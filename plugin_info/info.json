@@ -1,16 +1,16 @@
 {
 	"id" : "Monitoring",
 	"name" : "Monitoring",
-	"description" : "Plugin permettant le monitoring des équipements",
+	"description" : "Plugin permettant le monitoring des équipements (locaux et distants)",
 	"licence" : "AGPL",
-	"author" : "Phifi",
+	"author" : "TiTidom",
 	"require" : "3.0",
 	"hasDependency" : true,
 	"category" : "monitoring",
-	"language" : ["fr_FR","en_US","de_DE","es_ES"],
+	"language" : ["fr_FR","en_US"],
 	"compatibility" : ["Jeedomboard","Smart","miniplus","rpi","docker","diy","v4"],
 	"display" : "panel",
 	"mobile" : "panel",
-	"changelog" : "https://surveillancestation.github.io/surveillancestation/monitoring/fr_FR/#tocAnchor-1-10",
-	"documentation" : "https://surveillancestation.github.io/surveillancestation/monitoring/fr_FR/"
+	"changelog" : "https://titidom-rc.github.io/Monitoring/fr_FR/changelog",
+	"documentation" : "https://titidom-rc.github.io/Monitoring/fr_FR/changelog/"
 }
