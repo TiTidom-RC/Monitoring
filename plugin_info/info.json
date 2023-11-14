@@ -1,16 +1,22 @@
 {
 	"id" : "Monitoring",
 	"name" : "Monitoring",
-	"description" : "Plugin permettant le monitoring des équipements (locaux et distants)",
+	"description" : "Plugin permettant le monitoring des équipements locaux et distants (via SSH). Le plugin affichera les informations systèmes d'équipements sous Linux ou Synology (Distribution, CPU, Mémoire, Disques, Swap).",
 	"licence" : "AGPL",
 	"author" : "TiTidom",
 	"require" : "3.0",
 	"hasDependency" : true,
 	"category" : "monitoring",
-	"language" : ["fr_FR","en_US"],
-	"compatibility" : ["Jeedomboard","Smart","miniplus","rpi","docker","diy","v4"],
+	"language" : ["fr_FR","en_US","de_DE","es_ES"],
+	"compatibility" : ["jeedomboard","smart","miniplus","rpi","docker","diy","v4","atlas"],
+	"link": {
+		"forum": "https://community.jeedom.com/tag/plugin-monitoring",
+		"video": ""
+	},
 	"display" : "panel",
 	"mobile" : "panel",
-	"changelog" : "https://titidom-rc.github.io/Monitoring/fr_FR/changelog",
-	"documentation" : "https://titidom-rc.github.io/Monitoring/fr_FR/changelog/"
+	"changelog" : "https://titidom-rc.github.io/Documentation/Monitoring/#language#/changelog",
+	"documentation" : "https://titidom-rc.github.io/Documentation/Monitoring/#language#/",
+	"changelog_beta" : "https://titidom-rc.github.io/Documentation/Monitoring/#language#/changelog-beta",
+	"documentation_beta" : "https://titidom-rc.github.io/Documentation/Monitoring/#language#/"
 }

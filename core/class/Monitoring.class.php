@@ -59,7 +59,7 @@ class Monitoring extends eqLogic {
 			return;
 		}
 		log::remove('Monitoring_update');
-		$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../ressources/install.sh';
+		$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../resources/install.sh';
 		$cmd .= ' >> ' . log::getPathToLog('Monitoring_update') . ' 2>&1 &';
 		exec($cmd);
 	}
