@@ -34,7 +34,7 @@ elif [ "$versionPHP" -ge 7 ]
 		echo "* Pour finaliser l'installation, redémarrer Jeedom / To complete the installation, restart Jeedom *"
 		echo "***************************************************************************************************"
 else
-		echo "Installation KO, PHP5 ou PHP7 n'est pas installé"
+		echo "Installation KO, PHP5 ou PHP7+ n'est pas installé"
 		echo 100 > /tmp/dependancy_monitoring_in_progress
 fi
 rm /tmp/dependancy_monitoring_in_progress
