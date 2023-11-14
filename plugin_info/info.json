@@ -1,7 +1,7 @@
 {
 	"id" : "Monitoring",
 	"name" : "Monitoring",
-	"description" : "Plugin permettant le monitoring des équipements locaux et distants (via SSH). Le plugin remontera des informations systèmes d'équipements sous Linux ou Synology (Distribution, CPU, Mémoire, Disques, Swap).",
+	"description" : "Plugin permettant le monitoring des équipements locaux et distants (via SSH). Le plugin affichera les informations systèmes d'équipements sous Linux ou Synology (Distribution, CPU, Mémoire, Disques, Swap).",
 	"licence" : "AGPL",
 	"author" : "TiTidom",
 	"require" : "3.0",
