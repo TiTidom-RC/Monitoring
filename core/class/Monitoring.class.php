@@ -407,11 +407,15 @@ class Monitoring extends eqLogic {
 		$replace['#namedistri#'] = (is_object($namedistri)) ? $namedistri->execCmd() : '';
 		$replace['#namedistriid#'] = is_object($namedistri) ? $namedistri->getId() : '';
 		$replace['#namedistri_display#'] = (is_object($namedistri) && $namedistri->getIsVisible()) ? "#namedistri_display#" : "none";
+		$replace['#namedistri_collect#'] = (is_object($namedistri) && $namedistri->getIsVisible()) ? $namedistri->getCollectDate() : "-";
+        $replace['#namedistri_value#'] = (is_object($namedistri) && $namedistri->getIsVisible()) ? $namedistri->getValueDate() : "-";
 
 		$loadavg1mn = $this->getCmd(null,'loadavg1mn');
 		$replace['#loadavg1mn#'] = (is_object($loadavg1mn)) ? $loadavg1mn->execCmd() : '';
 		$replace['#loadavg1mnid#'] = is_object($loadavg1mn) ? $loadavg1mn->getId() : '';
 		$replace['#loadavg_display#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? "#loadavg_display#" : "none";
+		$replace['#loadavg_collect#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getCollectDate() : "-";
+        $replace['#loadavg_value#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getValueDate() : "-";
 
 		$loadavg5mn = $this->getCmd(null,'loadavg5mn');
 		$replace['#loadavg5mn#'] = (is_object($loadavg5mn)) ? $loadavg5mn->execCmd() : '';
@@ -425,21 +429,29 @@ class Monitoring extends eqLogic {
 		$replace['#uptime#'] = (is_object($uptime)) ? $uptime->execCmd() : '';
 		$replace['#uptimeid#'] = is_object($uptime) ? $uptime->getId() : '';
 		$replace['#uptime_display#'] = (is_object($uptime) && $uptime->getIsVisible()) ? "#uptime_display#" : "none";
-
+		$replace['#uptime_collect#'] = (is_object($uptime) && $uptime->getIsVisible()) ? $uptime->getCollectDate() : "-";
+        $replace['#uptime_value#'] = (is_object($uptime) && $uptime->getIsVisible()) ? $uptime->getValueDate() : "-";
+		
 		$Mem = $this->getCmd(null,'Mem');
 		$replace['#Mem#'] = (is_object($Mem)) ? $Mem->execCmd() : '';
 		$replace['#Memid#'] = is_object($Mem) ? $Mem->getId() : '';
 		$replace['#Mem_display#'] = (is_object($Mem) && $Mem->getIsVisible()) ? "#Mem_display#" : "none";
+		$replace['#Mem_collect#'] = (is_object($Mem) && $Mem->getIsVisible()) ? $Mem->getCollectDate() : "-";
+        $replace['#Mem_value#'] = (is_object($Mem) && $Mem->getIsVisible()) ? $Mem->getValueDate() : "-";
 
 		$Mem_swap = $this->getCmd(null,'Mem_swap');
 		$replace['#Mem_swap#'] = (is_object($Mem_swap)) ? $Mem_swap->execCmd() : '';
 		$replace['#Mem_swapid#'] = is_object($Mem_swap) ? $Mem_swap->getId() : '';
 		$replace['#Mem_swap_display#'] = (is_object($Mem_swap) && $Mem_swap->getIsVisible()) ? "#Mem_swap_display#" : "none";
+		$replace['#Mem_swap_collect#'] = (is_object($Mem_swap) && $Mem_swap->getIsVisible()) ? $Mem_swap->getCollectDate() : "-";
+        $replace['#Mem_swap_value#'] = (is_object($Mem_swap) && $Mem_swap->getIsVisible()) ? $Mem_swap->getValueDate() : "-";
 
 		$ethernet0 = $this->getCmd(null,'ethernet0');
 		$replace['#ethernet0#'] = (is_object($ethernet0)) ? $ethernet0->execCmd() : '';
 		$replace['#ethernet0id#'] = is_object($ethernet0) ? $ethernet0->getId() : '';
 		$replace['#ethernet0_display#'] = (is_object($ethernet0) && $ethernet0->getIsVisible()) ? "#ethernet0_display#" : "none";
+		$replace['#ethernet0_collect#'] = (is_object($ethernet0) && $ethernet0->getIsVisible()) ? $ethernet0->getCollectDate() : "-";
+        $replace['#ethernet0_value#'] = (is_object($ethernet0) && $ethernet0->getIsVisible()) ? $ethernet0->getValueDate() : "-";
 
 		$ethernet0_name = $this->getCmd(null,'ethernet0_name');
 		$replace['#ethernet0_name#'] = (is_object($ethernet0_name)) ? $ethernet0_name->execCmd() : '';
@@ -457,11 +469,15 @@ class Monitoring extends eqLogic {
 		$replace['#hddtotal#'] = (is_object($hddtotal)) ? $hddtotal->execCmd() : '';
 		$replace['#hddtotalid#'] = is_object($hddtotal) ? $hddtotal->getId() : '';
 		$replace['#hddused_display#'] = (is_object($hddtotal) && $hddtotal->getIsVisible()) ? "#hddused_display#" : "none";
+		$replace['#hddtotal_collect#'] = (is_object($hddtotal) && $hddtotal->getIsVisible()) ? $hddtotal->getCollectDate() : "-";
+        $replace['#hddtotal_value#'] = (is_object($hddtotal) && $hddtotal->getIsVisible()) ? $hddtotal->getValueDate() : "-";
 
 		$cpu = $this->getCmd(null,'cpu');
 		$replace['#cpu#'] = (is_object($cpu)) ? $cpu->execCmd() : '';
 		$replace['#cpuid#'] = is_object($cpu) ? $cpu->getId() : '';
 		$replace['#cpu_display#'] = (is_object($cpu) && $cpu->getIsVisible()) ? "#cpu_display#" : "none";
+		$replace['#cpu_collect#'] = (is_object($cpu) && $cpu->getIsVisible()) ? $cpu->getCollectDate() : "-";
+        $replace['#cpu_value#'] = (is_object($cpu) && $cpu->getIsVisible()) ? $cpu->getValueDate() : "-";
 
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddusedv2')) && $this->getCmd(null,'hddusedv2')->getIsVisible()) ? 'OK' : '';
 
@@ -479,6 +495,8 @@ class Monitoring extends eqLogic {
 			$replace['#hddtotalv2id#'] = is_object($hddtotalv2) ? $hddtotalv2->getId() : '';
 			$replace['#hddusedv2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? "#hddusedv2_display#" : "none";
 			$replace['#synovolume2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? 'OK' : '';
+			$replace['#hddtotalv2_collect#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? $hddtotalv2->getCollectDate() : "-";
+        	$replace['#hddtotalv2_value#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? $hddtotalv2->getValueDate() : "-";
 		}
 
 		$cnx_ssh = $this->getCmd(null,'cnx_ssh');
@@ -501,6 +519,8 @@ class Monitoring extends eqLogic {
 		$replace['#perso1#'] = (is_object($perso1)) ? $perso1->execCmd() : '';
 		$replace['#perso1id#'] = is_object($perso1) ? $perso1->getId() : '';
 		$replace['#perso1_display#'] = (is_object($perso1) && $perso1->getIsVisible()) ? "#perso1_display#" : "none";
+		$replace['#perso1_collect#'] = (is_object($perso1) && $perso1->getIsVisible()) ? $perso1->getCollectDate() : "-";
+        $replace['#perso1_value#'] = (is_object($perso1) && $perso1->getIsVisible()) ? $perso1->getValueDate() : "-";
 		
 		$nameperso_1 = (is_object($perso1)) ? $this->getCmd(null,'perso1')->getName() : '';
 		$iconeperso_1 = (is_object($perso1)) ? $this->getCmd(null,'perso1')->getdisplay('icon') : '';
@@ -514,6 +534,8 @@ class Monitoring extends eqLogic {
 		$replace['#perso2#'] = (is_object($perso2)) ? $perso2->execCmd() : '';
 		$replace['#perso2id#'] = is_object($perso2) ? $perso2->getId() : '';
 		$replace['#perso2_display#'] = (is_object($perso2) && $perso2->getIsVisible()) ? "#perso2_display#" : "none";
+		$replace['#perso2_collect#'] = (is_object($perso2) && $perso2->getIsVisible()) ? $perso2->getCollectDate() : "-";
+        $replace['#perso2_value#'] = (is_object($perso2) && $perso2->getIsVisible()) ? $perso2->getValueDate() : "-";
 		
 		$nameperso_2 = (is_object($perso2)) ? $this->getCmd(null,'perso2')->getName() : '';
 		$iconeperso_2 = (is_object($perso2)) ? $this->getCmd(null,'perso2')->getdisplay('icon') : '';
