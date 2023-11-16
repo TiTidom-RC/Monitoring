@@ -47,7 +47,7 @@ function Monitoring_update() {
 
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "resources" */
     try {
-      $dirToDelete = __DIR__ . '/../../plugins/Monitoring/ressources';
+      $dirToDelete = __DIR__ . '/../ressources';
       log::add('plugin', 'debug', '[DEL_OLDDIR_CHECK] Vérification de la présence du répertoire "ressources" - Plugin Monitoring :: ' . $dirToDelete);
       if (file_exists($dirToDelete)) {
         shell_exec('sudo rm -rf ' . $dirToDelete);
