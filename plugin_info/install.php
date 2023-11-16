@@ -54,7 +54,7 @@ function Monitoring_update() {
         log::add('Monitoring', 'debug', '[DEL_OLDDIR_OK] Le répertoire "ressources" a bien été effacé. Path = ' . $dirToDelete);
       }
       else {
-        log::add('Monitoring', 'debug', '[DEL_OLDDIR_NA] Le répertoire "ressources" non trouvé. Aucune action requise.');
+        log::add('Monitoring', 'debug', '[DEL_OLDDIR_NA] Répertoire "ressources" non trouvé. Aucune action requise.');
       }
     } catch (Exception $e) {
       log::add('Monitoring', 'debug', '[DEL_OLDDIR_KO] WARNING :: Exception levée (check du répertoire "ressources") :: '. $e->getMessage());
