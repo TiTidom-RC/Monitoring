@@ -98,7 +98,13 @@
  },
  stop: function( event, ui ) {
   var el = ui.element;
-  positionEqLogic(el.attr('data-eqlogic_id'));
+  if (!isClass(jeedomUtils.positionEqLogic)) {
+    positionEqLogic(el.attr('data-eqlogic_id'));
+    console.log('[DEBUG] Utilisation OLD class 4.1')
+  } else {
+    jeedomUtils.positionEqLogic(el.attr('data-eqlogic_id')); // Compatibilité 4.2+
+    console.log('[DEBUG] Utilisation NEW class 4.2+')
+  }
   el.closest('.div_displayEquipement').packery();
   var eqLogic = {id : el.attr('data-eqlogic_id')}
   eqLogic.display = {};
