@@ -45,7 +45,7 @@ function Monitoring_update() {
       $cron->save();
     }
 
-    /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "resources" */
+    /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
     try {
       $dirToDelete = __DIR__ . '/../ressources';
       log::add('Monitoring', 'debug', '[DEL_OLDDIR_CHECK] Vérification de la présence du répertoire "ressources" - Plugin Monitoring :: ' . $dirToDelete);
