@@ -257,7 +257,7 @@ class Monitoring extends eqLogic {
 				}
 
 			} elseif ($this->getConfiguration('synologyv2') == '0') {
-				$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
+				/* $MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
 				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
 				}
@@ -268,7 +268,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedv2');
 				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
-				}
+				}*/ 
 			}
 			
 			// Synology volume USB
@@ -307,7 +307,7 @@ class Monitoring extends eqLogic {
 				}
 
 			} elseif ($this->getConfiguration('synologyusb') == '0') {
-				$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
+				/* $MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
 				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
 				}
@@ -318,11 +318,11 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
 				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
-				}
+				}*/ 
 			}
 		} elseif ($this->getConfiguration('synology') == '0') {
 			
-			$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
+			/* $MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
 			if (is_object($MonitoringCmd)) {
 				$MonitoringCmd->remove();
 			}
@@ -347,7 +347,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
 			if (is_object($MonitoringCmd)) {
 				$MonitoringCmd->remove();
-			}
+			}*/ 
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cpu');
