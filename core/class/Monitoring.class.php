@@ -562,7 +562,7 @@ class Monitoring extends eqLogic {
         $replace['#cpu_value#'] = (is_object($cpu) && $cpu->getIsVisible()) ? $cpu->getValueDate() : "-";
 
 		// Syno Volume 2
-		$SynoV2Visible = (is_object($this->getCmd(null,'hddusedv2')) && $this->getCmd(null,'hddusedv2')->getIsVisible()) ? 'OK' : '';
+		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 
 		if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1'){
 			$hddusedv2 = $this->getCmd(null,'hddusedv2');
@@ -583,7 +583,7 @@ class Monitoring extends eqLogic {
 		}
 
 		// Syno Volume USB
-		$SynoUSBVisible = (is_object($this->getCmd(null,'hddusedusb')) && $this->getCmd(null,'hddusedusb')->getIsVisible()) ? 'OK' : '';
+		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
 
 		if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
 			$hddusedusb = $this->getCmd(null,'hddusedusb');
