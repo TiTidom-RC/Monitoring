@@ -324,7 +324,7 @@ class Monitoring extends eqLogic {
 			}
 		}
 		else {
-			$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
+			/* $MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
 			if (is_object($MonitoringCmd)) {
 				$MonitoringCmd->remove();
 			}
@@ -347,7 +347,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
 			if (is_object($MonitoringCmd)) {
 				$MonitoringCmd->remove();
-			}
+			} */
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cpu');
