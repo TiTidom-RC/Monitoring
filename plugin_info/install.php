@@ -44,6 +44,21 @@ function Monitoring_update() {
       $cron->setTimeout(30);
       $cron->save();
     }
+
+    /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
+    try {
+      $dirToDelete = __DIR__ . '/../ressources';
+      log::add('Monitoring', 'debug', '[DEL_OLDDIR_CHECK] Vérification de la présence du répertoire "ressources" - Plugin Monitoring :: ' . $dirToDelete);
+      if (file_exists($dirToDelete)) {
+        shell_exec('sudo rm -rf ' . $dirToDelete);
+        log::add('Monitoring', 'debug', '[DEL_OLDDIR_OK] Le répertoire "ressources" a bien été effacé. Path = ' . $dirToDelete);
+      }
+      else {
+        log::add('Monitoring', 'debug', '[DEL_OLDDIR_NA] Répertoire "ressources" non trouvé. Aucune action requise.');
+      }
+    } catch (Exception $e) {
+      log::add('Monitoring', 'debug', '[DEL_OLDDIR_KO] WARNING :: Exception levée (check du répertoire "ressources") :: '. $e->getMessage());
+    }
 }
 
 function Monitoring_remove() {
