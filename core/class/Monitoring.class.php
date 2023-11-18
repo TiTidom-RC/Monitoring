@@ -986,25 +986,25 @@ class Monitoring extends eqLogic {
 			
 			if($this->getConfiguration('synology') == '1') {
 				// $namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
-				$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname";
+				$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 
 				// $memory_cmd = "cat /proc/meminfo | cut -d':' -f2 | awk '{ print $1}' | tr '\n' ' ' | awk '{ print $1,$2,$3,$4}'";
 				// $swap_cmd = "free | grep 'Swap' | head -1 | awk '{ print $2,$3,$4 }'";
 				// $hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 				$hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
-				$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION | tr -d '\"'";
+				$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 			}
 			else {
-				$ARMv_cmd = "lscpu | grep Architecture | awk '{ print $2 }'";
-				$namedistri_cmd = "cat /etc/*-release | grep PRETTY_NAME=";
-				$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release | tr -d '\"'";
+				$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+				$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep PRETTY_NAME=";
+				$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release 2>/dev/null | tr -d '\"'";
 				
 				// $memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 				// $swap_cmd = "free -h | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
 				// $swap_pourc_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
 				
 				$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-				$bitdistri_cmd = "getconf LONG_BIT";
+				$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 				
 				$ARMv = exec($ARMv_cmd);
 				$bitdistri = exec($bitdistri_cmd);
@@ -1013,10 +1013,10 @@ class Monitoring extends eqLogic {
 			$memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 			$swap_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
 
-			$loadavg_cmd = "cat /proc/loadavg";
+			$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
 
 			// $ReseauRXTX_cmd = "cat /proc/net/dev | grep ".$cartereseau." | awk '{print $2,$10}'";
-			$ReseauRXTX_cmd = "cat /proc/net/dev | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
 
 			$perso_1cmd = $this->getConfiguration('perso1');
 			$perso_2cmd = $this->getConfiguration('perso2');
@@ -1045,9 +1045,7 @@ class Monitoring extends eqLogic {
 				$uname = '.';
 				$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core";
 				$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
-				// $versionsyno_cmd = "cat /etc.defaults/VERSION | cut -d'=' -f2 | cut -d'=' -f2 | tr '\n' ' ' | awk '{ print $3,$4,$5,$7,$9}'";
-				// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'";
-				$versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
+				$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
 
 				$nbcpu = exec($nbcpuARM_cmd);
 				$cpufreq0 = exec($cpufreq0ARM_cmd);
