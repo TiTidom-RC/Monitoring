@@ -177,6 +177,22 @@
 			}else {
 				$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor">#hddpourcusedv2#%</span>)');
 			}
+
+			// Syno Volume USB
+			if ('#synovolumeusb_display#' == 'OK'){
+				$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé)</br><i>Date de valeur : #hddusedusb_value#</br>Date de collecte : #hddusedusb_collect#</i>" class="fas fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
+			}
+			if ('#hddpourcusedusb#' === '') {
+				$('#hddpourcusedusb#id#').append('<span></span>');
+			}else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusbvertinfa#')) {
+				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)');
+			}else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusborangede#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusborangea#'))) {
+				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)');
+			}else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusbrougesupa#')) && '#hddpourcusedusbrougesupa#' !== '') {
+				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)');
+			}else {
+				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor">#hddpourcusedusb#%</span>)');
+			}
 		}
 	</script>
 	<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#;">

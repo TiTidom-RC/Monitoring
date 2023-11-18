@@ -270,6 +270,56 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->remove();
 				}
 			}
+			
+			// Synology volume USB
+			if ($this->getConfiguration('synologyusb') == '1') {
+				$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Total', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddtotalusb');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('string');
+					$MonitoringCmd->save();
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'hddusedusb');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Utilisé', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddusedusb');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('string');
+					$MonitoringCmd->save();
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Utilisé (pourcentage)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddpourcusedusb');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->save();
+				}
+
+			} elseif ($this->getConfiguration('synologyusb') == '0') {
+				$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
+				if ( is_object($MonitoringCmd)) {
+					$MonitoringCmd->remove();
+				}
+				$MonitoringCmd = $this->getCmd(null, 'hddusedusb');
+				if ( is_object($MonitoringCmd)) {
+					$MonitoringCmd->remove();
+				}
+				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
+				if ( is_object($MonitoringCmd)) {
+					$MonitoringCmd->remove();
+				}
+			}
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cpu');
@@ -394,6 +444,10 @@ class Monitoring extends eqLogic {
 		$replace ['#hddpourcusedv2orangede#'] = $this->getConfiguration('hddpourcusedv2orangede');
 		$replace ['#hddpourcusedv2orangea#'] = $this->getConfiguration('hddpourcusedv2orangea');
 		$replace ['#hddpourcusedv2rougesupa#'] = $this->getConfiguration('hddpourcusedv2rougesupa');
+		$replace ['#hddpourcusedusbvertinfa#'] = $this->getConfiguration('hddpourcusedusbvertinfa');
+		$replace ['#hddpourcusedusborangede#'] = $this->getConfiguration('hddpourcusedusborangede');
+		$replace ['#hddpourcusedusborangea#'] = $this->getConfiguration('hddpourcusedusborangea');
+		$replace ['#hddpourcusedusbrougesupa#'] = $this->getConfiguration('hddpourcusedusbrougesupa');
 		$replace ['#perso1vertinfa#'] = $this->getConfiguration('perso1vertinfa');
 		$replace ['#perso1orangede#'] = $this->getConfiguration('perso1orangede');
 		$replace ['#perso1orangea#'] = $this->getConfiguration('perso1orangea');
@@ -479,6 +533,7 @@ class Monitoring extends eqLogic {
 		$replace['#cpu_collect#'] = (is_object($cpu) && $cpu->getIsVisible()) ? $cpu->getCollectDate() : "-";
         $replace['#cpu_value#'] = (is_object($cpu) && $cpu->getIsVisible()) ? $cpu->getValueDate() : "-";
 
+		// Syno Volume 2
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddusedv2')) && $this->getCmd(null,'hddusedv2')->getIsVisible()) ? 'OK' : '';
 
 		if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1'){
@@ -497,6 +552,27 @@ class Monitoring extends eqLogic {
 			$replace['#synovolume2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? 'OK' : '';
 			$replace['#hddtotalv2_collect#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? $hddtotalv2->getCollectDate() : "-";
         	$replace['#hddtotalv2_value#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? $hddtotalv2->getValueDate() : "-";
+		}
+
+		// Syno Volume USB
+		$SynoUSBVisible = (is_object($this->getCmd(null,'hddusedusb')) && $this->getCmd(null,'hddusedusb')->getIsVisible()) ? 'OK' : '';
+
+		if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+			$hddusedusb = $this->getCmd(null,'hddusedusb');
+			$replace['#hddusedusb#'] = (is_object($hddusedusb)) ? $hddusedusb->execCmd() : '';
+			$replace['#hddusedusbid#'] = is_object($hddusedusb) ? $hddusedusb->getId() : '';
+
+			$hddusedusb_pourc = $this->getCmd(null,'hddpourcusedusb');
+			$replace['#hddpourcusedusb#'] = (is_object($hddusedusb_pourc)) ? $hddusedusb_pourc->execCmd() : '';
+			$replace['#hddpourcusedusbid#'] = is_object($hddusedusb_pourc) ? $hddusedusb_pourc->getId() : '';
+
+			$hddtotalusb = $this->getCmd(null,'hddtotalusb');
+			$replace['#hddtotalusb#'] = (is_object($hddtotalusb)) ? $hddtotalusb->execCmd() : '';
+			$replace['#hddtotalusbid#'] = is_object($hddtotalusb) ? $hddtotalusb->getId() : '';
+			$replace['#hddusedusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? "#hddusedusb_display#" : "none";
+			$replace['#synovolumeusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? 'OK' : '';
+			$replace['#hddtotalusb_collect#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? $hddtotalusb->getCollectDate() : "-";
+        	$replace['#hddtotalusb_value#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? $hddtotalusb->getValueDate() : "-";
 		}
 
 		$cnx_ssh = $this->getCmd(null,'cnx_ssh');
@@ -575,7 +651,8 @@ class Monitoring extends eqLogic {
 		}
 
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddusedv2')) && $this->getCmd(null,'hddusedv2')->getIsVisible()) ? 'OK' : '';
-		
+		$SynoUSBVisible = (is_object($this->getCmd(null,'hddusedusb')) && $this->getCmd(null,'hddusedusb')->getIsVisible()) ? 'OK' : '';
+
 		if ($this->getConfiguration('maitreesclave') == 'deporte' && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
 			$user = $this->getConfiguration('user');
@@ -665,7 +742,7 @@ class Monitoring extends eqLogic {
 						$synotemp_cmd='$(find /sys/devices/* -name temp*_input | head -1)';
 						if($this->getconfiguration('syno_use_temp_path')) $synotemp_cmd=$this->getconfiguration('syno_temp_path');				
 
-						$cputemp0_cmd = "timeout 3 cat ".$synotemp_cmd;
+						$cputemp0_cmd = $synotemp_cmd;
 						log::add("Monitoring","debug", "commande temp syno : ".$cputemp0_cmd);
 						$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 					
@@ -673,6 +750,11 @@ class Monitoring extends eqLogic {
 							// $hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1"; // DSM 5.x & 6.x
 							$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x & 6.x
 							$hddv2 = $sshconnection->exec($hddv2cmd);
+						}
+
+						if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1') {
+							$hddusbcmd = "df -h | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x & 6.x
+							$hddusb = $sshconnection->exec($hddusbcmd);
 						}
 					}	
 					elseif ($ARMv == 'armv6l') {
@@ -944,8 +1026,13 @@ class Monitoring extends eqLogic {
 				$versionsyno = exec($versionsyno_cmd);
 
 				if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
-					$hddv2cmd = "df -h | grep 'vg1001' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+					$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 					$hddv2 = exec($hddv2cmd);
+				}
+
+				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1') {
+					$hddusbcmd = "df -h | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+					$hddusb = exec($hddusbcmd);
 				}
 			}
 			elseif ($ARMv == 'armv6l') {
@@ -1082,6 +1169,7 @@ class Monitoring extends eqLogic {
 					}
 				}
 				
+				// Syno Volume 2
 				if($SynoV2Visible == 'OK' && $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1'){
 					if (isset($hddv2)) {
 						$hdddatav2 = explode(' ', $hddv2);
@@ -1089,6 +1177,18 @@ class Monitoring extends eqLogic {
 							$hddtotalv2 = $hdddatav2[0];
 							$hddusedv2 = $hdddatav2[1];
 							$hddusedv2_pourc = preg_replace("/[^0-9.]/","",$hdddatav2[2]);
+						}
+					}
+				}
+
+				// Syno Volume USB 
+				if($SynoUSBVisible == 'OK' && $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1'){
+					if (isset($hddusb)) {
+						$hdddatausb = explode(' ', $hddusb);
+						if (isset($hdddatausb[0]) && isset($hdddatausb[1]) && isset($hdddatausb[2])) {
+							$hddtotalusb = $hdddatausb[0];
+							$hddusedusb = $hdddatausb[1];
+							$hddusedusb_pourc = preg_replace("/[^0-9.]/","",$hdddatausb[2]);
 						}
 					}
 				}
@@ -1434,6 +1534,15 @@ class Monitoring extends eqLogic {
 					);
 				}
 
+				// Syno Volume USB
+				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+					$dataresultusb = array(
+						'hddtotalusb' => $hddtotalusb,
+						'hddusedusb' => $hddusedusb,
+						'hddpourcusedusb' => $hddusedusb_pourc,
+					);
+				}
+
 				$namedistri = $this->getCmd(null,'namedistri');
 				if(is_object($namedistri)){
 					$namedistri->event($dataresult['namedistri']);
@@ -1506,6 +1615,21 @@ class Monitoring extends eqLogic {
 					$hddusedv2_pourc = $this->getCmd(null,'hddpourcusedv2');
 					if(is_object($hddusedv2_pourc)){
 						$hddusedv2_pourc->event($dataresultv2['hddpourcusedv2']);
+					}
+				}
+
+				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+					$hddtotalusb = $this->getCmd(null,'hddtotalusb');
+					if(is_object($hddtotalusb)){
+						$hddtotalusb->event($dataresultusb['hddtotalusb']);
+					}
+					$hddusedusb = $this->getCmd(null,'hddusedusb');
+					if(is_object($hddusedusb)){
+						$hddusedusb->event($dataresultusb['hddusedusb']);
+					}
+					$hddusedusb_pourc = $this->getCmd(null,'hddpourcusedusb');
+					if(is_object($hddusedusb_pourc)){
+						$hddusedusb_pourc->event($dataresultusb['hddpourcusedusb']);
 					}
 				}
 
