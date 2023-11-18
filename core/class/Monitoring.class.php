@@ -271,8 +271,6 @@ class Monitoring extends eqLogic {
 				}
 			}
 			
-			if ($this->getConfigutation())
-
 			// Synology volume USB
 			if ($this->getConfiguration('synologyusb') == '1') {
 				$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
