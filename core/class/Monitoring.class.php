@@ -258,15 +258,15 @@ class Monitoring extends eqLogic {
 
 			} elseif ($this->getConfiguration('synologyv2') == '0') {
 				$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
-				if ( is_object($MonitoringCmd)) {
+				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
 				}
 				$MonitoringCmd = $this->getCmd(null, 'hddusedv2');
-				if ( is_object($MonitoringCmd)) {
+				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
 				}
 				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedv2');
-				if ( is_object($MonitoringCmd)) {
+				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
 				}
 			}
@@ -308,15 +308,15 @@ class Monitoring extends eqLogic {
 
 			} elseif ($this->getConfiguration('synologyusb') == '0') {
 				$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
-				if ( is_object($MonitoringCmd)) {
+				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
 				}
 				$MonitoringCmd = $this->getCmd(null, 'hddusedusb');
-				if ( is_object($MonitoringCmd)) {
+				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
 				}
 				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
-				if ( is_object($MonitoringCmd)) {
+				if (is_object($MonitoringCmd)) {
 					$MonitoringCmd->remove();
 				}
 			}
