@@ -177,8 +177,11 @@
 			}else {
 				$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor">#hddpourcusedv2#%</span>)');
 			}
-
-			// Syno Volume USB
+		}
+	</script>
+	<div id="synovolusb#id#"></div>
+	<script>
+		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 			if ('#synovolumeusb_display#' == 'OK'){
 				$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé)</br><i>Date de valeur : #hddusedusb_value#</br>Date de collecte : #hddusedusb_collect#</i>" class="fas fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
 			}

@@ -175,6 +175,25 @@
 			}
 		}
 	</script>
+	<div id="synovolusb#id#"></div>
+	<script>
+    if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+			if ('#synovolumeusb_display#' == 'OK'){
+				$('#synovolusb#id#').append('<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé)" class="fas fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
+			}
+			if ('#hddpourcusedusb#' === '') {
+				$('#hddpourcusedusb#id#').append('<span></span>');
+			}else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusbvertinfa#')) {
+				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)');
+			}else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusborangede#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusborangea#'))) {
+				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)');
+			}else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusbrougesupa#')) && '#hddpourcusedusbrougesupa#' !== '') {
+				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)');
+			}else {
+				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span>#hddpourcusedusb#%</span>)');
+			}
+		}
+	</script>
 	<div class="cmd tooltips" style="margin-left:5px;display: #cpu_display#;">
 			<span title="Nombre CPU, fréquence (température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" class="fa techno-pc" style="width:15px"></span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>

@@ -1414,9 +1414,9 @@ class Monitoring extends eqLogic {
 						$hddused = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddata[1]);
 						$hddused_pourc = preg_replace("/[^0-9.]/","",$hdddata[2]);
 						$hddused_pourc = trim($hddused_pourc);
-						if ($hddused_pourc < '10') {
+						/* if ($hddused_pourc < '10') {
 							$hddused_pourc = '0'.$hddused_pourc; // A quoi sert certe conversion ?
-						}
+						}*/
 					}
 				}
 
