@@ -320,8 +320,8 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->remove();
 				}
 			}
-		}
-		elseif ($this->getConfiguration('synology') == '0') {
+		} elseif ($this->getConfiguration('synology') == '0') {
+			
 			$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
 			if (is_object($MonitoringCmd)) {
 				$MonitoringCmd->remove();
@@ -338,6 +338,8 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
 			if (is_object($MonitoringCmd)) {
 				$MonitoringCmd->remove();
+			}
+			
 			$MonitoringCmd = $this->getCmd(null, 'hddusedusb');
 			if (is_object($MonitoringCmd)) {
 				$MonitoringCmd->remove();
