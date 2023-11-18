@@ -103,7 +103,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-4 control-label">{{Carte Réseau}}</label>
                                     <div class="col-md-6">
                                         <select id="cartereseau" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cartereseau"
-                                                onchange="if(this.selectedIndex == 2) document.getElementById('netautre').style.display = 'block'; else document.getElementById('netautre').style.display = 'none';">
+                                                onchange="if(this.selectedIndex == 3) document.getElementById('netautre').style.display = 'block'; else document.getElementById('netautre').style.display = 'none';">
                                             <option value="netauto">{{Auto (par défaut)}}</option>
                                             <option value="eth0">{{1er port Ethernet}}</option>
                                             <option value="wlan0">{{1er port Wi-Fi}}</option>
