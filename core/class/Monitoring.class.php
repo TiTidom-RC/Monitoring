@@ -767,7 +767,7 @@ class Monitoring extends eqLogic {
 						$versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 						$versionsyno = $sshconnection->exec($versionsyno_cmd);
 
-						$synotemp_cmd='$(find /sys/devices/* -name temp*_input | head -1)';
+						$synotemp_cmd='timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)';
 						if($this->getconfiguration('syno_use_temp_path')) $synotemp_cmd=$this->getconfiguration('syno_temp_path');				
 
 						$cputemp0_cmd = $synotemp_cmd;
