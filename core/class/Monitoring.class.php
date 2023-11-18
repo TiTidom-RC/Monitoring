@@ -704,14 +704,14 @@ class Monitoring extends eqLogic {
 
 					if($this->getConfiguration('synology') == '1') {
 						// $namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
-						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname";
-						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION | tr -d '\"'";
+						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
+						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 					}
 					else {
-						$namedistri_cmd = "cat /etc/*-release | grep PRETTY_NAME=";
+						$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep PRETTY_NAME=";
 						// $swap_pourc_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
-						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release | tr -d '\"'";
-						$bitdistri_cmd = "getconf LONG_BIT";
+						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release 2>/dev/null | tr -d '\"'";
+						$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 					}
 
 					$memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
