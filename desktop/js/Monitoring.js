@@ -71,19 +71,18 @@ function addCmdToTable(_cmd) {
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
-
-
 $(".eqLogicAttr[data-l2key='synology']").on('change', function () {
 	if(this.checked){
 	  $(".syno_conf").show();
-	}else{
+	} else {
 	  $(".syno_conf").hide();
 	}
-  });
-  $(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
+});
+
+$(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
 	if(this.checked){
 	  $(".syno_conf_temppath").show();
-	}else{
+	} else {
 	  $(".syno_conf_temppath").hide();
 	}
-  });
+});
