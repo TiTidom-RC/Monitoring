@@ -678,8 +678,8 @@ class Monitoring extends eqLogic {
 			$cartereseau = $this->getConfiguration('cartereseau');
 		}
 
-		$SynoV2Visible = (is_object($this->getCmd(null,'hddusedv2')) && $this->getCmd(null,'hddusedv2')->getIsVisible()) ? 'OK' : '';
-		$SynoUSBVisible = (is_object($this->getCmd(null,'hddusedusb')) && $this->getCmd(null,'hddusedusb')->getIsVisible()) ? 'OK' : '';
+		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
+		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
 
 		if ($this->getConfiguration('maitreesclave') == 'deporte' && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
@@ -1202,9 +1202,10 @@ class Monitoring extends eqLogic {
 					if (isset($hddv2)) {
 						$hdddatav2 = explode(' ', $hddv2);
 						if (isset($hdddatav2[0]) && isset($hdddatav2[1]) && isset($hdddatav2[2])) {
-							$hddtotalv2 = $hdddatav2[0];
-							$hddusedv2 = $hdddatav2[1];
+							$hddtotalv2 = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatav2[0]);
+							$hddusedv2 = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatav2[1]);
 							$hddusedv2_pourc = preg_replace("/[^0-9.]/","",$hdddatav2[2]);
+							$hddusedv2_pourc = trim($hddusedv2_pourc);
 						}
 					}
 				}
@@ -1214,9 +1215,10 @@ class Monitoring extends eqLogic {
 					if (isset($hddusb)) {
 						$hdddatausb = explode(' ', $hddusb);
 						if (isset($hdddatausb[0]) && isset($hdddatausb[1]) && isset($hdddatausb[2])) {
-							$hddtotalusb = $hdddatausb[0];
-							$hddusedusb = $hdddatausb[1];
+							$hddtotalusb = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatausb[0]);
+							$hddusedusb = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatausb[1]);
 							$hddusedusb_pourc = preg_replace("/[^0-9.]/","",$hdddatausb[2]);
+							$hddusedusb_pourc = trim($hddusedusb_pourc);
 						}
 					}
 				}
