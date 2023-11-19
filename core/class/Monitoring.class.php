@@ -1719,7 +1719,7 @@ class Monitoring extends eqLogic {
 
 class MonitoringCmd extends cmd {
 	/* * *************************Attributs****************************** */
-	public static $_widgetPossibility = array('custom' => false);
+	// public static $_widgetPossibility = array('custom' => false);
 
 	/* * *********************Methode d'instance************************* */
 	public function execute($_options = null) {
