@@ -24,13 +24,13 @@
         "atlas"
     ],
     "link": {
-        "forum": "https:\/\/community.jeedom.com\/tag\/plugin-monitoring",
+        "forum": "https://community.jeedom.com/tag/plugin-monitoring",
         "video": ""
     },
     "display": "panel",
     "mobile": "panel",
-    "changelog": "https:\/\/titidom-rc.github.io\/Documentation\/Monitoring\/#language#\/changelog",
-    "documentation": "https:\/\/titidom-rc.github.io\/Documentation\/Monitoring\/#language#\/",
-    "changelog_beta": "https:\/\/titidom-rc.github.io\/Documentation\/Monitoring\/#language#\/changelog-beta",
-    "documentation_beta": "https:\/\/titidom-rc.github.io\/Documentation\/Monitoring\/#language#\/"
+    "changelog": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/changelog",
+    "documentation": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/index",
+    "changelog_beta": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/beta/changelog",
+    "documentation_beta": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/beta/index"
 }
