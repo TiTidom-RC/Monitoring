@@ -84,9 +84,9 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="col-sm-8">
                                         <?php
                                             foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
-                                            echo '<label class="checkbox-inline">';
-                                            echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
-                                            echo '</label>';
+                                                echo '<label class="checkbox-inline">';
+                                                echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
+                                                echo '</label>';
                                             }
                                         ?>
                                     </div>
@@ -103,7 +103,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-4 control-label">{{Carte Réseau}}</label>
                                     <div class="col-md-6">
                                         <select id="cartereseau" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cartereseau"
-                                                onchange="if(this.selectedIndex == 3) document.getElementById('netautre').style.display = 'block'; else document.getElementById('netautre').style.display = 'none';">
+                                            onchange="if(this.selectedIndex == 3) document.getElementById('netautre').style.display = 'block'; else document.getElementById('netautre').style.display = 'none';">
                                             <option value="netauto">{{Auto (par défaut)}}</option>
                                             <option value="eth0">{{1er port Ethernet}}</option>
                                             <option value="wlan0">{{1er port Wi-Fi}}</option>
@@ -165,19 +165,25 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
-                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="synology">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synology">
                                         <span style="font-size: 75%;">({{à cocher seulement si vous désirez Monitorer un NAS Synology}})</span>
                                     </div>
                                 </div>
                                 <div class="syno_conf">
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label" >{{Volume 2}}</label>
-                                    <div class="col-md-8">
-                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="synologyv2" >
-                                        <span style="font-size: 75%;">({{à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut}})</span>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" >{{Volume 2}}</label>
+                                        <div class="col-md-8">
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyv2" >
+                                            <span style="font-size: 75%;">({{à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut}})</span>
+                                        </div>
                                     </div>
-                                </div>
-                                
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" >{{Volume USB}}</label>
+                                        <div class="col-md-8">
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyusb" >
+                                            <span style="font-size: 75%;">({{à cocher seulement si vous avez un volume USB dans Synology}})</span>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-md-2 control-label" >{{Chemin temp utilisateur}}</label>
                                         <div class="col-md-8">
@@ -185,11 +191,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                             <span style="font-size: 75%;">({{si vous souhaitez spécifier directement le chemin pour récupérer la température}})</span>
                                         </div>
                                     </div>
-
                                     <div class="form-group syno_conf_temppath">
                                         <label class="col-md-2 control-label" >{{chemin temp}}</label>
                                         <div class="col-md-8">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{/sys/devices/platform/coretemp.0/temp2_input}}">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input}}">
                                         </div>
                                     </div>
                                 </div>
