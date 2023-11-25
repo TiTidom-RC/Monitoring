@@ -256,18 +256,41 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->save();
 				}
 
-			} elseif ($this->getConfiguration('synologyv2') == '0') {
-				$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
-				if ( is_object($MonitoringCmd)) {
-					$MonitoringCmd->remove();
+			}
+			
+			// Synology volume USB
+			if ($this->getConfiguration('synologyusb') == '1') {
+				$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Total', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddtotalusb');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('string');
+					$MonitoringCmd->save();
 				}
-				$MonitoringCmd = $this->getCmd(null, 'hddusedv2');
-				if ( is_object($MonitoringCmd)) {
-					$MonitoringCmd->remove();
+
+				$MonitoringCmd = $this->getCmd(null, 'hddusedusb');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Utilisé', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddusedusb');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('string');
+					$MonitoringCmd->save();
 				}
-				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedv2');
-				if ( is_object($MonitoringCmd)) {
-					$MonitoringCmd->remove();
+
+				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Utilisé (pourcentage)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddpourcusedusb');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->save();
 				}
 			}
 		}
@@ -394,6 +417,10 @@ class Monitoring extends eqLogic {
 		$replace ['#hddpourcusedv2orangede#'] = $this->getConfiguration('hddpourcusedv2orangede');
 		$replace ['#hddpourcusedv2orangea#'] = $this->getConfiguration('hddpourcusedv2orangea');
 		$replace ['#hddpourcusedv2rougesupa#'] = $this->getConfiguration('hddpourcusedv2rougesupa');
+		$replace ['#hddpourcusedusbvertinfa#'] = $this->getConfiguration('hddpourcusedusbvertinfa');
+		$replace ['#hddpourcusedusborangede#'] = $this->getConfiguration('hddpourcusedusborangede');
+		$replace ['#hddpourcusedusborangea#'] = $this->getConfiguration('hddpourcusedusborangea');
+		$replace ['#hddpourcusedusbrougesupa#'] = $this->getConfiguration('hddpourcusedusbrougesupa');
 		$replace ['#perso1vertinfa#'] = $this->getConfiguration('perso1vertinfa');
 		$replace ['#perso1orangede#'] = $this->getConfiguration('perso1orangede');
 		$replace ['#perso1orangea#'] = $this->getConfiguration('perso1orangea');
@@ -479,7 +506,8 @@ class Monitoring extends eqLogic {
 		$replace['#cpu_collect#'] = (is_object($cpu) && $cpu->getIsVisible()) ? $cpu->getCollectDate() : "-";
         $replace['#cpu_value#'] = (is_object($cpu) && $cpu->getIsVisible()) ? $cpu->getValueDate() : "-";
 
-		$SynoV2Visible = (is_object($this->getCmd(null,'hddusedv2')) && $this->getCmd(null,'hddusedv2')->getIsVisible()) ? 'OK' : '';
+		// Syno Volume 2
+		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 
 		if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1'){
 			$hddusedv2 = $this->getCmd(null,'hddusedv2');
@@ -497,6 +525,27 @@ class Monitoring extends eqLogic {
 			$replace['#synovolume2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? 'OK' : '';
 			$replace['#hddtotalv2_collect#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? $hddtotalv2->getCollectDate() : "-";
         	$replace['#hddtotalv2_value#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? $hddtotalv2->getValueDate() : "-";
+		}
+
+		// Syno Volume USB
+		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
+
+		if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+			$hddusedusb = $this->getCmd(null,'hddusedusb');
+			$replace['#hddusedusb#'] = (is_object($hddusedusb)) ? $hddusedusb->execCmd() : '';
+			$replace['#hddusedusbid#'] = is_object($hddusedusb) ? $hddusedusb->getId() : '';
+
+			$hddusedusb_pourc = $this->getCmd(null,'hddpourcusedusb');
+			$replace['#hddpourcusedusb#'] = (is_object($hddusedusb_pourc)) ? $hddusedusb_pourc->execCmd() : '';
+			$replace['#hddpourcusedusbid#'] = is_object($hddusedusb_pourc) ? $hddusedusb_pourc->getId() : '';
+
+			$hddtotalusb = $this->getCmd(null,'hddtotalusb');
+			$replace['#hddtotalusb#'] = (is_object($hddtotalusb)) ? $hddtotalusb->execCmd() : '';
+			$replace['#hddtotalusbid#'] = is_object($hddtotalusb) ? $hddtotalusb->getId() : '';
+			$replace['#hddusedusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? "#hddusedusb_display#" : "none";
+			$replace['#synovolumeusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? 'OK' : '';
+			$replace['#hddtotalusb_collect#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? $hddtotalusb->getCollectDate() : "-";
+        	$replace['#hddtotalusb_value#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? $hddtotalusb->getValueDate() : "-";
 		}
 
 		$cnx_ssh = $this->getCmd(null,'cnx_ssh');
@@ -568,14 +617,14 @@ class Monitoring extends eqLogic {
 			$cartereseau = $this->getConfiguration('cartereseauautre');
 		}
         elseif ($this->getConfiguration('cartereseau') == 'netauto') {
-          // $cartereseau = "$(ip a | grep 'state UP' | awk -F':' '{gsub(/^[ \t]+|[ \t]+$/, \"\", $2); print $2}' | tail -1)";
 		  $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1)";
 		} else {
 			$cartereseau = $this->getConfiguration('cartereseau');
 		}
 
-		$SynoV2Visible = (is_object($this->getCmd(null,'hddusedv2')) && $this->getCmd(null,'hddusedv2')->getIsVisible()) ? 'OK' : '';
-		
+		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
+		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
+
 		if ($this->getConfiguration('maitreesclave') == 'deporte' && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
 			$user = $this->getConfiguration('user');
@@ -599,14 +648,13 @@ class Monitoring extends eqLogic {
 
 					if($this->getConfiguration('synology') == '1') {
 						// $namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
-						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname";
-						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION | tr -d '\"'";
+						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
+						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 					}
 					else {
-						$namedistri_cmd = "cat /etc/*-release | grep PRETTY_NAME=";
-						// $swap_pourc_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
-						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release | tr -d '\"'";
-						$bitdistri_cmd = "getconf LONG_BIT";
+						$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep PRETTY_NAME=";
+						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release 2>/dev/null | tr -d '\"'";
+						$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 					}
 
 					$memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
@@ -614,7 +662,6 @@ class Monitoring extends eqLogic {
 					
 					$loadavg_cmd = "cat /proc/loadavg";
 					
-					// $ReseauRXTX_cmd = "cat /proc/net/dev | grep ".$cartereseau." | awk '{print $2,$10}'";
 					$ReseauRXTX_cmd = "cat /proc/net/dev | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
 
 					$perso_1cmd = $this->getConfiguration('perso1');
@@ -635,7 +682,6 @@ class Monitoring extends eqLogic {
 
 					$memory = $sshconnection->exec($memory_cmd);
 					$swap = $sshconnection->exec($swap_cmd);
-					// $Swappourc = $sshconnection->exec($swap_pourc_cmd);
 
 					$perso_1 = $sshconnection->exec($perso_1cmd);
 					log::add('Monitoring', 'debug', '[SSH] $perso_1 : '.$perso_1);
@@ -653,26 +699,28 @@ class Monitoring extends eqLogic {
 						$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
 						$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
 						
-						// $hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 						$hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hdd = $sshconnection->exec($hdd_cmd);
 
-						// $versionsyno_cmd = "cat /etc.defaults/VERSION | cut -d'=' -f2 | cut -d'=' -f2 | tr '\n' ' ' | awk '{ print $3,$4,$5,$7,$9}'";
 						// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
 						$versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 						$versionsyno = $sshconnection->exec($versionsyno_cmd);
 
-						$synotemp_cmd='$(find /sys/devices/* -name temp*_input | head -1)';
+						$synotemp_cmd='timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)';
 						if($this->getconfiguration('syno_use_temp_path')) $synotemp_cmd=$this->getconfiguration('syno_temp_path');				
 
-						$cputemp0_cmd = "timeout 3 cat ".$synotemp_cmd;
+						$cputemp0_cmd = $synotemp_cmd;
 						log::add("Monitoring","debug", "commande temp syno : ".$cputemp0_cmd);
 						$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 					
 						if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
-							// $hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1"; // DSM 5.x & 6.x
-							$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x & 6.x
+							$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 							$hddv2 = $sshconnection->exec($hddv2cmd);
+						}
+
+						if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1') {
+							$hddusbcmd = "df -h | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$hddusb = $sshconnection->exec($hddusbcmd);
 						}
 					}	
 					elseif ($ARMv == 'armv6l') {
@@ -684,8 +732,12 @@ class Monitoring extends eqLogic {
 						$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hdd = $sshconnection->exec($hdd_cmd);
 
-						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-						$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
+						$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);						
+						if (cpufreq0 == '') {
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+						}
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
@@ -700,8 +752,13 @@ class Monitoring extends eqLogic {
 						
 						$uname = '.';
 
-						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
 						$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
+
+						if ($cpufreq0 == '') {
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+							$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
+						}
 
 						$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hdd = $sshconnection->exec($hdd_cmd);
@@ -739,6 +796,11 @@ class Monitoring extends eqLogic {
 						$cpufreq = $sshconnection->exec($cpufreqVM_cmd);
 
 						if ($cpufreq == '') {
+							$cpufreqVMbis_cmd = "lscpu | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
+							$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
+						}
+
+						if ($cpufreq == '') {
 							$cpufreqVMbis_cmd = "lscpu | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
 							$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
 						}
@@ -755,8 +817,7 @@ class Monitoring extends eqLogic {
 
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null";	// OK AOpen DE2700
-								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-								
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
 							}
 							if ($cputemp0 == '') {
 								$cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input 2>/dev/null";	// OK AMD Ryzen
@@ -870,31 +931,24 @@ class Monitoring extends eqLogic {
 				}
 			}
 		}
-		elseif($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
+		elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
 			$cnx_ssh = 'No';
 			$uptime_cmd = "uptime";
 			
 			if($this->getConfiguration('synology') == '1') {
 				// $namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
-				$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname";
+				$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 
-				// $memory_cmd = "cat /proc/meminfo | cut -d':' -f2 | awk '{ print $1}' | tr '\n' ' ' | awk '{ print $1,$2,$3,$4}'";
-				// $swap_cmd = "free | grep 'Swap' | head -1 | awk '{ print $2,$3,$4 }'";
-				// $hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 				$hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
-				$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION | tr -d '\"'";
+				$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 			}
 			else {
-				$ARMv_cmd = "lscpu | grep Architecture | awk '{ print $2 }'";
-				$namedistri_cmd = "cat /etc/*-release | grep PRETTY_NAME=";
-				$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release | tr -d '\"'";
-				
-				// $memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
-				// $swap_cmd = "free -h | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
-				// $swap_pourc_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
+				$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+				$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep PRETTY_NAME=";
+				$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release 2>/dev/null | tr -d '\"'";
 				
 				$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-				$bitdistri_cmd = "getconf LONG_BIT";
+				$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 				
 				$ARMv = exec($ARMv_cmd);
 				$bitdistri = exec($bitdistri_cmd);
@@ -903,10 +957,9 @@ class Monitoring extends eqLogic {
 			$memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 			$swap_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
 
-			$loadavg_cmd = "cat /proc/loadavg";
+			$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
 
-			// $ReseauRXTX_cmd = "cat /proc/net/dev | grep ".$cartereseau." | awk '{print $2,$10}'";
-			$ReseauRXTX_cmd = "cat /proc/net/dev | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
 
 			$perso_1cmd = $this->getConfiguration('perso1');
 			$perso_2cmd = $this->getConfiguration('perso2');
@@ -920,7 +973,6 @@ class Monitoring extends eqLogic {
 			$hdd = exec($hdd_cmd);
 			$memory = exec($memory_cmd);
 			$swap = exec($swap_cmd);
-			// $Swappourc = exec($swap_pourc_cmd);
 			
 			if ($perso_1cmd != '') {
 				$perso_1 = exec ($perso_1cmd);
@@ -935,28 +987,39 @@ class Monitoring extends eqLogic {
 				$uname = '.';
 				$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core";
 				$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
-				// $versionsyno_cmd = "cat /etc.defaults/VERSION | cut -d'=' -f2 | cut -d'=' -f2 | tr '\n' ' ' | awk '{ print $3,$4,$5,$7,$9}'";
-				// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'";
-				$versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
+				$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
 
 				$nbcpu = exec($nbcpuARM_cmd);
 				$cpufreq0 = exec($cpufreq0ARM_cmd);
 				$versionsyno = exec($versionsyno_cmd);
 
 				if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
-					$hddv2cmd = "df -h | grep 'vg1001' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+					$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 					$hddv2 = exec($hddv2cmd);
+				}
+
+				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1') {
+					$hddusbcmd = "df -h | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+					$hddusb = exec($hddusbcmd);
 				}
 			}
 			elseif ($ARMv == 'armv6l') {
 				$uname = '.';
+				$cpufreq0 = '';
+				$cputemp0 = '';
 
 				$nbcpuARM_cmd = "lscpu | grep 'CPU(s):' | awk '{ print $2 }'";
 				$nbcpu = exec($nbcpuARM_cmd);
 				
-				if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq')) {
-					$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
+				if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq')) {
+					$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
 					$cpufreq0 = exec($cpufreq0ARM_cmd);
+				}
+				if ($cpufreq0 == '') {
+					if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq')) {
+						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
+						$cpufreq0 = exec($cpufreq0ARM_cmd);
+					}
 				}
 				$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 				if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
@@ -974,10 +1037,16 @@ class Monitoring extends eqLogic {
 				$nbcpuARM_cmd = "lscpu | grep '^CPU(s):' | awk '{ print $2 }'";
 				$nbcpu = exec($nbcpuARM_cmd);
 				
-				if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq')) {
-					$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
+				if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq')) {
+					$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
 					$cpufreq0 = exec($cpufreq0ARM_cmd);
 				}
+				if ($cpufreq0 == '') {
+					if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq')) {
+						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
+						$cpufreq0 = exec($cpufreq0ARM_cmd);
+					}
+				}	
 				
 				$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 				if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
@@ -1011,6 +1080,10 @@ class Monitoring extends eqLogic {
 				$cpufreqVM_cmd = "lscpu | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
 				$cpufreq = exec($cpufreqVM_cmd);
 				
+				if ($cpufreq == ''){
+					$cpufreqVMbis_cmd = "lscpu | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
+					$cpufreq = exec($cpufreqVMbis_cmd);
+				}
 				if ($cpufreq == ''){
 					$cpufreqVMbis_cmd = "lscpu | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
 					$cpufreq = exec($cpufreqVMbis_cmd);
@@ -1060,12 +1133,6 @@ class Monitoring extends eqLogic {
 							$versionsyno_TXT = '';
 						}
 
-						/* $versionsyno = str_ireplace('"', '', $versionsyno);
-						$versionsyno = explode(' ', $versionsyno);
-						if (isset($versionsyno[0]) && isset($versionsyno[1]) && isset($versionsyno[2]) && isset($versionsyno[3]) && isset($versionsyno[4])) {
-							$versionsyno = 'DSM '.$versionsyno[0].'.'.$versionsyno[1].'.'.$versionsyno[2].'-'.$versionsyno[3].' Update '.$versionsyno[4];
-						} */
-
 						if (isset($namedistri) && isset($versionsyno_TXT)) {
 							$namedistri = trim($namedistri);
 							$namedistri = $versionsyno_TXT.' ('.$namedistri.')';
@@ -1082,13 +1149,28 @@ class Monitoring extends eqLogic {
 					}
 				}
 				
+				// Syno Volume 2
 				if($SynoV2Visible == 'OK' && $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1'){
 					if (isset($hddv2)) {
 						$hdddatav2 = explode(' ', $hddv2);
 						if (isset($hdddatav2[0]) && isset($hdddatav2[1]) && isset($hdddatav2[2])) {
-							$hddtotalv2 = $hdddatav2[0];
-							$hddusedv2 = $hdddatav2[1];
+							$hddtotalv2 = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatav2[0]);
+							$hddusedv2 = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatav2[1]);
 							$hddusedv2_pourc = preg_replace("/[^0-9.]/","",$hdddatav2[2]);
+							$hddusedv2_pourc = trim($hddusedv2_pourc);
+						}
+					}
+				}
+
+				// Syno Volume USB 
+				if($SynoUSBVisible == 'OK' && $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1'){
+					if (isset($hddusb)) {
+						$hdddatausb = explode(' ', $hddusb);
+						if (isset($hdddatausb[0]) && isset($hdddatausb[1]) && isset($hdddatausb[2])) {
+							$hddtotalusb = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatausb[0]);
+							$hddusedusb = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatausb[1]);
+							$hddusedusb_pourc = preg_replace("/[^0-9.]/","",$hdddatausb[2]);
+							$hddusedusb_pourc = trim($hddusedusb_pourc);
 						}
 					}
 				}
@@ -1135,14 +1217,6 @@ class Monitoring extends eqLogic {
 								log::add('Monitoring', 'debug', '[Memory] Version Linux ('.$VersionID.') / Mémoire Libre = '.$memorylibre);
 							}
 						}
-						/* elseif(intval($VersionID) >= 9 && isset($memory[3])){
-							$memorylibre = intval($memory[3]);
-							log::add('Monitoring', 'debug', '[Memory] VersionID ('.$VersionID.') >= 9 et Free3 ok : '.$memorylibre.' / '.$memory[3]);
-						}
-						elseif(intval($VersionID) < 9 && isset($memory[2]) && isset($memory[3])){
-							$memorylibre = intval($memory[2]) + intval($memory[3]);
-							log::add('Monitoring', 'debug', 'Version ('.$VersionID.') < 9 et Free2 et Free3 ok : '.$memorylibre.' / '.$memory[2].' / '.$memory[3]);
-						} */
 						
 						if (isset($memory[0]) && isset($memorylibre)) {
 							if (intval($memory[0]) != 0) {
@@ -1246,22 +1320,6 @@ class Monitoring extends eqLogic {
 						$swap[2] = str_replace("B"," o", $swap[2]);
 						$Memswap = 'Total : '.$swap[0].' - Utilisé : '.$swap[1].' - Libre : '.$swap[2];
 					}
-
-					/* $Swappourc = explode(' ', $Swappourc);
-					if (isset($Swappourc[0]) && isset($Swappourc[1]))
-					{
-						log::add('Monitoring', 'debug', 'Variable Swappourc[0] = '.$Swappourc[0].' / Swappourc[1] = '.$Swappourc[1]);
-						if (intval($Swappourc[0]) != 0){
-							$swaplibre_pourc = round(intval($Swappourc[1]) / intval($Swappourc[0]) * 100, 2);
-						if (intval($memory[0]) != 0) {
-							$memorylibre_pourc = round(intval($memorylibre) / intval($memory[0]) * 100);
-							log::add('Monitoring', 'debug', '[Memory] Memorylibre% = '.$memorylibre_pourc);
-						}
-						else {
-							$swaplibre_pourc = 0;
-							$memorylibre_pourc = 0;
-						}
-					} */
 				} 
 				else {
 					$Memswap = '';
@@ -1314,9 +1372,9 @@ class Monitoring extends eqLogic {
 						$hddused = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddata[1]);
 						$hddused_pourc = preg_replace("/[^0-9.]/","",$hdddata[2]);
 						$hddused_pourc = trim($hddused_pourc);
-						if ($hddused_pourc < '10') {
+						/* if ($hddused_pourc < '10') {
 							$hddused_pourc = '0'.$hddused_pourc; // A quoi sert certe conversion ?
-						}
+						}*/
 					}
 				}
 
@@ -1398,7 +1456,6 @@ class Monitoring extends eqLogic {
 				if (empty($perso_1)) {$perso_1 = '';}
 				if (empty($perso_2)) {$perso_2 = '';}
 				if (empty($cnx_ssh)) {$cnx_ssh = '';}
-				// if (empty($swap_pourc_cmd)) {$swap_pourc_cmd = '';}
 				if (empty($uname)) {$uname = 'Inconnu';}
 				if (empty($Mem)) {$Mem = '';}
 				if (empty($memorylibre_pourc)) {$memorylibre_pourc = '';}
@@ -1431,6 +1488,15 @@ class Monitoring extends eqLogic {
 						'hddtotalv2' => $hddtotalv2,
 						'hddusedv2' => $hddusedv2,
 						'hddpourcusedv2' => $hddusedv2_pourc,
+					);
+				}
+
+				// Syno Volume USB
+				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+					$dataresultusb = array(
+						'hddtotalusb' => $hddtotalusb,
+						'hddusedusb' => $hddusedusb,
+						'hddpourcusedusb' => $hddusedusb_pourc,
 					);
 				}
 
@@ -1506,6 +1572,21 @@ class Monitoring extends eqLogic {
 					$hddusedv2_pourc = $this->getCmd(null,'hddpourcusedv2');
 					if(is_object($hddusedv2_pourc)){
 						$hddusedv2_pourc->event($dataresultv2['hddpourcusedv2']);
+					}
+				}
+
+				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+					$hddtotalusb = $this->getCmd(null,'hddtotalusb');
+					if(is_object($hddtotalusb)){
+						$hddtotalusb->event($dataresultusb['hddtotalusb']);
+					}
+					$hddusedusb = $this->getCmd(null,'hddusedusb');
+					if(is_object($hddusedusb)){
+						$hddusedusb->event($dataresultusb['hddusedusb']);
+					}
+					$hddusedusb_pourc = $this->getCmd(null,'hddpourcusedusb');
+					if(is_object($hddusedusb_pourc)){
+						$hddusedusb_pourc->event($dataresultusb['hddpourcusedusb']);
 					}
 				}
 
