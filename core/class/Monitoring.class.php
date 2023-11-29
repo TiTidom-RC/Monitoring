@@ -604,8 +604,6 @@ class Monitoring extends eqLogic {
 	}
 
 	public function getInformations() {
-
-		// $swap_pourc_cmd = '';
 		$bitdistri_cmd = '';
 		$uname = "Inconnu";
 		$Mem = '';
@@ -652,8 +650,8 @@ class Monitoring extends eqLogic {
 						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 					}
 					else {
-						$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep PRETTY_NAME=";
-						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release 2>/dev/null | tr -d '\"'";
+						$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 						$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 					}
 
@@ -944,8 +942,8 @@ class Monitoring extends eqLogic {
 			}
 			else {
 				$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-				$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep PRETTY_NAME=";
-				$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/os-release 2>/dev/null | tr -d '\"'";
+				$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+				$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 				
 				$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 				$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
@@ -1380,7 +1378,7 @@ class Monitoring extends eqLogic {
 
 				if (isset($ARMv)) {
 					if ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386'){
-						if ((floatval($cpufreq) / 1024) > 1) {
+						if ((floatval($cpufreq) / 1000) > 1) {
 							$cpufreq = round(floatval($cpufreq) / 1000, 1, PHP_ROUND_HALF_UP) . " GHz";
 						}
 						else {

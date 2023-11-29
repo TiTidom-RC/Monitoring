@@ -41,7 +41,11 @@ function initMonitoringPanel(_object_id) {
   displayMonitoring(_object_id);
 
   $(window).on("resize", function (event) {
-    setTileSize('.eqLogic');
+    if (typeof jeedomUtils.setTileSize === "function") {
+      jeedomUtils.setTileSize('.eqLogic');
+    } else {
+      setTileSize('.eqLogic');
+    }
     $('#div_displayEquipementMonitoring').packery({gutter : 0});
   });
 }
@@ -69,7 +73,11 @@ function displayMonitoring(_object_id) {
       for (var i in data.result.eqLogics) {
         $('#div_displayEquipementMonitoring').append(data.result.eqLogics[i]).trigger('create');
       }
-      setTileSize('.eqLogic');
+      if (typeof jeedomUtils.setTileSize === "function") {
+        jeedomUtils.setTileSize('.eqLogic');
+      } else {
+        setTileSize('.eqLogic');
+      }
       jeedom.eqLogic.changeDisplayObjectName(true);
       $('#div_displayEquipementMonitoring').packery({gutter : 0});
       $('#div_displayEquipementMonitoring').packery({gutter : 0});
