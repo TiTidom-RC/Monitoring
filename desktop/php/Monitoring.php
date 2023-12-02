@@ -171,7 +171,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                                 <div class="syno_conf">
                                     <div class="form-group">
-                                        <label class="col-md-2 control-label" >{{Méthode alternative de détection du modèle}}</label>
+                                        <label class="col-md-2 control-label" >{{Modèle (Alt)}}</label>
                                         <div class="col-md-8">
                                             <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="syno_alt_name" >
                                             <span style="font-size: 75%;">({{à cocher si le nom du modèle de votre Syno est mal détecté}})</span>
@@ -181,7 +181,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <label class="col-md-2 control-label" >{{Volume 2}}</label>
                                         <div class="col-md-8">
                                             <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyv2" >
-                                            <span style="font-size: 75%;">({{à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut}})</span>
+                                            <span style="font-size: 75%;">({{à cocher seulement si vous avez un 2ème volume (Volume 2)}})</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -192,14 +192,14 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-2 control-label" >{{Chemin temp utilisateur}}</label>
+                                        <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                         <div class="col-md-8">
                                             <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="syno_use_temp_path" >
                                             <span style="font-size: 75%;">({{à cocher pour spécifier la commande de récupération de la température}})</span>
                                         </div>
                                     </div>
                                     <div class="form-group syno_conf_temppath">
-                                        <label class="col-md-2 control-label" >{{chemin temp}}</label>
+                                        <label class="col-md-2 control-label" >{{Comande Temp}}</label>
                                         <div class="col-md-8">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input}}">
                                         </div>
