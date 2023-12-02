@@ -3,6 +3,7 @@
         "Ajouter un équipement": "Ajouter un équipement",
         "Rechercher": "Rechercher",
         "Général": "Général",
+        "Nom de l'équipement": "Nom de l'équipement",
         "Nom de l'équipement Monitoring": "Nom de l'équipement Monitoring",
         "Objet parent": "Objet parent",
         "Aucun": "Aucun",
@@ -57,7 +58,7 @@
         "A cocher si le nom du modèle de votre Syno est mal détecté": "A cocher si le nom du modèle de votre Syno est mal détecté",
         "A cocher si vous avez un 2ème volume disque": "A cocher si vous avez un 2ème volume disque",
         "A cocher si vous avez un disque USB": "A cocher si vous avez un disque USB",
-        "A cocher pour spécifier la commande de récupération de la température": "A cocher pour spécifier la commande de récupération de la température"
+        "A cocher pour spécifier la commande de récupération de température": "A cocher pour spécifier la commande de récupération de température"
     },
     "plugins\/Monitoring\/core\/class\/Monitoring.class.php": {
         "Distribution": "Distribution",

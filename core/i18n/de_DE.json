@@ -3,6 +3,7 @@
         "Ajouter un équipement": "Gerät hinzufügen",
         "Rechercher": "Suchen",
         "Général": "Allgemein",
+        "Nom de l'équipement": "Gerätename",
         "Nom de l'équipement Monitoring": "Monitoring Gerätename",
         "Objet parent": "Elternobjekt",
         "Aucun": "Keine",
@@ -57,7 +58,7 @@
         "A cocher si le nom du modèle de votre Syno est mal détecté": "Aktivieren Sie, wenn der Modellname Ihres Syno falsch erkannt wird",
         "A cocher si vous avez un 2ème volume disque": "Aktivieren Sie, wenn Sie ein zweites Festplattenvolume haben",
         "A cocher si vous avez un disque USB": "Aktivieren Sie, wenn Sie eine USB-Festplatte haben ",
-        "A cocher pour spécifier la commande de récupération de la température": "Aktivieren Sie, um den Temperaturwiederherstellungsbefehl anzugeben"
+        "A cocher pour spécifier la commande de récupération de température": "Aktivieren Sie, um den Temperaturwiederherstellungsbefehl anzugeben"
     },
     "plugins\/Monitoring\/core\/class\/Monitoring.class.php": {
         "Distribution": "Distribution",
