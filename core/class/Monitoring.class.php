@@ -645,7 +645,7 @@ class Monitoring extends eqLogic {
 					$uptime_cmd = "uptime";
 
 					if($this->getConfiguration('synology') == '1') {
-						if ($this->getConfigutation('syno_alt_name') == '1') {
+						if ($this->getConfiguration('syno_alt_name') == '1') {
 							$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
 						}
 						else {
@@ -938,7 +938,7 @@ class Monitoring extends eqLogic {
 			$uptime_cmd = "uptime";
 			
 			if($this->getConfiguration('synology') == '1') {
-				if ($this->getConfigutation('syno_alt_name') == '1') {
+				if ($this->getConfiguration('syno_alt_name') == '1') {
 					$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
 				}
 				else {
