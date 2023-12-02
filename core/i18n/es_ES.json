@@ -58,7 +58,7 @@
         "A cocher si vous avez un 2ème volume disque": "Comprueba si tienes un segundo volumen de disco",
         "A cocher si le nom du modèle de votre Syno est mal détecté": "Compruebe si el nombre del modelo de su Syno se detecta incorrectamente",
         "A cocher si vous avez un disque USB": "Comprueba si tienes un disco USB",
-        "A cocher pour spécifier la commande de récupération de la température": "Marque para especificar el comando de recuperación de temperatura."
+        "A cocher pour spécifier la commande de récupération de température": "Marque para especificar el comando de recuperación de temperatura."
     },
     "plugins\/Monitoring\/core\/class\/Monitoring.class.php": {
         "Distribution": "Distribución",
