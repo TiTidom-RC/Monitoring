@@ -188,7 +188,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <label class="col-md-2 control-label" >{{Volume USB}}</label>
                                         <div class="col-md-8">
                                             <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyusb" >
-                                            <span style="font-size: 80%;">({{à cocher si vous avez un volume USB dans Synology}})</span>
+                                            <span style="font-size: 80%;">({{à cocher si vous avez un volume USB}})</span>
                                         </div>
                                     </div>
                                     <div class="form-group">

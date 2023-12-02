@@ -52,7 +52,7 @@
         "eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...": "eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...",
         "à cocher si vous désirez monitorer un NAS Synology": "à cocher si vous désirez monitorer un NAS Synology",
         "à cocher si vous avez un 2ème volume (Volume 2)": "à cocher si vous avez un 2ème volume (Volume 2)",
-        "à cocher si vous avez un volume USB dans Synology": "à cocher si vous avez un volume USB dans Synology",
+        "à cocher si vous avez un volume USB": "à cocher si vous avez un volume USB",
         "à cocher pour spécifier la commande de récupération de la température": "à cocher pour spécifier la commande de récupération de la température",
         "Temp (Alt)": "Temp (Alt)",
         "Commande Temp": "Commande Temp",
