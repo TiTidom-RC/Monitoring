@@ -645,8 +645,12 @@ class Monitoring extends eqLogic {
 					$uptime_cmd = "uptime";
 
 					if($this->getConfiguration('synology') == '1') {
-						// $namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
-						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
+						if ($this->getConfigutation('syno_alt_name') == '1') {
+							$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
+						}
+						else {
+							$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
+						}
 						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 					}
 					else {
@@ -934,9 +938,12 @@ class Monitoring extends eqLogic {
 			$uptime_cmd = "uptime";
 			
 			if($this->getConfiguration('synology') == '1') {
-				// $namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
-				$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
-
+				if ($this->getConfigutation('syno_alt_name') == '1') {
+					$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
+				}
+				else {
+					$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
+				}
 				$hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 				$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 			}

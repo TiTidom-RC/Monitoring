@@ -166,10 +166,17 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
                                         <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synology">
-                                        <span style="font-size: 75%;">({{à cocher seulement si vous désirez Monitorer un NAS Synology}})</span>
+                                        <span style="font-size: 75%;">({{à cocher seulement si vous désirez monitorer un NAS Synology}})</span>
                                     </div>
                                 </div>
                                 <div class="syno_conf">
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" >{{Méthode alternative de détection du modèle}}</label>
+                                        <div class="col-md-8">
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="syno_alt_name" >
+                                            <span style="font-size: 75%;">({{à cocher si le nom du modèle de votre Syno est mal détecté}})</span>
+                                        </div>
+                                    </div>
                                     <div class="form-group">
                                         <label class="col-md-2 control-label" >{{Volume 2}}</label>
                                         <div class="col-md-8">
@@ -188,7 +195,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <label class="col-md-2 control-label" >{{Chemin temp utilisateur}}</label>
                                         <div class="col-md-8">
                                             <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="syno_use_temp_path" >
-                                            <span style="font-size: 75%;">({{si vous souhaitez spécifier directement le chemin pour récupérer la température}})</span>
+                                            <span style="font-size: 75%;">({{à cocher pour spécifier la commande de récupération de la température}})</span>
                                         </div>
                                     </div>
                                     <div class="form-group syno_conf_temppath">

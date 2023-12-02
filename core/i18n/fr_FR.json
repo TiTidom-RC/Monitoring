@@ -50,8 +50,14 @@
         "Commandes": "Commandes",
         "Type": "Type",
         "eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...": "eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...",
-        "à cocher seulement si vous désirez Monitorer un NAS Synology": "à cocher seulement si vous désirez Monitorer un NAS Synology",
-        "à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut": "à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut"
+        "à cocher seulement si vous désirez monitorer un NAS Synology": "à cocher seulement si vous désirez monitorer un NAS Synology",
+        "à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut": "à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut",
+        "à cocher seulement si vous avez un volume USB dans Synology": "à cocher seulement si vous avez un volume USB dans Synology",
+        "à cocher pour spécifier la commande de récupération de la température": "à cocher pour spécifier la commande de récupération de la température",
+        "Chemin temp utilisateur": "Chemin temp utilisateur",
+        "chemin temp": "chemin temp",
+        "Méthode alternative de détection du modèle": "Méthode alternative de détection du modèle",
+        "à cocher si le nom du modèle de votre Syno est mal détecté": "à cocher si le nom du modèle de votre Syno est mal détecté"
     },
     "plugins\/Monitoring\/core\/class\/Monitoring.class.php": {
         "Distribution": "Distribution",

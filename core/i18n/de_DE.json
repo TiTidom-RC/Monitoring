@@ -50,7 +50,7 @@
         "Commandes": "Commandes",
         "Type": "Type",
         "eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...": "eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...",
-        "à cocher seulement si vous désirez Monitorer un NAS Synology": "à cocher seulement si vous désirez Monitorer un NAS Synology",
+        "à cocher seulement si vous désirez monitorer un NAS Synology": "à cocher seulement si vous désirez Monitorer un NAS Synology",
         "à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut": "à cocher seulement si vous avez un 2ème volume (Volume 2) dans Synology. Le volume 1 est pris en compte par défaut"
     },
     "plugins\/Monitoring\/core\/class\/Monitoring.class.php": {
