@@ -124,7 +124,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-4 control-label">{{Local ou Distant ?}}</label>
                                     <div class="col-md-6">
                                         <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave" onchange="if(this.selectedIndex == 1) document.getElementById('deporte').style.display = 'block'; else document.getElementById('deporte').style.display = 'none';">
-                                            <option value="local" selected>{{Local}}</option>
+                                            <option value="local" selected="selected">{{Local}}</option>
                                             <option value="deporte">{{Distant}}</option>
                                         </select>
                                     </div>
