@@ -169,7 +169,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <span style="font-size: 85%;">({{A cocher pour monitorer un NAS Synology}})</span>
                                     </div>
                                 </div>
-                                <div class="syno_conf">
+                                <div class="syno_conf" style="display:none;">
                                     <div class="form-group">
                                         <label class="col-md-2 control-label" >{{Modèle (Alt)}}</label>
                                         <div class="col-md-8">
