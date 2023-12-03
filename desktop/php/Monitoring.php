@@ -198,7 +198,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                             <span style="font-size: 85%;">({{A cocher pour spécifier la commande de récupération de température}})</span>
                                         </div>
                                     </div>
-                                    <div class="form-group syno_conf_temppath">
+                                    <div class="form-group syno_conf_temppath" style="display:none;">
                                         <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                         <div class="col-md-6">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input}}">
