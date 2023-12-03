@@ -104,7 +104,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="col-md-6">
                                         <select id="cartereseau" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cartereseau"
                                             onchange="if(this.selectedIndex == 3) document.getElementById('netautre').style.display = 'block'; else document.getElementById('netautre').style.display = 'none';">
-                                            <option value="netauto" selected>{{Auto (par défaut)}}</option>
+                                            <option value="netauto">{{Auto (par défaut)}}</option>
                                             <option value="eth0">{{1er port Ethernet}}</option>
                                             <option value="wlan0">{{1er port Wi-Fi}}</option>
                                             <option value="netautre">{{Autre}}</option>
@@ -124,7 +124,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-4 control-label">{{Local ou Distant ?}}</label>
                                     <div class="col-md-6">
                                         <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave" onchange="if(this.selectedIndex == 1) document.getElementById('deporte').style.display = 'block'; else document.getElementById('deporte').style.display = 'none';">
-                                            <option value="local" selected="selected">{{Local}}</option>
+                                            <option value="local">{{Local}}</option>
                                             <option value="deporte">{{Distant}}</option>
                                         </select>
                                     </div>
