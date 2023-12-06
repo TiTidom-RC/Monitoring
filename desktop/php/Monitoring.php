@@ -150,8 +150,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Mot de passe}}</label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="password" type="password" placeholder="{{Saisir le password}}">
+                                        <div class="col-md-6 input-group">
+                                            <input type="text" class="eqLogicAttr form-control roundedleft inputPassword" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}">
+                                            <span class="input-group-btn">
+											    <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+										    </span>
                                         </div>
                                     </div>
                                 </div>
