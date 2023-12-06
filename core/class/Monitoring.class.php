@@ -25,7 +25,7 @@ use phpseclib\Net\SSH2;
 
 class Monitoring extends eqLogic {
 
-	public static $_encryptConfigKey = array('user', 'password');
+	// public static $_encryptConfigKey = array('user', 'password');
 
 	public static function pull() {
 		foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
