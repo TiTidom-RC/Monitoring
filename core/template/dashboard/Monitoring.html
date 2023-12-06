@@ -1,8 +1,7 @@
-<div id="plugin_container" class="eqLogic-widget eqLogic allowResize" style="width:#width#;height:#height#;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#; #style#" data-translate-category="#translate_category#" data-category="#category#" data-eqLogic_id="#id#" data-version="#version#" >
-	<center class="widget-name">
-		<a href="#eqLink#" style="#hideEqLogicName#">#name_display#
-			<span style="font-size: 0.85em;position: relative;top:-2px;display:none;" class="object_name">#object_name#</span>
-		</a>
+<div class="eqLogic eqLogic-widget allowResize" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#">
+	<div class="widget-name" text-center>
+		<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+		<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
 		<span class="cmd refresh pull-right cursor">
 			<span id="iconSSH#id#"></span>
 			<script>
@@ -16,10 +15,10 @@
 			<span title="Eteindre l'équipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
 				<script>
-					$('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action').on('click', function() {
+					$('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action').on('click', function () {
 						bootbox.confirm('Etes-vous sûr de vouloir éteindre l\'équipement #name# ?', function (result) {
 							if (result) {
-								jeedom.cmd.execute({id: '#cmd_poweroff_id#'});
+								jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
 							}
 						});
 					});
@@ -28,241 +27,244 @@
 			<span title="Redémarrer l'équipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-sync" style="padding-left:5px;"></i></a>
 				<script>
-					$('.reboot[data-cmd_id=#cmd_reboot_id#] .action').on('click', function() {
+					$('.reboot[data-cmd_id=#cmd_reboot_id#] .action').on('click', function () {
 						bootbox.confirm('Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?', function (result) {
 							if (result) {
-								jeedom.cmd.execute({id: '#cmd_reboot_id#'});
+								jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
 							}
 						});
 					});
 				</script>
 			</span>
 		</span>
-	</center>
-	<div class="tooltips" data-cmd_id="#namedistriid#" style="margin-left:5px;display: #namedistri_display#;">
+	</div>
+	<div class="cmds text-left">
+		<div class="tooltips" data-cmd_id="#namedistriid#" style="margin-left:5px;display: #namedistri_display#;">
 			<span title="Distribution Linux</br><i>Date de valeur : #namedistri_value#</br>Date de collecte : #namedistri_collect#</i>" class="fab fa-linux" style="min-width:15px"></span>
 			<span>#namedistri#</span>
-	</div>
-	<div class="tooltips" data-cmd_id="#uptimeid#" style="margin-left:5px;display: #uptime_display#;">
+		</div>
+		<div class="tooltips" data-cmd_id="#uptimeid#" style="margin-left:5px;display: #uptime_display#;">
 			<span title="Temps d'activité (uptime)</br><i>Date de valeur : #uptime_value#</br>Date de collecte : #uptime_collect#</i>" class="fas fa-tachometer-alt" style="min-width:15px;"></span>
 			<span id="uptime#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			$('#uptime#id#').append('<span>#uptime#</span>');
-		}
-    </script>
-	<div class="tooltips" style="margin-left:5px;display: #loadavg_display#;">
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				$('#uptime#id#').append('<span>#uptime#</span>');
+			}
+		</script>
+		<div class="tooltips" style="margin-left:5px;display: #loadavg_display#;">
 			<span title="Charge système (load average)</br><i>Date de valeur : #loadavg_value#</br>Date de collecte : #loadavg_collect#</i>" class="fa techno-courbes3" style="width:15px;"></span>
 			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			if ('#loadavg1mn#' === '') {
-				$('#loadavg1mn#id#').append('<span></span>');
-			}else if (parseFloat('#loadavg1mn#') < parseFloat('#loadavg1mnvertinfa#')) {
-				$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg1mn#</span>');
-			}else if ((parseFloat('#loadavg1mn#') >= parseFloat('#loadavg1mnorangede#')) && (parseFloat('#loadavg1mn#') <= parseFloat('#loadavg1mnorangea#'))) {
-				$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg1mn#</span>');
-			}else if ((parseFloat('#loadavg1mn#') > parseFloat('#loadavg1mnrougesupa#')) && '#loadavg1mnrougesupa#' !== '') {
-				$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg1mn#</span>');
-			}else {
-				$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor">#loadavg1mn#</span>');
-			}
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#loadavg1mn#' === '') {
+					$('#loadavg1mn#id#').append('<span></span>');
+				} else if (parseFloat('#loadavg1mn#') < parseFloat('#loadavg1mnvertinfa#')) {
+					$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg1mn#</span>');
+				} else if ((parseFloat('#loadavg1mn#') >= parseFloat('#loadavg1mnorangede#')) && (parseFloat('#loadavg1mn#') <= parseFloat('#loadavg1mnorangea#'))) {
+					$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg1mn#</span>');
+				} else if ((parseFloat('#loadavg1mn#') > parseFloat('#loadavg1mnrougesupa#')) && '#loadavg1mnrougesupa#' !== '') {
+					$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg1mn#</span>');
+				} else {
+					$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor">#loadavg1mn#</span>');
+				}
 
-			if ('#loadavg5mn#' === '') {
-				$('#loadavg5mn#id#').append('<span></span>');
-			}else if (parseFloat('#loadavg5mn#') < parseFloat('#loadavg5mnvertinfa#')) {
-				$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg5mn#</span>');
-			}else if ((parseFloat('#loadavg5mn#') >= parseFloat('#loadavg5mnorangede#')) && (parseFloat('#loadavg5mn#') <= parseFloat('#loadavg5mnorangea#'))) {
-				$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg5mn#</span>');
-			}else if ((parseFloat('#loadavg5mn#') > parseFloat('#loadavg5mnrougesupa#')) && '#loadavg5mnrougesupa#' !== '') {
-				$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg5mn#</span>');
-			}else {
-				$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor">#loadavg5mn#</span>');
+				if ('#loadavg5mn#' === '') {
+					$('#loadavg5mn#id#').append('<span></span>');
+				} else if (parseFloat('#loadavg5mn#') < parseFloat('#loadavg5mnvertinfa#')) {
+					$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg5mn#</span>');
+				} else if ((parseFloat('#loadavg5mn#') >= parseFloat('#loadavg5mnorangede#')) && (parseFloat('#loadavg5mn#') <= parseFloat('#loadavg5mnorangea#'))) {
+					$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg5mn#</span>');
+				} else if ((parseFloat('#loadavg5mn#') > parseFloat('#loadavg5mnrougesupa#')) && '#loadavg5mnrougesupa#' !== '') {
+					$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg5mn#</span>');
+				} else {
+					$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor">#loadavg5mn#</span>');
+				}
+				if ('#loadavg15mn#' === '') {
+					$('#loadavg15mn#id#').append('<span></span>');
+				} else if (parseFloat('#loadavg15mn#') < parseFloat('#loadavg15mnvertinfa#')) {
+					$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg15mn#</span>');
+				} else if ((parseFloat('#loadavg15mn#') >= parseFloat('#loadavg15mnorangede#')) && (parseFloat('#loadavg15mn#') <= parseFloat('#loadavg15mnorangea#'))) {
+					$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg15mn#</span>');
+				} else if ((parseFloat('#loadavg15mn#') > parseFloat('#loadavg15mnrougesupa#')) && '#loadavg15mnrougesupa#' !== '') {
+					$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg15mn#</span>');
+				} else {
+					$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor">#loadavg15mn#</span>');
+				}
 			}
-			if ('#loadavg15mn#' === '') {
-				$('#loadavg15mn#id#').append('<span></span>');
-			}else if (parseFloat('#loadavg15mn#') < parseFloat('#loadavg15mnvertinfa#')) {
-				$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg15mn#</span>');
-			}else if ((parseFloat('#loadavg15mn#') >= parseFloat('#loadavg15mnorangede#')) && (parseFloat('#loadavg15mn#') <= parseFloat('#loadavg15mnorangea#'))) {
-				$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg15mn#</span>');
-			}else if ((parseFloat('#loadavg15mn#') > parseFloat('#loadavg15mnrougesupa#')) && '#loadavg15mnrougesupa#' !== '') {
-				$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg15mn#</span>');
-			}else {
-				$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor">#loadavg15mn#</span>');
-			}
-		}
-    </script>
-	<div class="tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#;">
+		</script>
+		<div class="tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#;">
 			<span title="Mémoire vive (% libre)</br><i>Date de valeur : #Mem_value#</br>Date de collecte : #Mem_collect#</i>" class="fa techno-memory" style="width:15px;"></span>
 			<span id="Mempourcent#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			if ('#Mempourc#' === '') {
-				$('#Mempourcent#id#').append('<span>#Mem#</span>');
-			}else if ((parseInt('#Mempourc#') > parseInt('#Mempourcvertsupa#')) && '#Mempourcvertsupa#' !== '') {
-				$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-success-color) !important;" >#Mempourc#%</span>)');
-			}else if ((parseInt('#Mempourc#') >= parseInt('#Mempourcorangede#')) && (parseInt('#Mempourc#') <= parseInt('#Mempourcorangea#'))) {
-				$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#Mempourc#%</span>)');
-			}else if (parseInt('#Mempourc#') < parseInt('#Mempourcrougeinfa#')) {
-				$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#Mempourc#%</span>)');
-			}else {
-				$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" >#Mempourc#%</span>)');
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#Mempourc#' === '') {
+					$('#Mempourcent#id#').append('<span>#Mem#</span>');
+				} else if ((parseInt('#Mempourc#') > parseInt('#Mempourcvertsupa#')) && '#Mempourcvertsupa#' !== '') {
+					$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-success-color) !important;" >#Mempourc#%</span>)');
+				} else if ((parseInt('#Mempourc#') >= parseInt('#Mempourcorangede#')) && (parseInt('#Mempourc#') <= parseInt('#Mempourcorangea#'))) {
+					$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#Mempourc#%</span>)');
+				} else if (parseInt('#Mempourc#') < parseInt('#Mempourcrougeinfa#')) {
+					$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#Mempourc#%</span>)');
+				} else {
+					$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" >#Mempourc#%</span>)');
+				}
 			}
-		}
-    </script>
-	<div class="tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#;">
+		</script>
+		<div class="tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#;">
 			<span title="Mémoire Swap (% libre)</br><i>Date de valeur : #Mem_swap_value#</br>Date de collecte : #Mem_swap_collect#</i>" class="fas fa-list" style="width:15px;"></span>
 			<span id="Swappourc#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			if ('#Swappourc#' === '') {
-				$('#Swappourc#id#').append('<span>#Mem_swap#</span>');
-			}else if ((parseInt('#Swappourc#') > parseInt('#Swappourcvertsupa#')) && '#Swappourcvertsupa#' !== '') {
-				$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-success-color) !important;" >#Swappourc#%</span>)');
-			}else if ((parseInt('#Swappourc#') >= parseInt('#Swappourcorangede#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourcorangea#'))) {
-				$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#Swappourc#%</span>)');
-			}else if (parseInt('#Swappourc#') < parseInt('#Swappourcrougeinfa#')) {
-				$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#Swappourc#%</span>)');	
-			}else {
-				$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" >#Swappourc#%</span>)');
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#Swappourc#' === '') {
+					$('#Swappourc#id#').append('<span>#Mem_swap#</span>');
+				} else if ((parseInt('#Swappourc#') > parseInt('#Swappourcvertsupa#')) && '#Swappourcvertsupa#' !== '') {
+					$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-success-color) !important;" >#Swappourc#%</span>)');
+				} else if ((parseInt('#Swappourc#') >= parseInt('#Swappourcorangede#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourcorangea#'))) {
+					$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#Swappourc#%</span>)');
+				} else if (parseInt('#Swappourc#') < parseInt('#Swappourcrougeinfa#')) {
+					$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#Swappourc#%</span>)');
+				} else {
+					$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" >#Swappourc#%</span>)');
+				}
 			}
-		}
-    </script>
-	<div class="tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#;">
+		</script>
+		<div class="tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#;">
 			<span title="Trafic réseau (#ethernet0_name#)</br><i>Date de valeur : #ethernet0_value#</br>Date de collecte : #ethernet0_collect#</i>" class="fa techno-fleches" style="width:15px;"></span>
 			<span id="ethernet0#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			$('#ethernet0#id#').append('<span>#ethernet0#</span>');
-		}
-    </script>
-	<div class="tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#;">
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				$('#ethernet0#id#').append('<span>#ethernet0#</span>');
+			}
+		</script>
+		<div class="tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#;">
 			<span title="Espace disque (% utilisé)</br><i>Date de valeur : #hddtotal_value#</br>Date de collecte : #hddtotal_collect#</i>" class="fas fa-hdd" style="width:15px;"></span>
 			<span id="hddpourcused#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			if ('#hddpourcused#' === '') {
-				$('#hddpourcused#id#').append('<span></span>');
-			}else if (parseInt('#hddpourcused#') < parseInt('#hddpourcusedvertinfa#')) {
-				$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcused#%</span>)');
-			}else if ((parseInt('#hddpourcused#') >= parseInt('#hddpourcusedorangede#')) && (parseInt('#hddpourcused#') <= parseInt('#hddpourcusedorangea#'))) {
-				$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcused#%</span>)');
-			}else if ((parseInt('#hddpourcused#') > parseInt('#hddpourcusedrougesupa#')) && '#hddpourcusedrougesupa#' !== '') {
-				$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcused#%</span>)');
-			}else {
-				$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor">#hddpourcused#%</span>)');
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#hddpourcused#' === '') {
+					$('#hddpourcused#id#').append('<span></span>');
+				} else if (parseInt('#hddpourcused#') < parseInt('#hddpourcusedvertinfa#')) {
+					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcused#%</span>)');
+				} else if ((parseInt('#hddpourcused#') >= parseInt('#hddpourcusedorangede#')) && (parseInt('#hddpourcused#') <= parseInt('#hddpourcusedorangea#'))) {
+					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcused#%</span>)');
+				} else if ((parseInt('#hddpourcused#') > parseInt('#hddpourcusedrougesupa#')) && '#hddpourcusedrougesupa#' !== '') {
+					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcused#%</span>)');
+				} else {
+					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor">#hddpourcused#%</span>)');
+				}
 			}
-		}
-    </script>
-	<div id="synovol2#id#"></div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			if ('#synovolume2_display#' == 'OK'){
-				$('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Espace disque Volume 2 Syno (% utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>');
+		</script>
+		<div id="synovol2#id#"></div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#synovolume2_display#' == 'OK') {
+					$('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Espace disque Volume 2 Syno (% utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>');
+				}
+				if ('#hddpourcusedv2#' === '') {
+					$('#hddpourcusedv2#id#').append('<span></span>');
+				} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2vertinfa#')) {
+					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedv2#%</span>)');
+				} else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2orangede#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2orangea#'))) {
+					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#%</span>)');
+				} else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2rougesupa#')) && '#hddpourcusedv2rougesupa#' !== '') {
+					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#%</span>)');
+				} else {
+					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor">#hddpourcusedv2#%</span>)');
+				}
 			}
-			if ('#hddpourcusedv2#' === '') {
-				$('#hddpourcusedv2#id#').append('<span></span>');
-			}else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2vertinfa#')) {
-				$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedv2#%</span>)');
-			}else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2orangede#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2orangea#'))) {
-				$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#%</span>)');
-			}else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2rougesupa#')) && '#hddpourcusedv2rougesupa#' !== '') {
-				$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#%</span>)');
-			}else {
-				$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor">#hddpourcusedv2#%</span>)');
+		</script>
+		<div id="synovolusb#id#"></div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#synovolumeusb_display#' == 'OK') {
+					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
+				}
+				if ('#hddpourcusedusb#' === '') {
+					$('#hddpourcusedusb#id#').append('<span></span>');
+				} else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusbvertinfa#')) {
+					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)');
+				} else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusborangede#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusborangea#'))) {
+					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)');
+				} else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusbrougesupa#')) && '#hddpourcusedusbrougesupa#' !== '') {
+					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)');
+				} else {
+					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor">#hddpourcusedusb#%</span>)');
+				}
 			}
-		}
-	</script>
-	<div id="synovolusb#id#"></div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			if ('#synovolumeusb_display#' == 'OK'){
-				$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
-			}
-			if ('#hddpourcusedusb#' === '') {
-				$('#hddpourcusedusb#id#').append('<span></span>');
-			}else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusbvertinfa#')) {
-				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)');
-			}else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusborangede#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusborangea#'))) {
-				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)');
-			}else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusbrougesupa#')) && '#hddpourcusedusbrougesupa#' !== '') {
-				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)');
-			}else {
-				$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor">#hddpourcusedusb#%</span>)');
-			}
-		}
-	</script>
-	<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#;">
+		</script>
+		<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#;">
 			<span title="Nombre CPU, fréquence (température)</br><i>Date de valeur : #cpu_value#</br>Date de collecte : #cpu_collect#</i>" class="fa techno-pc" style="width:15px;"></span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			if ('#cpu_temp#' !== '') {
-				if (parseFloat('#cpu_temp#') < parseFloat('#cpu_tempvertinfa#')) {
-					$('#cpu#id#').append('<span>#cpu# </span>');
-					$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)');
-				}else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temporangede#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temporangea#'))) {
-					$('#cpu#id#').append('<span>#cpu# </span>');
-					$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#cpu_temp#°C</span>)');
-				}else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temprougesupa#')) && '#cpu_temprougesupa#' !== '') {
-					$('#cpu#id#').append('<span>#cpu# </span>');
-					$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#cpu_temp#°C</span>)');
-				}else {
-					$('#cpu#id#').append('<span>#cpu# </span>');
-					$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor">#cpu_temp#°C</span>)');
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#cpu_temp#' !== '') {
+					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_tempvertinfa#')) {
+						$('#cpu#id#').append('<span>#cpu# </span>');
+						$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)');
+					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temporangede#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temporangea#'))) {
+						$('#cpu#id#').append('<span>#cpu# </span>');
+						$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#cpu_temp#°C</span>)');
+					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temprougesupa#')) && '#cpu_temprougesupa#' !== '') {
+						$('#cpu#id#').append('<span>#cpu# </span>');
+						$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#cpu_temp#°C</span>)');
+					} else {
+						$('#cpu#id#').append('<span>#cpu# </span>');
+						$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor">#cpu_temp#°C</span>)');
+					}
+				} else {
+					$('#cpu#id#').append('<span>#cpu#</span>');
 				}
-			}else {
-				$('#cpu#id#').append('<span>#cpu#</span>');
 			}
-		}
-    </script>
-	<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#;">
+		</script>
+		<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#;">
 			<span class="fa" title="#nameperso1#</br><i>Date de valeur : #perso1_value#</br>Date de collecte : #perso1_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso1#</span>
 			<span id="uniteperso1#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-            if ('#perso1#' !== '') {
-				if (parseFloat('#perso1#') < parseFloat('#perso1vertinfa#')) {
-					$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
-				}else if ((parseFloat('#perso1#') >= parseFloat('#perso1orangede#')) && (parseFloat('#perso1#') <= parseFloat('#perso1orangea#'))) {
-					$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
-				}else if ((parseFloat('#perso1#') > parseFloat('#perso1rougesupa#')) && parseFloat('#perso1rougesupa#') !== '') {
-					$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
-				}else {
-                    $('#uniteperso1#id#').append('<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>');
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso1#' !== '') {
+					if (parseFloat('#perso1#') < parseFloat('#perso1vertinfa#')) {
+						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
+					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1orangede#')) && (parseFloat('#perso1#') <= parseFloat('#perso1orangea#'))) {
+						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
+					} else if ((parseFloat('#perso1#') > parseFloat('#perso1rougesupa#')) && parseFloat('#perso1rougesupa#') !== '') {
+						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
+					} else {
+						$('#uniteperso1#id#').append('<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>');
+					}
+				} else {
+					$('#uniteperso1#id#').append('<span></span>');
 				}
-			}else {
-			    $('#uniteperso1#id#').append('<span></span>');
-			}		
-		}
-    </script>
-	<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#;">
+			}
+		</script>
+		<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#;">
 			<span class="fa" title="#nameperso2#</br><i>Date de valeur : #perso2_value#</br>Date de collecte : #perso2_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso2#</span>
 			<span id="uniteperso2#id#"></span>
-	</div>
-	<script>
-		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-            if ('#perso2#' !== '') {
-				if (parseFloat('#perso2#') < parseFloat('#perso2vertinfa#')) {
-					$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-				}else if ((parseFloat('#perso2#') >= parseFloat('#perso2orangede#')) && (parseFloat('#perso2#') <= parseFloat('#perso2orangea#'))) {
-					$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-				}else if ((parseFloat('#perso2#') > parseFloat('#perso2rougesupa#')) && parseFloat('#perso2rougesupa#') !== '') {
-					$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-				}else {
-                    $('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>');
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso2#' !== '') {
+					if (parseFloat('#perso2#') < parseFloat('#perso2vertinfa#')) {
+						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2orangede#')) && (parseFloat('#perso2#') <= parseFloat('#perso2orangea#'))) {
+						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+					} else if ((parseFloat('#perso2#') > parseFloat('#perso2rougesupa#')) && parseFloat('#perso2rougesupa#') !== '') {
+						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+					} else {
+						$('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>');
+					}
+				} else {
+					$('#uniteperso2#id#').append('<span></span>');
 				}
-			}else {
-			    $('#uniteperso2#id#').append('<span></span>');
-			}		
-		}
-    </script>
+			}
+		</script>
+	</div>
+	#divGraphInfo#
 </div>
