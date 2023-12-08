@@ -145,13 +145,16 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Identifiant}}</label>
                                         <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" placeholder="{{Saisir le login}}">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Mot de passe}}</label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="password" type="password" placeholder="{{Saisir le password}}">
+                                        <div class="col-md-6 input-group">
+                                            <input type="text" autocomplete="ssh-password" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}">
+                                            <span class="input-group-btn">
+											    <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+										    </span>
                                         </div>
                                     </div>
                                 </div>
@@ -169,7 +172,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <span style="font-size: 85%;">({{A cocher pour monitorer un NAS Synology}})</span>
                                     </div>
                                 </div>
-                                <div class="syno_conf">
+                                <div class="syno_conf" style="display:none;">
                                     <div class="form-group">
                                         <label class="col-md-2 control-label" >{{Modèle (Alt)}}</label>
                                         <div class="col-md-8">
@@ -198,7 +201,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                             <span style="font-size: 85%;">({{A cocher pour spécifier la commande de récupération de température}})</span>
                                         </div>
                                     </div>
-                                    <div class="form-group syno_conf_temppath">
+                                    <div class="form-group syno_conf_temppath" style="display:none;">
                                         <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                         <div class="col-md-6">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input}}">
@@ -220,7 +223,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<th>{{Colorisation des valeurs}}</th>
 							<th>{{Afficher/Historiser}}</th>
 							<th>{{Type}}</th>
-							<th>{{Action}}</th>
+                            <th>{{Etat}}</th>
+							<th>{{Actions}}</th>
 						</tr>
 					</thead>
 					<tbody>
