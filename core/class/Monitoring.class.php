@@ -651,7 +651,7 @@ class Monitoring extends eqLogic {
 			}
 			else {
 				if ($pass == '') {
-					$pass = $sshpubkey;
+					$pass = PublicKeyLoader::load($sshpubkey);
 				}
 				if (!$sshconnection->login($user, $pass)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
