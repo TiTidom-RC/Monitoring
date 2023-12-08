@@ -22,18 +22,21 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 /* * *************************** Includes ********************************* */
 include_once('phpseclib/autoload.php');
 use phpseclib\Net\SSH2;
+use phpseclib\Crypt\PublicKeyLoader;
 
 class Monitoring extends eqLogic {
 
-	public static $_encryptConfigKey = array('user', 'password');
+	public static $_encryptConfigKey = array('user', 'password', 'sshpubkey');
 
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
+		$this->setConfiguration('sshpubkey', utils::decrypt($this->getConfiguration('sshpubkey')));
 	  }
 	  public function encrypt() {
 		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
+		$this->setConfiguration('sshpubkey', utils::encrypt($this->getConfiguration('sshpubkey')));
 	  }
 
 	public static function pull() {
@@ -638,6 +641,7 @@ class Monitoring extends eqLogic {
 			$ip = $this->getConfiguration('addressip');
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
+			$sshpubkey = $this->getConfiguration('sshpubkey');
 			$port = $this->getConfiguration('portssh');
 			$equipement = $this->getName();
 
@@ -646,6 +650,9 @@ class Monitoring extends eqLogic {
 				$cnx_ssh = 'KO';
 			}
 			else {
+				if ($pass == '') {
+					$pass = $sshpubkey;
+				}
 				if (!$sshconnection->login($user, $pass)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
 					$cnx_ssh = 'KO';
