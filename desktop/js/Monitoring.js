@@ -59,6 +59,11 @@ function addCmdToTable(_cmd) {
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	}
 	tr += '</td>';
+
+	tr += '<td>';
+	tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
+	tr += '</td>';
+	
 	tr += '<td>';
 	if (is_numeric(_cmd.id)) {
 		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';

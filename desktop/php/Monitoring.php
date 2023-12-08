@@ -223,6 +223,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<th>{{Colorisation des valeurs}}</th>
 							<th>{{Afficher/Historiser}}</th>
 							<th>{{Type}}</th>
+                            <th>{{Etat}}</th>
 							<th>{{Action}}</th>
 						</tr>
 					</thead>
