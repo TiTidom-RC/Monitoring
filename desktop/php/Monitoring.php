@@ -224,7 +224,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<th>{{Afficher/Historiser}}</th>
 							<th>{{Type}}</th>
                             <th>{{Etat}}</th>
-							<th>{{Action}}</th>
+							<th>{{Actions}}</th>
 						</tr>
 					</thead>
 					<tbody>
