@@ -25,8 +25,6 @@ use phpseclib\Net\SSH2;
 
 class Monitoring extends eqLogic {
 
-	public static $_encryptConfigKey = array('user', 'password');
-
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
