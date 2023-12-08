@@ -151,7 +151,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Mot de passe}}</label>
                                         <div class="col-md-6 input-group">
-                                            <input type="text" autocomplete="ssh-password" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="password">
+                                            <input type="text" autocomplete="ssh-password" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}">
                                             <span class="input-group-btn">
 											    <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
 										    </span>
@@ -160,7 +160,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Clé SSH}}</label>
                                         <div class="col-md-6 input-group">
-                                            <input type="text" autocomplete="ssh-pubkey" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="sshpubkey">
+                                            <input type="text" autocomplete="ssh-key" class="eqLogicAttr form-control inputPassword roundedLeft autogrow" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Coller la clé SSH}}">
                                             <span class="input-group-btn">
 											    <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
 										    </span>
