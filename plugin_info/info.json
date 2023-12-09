@@ -7,7 +7,7 @@
         "es_ES": "Plugin para monitorear equipos locales y remotos (a través de SSH). El complemento mostrará información del sistema de Linux o Synology (Distribución, CPU, Memoria, Discos, Intercambio).",
         "de_DE": "Plugin zur Überwachung lokaler und entfernter Geräte (über SSH). Das Plugin zeigt Systeminformationen von Linux oder Synology an (Verteilung, CPU, Speicher, Festplatten, Swap)."
     },
-    "utilization": "Ajouter un équipement et choisissez s'il est local ou distant pour monitorer l'OS Linux ou Synology correspondant (Nom de la distribution Linux ou Syno, uptime, charge système, mémoire libre, disques + swap, réseau, cpu et température).",
+    "utilization": "Ajoutez un équipement et choisissez s'il est local ou distant pour monitorer l'OS Linux ou Synology correspondant (Nom de la distribution Linux ou Syno, uptime, charge système, mémoire libre, disques + swap, réseau, cpu et température).",
     "licence": "AGPL",
     "author": "TiTidom",
     "require": "4.2",
