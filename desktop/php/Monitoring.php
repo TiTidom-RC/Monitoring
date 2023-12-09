@@ -116,7 +116,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <label class="col-md-4 control-label">{{Nom de la carte réseau}}</label>
                                         <div class="col-md-6">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cartereseauautre" type="text" placeholder="{{Saisir le nom de la carte}}" />
-                                            <span style="font-size: 75%;">({{eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...}})</span>
+                                            <span style="font-size: 75%;">({{eth1 : 2ème port Ethernet, wlan1 : 2ème port Wi-Fi...}})</span>
                                         </div>
                                     </div>
                                 </div>

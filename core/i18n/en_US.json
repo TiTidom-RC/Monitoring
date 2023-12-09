@@ -54,7 +54,7 @@
         "Equipement": "Device",
         "Commandes": "Commands",
         "Type": "Type",
-        "eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...": "eth1: 2nd Ethernet port, wlan1: 2nd Wi-Fi port ...",
+        "eth1 : 2ème port Ethernet, wlan1 : 2ème port Wi-Fi...": "eth1: 2nd Ethernet port, wlan1: 2nd Wi-Fi port ...",
         "Modèle (Alt)": "Modèle (Alt)",
         "Temp (Alt)": "Temp (Alt)",
         "Commande Temp": "Temp Command",
