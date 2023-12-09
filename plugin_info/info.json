@@ -11,7 +11,7 @@
     "licence": "AGPL",
     "author": "TiTidom",
     "require": "4.2",
-    "hasDependency": true,
+    "hasDependency": false,
     "category": "monitoring",
     "language": [
         "fr_FR",

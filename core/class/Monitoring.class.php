@@ -17,11 +17,10 @@
  */
 
 /* * *************************** Requires ********************************* */
-require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+require_once __DIR__  . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
-/* * *************************** Includes ********************************* */
-include_once('phpseclib/autoload.php');
-use phpseclib\Net\SSH2;
+use phpseclib3\Net\SSH2;
 
 class Monitoring extends eqLogic {
 
@@ -47,7 +46,7 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	public static function dependancy_info() {
+	/* public static function dependancy_info() {
 		$return = array();
 		$return['log'] = 'Monitoring_update';
 		$return['progress_file'] = '/tmp/dependancy_monitoring_in_progress';
@@ -71,7 +70,7 @@ class Monitoring extends eqLogic {
 		$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../resources/install.sh';
 		$cmd .= ' >> ' . log::getPathToLog('Monitoring_update') . ' 2>&1 &';
 		exec($cmd);
-	}
+	} */
 
 	public function postSave() {
 
