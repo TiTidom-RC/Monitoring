@@ -126,7 +126,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave">
                                             <option value="local">{{Local}}</option>
                                             <option value="deporte">{{Distant (Mot de Passe)}}</option>
-                                            <option value="distant-key">{{Distant (Clé SSH)}}</option>
+                                            <option value="deporte-key">{{Distant (Clé SSH)}}</option>
                                         </select>
                                     </div>
                                 </div>
