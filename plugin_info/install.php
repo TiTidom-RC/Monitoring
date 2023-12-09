@@ -47,17 +47,31 @@ function Monitoring_update() {
 
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
     try {
-      $dirToDelete = __DIR__ . '/../ressources';
-      log::add('Monitoring', 'debug', '[DEL_OLDDIR_CHECK] Vérification de la présence du répertoire "ressources" - Plugin Monitoring :: ' . $dirToDelete);
-      if (file_exists($dirToDelete)) {
-        shell_exec('sudo rm -rf ' . $dirToDelete);
-        log::add('Monitoring', 'debug', '[DEL_OLDDIR_OK] Le répertoire "ressources" a bien été effacé. Path = ' . $dirToDelete);
+      $dirToDelete = array (__DIR__ . '/../ressources',__DIR__ . '/../desktop/modal');
+      $filesToDelete = array(__DIR__ . '/../plugin_info/packages.json',__DIR__ . '/../resources/install.sh');
+      
+      foreach ($dirToDelete as $dir) {
+        log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du répertoire ' . $dir);
+        if (file_exists($dir)) {
+          shell_exec('sudo rm -rf ' . $dir);
+          log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le répertoire ' . $dir . ' a bien été effacé.');
+        }
+        else {
+          log::add('Monitoring', 'debug', '[CLEAN_CHECK_NA] Répertoire ' . $dir . ' non trouvé. Aucune action requise.');
+        }
       }
-      else {
-        log::add('Monitoring', 'debug', '[DEL_OLDDIR_NA] Répertoire "ressources" non trouvé. Aucune action requise.');
+      foreach ($filesToDelete as $file) {
+        log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du fichier : '. $file);
+        if (file_exists($dir)) {
+          shell_exec('sudo rm -f ' . $file);
+          log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le fichier  ' . $file . ' a bien été effacé.');
+        }
+        else {
+          log::add('Monitoring', 'debug', '[CLEAN_CHECK_NA] Fichier ' . $file . ' non trouvé. Aucune action requise.');
+        }
       }
     } catch (Exception $e) {
-      log::add('Monitoring', 'debug', '[DEL_OLDDIR_KO] WARNING :: Exception levée (check du répertoire "ressources") :: '. $e->getMessage());
+      log::add('Monitoring', 'debug', '[CLEAN_CHECK_KO] WARNING :: Exception levée :: '. $e->getMessage());
     }
 }
 
