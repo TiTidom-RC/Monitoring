@@ -15,13 +15,8 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
  setTimeout(function () {
-  if (typeof jeedomUtils.positionEqLogic === "function") {
-  	jeedomUtils.positionEqLogic();
-    // $('#div_alert').showAlert({message: '[DEV] Utilisation NEW class 4.2+', level: 'info'});
-  } else {
-    positionEqLogic();
-    // $('#div_alert').showAlert({message: '[DEV] Utilisation OLD class 4.1', level: 'warning'}); 
-  }
+  jeedomUtils.positionEqLogic();
+
   $('.div_displayEquipement').disableSelection();
   $( "input").click(function() { $(this).focus(); });
   $( "textarea").click(function() { $(this).focus(); });
@@ -104,13 +99,7 @@
  },
  stop: function( event, ui ) {
   var el = ui.element;
-  if (typeof jeedomUtils.positionEqLogic === "function") {
-    jeedomUtils.positionEqLogic(el.attr('data-eqlogic_id')); // Compatibilité 4.2+
-    // $('#div_alert').showAlert({message: '[DEV] Utilisation NEW class 4.2+', level: 'info'});
-  } else {
-    positionEqLogic(el.attr('data-eqlogic_id'));
-    // $('#div_alert').showAlert({message: '[DEV] Utilisation OLD class 4.1', level: 'warning'});
-  }
+  jeedomUtils.positionEqLogic(el.attr('data-eqlogic_id')); // Compatibilité 4.2+
   el.closest('.div_displayEquipement').packery();
   var eqLogic = {id : el.attr('data-eqlogic_id')}
   eqLogic.display = {};

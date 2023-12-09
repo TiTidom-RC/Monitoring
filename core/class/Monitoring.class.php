@@ -1242,7 +1242,7 @@ class Monitoring extends eqLogic {
 						}
 
 						if (isset($memorylibre)) {
-							if ((intval($memorylibre) / 1024) > 1024) {
+							if ((intval($memorylibre) / 1024) >= 1024) {
 								$memorylibre = round(intval($memorylibre) / 1048576, 2) . " Go";
 							}
 							else {
@@ -1250,7 +1250,7 @@ class Monitoring extends eqLogic {
 							}
 						}
 						if (isset($memory[0])) {
-							if ((intval($memory[0]) / 1024) > 1024) {
+							if ((intval($memory[0]) / 1024) >= 1024) {
 								$memtotal = round(intval($memory[0]) / 1048576, 2) . " Go";
 							}
 							else {
@@ -1271,13 +1271,13 @@ class Monitoring extends eqLogic {
 								$memorylibre_pourc = 0;
 							}
 						}
-						if ((intval($memory[1]) / 1024) > 1024) {
+						if ((intval($memory[1]) / 1024) >= 1024) {
 							$memorylibre = round(intval($memory[1]) / 1048576, 2) . " Go";
 						}
 						else{
 							$memorylibre = round(intval($memory[1]) / 1024) . " Mo";
 						}
-						if (($memory[0] / 1024) > 1024) {
+						if (($memory[0] / 1024) >= 1024) {
 							$memtotal = round(intval($memory[0]) / 1048576, 2) . " Go";
 						}
 						else{
@@ -1303,27 +1303,27 @@ class Monitoring extends eqLogic {
 					}
 
 					if(isset($swap[0])){
-						if ((intval($swap[0]) / 1024) > 1024) {
-							$swap[0] = round(intval($swap[0]) / 1048576, 2) . " Go";
+						if ((intval($swap[0]) / 1024) >= 1024) {
+							$swap[0] = round(intval($swap[0]) / 1048576, 1) . " Go";
 						}
 						else {
-							$swap[0] = round(intval($swap[0]) / 1024, 2) . " Mo";
+							$swap[0] = round(intval($swap[0]) / 1024, 1) . " Mo";
 						}
 					}
 					if(isset($swap[1])) {
-						if ((intval($swap[1]) / 1024) > 1024) {
-							$swap[1] = round(intval($swap[1]) / 1048576, 2) . " Go";
+						if ((intval($swap[1]) / 1024) >= 1024) {
+							$swap[1] = round(intval($swap[1]) / 1048576, 1) . " Go";
 						}
 						else {
-							$swap[1] = round(intval($swap[1]) / 1024, 2) . " Mo";
+							$swap[1] = round(intval($swap[1]) / 1024, 1) . " Mo";
 						}
 					}
 					if(isset($swap[2])){
-						if ((intval($swap[2]) / 1024) > 1024) {
-							$swap[2] = round(intval($swap[2]) / 1048576, 2) . " Go";
+						if ((intval($swap[2]) / 1024) >= 1024) {
+							$swap[2] = round(intval($swap[2]) / 1048576, 1) . " Go";
 						}
 						else {
-							$swap[2] = round(intval($swap[2]) / 1024, 2) . " Mo";
+							$swap[2] = round(intval($swap[2]) / 1024, 1) . " Mo";
 						}
 					}
 
@@ -1341,26 +1341,26 @@ class Monitoring extends eqLogic {
 				if (isset($ReseauRXTX)) {
 					$ReseauRXTX = explode(' ', $ReseauRXTX);
 					if(isset($ReseauRXTX[0]) && isset($ReseauRXTX[1]) && isset($ReseauRXTX[2])){
-						if ((intval($ReseauRXTX[2]) / 1024) > 1073741824) {
+						if ((intval($ReseauRXTX[2]) / 1024) >= 1073741824) {
 							$ReseauTX = round(intval($ReseauRXTX[2]) / 1099511627776, 2) . " To";
 						}
-                      	elseif ((intval($ReseauRXTX[2]) / 1024) > 1048576) {
+                      	elseif ((intval($ReseauRXTX[2]) / 1024) >= 1048576) {
 							$ReseauTX = round(intval($ReseauRXTX[2]) / 1073741824, 2) . " Go";
 						}
-						elseif ((intval($ReseauRXTX[2]) / 1024) > 1024) {
+						elseif ((intval($ReseauRXTX[2]) / 1024) >= 1024) {
 							$ReseauTX = round(intval($ReseauRXTX[2]) / 1048576, 2) . " Mo";
 						}
 						else {
 							$ReseauTX = round(intval($ReseauRXTX[2]) / 1024) . " Ko";
 						}
 						
-						if ((intval($ReseauRXTX[1]) / 1024) > 1073741824) {
+						if ((intval($ReseauRXTX[1]) / 1024) >= 1073741824) {
 							$ReseauRX = round(intval($ReseauRXTX[1]) / 1099511627776, 2) . " To";
 						}
-						elseif ((intval($ReseauRXTX[1]) / 1024) > 1048576) {
+						elseif ((intval($ReseauRXTX[1]) / 1024) >= 1048576) {
 							$ReseauRX = round(intval($ReseauRXTX[1]) / 1073741824, 2) . " Go";
 						}
-						elseif ((intval($ReseauRXTX[1]) / 1024) > 1024) {
+						elseif ((intval($ReseauRXTX[1]) / 1024) >= 1024) {
 							$ReseauRX = round(intval($ReseauRXTX[1]) / 1048576, 2) . " Mo";
 						}
 						else {
