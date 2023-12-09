@@ -62,7 +62,7 @@ function Monitoring_update() {
       }
       foreach ($filesToDelete as $file) {
         log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du fichier : '. $file);
-        if (file_exists($dir)) {
+        if (file_exists($file)) {
           shell_exec('sudo rm -f ' . $file);
           log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le fichier  ' . $file . ' a bien été effacé.');
         }
