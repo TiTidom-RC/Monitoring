@@ -642,14 +642,14 @@ class Monitoring extends eqLogic {
 			$port = $this->getConfiguration('portssh');
 			$equipement = $this->getName();
 
-			$key = PublicKeyLoader::load($ssh-key);
+			// $key = PublicKeyLoader::load($ssh-key);
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
 				log::add('Monitoring', 'error', 'connexion SSH KO pour '.$equipement);
 				$cnx_ssh = 'KO';
 			}
 			else {
-				if (!$sshconnection->login($user, $key)) {
+				if (!$sshconnection->login($user, $sshkey)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
 					$cnx_ssh = 'KO';
 				}
