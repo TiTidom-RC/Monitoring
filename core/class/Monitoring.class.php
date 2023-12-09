@@ -637,10 +637,10 @@ class Monitoring extends eqLogic {
 
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
+			$port = $this->getConfiguration('portssh');
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
 			$sshkey = $this->getConfiguration('ssh-key');
-			$port = $this->getConfiguration('portssh');
 			$equipement = $this->getName();
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
@@ -652,7 +652,7 @@ class Monitoring extends eqLogic {
 					try {
 						$keyOrPwd = PublicKeyLoader::load($sshkey);
 					} catch (Exception $e) {
-						log::add('Monitoring', 'debug', '[SSH-Key] Exception levée :: '. $e->getMessage());
+						log::add('Monitoring', 'error', '[SSH-Key] Exception levée :: '. $e->getMessage());
 						$keyOrPwd = '';
 					}
 				}
