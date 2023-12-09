@@ -123,9 +123,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">{{Local ou Distant ?}}</label>
                                     <div class="col-md-6">
-                                        <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave" onchange="if(this.selectedIndex == 1) document.getElementById('deporte').style.display = 'block'; else document.getElementById('deporte').style.display = 'none';">
+                                        <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave" onchange="if(this.selectedIndex == 1) { document.getElementById('deporte').style.display = 'block'; document.getElementById('deporte-password').style.display = 'block' } else { document.getElementById('deporte').style.display = 'none'; document.getElementById('deporte-password').style.display = 'none' } if(this.selectedIndex == 2) {document.getElementById('deporte').style.display = 'block'; document.getElementById('deporte-key').style.display = 'block' } else { document.getElementById('deporte').style.display = 'none'; document.getElementById('deporte-key').style.display = 'none' }">
                                             <option value="local">{{Local}}</option>
-                                            <option value="deporte">{{Distant}}</option>
+                                            <option value="distant-password">{{Distant (Mot de Passe)}}</option>
+                                            <option value="distant-key">{{Distant (Clé SSH)}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -148,19 +149,23 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Mot de passe}}</label>
-                                        <div class="col-md-6 input-group">
-                                            <input type="text" autocomplete="ssh-password" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
-                                            <span class="input-group-btn">
-											    <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
-										    </span>
+                                    <div id="distant-password">
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">{{Mot de passe}}</label>
+                                            <div class="col-md-6 input-group">
+                                                <input type="text" autocomplete="ssh-password" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
+                                                <span class="input-group-btn">
+											        <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+										        </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Clé SSH}}</label>
-                                        <div class="col-md-8">
-                                        <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
+                                    <div id="distant-key">
+                                        <div class="form-group">
+                                            <label class="col-md-4 control-label">{{Clé SSH}}</label>
+                                            <div class="col-md-8">
+                                                <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
