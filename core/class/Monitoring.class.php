@@ -21,6 +21,7 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use phpseclib3\Net\SSH2;
+use phpseclib3\Crypt\PublicKeyLoader;
 
 class Monitoring extends eqLogic {
 
@@ -638,12 +639,15 @@ class Monitoring extends eqLogic {
 			$port = $this->getConfiguration('portssh');
 			$equipement = $this->getName();
 
+			$key = PublicKeyLoader::load($pass);
+
+
 			if (!$sshconnection = new SSH2($ip,$port)) {
 				log::add('Monitoring', 'error', 'connexion SSH KO pour '.$equipement);
 				$cnx_ssh = 'KO';
 			}
 			else {
-				if (!$sshconnection->login($user, $pass)) {
+				if (!$sshconnection->login($user, $key)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
 					$cnx_ssh = 'KO';
 				}
