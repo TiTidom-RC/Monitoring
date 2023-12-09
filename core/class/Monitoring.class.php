@@ -633,8 +633,9 @@ class Monitoring extends eqLogic {
 
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
+		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 
-		if ($this->getConfiguration('maitreesclave') == 'deporte' && $this->getIsEnable()) {
+		if (($confLocalOrRemote == 'distant-password' || $confLocalOrRemote == 'distant-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
@@ -642,14 +643,24 @@ class Monitoring extends eqLogic {
 			$port = $this->getConfiguration('portssh');
 			$equipement = $this->getName();
 
-			$key = PublicKeyLoader::load($sshkey);
-
 			if (!$sshconnection = new SSH2($ip,$port)) {
 				log::add('Monitoring', 'error', 'connexion SSH KO pour '.$equipement);
 				$cnx_ssh = 'KO';
 			}
 			else {
-				if (!$sshconnection->login($user, $key)) {
+				if ($confLocalOrRemote == 'distant-key') {
+					try {
+						$keyOrPwd = PublicKeyLoader::load($sshkey);
+					} catch (Exception $e) {
+						log::add('Monitoring', 'debug', '[SSH_Key_KO] ERROR :: Exception levée :: '. $e->getMessage());
+						$keyOrPwd = '';
+					}
+				}
+				else {
+					$keyOrPwd = $pass;
+				}
+
+				if (!$sshconnection->login($user, $keyOrPwd)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
 					$cnx_ssh = 'KO';
 				}
