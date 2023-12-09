@@ -61,7 +61,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
                                     <div class="col-md-6">
                                         <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
-                                        <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement Monitoring}}"/>
+                                        <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement Monitoring}}" />
                                     </div>
                                 </div>
 
@@ -94,8 +94,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <div class="form-group">
                                     <label class="col-md-4 control-label"></label>
                                     <div class="col-md-8">
-                                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
-                                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked />{{Activer}}</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked />{{Visible}}</label>
                                     </div>
                                 </div>
                                 <br/>
@@ -115,7 +115,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Nom de la carte réseau}}</label>
                                         <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cartereseauautre" type="text" placeholder="{{Saisir le nom de la carte}}">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cartereseauautre" type="text" placeholder="{{Saisir le nom de la carte}}" />
                                             <span style="font-size: 75%;">({{eth1 : 2éme port Ethernet, wlan1 : 2éme port Wi-Fi...}})</span>
                                         </div>
                                     </div>
@@ -133,25 +133,25 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Adresse IP}}</label>
                                         <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="addressip" type="text" placeholder="{{Saisir l'adresse IP}}">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="addressip" type="text" placeholder="{{Saisir l'adresse IP}}" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Port SSH}}</label>
                                         <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="portssh" type="text" placeholder="{{Saisir le port SSH}}">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="portssh" type="text" placeholder="{{Saisir le port SSH}}" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Identifiant}}</label>
                                         <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Mot de passe}}</label>
                                         <div class="col-md-6 input-group">
-                                            <input type="text" autocomplete="ssh-password" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}">
+                                            <input type="text" autocomplete="ssh-password" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
                                             <span class="input-group-btn">
 											    <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
 										    </span>
@@ -160,7 +160,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Clé SSH}}</label>
                                         <div class="col-md-6 input-group">
-                                            <textarea type="text" autocomplete="ssh-key" class="eqLogicAttr form-control autogrow roundedLeft" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Saisir la clé SSH}}">
+                                            <textarea type="text" autocomplete="ssh-key" class="eqLogicAttr form-control autogrow roundedLeft" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Saisir la clé SSH}}"></textarea>
                                             <span class="input-group-btn">
 											    <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
 										    </span>
@@ -177,7 +177,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
-                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synology">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synology" />
                                         <span style="font-size: 85%;">({{A cocher pour monitorer un NAS Synology}})</span>
                                     </div>
                                 </div>
@@ -185,35 +185,35 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-md-2 control-label" >{{Modèle (Alt)}}</label>
                                         <div class="col-md-8">
-                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="syno_alt_name" >
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="syno_alt_name" />
                                             <span style="font-size: 85%;">({{A cocher si le nom du modèle de votre Syno est mal détecté}})</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-2 control-label" >{{Volume 2}}</label>
                                         <div class="col-md-8">
-                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyv2" >
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyv2" />
                                             <span style="font-size: 85%;">({{A cocher si vous avez un 2ème volume disque}})</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-2 control-label" >{{HDD USB}}</label>
                                         <div class="col-md-8">
-                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyusb" >
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyusb" />
                                             <span style="font-size: 85%;">({{A cocher si vous avez un disque USB}})</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-2 control-label" >{{Temp (Alt)}}</label>
                                         <div class="col-md-8">
-                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="syno_use_temp_path" >
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="syno_use_temp_path" />
                                             <span style="font-size: 85%;">({{A cocher pour spécifier la commande de récupération de température}})</span>
                                         </div>
                                     </div>
                                     <div class="form-group syno_conf_temppath" style="display:none;">
                                         <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                         <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input}}">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input}}" />
                                         </div>
                                     </div>
                                 </div>
