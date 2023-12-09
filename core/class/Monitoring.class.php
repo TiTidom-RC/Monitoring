@@ -28,10 +28,12 @@ class Monitoring extends eqLogic {
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
+		$this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
 	  }
 	  public function encrypt() {
 		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
+		$this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
 	  }
 
 	public static function pull() {
@@ -636,11 +638,11 @@ class Monitoring extends eqLogic {
 			$ip = $this->getConfiguration('addressip');
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
+			$sshkey = $this->getConfiguration('ssh-key');
 			$port = $this->getConfiguration('portssh');
 			$equipement = $this->getName();
 
-			$key = PublicKeyLoader::load($pass);
-
+			$key = PublicKeyLoader::load($ssh-key);
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
 				log::add('Monitoring', 'error', 'connexion SSH KO pour '.$equipement);
