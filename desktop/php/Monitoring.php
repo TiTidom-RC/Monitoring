@@ -130,7 +130,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         </select>
                                     </div>
                                 </div>
-                                <div id="deporte">
+                                <div class="deporte" style="display:none;">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Adresse IP}}</label>
                                         <div class="col-md-6">
@@ -149,7 +149,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
                                         </div>
                                     </div>
-                                    <div id="distant-password">
+                                    <div class="distant-password" style="display:none;">
                                         <div class="form-group">
                                             <label class="col-md-4 control-label">{{Mot de passe}}</label>
                                             <div class="col-md-6 input-group">
@@ -160,7 +160,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="distant-key">
+                                    <div class="distant-key" style="display:none;">
                                         <div class="form-group">
                                             <label class="col-md-4 control-label">{{Clé SSH}}</label>
                                             <div class="col-md-8">
