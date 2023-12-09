@@ -125,12 +125,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="col-md-6">
                                         <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave">
                                             <option value="local">{{Local}}</option>
-                                            <option value="distant-password">{{Distant (Mot de Passe)}}</option>
+                                            <option value="deporte">{{Distant (Mot de Passe)}}</option>
                                             <option value="distant-key">{{Distant (Clé SSH)}}</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="deporte" style="display:none;">
+                                <div class="distant" style="display:none;">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Adresse IP}}</label>
                                         <div class="col-md-6">
@@ -164,7 +164,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <div class="form-group">
                                             <label class="col-md-4 control-label">{{Clé SSH}}</label>
                                             <div class="col-md-8">
-                                                <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
+                                                <textarea class="eqLogicAttr form-control autogrow" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
                                             </div>
                                         </div>
                                     </div>

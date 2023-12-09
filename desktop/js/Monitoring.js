@@ -98,14 +98,14 @@ $(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
 
 $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 	if (this.selectedIndex == 1) {
-	  $(".deporte").show();
+	  $(".distant").show();
 	  $(".distant-password").show();
 	  $(".distant-key").hide();
 	} else if (this.selectedIndex == 2) {
-		$(".deporte").show();
+		$(".distant").show();
 		$(".distant-password").hide();
 		$(".distant-key").show();
 	} else { 
-		$(".deporte").hide();
+		$(".distant").hide();
 	}
 });
