@@ -159,7 +159,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Clé SSH}}</label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-8">
                                             <textarea type="text" autocomplete="ssh-key" class="eqLogicAttr form-control autogrow roundedLeft" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Saisir la clé SSH}}"></textarea>
                                         </div>
                                     </div>
