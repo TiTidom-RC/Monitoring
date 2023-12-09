@@ -95,3 +95,17 @@ $(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
 	  $(".syno_conf_temppath").hide();
 	}
 });
+
+$(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
+	if (this.selectedIndex == 1) {
+	  $(".deporte").show();
+	  $(".distant-password").show();
+	  $(".distant-key").hide();
+	} else if (this.selectedIndex == 2) {
+		$(".deporte").show();
+		$(".distant-password").hide();
+		$(".distant-key").show();
+	} else { 
+		$(".deporte").hide();
+	}
+});

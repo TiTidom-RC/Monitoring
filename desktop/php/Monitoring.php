@@ -123,7 +123,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">{{Local ou Distant ?}}</label>
                                     <div class="col-md-6">
-                                        <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave" onchange="if(this.selectedIndex == 1) { document.getElementById('deporte').style.display = 'block'; document.getElementById('deporte-password').style.display = 'block' } else { document.getElementById('deporte').style.display = 'none'; document.getElementById('deporte-password').style.display = 'none' } if(this.selectedIndex == 2) {document.getElementById('deporte').style.display = 'block'; document.getElementById('deporte-key').style.display = 'block' } else { document.getElementById('deporte').style.display = 'none'; document.getElementById('deporte-key').style.display = 'none' }">
+                                        <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave">
                                             <option value="local">{{Local}}</option>
                                             <option value="distant-password">{{Distant (Mot de Passe)}}</option>
                                             <option value="distant-key">{{Distant (Clé SSH)}}</option>
