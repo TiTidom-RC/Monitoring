@@ -29,11 +29,13 @@ class Monitoring extends eqLogic {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
+		$this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
 	  }
 	  public function encrypt() {
 		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
+		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
 	  }
 
 	public static function pull() {
@@ -641,6 +643,7 @@ class Monitoring extends eqLogic {
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
 			$sshkey = $this->getConfiguration('ssh-key');
+			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 			$equipement = $this->getName();
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
@@ -660,7 +663,7 @@ class Monitoring extends eqLogic {
 					$keyOrPwd = $pass;
 				}
 
-				if (!$sshconnection->login($user, $keyOrPwd)) {
+				if (!$sshconnection->login($user, $keyOrPwd, $sshpassphrase)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
 					$cnx_ssh = 'KO';
 				}
@@ -1682,6 +1685,7 @@ class Monitoring extends eqLogic {
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
 			$sshkey = $this->getConfiguration('ssh-key');
+			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 			$equipement = $this->getName();
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
@@ -1701,7 +1705,7 @@ class Monitoring extends eqLogic {
 					$keyOrPwd = $pass;
 				}
 
-				if (!$sshconnection->login($user, $keyOrPwd)){
+				if (!$sshconnection->login($user, $keyOrPwd, $sshpassphrase)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
 					$cnx_ssh = 'KO';
 				}
