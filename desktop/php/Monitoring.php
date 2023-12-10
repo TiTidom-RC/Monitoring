@@ -168,8 +168,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                                 <span class="input-group-btn">
 											        <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
 										        </span>
-                                                <span class="input-group">({{* Optionnel}})</span>
                                             </div>
+                                            <span class="input-group">({{* Optionnel}})</span>
                                         </div>    
                                         <div class="form-group">
                                             <label class="col-md-4 control-label">{{Clé SSH}}</label>
