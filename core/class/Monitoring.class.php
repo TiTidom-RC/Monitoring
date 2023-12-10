@@ -671,7 +671,7 @@ class Monitoring extends eqLogic {
 				}
 				else {
 					$cnx_ssh = 'OK';
-					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
 
 					$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 					$uptime_cmd = "uptime";
@@ -1716,7 +1716,7 @@ class Monitoring extends eqLogic {
 					$cnx_ssh = 'KO';
 				}
 				else {
-					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
 					switch ($paramaction) {
 						case "reboot":
 							$paramaction =
