@@ -33,7 +33,7 @@
         "Saisir la clé SSH": "Enter SSH key",
         "Passphrase": "Passphrase",
         "Saisir la passphrase SSH": "Enter SSH passphrase",
-        "* Optionnel": "* Optional",
+        "Optionnel : Phrase secrête pour la clé SSH": "Optional : Passphrase for SSH key",
         "NAS Synology": "NAS Synology",
         "Informations": "Informations",
         "Id": "Id",

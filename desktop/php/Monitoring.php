@@ -162,14 +162,15 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     </div>
                                     <div class="distant-key" style="display:none;">
                                         <div class="form-group">
-                                            <label class="col-md-4 control-label">{{Passphrase}}</label>
+                                            <label class="col-md-4 control-label">{{Passphrase}}
+                                                <sup><i class="fas fa-asterisk tooltips" title="{{Optionnel : Phrase secrête pour la clé SSH}}"></i></sup>
+                                            </label>
                                             <div class="col-md-6 input-group">
                                                 <input type="text" autocomplete="ssh-passphrase" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="ssh-passphrase" placeholder="{{Saisir la passphrase SSH}}" />
                                                 <span class="input-group-btn">
 											        <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
 										        </span>
                                             </div>
-                                            <span class="input-group">({{* Optionnel}})</span>
                                         </div>    
                                         <div class="form-group">
                                             <label class="col-md-4 control-label">{{Clé SSH}}</label>
