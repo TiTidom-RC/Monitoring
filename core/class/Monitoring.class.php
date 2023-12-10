@@ -29,11 +29,13 @@ class Monitoring extends eqLogic {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
+		$this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
 	  }
 	  public function encrypt() {
 		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
+		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
 	  }
 
 	public static function pull() {
@@ -641,31 +643,36 @@ class Monitoring extends eqLogic {
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
 			$sshkey = $this->getConfiguration('ssh-key');
+			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 			$equipement = $this->getName();
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
-				log::add('Monitoring', 'error', 'connexion SSH KO pour '.$equipement);
+				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: ERROR :: '.$equipement);
 				$cnx_ssh = 'KO';
 			}
 			else {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
-						$keyOrPwd = PublicKeyLoader::load($sshkey);
+						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
+						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: OK');
 					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '[SSH-Key] Exception levée :: '. $e->getMessage());
+						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $e->getMessage());
 						$keyOrPwd = '';
 					}
 				}
 				else {
 					$keyOrPwd = $pass;
+					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe');
 				}
 
 				if (!$sshconnection->login($user, $keyOrPwd)) {
-					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
+					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: ERROR :: '.$equipement);
 					$cnx_ssh = 'KO';
 				}
 				else {
 					$cnx_ssh = 'OK';
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
+
 					$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 					$uptime_cmd = "uptime";
 
@@ -1676,50 +1683,54 @@ class Monitoring extends eqLogic {
 
 	function getCaseAction($paramaction) {
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
-		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()){
+		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
 			$port = $this->getConfiguration('portssh');
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
 			$sshkey = $this->getConfiguration('ssh-key');
+			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 			$equipement = $this->getName();
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
-				log::add('Monitoring', 'error', 'connexion SSH KO pour '.$equipement);
+				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: ERROR :: '.$equipement);
 				$cnx_ssh = 'KO';
 			}
 			else {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
-						$keyOrPwd = PublicKeyLoader::load($sshkey);
+						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
+						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: OK');
 					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '[SSH-Key] Exception levée :: '. $e->getMessage());
+						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $e->getMessage());
 						$keyOrPwd = '';
 					}
 				}
 				else {
 					$keyOrPwd = $pass;
+					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe');
 				}
 
-				if (!$sshconnection->login($user, $keyOrPwd)){
-					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
+				if (!$sshconnection->login($user, $keyOrPwd)) {
+					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: ERROR :: '.$equipement);
 					$cnx_ssh = 'KO';
 				}
 				else {
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
 					switch ($paramaction) {
 						case "reboot":
 							$paramaction =
 							// $Rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 							$Rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
 							$Reboot = $sshconnection->exec($Rebootcmd);
-							log::add('Monitoring','debug','Lancement commande distante REBOOT ' . $this->getHumanName());
+							log::add('Monitoring','debug','[SSH-REBOOT] Lancement commande distante REBOOT :: ' . $this->getHumanName());
 							break;
 						case "poweroff":
 							$paramaction =
 							// $poweroffcmd = "sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null";
 							$poweroffcmd = "sudo poweroff >/dev/null & poweroff  >/dev/null";
 							$poweroff = $sshconnection->exec($poweroffcmd);
-							log::add('Monitoring','debug','Lancement commande distante POWEROFF' . $this->getHumanName());
+							log::add('Monitoring','debug','[SSH-OFF] Lancement commande distante POWEROFF :: ' . $this->getHumanName());
 							break;
 					}
 				}
@@ -1732,12 +1743,12 @@ class Monitoring extends eqLogic {
 						$paramaction =
 						$cmdreboot = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 						exec($cmdreboot);
-						log::add('Monitoring','debug','[SYNO] Lancement commande locale REBOOT ' . $this->getHumanName());
+						log::add('Monitoring','debug','[SYNO] Lancement commande locale REBOOT :: ' . $this->getHumanName());
 						break;
 					case "poweroff":
 						$paramaction =
 						exec('sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null');
-						log::add('Monitoring','debug','[SYNO] Lancement commande locale POWEROFF ' . $this->getHumanName());
+						log::add('Monitoring','debug','[SYNO] Lancement commande locale POWEROFF :: ' . $this->getHumanName());
 					break;
 				}
 			}
@@ -1747,12 +1758,12 @@ class Monitoring extends eqLogic {
 						$paramaction =
 						$cmdreboot = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 						exec($cmdreboot);
-						log::add('Monitoring','debug','Lancement commande locale REBOOT ' . $this->getHumanName());
+						log::add('Monitoring','debug','[LINXU] Lancement commande locale REBOOT :: ' . $this->getHumanName());
 						break;
 					case "poweroff":
 						$paramaction =
 						exec('sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null');
-						log::add('Monitoring','debug','Lancement commande locale POWEROFF ' . $this->getHumanName());
+						log::add('Monitoring','debug','[LINUX] Lancement commande locale POWEROFF :: ' . $this->getHumanName());
 						break;
 				}
 			}
