@@ -653,7 +653,7 @@ class Monitoring extends eqLogic {
 			else {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
-						$keyOrPwd = PublicKeyLoader::load($sshkey);
+						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
 					} catch (Exception $e) {
 						log::add('Monitoring', 'error', '[SSH-Key] Exception levée :: '. $e->getMessage());
 						$keyOrPwd = '';
@@ -663,7 +663,7 @@ class Monitoring extends eqLogic {
 					$keyOrPwd = $pass;
 				}
 
-				if (!$sshconnection->login($user, $keyOrPwd, $sshpassphrase)) {
+				if (!$sshconnection->login($user, $keyOrPwd)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
 					$cnx_ssh = 'KO';
 				}
@@ -1679,7 +1679,7 @@ class Monitoring extends eqLogic {
 
 	function getCaseAction($paramaction) {
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
-		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()){
+		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
 			$port = $this->getConfiguration('portssh');
 			$user = $this->getConfiguration('user');
@@ -1695,7 +1695,7 @@ class Monitoring extends eqLogic {
 			else {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
-						$keyOrPwd = PublicKeyLoader::load($sshkey);
+						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
 					} catch (Exception $e) {
 						log::add('Monitoring', 'error', '[SSH-Key] Exception levée :: '. $e->getMessage());
 						$keyOrPwd = '';
@@ -1705,7 +1705,7 @@ class Monitoring extends eqLogic {
 					$keyOrPwd = $pass;
 				}
 
-				if (!$sshconnection->login($user, $keyOrPwd, $sshpassphrase)) {
+				if (!$sshconnection->login($user, $keyOrPwd)) {
 					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
 					$cnx_ssh = 'KO';
 				}
