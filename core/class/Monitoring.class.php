@@ -17,13 +17,26 @@
  */
 
 /* * *************************** Requires ********************************* */
-require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
+require_once __DIR__  . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
-/* * *************************** Includes ********************************* */
-include_once('phpseclib/autoload.php');
-use phpseclib\Net\SSH2;
+use phpseclib3\Net\SSH2;
+use phpseclib3\Crypt\PublicKeyLoader;
 
 class Monitoring extends eqLogic {
+
+	public function decrypt() {
+		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
+		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
+		$this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
+		$this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
+	  }
+	  public function encrypt() {
+		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
+		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
+		$this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
+		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
+	  }
 
 	public static function pull() {
 		foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
@@ -38,7 +51,7 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	public static function dependancy_info() {
+	/* public static function dependancy_info() {
 		$return = array();
 		$return['log'] = 'Monitoring_update';
 		$return['progress_file'] = '/tmp/dependancy_monitoring_in_progress';
@@ -62,7 +75,7 @@ class Monitoring extends eqLogic {
 		$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../resources/install.sh';
 		$cmd .= ' >> ' . log::getPathToLog('Monitoring_update') . ' 2>&1 &';
 		exec($cmd);
-	}
+	} */
 
 	public function postSave() {
 
@@ -622,25 +635,44 @@ class Monitoring extends eqLogic {
 
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
+		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 
-		if ($this->getConfiguration('maitreesclave') == 'deporte' && $this->getIsEnable()) {
+		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
+			$port = $this->getConfiguration('portssh');
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
-			$port = $this->getConfiguration('portssh');
+			$sshkey = $this->getConfiguration('ssh-key');
+			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 			$equipement = $this->getName();
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
-				log::add('Monitoring', 'error', 'connexion SSH KO pour '.$equipement);
+				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: ERROR :: '.$equipement);
 				$cnx_ssh = 'KO';
 			}
 			else {
-				if (!$sshconnection->login($user, $pass)) {
-					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
+				if ($confLocalOrRemote == 'deporte-key') {
+					try {
+						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
+						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: OK');
+					} catch (Exception $e) {
+						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $e->getMessage());
+						$keyOrPwd = '';
+					}
+				}
+				else {
+					$keyOrPwd = $pass;
+					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe');
+				}
+
+				if (!$sshconnection->login($user, $keyOrPwd)) {
+					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: ERROR :: '.$equipement);
 					$cnx_ssh = 'KO';
 				}
 				else {
 					$cnx_ssh = 'OK';
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
+
 					$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 					$uptime_cmd = "uptime";
 
@@ -1234,7 +1266,7 @@ class Monitoring extends eqLogic {
 						}
 
 						if (isset($memorylibre)) {
-							if ((intval($memorylibre) / 1024) > 1024) {
+							if ((intval($memorylibre) / 1024) >= 1024) {
 								$memorylibre = round(intval($memorylibre) / 1048576, 2) . " Go";
 							}
 							else {
@@ -1242,7 +1274,7 @@ class Monitoring extends eqLogic {
 							}
 						}
 						if (isset($memory[0])) {
-							if ((intval($memory[0]) / 1024) > 1024) {
+							if ((intval($memory[0]) / 1024) >= 1024) {
 								$memtotal = round(intval($memory[0]) / 1048576, 2) . " Go";
 							}
 							else {
@@ -1263,13 +1295,13 @@ class Monitoring extends eqLogic {
 								$memorylibre_pourc = 0;
 							}
 						}
-						if ((intval($memory[1]) / 1024) > 1024) {
+						if ((intval($memory[1]) / 1024) >= 1024) {
 							$memorylibre = round(intval($memory[1]) / 1048576, 2) . " Go";
 						}
 						else{
 							$memorylibre = round(intval($memory[1]) / 1024) . " Mo";
 						}
-						if (($memory[0] / 1024) > 1024) {
+						if (($memory[0] / 1024) >= 1024) {
 							$memtotal = round(intval($memory[0]) / 1048576, 2) . " Go";
 						}
 						else{
@@ -1295,27 +1327,27 @@ class Monitoring extends eqLogic {
 					}
 
 					if(isset($swap[0])){
-						if ((intval($swap[0]) / 1024) > 1024) {
-							$swap[0] = round(intval($swap[0]) / 1048576, 2) . " Go";
+						if ((intval($swap[0]) / 1024) >= 1024) {
+							$swap[0] = round(intval($swap[0]) / 1048576, 1) . " Go";
 						}
 						else {
-							$swap[0] = round(intval($swap[0]) / 1024, 2) . " Mo";
+							$swap[0] = round(intval($swap[0]) / 1024, 1) . " Mo";
 						}
 					}
 					if(isset($swap[1])) {
-						if ((intval($swap[1]) / 1024) > 1024) {
-							$swap[1] = round(intval($swap[1]) / 1048576, 2) . " Go";
+						if ((intval($swap[1]) / 1024) >= 1024) {
+							$swap[1] = round(intval($swap[1]) / 1048576, 1) . " Go";
 						}
 						else {
-							$swap[1] = round(intval($swap[1]) / 1024, 2) . " Mo";
+							$swap[1] = round(intval($swap[1]) / 1024, 1) . " Mo";
 						}
 					}
 					if(isset($swap[2])){
-						if ((intval($swap[2]) / 1024) > 1024) {
-							$swap[2] = round(intval($swap[2]) / 1048576, 2) . " Go";
+						if ((intval($swap[2]) / 1024) >= 1024) {
+							$swap[2] = round(intval($swap[2]) / 1048576, 1) . " Go";
 						}
 						else {
-							$swap[2] = round(intval($swap[2]) / 1024, 2) . " Mo";
+							$swap[2] = round(intval($swap[2]) / 1024, 1) . " Mo";
 						}
 					}
 
@@ -1333,26 +1365,26 @@ class Monitoring extends eqLogic {
 				if (isset($ReseauRXTX)) {
 					$ReseauRXTX = explode(' ', $ReseauRXTX);
 					if(isset($ReseauRXTX[0]) && isset($ReseauRXTX[1]) && isset($ReseauRXTX[2])){
-						if ((intval($ReseauRXTX[2]) / 1024) > 1073741824) {
+						if ((intval($ReseauRXTX[2]) / 1024) >= 1073741824) {
 							$ReseauTX = round(intval($ReseauRXTX[2]) / 1099511627776, 2) . " To";
 						}
-                      	elseif ((intval($ReseauRXTX[2]) / 1024) > 1048576) {
+                      	elseif ((intval($ReseauRXTX[2]) / 1024) >= 1048576) {
 							$ReseauTX = round(intval($ReseauRXTX[2]) / 1073741824, 2) . " Go";
 						}
-						elseif ((intval($ReseauRXTX[2]) / 1024) > 1024) {
+						elseif ((intval($ReseauRXTX[2]) / 1024) >= 1024) {
 							$ReseauTX = round(intval($ReseauRXTX[2]) / 1048576, 2) . " Mo";
 						}
 						else {
 							$ReseauTX = round(intval($ReseauRXTX[2]) / 1024) . " Ko";
 						}
 						
-						if ((intval($ReseauRXTX[1]) / 1024) > 1073741824) {
+						if ((intval($ReseauRXTX[1]) / 1024) >= 1073741824) {
 							$ReseauRX = round(intval($ReseauRXTX[1]) / 1099511627776, 2) . " To";
 						}
-						elseif ((intval($ReseauRXTX[1]) / 1024) > 1048576) {
+						elseif ((intval($ReseauRXTX[1]) / 1024) >= 1048576) {
 							$ReseauRX = round(intval($ReseauRXTX[1]) / 1073741824, 2) . " Go";
 						}
-						elseif ((intval($ReseauRXTX[1]) / 1024) > 1024) {
+						elseif ((intval($ReseauRXTX[1]) / 1024) >= 1024) {
 							$ReseauRX = round(intval($ReseauRXTX[1]) / 1048576, 2) . " Mo";
 						}
 						else {
@@ -1650,38 +1682,55 @@ class Monitoring extends eqLogic {
 	}
 
 	function getCaseAction($paramaction) {
-		if ($this->getConfiguration('maitreesclave') == 'deporte' && $this->getIsEnable()){
-
+		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
+		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
+			$port = $this->getConfiguration('portssh');
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
-			$port = $this->getConfiguration('portssh');
+			$sshkey = $this->getConfiguration('ssh-key');
+			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 			$equipement = $this->getName();
 
 			if (!$sshconnection = new SSH2($ip,$port)) {
-				log::add('Monitoring', 'error', 'connexion SSH KO pour '.$equipement);
+				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: ERROR :: '.$equipement);
 				$cnx_ssh = 'KO';
 			}
 			else {
-				if (!$sshconnection->login($user, $pass)){
-					log::add('Monitoring', 'error', 'Authentification SSH KO pour '.$equipement);
+				if ($confLocalOrRemote == 'deporte-key') {
+					try {
+						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
+						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: OK');
+					} catch (Exception $e) {
+						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $e->getMessage());
+						$keyOrPwd = '';
+					}
+				}
+				else {
+					$keyOrPwd = $pass;
+					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe');
+				}
+
+				if (!$sshconnection->login($user, $keyOrPwd)) {
+					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: ERROR :: '.$equipement);
 					$cnx_ssh = 'KO';
 				}
 				else {
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
 					switch ($paramaction) {
 						case "reboot":
 							$paramaction =
 							// $Rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 							$Rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
 							$Reboot = $sshconnection->exec($Rebootcmd);
-							log::add('Monitoring','debug','lancement commande deporte reboot ' . $this->getHumanName());
+							log::add('Monitoring','debug','[SSH-REBOOT] Lancement commande distante REBOOT :: ' . $this->getHumanName());
 							break;
 						case "poweroff":
 							$paramaction =
 							// $poweroffcmd = "sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null";
 							$poweroffcmd = "sudo poweroff >/dev/null & poweroff  >/dev/null";
 							$poweroff = $sshconnection->exec($poweroffcmd);
-							log::add('Monitoring','debug','lancement commande deporte poweroff' . $this->getHumanName());
+							log::add('Monitoring','debug','[SSH-OFF] Lancement commande distante POWEROFF :: ' . $this->getHumanName());
 							break;
 					}
 				}
@@ -1694,12 +1743,12 @@ class Monitoring extends eqLogic {
 						$paramaction =
 						$cmdreboot = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 						exec($cmdreboot);
-						log::add('Monitoring','debug','lancement commande local reboot ' . $this->getHumanName());
+						log::add('Monitoring','debug','[SYNO] Lancement commande locale REBOOT :: ' . $this->getHumanName());
 						break;
 					case "poweroff":
 						$paramaction =
 						exec('sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null');
-						log::add('Monitoring','debug','lancement commande local poweroff ' . $this->getHumanName());
+						log::add('Monitoring','debug','[SYNO] Lancement commande locale POWEROFF :: ' . $this->getHumanName());
 					break;
 				}
 			}
@@ -1709,12 +1758,12 @@ class Monitoring extends eqLogic {
 						$paramaction =
 						$cmdreboot = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 						exec($cmdreboot);
-						log::add('Monitoring','debug','lancement commande local reboot ' . $this->getHumanName());
+						log::add('Monitoring','debug','[LINXU] Lancement commande locale REBOOT :: ' . $this->getHumanName());
 						break;
 					case "poweroff":
 						$paramaction =
 						exec('sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null');
-						log::add('Monitoring','debug','lancement commande local poweroff ' . $this->getHumanName());
+						log::add('Monitoring','debug','[LINUX] Lancement commande locale POWEROFF :: ' . $this->getHumanName());
 						break;
 				}
 			}
