@@ -1733,7 +1733,8 @@ class Monitoring extends eqLogic {
 						switch ($paramaction) {
 							case "reboot":
 								try {
-									$rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
+									// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
+									$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null";
 									$sshconnection->exec($rebootcmd);
 								} catch (Exception $e) {
 									log::add('Monitoring','debug','[SYNO-REBOOT] Exception [REBOOT] :: '. $equipement .' :: '. $e->getMessage());	
@@ -1742,8 +1743,9 @@ class Monitoring extends eqLogic {
 								break;
 							case "poweroff":
 								try {
-									// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
-									$poweroffcmd = 'sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null';
+									// $poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
+									// $poweroffcmd = 'sudo /sbin/shutdown -P now >/dev/null & /sbin/shutdown -P now >/dev/null';
+									$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null';
 									$sshconnection->exec($poweroffcmd);
 								} catch (Exception $e) {
 									log::add('Monitoring','debug','[SYNO-OFF] Exception [POWEROFF] :: '. $equipement .' :: '. $e->getMessage());	
@@ -1783,12 +1785,12 @@ class Monitoring extends eqLogic {
 			if($this->getConfiguration('synology') == '1'){
 				switch ($paramaction) {
 					case "reboot":
-						$rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
+						$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null";
 						log::add('Monitoring','info','[SYNO-REBOOT] Lancement commande locale REBOOT :: '. $equipement);
 						exec($rebootcmd);
 						break;
 					case "poweroff":
-						$poweroffcmd = 'sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null';
+						$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null';
 						log::add('Monitoring','info','[SYNO-OFF] Lancement commande locale POWEROFF :: '. $equipement);
 						exec($poweroffcmd);
 						break;
