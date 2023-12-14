@@ -645,6 +645,7 @@ class Monitoring extends eqLogic {
 			$sshkey = $this->getConfiguration('ssh-key');
 			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 			$equipement = $this->getName();
+			$cnx_ssh = '';
 
 			try {
 				$sshconnection = new SSH2($ip,$port);
