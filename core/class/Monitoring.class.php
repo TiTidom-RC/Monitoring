@@ -646,32 +646,39 @@ class Monitoring extends eqLogic {
 			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 			$equipement = $this->getName();
 
-			if (!$sshconnection = new SSH2($ip,$port)) {
-				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: ERROR :: '.$equipement);
+			try {
+				$sshconnection = new SSH2($ip,$port);
+				log::add('Monitoring', 'debug', '[SSH-New] Connexion SSH :: ' . $equipement .' :: OK');
+			} catch (Exception $e) {
+				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: ' . $equipement .' :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			}
-			else {
+			if ($cnx_ssh != 'KO') {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
 						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: OK');
+						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: ' . $equipement .' :: OK');
 					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $e->getMessage());
+						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: ' . $equipement .' :: '. $e->getMessage());
 						$keyOrPwd = '';
 					}
 				}
 				else {
 					$keyOrPwd = $pass;
-					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe');
+					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe :: ' . $equipement);
 				}
 
-				if (!$sshconnection->login($user, $keyOrPwd)) {
-					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: ERROR :: '.$equipement);
+				try {
+					$sshconnection->login($user, $keyOrPwd);
+
+				} catch (Exception $e) {
+					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: '.$equipement .' :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
 				}
-				else {
+
+				if ($cnx_ssh != 'KO') {
 					$cnx_ssh = 'OK';
-					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: OK :: '.$equipement);
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '.$equipement .' :: OK');
 
 					$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 					$uptime_cmd = "uptime";
