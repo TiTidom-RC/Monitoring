@@ -1731,12 +1731,14 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '.$equipement .' :: OK');
 					switch ($paramaction) {
 						case "reboot":
-							$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
+							$rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
+							// $rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
 							$reboot = $sshconnection->exec($rebootcmd);
 							log::add('Monitoring','info','[SSH-REBOOT] Lancement commande distante REBOOT :: ' . $this->getHumanName());
 							break;
 						case "poweroff":
-							$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
+							$poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
+							// $poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
 							$poweroff = $sshconnection->exec($poweroffcmd);
 							log::add('Monitoring','info','[SSH-OFF] Lancement commande distante POWEROFF :: ' . $this->getHumanName());
 							break;
@@ -1762,14 +1764,14 @@ class Monitoring extends eqLogic {
 			else {
 				switch ($paramaction) {
 					case "reboot":
-						// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
-						$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
+						$rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
+						// $rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
 						log::add('Monitoring','debug','[LINUX] Lancement commande locale REBOOT :: ' . $this->getHumanName());
 						exec($rebootcmd);
 						break;
 					case "poweroff":
-						// $poweroffcmd = 'sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null';
-						$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
+						$poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
+						// $poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
 						log::add('Monitoring','debug','[LINUX] Lancement commande locale POWEROFF :: ' . $this->getHumanName());
 						exec($poweroffcmd);
 						break;
