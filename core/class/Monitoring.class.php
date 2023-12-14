@@ -1731,15 +1731,23 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '.$equipement .' :: OK');
 					switch ($paramaction) {
 						case "reboot":
-							// $rebootcmd = "sudo shutdown -r now >/dev/null";
-							$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
-							$sshconnection->write($rebootcmd.'\n');
+							try {
+								// $rebootcmd = "sudo shutdown -r now >/dev/null";
+								$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
+								$sshconnection->exec($rebootcmd);
+							} catch (Exception $e) {
+								log::add('Monitoring','debug','[SSH-REBOOT] Exception [REBOOT] :: ' . $this->getHumanName() . ' :: ' . $e->getMessage());	
+							}
 							log::add('Monitoring','info','[SSH-REBOOT] Lancement commande distante REBOOT :: ' . $this->getHumanName());
 							break;
 						case "poweroff":
-							// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
-							$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
-							$sshconnection->write($poweroffcmd.'\n');
+							try {
+								// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
+								$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
+								$sshconnection->exec($poweroffcmd);
+							} catch (Exception $e) {
+								log::add('Monitoring','debug','[SSH-OFF] Exception [POWEROFF] :: ' . $this->getHumanName() . ' :: ' . $e->getMessage());	
+							}
 							log::add('Monitoring','info','[SSH-OFF] Lancement commande distante POWEROFF :: ' . $this->getHumanName());
 							break;
 					}
