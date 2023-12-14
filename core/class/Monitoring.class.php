@@ -1731,15 +1731,15 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '.$equipement .' :: OK');
 					switch ($paramaction) {
 						case "reboot":
-							$rebootcmd = "sleep 2; sudo shutdown -r now >/dev/null";
-							// $rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
-							$reboot = $sshconnection->exec($rebootcmd);
+							// $rebootcmd = "sudo shutdown -r now >/dev/null";
+							$rebootcmd = "sudo reboot >/dev/null";
+							$sshconnection->write($rebootcmd.'\n');
 							log::add('Monitoring','info','[SSH-REBOOT] Lancement commande distante REBOOT :: ' . $this->getHumanName());
 							break;
 						case "poweroff":
-							$poweroffcmd = 'sleep 2; sudo shutdown -h now >/dev/null';
-							// $poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
-							$poweroff = $sshconnection->exec($poweroffcmd);
+							// $poweroffcmd = 'sudo shutdown -h now >/dev/null';
+							$poweroffcmd = "sudo poweroff >/dev/null";
+							$sshconnection->write($poweroffcmd.'\n');
 							log::add('Monitoring','info','[SSH-OFF] Lancement commande distante POWEROFF :: ' . $this->getHumanName());
 							break;
 					}
@@ -1750,7 +1750,7 @@ class Monitoring extends eqLogic {
 			if($this->getConfiguration('synology') == '1'){
 				switch ($paramaction) {
 					case "reboot":
-						$rebootcmd = "sleep 2; sudo shutdown -r now >/dev/null";
+						$rebootcmd = "sudo shutdown -r now >/dev/null";
 						log::add('Monitoring','info','[SYNO] Lancement commande locale REBOOT :: ' . $this->getHumanName());
 						exec($rebootcmd);
 						break;
@@ -1764,13 +1764,13 @@ class Monitoring extends eqLogic {
 			else {
 				switch ($paramaction) {
 					case "reboot":
-						$rebootcmd = "sleep 2; sudo shutdown -r now >/dev/null";
+						$rebootcmd = "sudo shutdown -r now >/dev/null";
 						// $rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
 						log::add('Monitoring','debug','[LINUX] Lancement commande locale REBOOT :: ' . $this->getHumanName());
 						exec($rebootcmd);
 						break;
 					case "poweroff":
-						$poweroffcmd = 'sleep 2; sudo shutdown -h now >/dev/null';
+						$poweroffcmd = 'sudo shutdown -h now >/dev/null';
 						// $poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
 						log::add('Monitoring','debug','[LINUX] Lancement commande locale POWEROFF :: ' . $this->getHumanName());
 						exec($poweroffcmd);
