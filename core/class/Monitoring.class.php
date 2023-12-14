@@ -649,35 +649,35 @@ class Monitoring extends eqLogic {
 
 			try {
 				$sshconnection = new SSH2($ip,$port);
-				log::add('Monitoring', 'debug', '[SSH-New] Connexion SSH :: ' . $equipement .' :: OK');
+				log::add('Monitoring', 'debug', '[SSH-New] Connexion SSH :: '. $equipement .' :: OK');
 			} catch (Exception $e) {
-				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: ' . $equipement .' :: '. $e->getMessage());
+				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			}
 			if ($cnx_ssh != 'KO') {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
 						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: ' . $equipement .' :: OK');
+						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: '. $equipement .' :: OK');
 					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: ' . $equipement .' :: '. $e->getMessage());
+						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $equipement .' :: '. $e->getMessage());
 						$keyOrPwd = '';
 					}
 				}
 				else {
 					$keyOrPwd = $pass;
-					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe :: ' . $equipement);
+					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe :: '. $equipement);
 				}
 
 				try {
 					$sshconnection->login($user, $keyOrPwd);
 				} catch (Exception $e) {
-					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: '.$equipement .' :: '. $e->getMessage());
+					log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: '. $equipement .' :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
 				}
 				if ($cnx_ssh != 'KO') {
 					$cnx_ssh = 'OK';
-					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '.$equipement .' :: OK');
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '. $equipement .' :: OK');
 
 					$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 					$uptime_cmd = "uptime";
@@ -1701,34 +1701,34 @@ class Monitoring extends eqLogic {
 
 			try {
 				$sshconnection = new SSH2($ip,$port);
-				log::add('Monitoring', 'debug', '[SSH-New] Connexion SSH :: ' . $equipement .' :: OK');
+				log::add('Monitoring', 'debug', '[SSH-New] Connexion SSH :: '. $equipement .' :: OK');
 			} catch (Exception $e) {
-				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: ' . $equipement .' :: '. $e->getMessage());
+				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			}
 			if ($cnx_ssh != 'KO') {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
 						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: ' . $equipement .' :: OK');
+						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: '. $equipement .' :: OK');
 					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: ' . $equipement .' :: '. $e->getMessage());
+						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $equipement .' :: '. $e->getMessage());
 						$keyOrPwd = '';
 					}
 				}
 				else {
 					$keyOrPwd = $pass;
-					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe :: ' . $equipement);
+					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe :: '. $equipement);
 				}
 
 				try {
 					$sshconnection->login($user, $keyOrPwd);			
 				} catch (Exception $e) {
-					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '.$equipement .' :: '. $e->getMessage());
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '. $equipement .' :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
 				}		
 				if ($cnx_ssh != 'KO') {
-					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '.$equipement .' :: OK');
+					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '. $equipement .' :: OK');
 					switch ($paramaction) {
 						case "reboot":
 							try {
@@ -1736,9 +1736,9 @@ class Monitoring extends eqLogic {
 								$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
 								$sshconnection->exec($rebootcmd);
 							} catch (Exception $e) {
-								log::add('Monitoring','debug','[SSH-REBOOT] Exception [REBOOT] :: ' . $this->getHumanName() . ' :: ' . $e->getMessage());	
+								log::add('Monitoring','debug','[SSH-REBOOT] Exception [REBOOT] :: '. $equipement .' :: '. $e->getMessage());	
 							}
-							log::add('Monitoring','info','[SSH-REBOOT] Lancement commande distante REBOOT :: ' . $this->getHumanName());
+							log::add('Monitoring','info','[SSH-REBOOT] Lancement commande distante REBOOT :: '. $equipement);
 							break;
 						case "poweroff":
 							try {
@@ -1746,9 +1746,9 @@ class Monitoring extends eqLogic {
 								$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
 								$sshconnection->exec($poweroffcmd);
 							} catch (Exception $e) {
-								log::add('Monitoring','debug','[SSH-OFF] Exception [POWEROFF] :: ' . $this->getHumanName() . ' :: ' . $e->getMessage());	
+								log::add('Monitoring','debug','[SSH-OFF] Exception [POWEROFF] :: '. $equipement .' :: '. $e->getMessage());	
 							}
-							log::add('Monitoring','info','[SSH-OFF] Lancement commande distante POWEROFF :: ' . $this->getHumanName());
+							log::add('Monitoring','info','[SSH-OFF] Lancement commande distante POWEROFF :: '. $equipement);
 							break;
 					}
 				}
@@ -1759,12 +1759,12 @@ class Monitoring extends eqLogic {
 				switch ($paramaction) {
 					case "reboot":
 						$rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
-						log::add('Monitoring','info','[SYNO-REBOOT] Lancement commande locale REBOOT :: ' . $this->getHumanName());
+						log::add('Monitoring','info','[SYNO-REBOOT] Lancement commande locale REBOOT :: '. $equipement);
 						exec($rebootcmd);
 						break;
 					case "poweroff":
 						$poweroffcmd = 'sudo shutdown -P now >/dev/null & shutdown -P now >/dev/null';
-						log::add('Monitoring','info','[SYNO-OFF] Lancement commande locale POWEROFF :: ' . $this->getHumanName());
+						log::add('Monitoring','info','[SYNO-OFF] Lancement commande locale POWEROFF :: '. $equipement);
 						exec($poweroffcmd);
 						break;
 				}
@@ -1774,13 +1774,13 @@ class Monitoring extends eqLogic {
 					case "reboot":
 						// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 						$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
-						log::add('Monitoring','debug','[LINUX-REBOOT] Lancement commande locale REBOOT :: ' . $this->getHumanName());
+						log::add('Monitoring','debug','[LINUX-REBOOT] Lancement commande locale REBOOT :: '. $equipement);
 						exec($rebootcmd);
 						break;
 					case "poweroff":
 						// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
 						$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
-						log::add('Monitoring','debug','[LINUX-OFF] Lancement commande locale POWEROFF :: ' . $this->getHumanName());
+						log::add('Monitoring','debug','[LINUX-OFF] Lancement commande locale POWEROFF :: '. $equipement);
 						exec($poweroffcmd);
 						break;
 				}
