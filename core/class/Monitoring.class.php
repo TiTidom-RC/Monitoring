@@ -753,7 +753,7 @@ class Monitoring extends eqLogic {
 							$cputemp0_cmd='timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)';
 						}
 
-						log::add("Monitoring","debug", "commande temp syno : ".$cputemp0_cmd);
+						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: ".$cputemp0_cmd);
 						$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 					
 						if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
@@ -855,8 +855,8 @@ class Monitoring extends eqLogic {
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-							if ($this->getconfiguration('proxmox_use_temp_cmd')) {
-								$cputemp0_cmd=$this->getconfiguration('proxmox_temp_cmd');
+							if ($this->getconfiguration('linux_use_temp_cmd')) {
+								$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							} 
 							else
 							{
@@ -873,9 +873,10 @@ class Monitoring extends eqLogic {
 								$cputemp0 = $sshconnection->exec($cputemp0AMD_cmd);
 							}
 							if ($cputemp0 == '') {
-								$cputemp0sensors_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors
-								$cputemp0 = $sshconnection->exec($cputemp0sensors_cmd);
+								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 							}
+							log::add("Monitoring","debug", "[LINUX-TEMP] Commande Température :: ".$cputemp0_cmd);
 						}
 
 					}

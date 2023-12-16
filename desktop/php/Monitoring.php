@@ -232,18 +232,18 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
 					        </fieldset>
                             <fieldset>
-                                <legend>{{Proxmox}}</legend>
+                                <legend>{{Linux / Proxmox}}</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Temp (Alt)}}</label>
                                     <div class="col-md-8">
-                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="proxmox_use_temp_cmd" />
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="linux_use_temp_cmd" />
                                         <span style="font-size: 85%;">({{A cocher pour spécifier la commande de récupération de température}})</span>
                                     </div>
                                 </div>
-                                <div class="form-group proxmox_class_temp_cmd" style="display:none;">
+                                <div class="form-group linux_class_temp_cmd" style="display:none;">
                                     <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                     <div class="col-md-6">
-                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="proxmox_temp_cmd" type="text" placeholder="{{timeout 3 cat /sys/devices/virtual/thermal/thermal_zone1/temp}}" />
+                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="linux_temp_cmd" type="text" placeholder="{{timeout 3 cat /sys/devices/virtual/thermal/thermal_zone1/temp}}" />
                                     </div>
                                 </div>
                             </fieldset>
