@@ -96,6 +96,14 @@ $(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
 	}
 });
 
+$(".eqLogicAttr[data-l2key='proxmox_use_temp_cmd']").on('change', function () {
+	if(this.checked){
+	  $(".proxmox_class_temp_cmd").show();
+	} else {
+	  $(".proxmox_class_temp_cmd").hide();
+	}
+});
+
 $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 	if (this.selectedIndex == 1) {
 	  $(".distant").show();

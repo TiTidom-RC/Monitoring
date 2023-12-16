@@ -746,10 +746,13 @@ class Monitoring extends eqLogic {
 						$versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 						$versionsyno = $sshconnection->exec($versionsyno_cmd);
 
-						$synotemp_cmd='timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)';
-						if($this->getconfiguration('syno_use_temp_path')) $synotemp_cmd=$this->getconfiguration('syno_temp_path');				
+						if ($this->getconfiguration('syno_use_temp_path')) {
+							$cputemp0_cmd=$this->getconfiguration('syno_temp_path');
+						} 
+						else {
+							$cputemp0_cmd='timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)';
+						}
 
-						$cputemp0_cmd = $synotemp_cmd;
 						log::add("Monitoring","debug", "commande temp syno : ".$cputemp0_cmd);
 						$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 					
@@ -852,7 +855,13 @@ class Monitoring extends eqLogic {
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-							$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// OK Dell WYSE
+							if ($this->getconfiguration('proxmox_use_temp_cmd')) {
+								$cputemp0_cmd=$this->getconfiguration('proxmox_temp_cmd');
+							} 
+							else
+							{
+								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// OK Dell WYSE
+							}
 							$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 
 							if ($cputemp0 == '') {
