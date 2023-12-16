@@ -699,36 +699,32 @@ class Monitoring extends eqLogic {
 
 					$memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 					$swap_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
-					
 					$loadavg_cmd = "cat /proc/loadavg";
-					
 					$ReseauRXTX_cmd = "cat /proc/net/dev | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
 
-					$perso_1cmd = $this->getConfiguration('perso1');
-					$perso_2cmd = $this->getConfiguration('perso2');
-
 					$ARMv = trim($sshconnection->exec($ARMv_cmd));
-
 					$uptime = $sshconnection->exec($uptime_cmd);
-
 					$VersionID = trim($sshconnection->exec($VersionID_cmd));
-					
 					$namedistri = $sshconnection->exec($namedistri_cmd);
 					$bitdistri = $sshconnection->exec($bitdistri_cmd);
-
 					$loadav = $sshconnection->exec($loadavg_cmd);
-
 					$ReseauRXTX = $sshconnection->exec($ReseauRXTX_cmd);
 
 					$memory = $sshconnection->exec($memory_cmd);
 					$swap = $sshconnection->exec($swap_cmd);
 
-					$perso_1 = $sshconnection->exec($perso_1cmd);
-					log::add('Monitoring', 'debug', '[SSH] $perso_1 : '.$perso_1);
+					$perso_1cmd = $this->getConfiguration('perso1');
+					$perso_2cmd = $this->getConfiguration('perso2');
 
-					$perso_2 = $sshconnection->exec($perso_2cmd);
-					log::add('Monitoring', 'debug', '[SSH] $perso_2 : '.$perso_2);
-
+					if ($perso_1cmd != '') {
+						$perso_1 = $sshconnection->exec($perso_1cmd);
+						log::add('Monitoring', 'debug', '[SSH] $perso_1 : '.$perso_1);
+					}
+					if ($perso_2cmd != '') {
+						$perso_2 = $sshconnection->exec($perso_2cmd);
+						log::add('Monitoring', 'debug', '[SSH] $perso_2 : '.$perso_2);
+					}
+					
 					if($this->getConfiguration('synology') == '1') {
 						$platform_cmd = "get_key_value /etc/synoinfo.conf unique | cut -d'_' -f2";
 						$synoplatorm = $sshconnection->exec($platform_cmd);
@@ -748,12 +744,12 @@ class Monitoring extends eqLogic {
 
 						if ($this->getconfiguration('syno_use_temp_path')) {
 							$cputemp0_cmd=$this->getconfiguration('syno_temp_path');
+							log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
 						} 
 						else {
-							$cputemp0_cmd='timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)';
+							$cputemp0_cmd="timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
+							log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: ".$cputemp0_cmd);
 						}
-
-						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: ".$cputemp0_cmd);
 						$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 					
 						if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
@@ -784,7 +780,14 @@ class Monitoring extends eqLogic {
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-							$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+							if ($this->getconfiguration('linux_use_temp_cmd')) {
+								$cputemp0armv6l_cmd=$this->getconfiguration('linux_temp_cmd');
+								log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: ".$cputemp0armv6l_cmd);	
+							} 
+							else {
+								$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+								log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: ".$cputemp0armv6l_cmd);
+							}
 							$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
 						}
 
@@ -808,15 +811,22 @@ class Monitoring extends eqLogic {
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-							$cputemp0RPi2_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";	// OK RPi2
-							$cputemp0 = $sshconnection->exec($cputemp0RPi2_cmd);
-
-							if ($cputemp0 == '') {
-								$cputemp0armv7l_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"; // OK Banana Pi (Cubie surement un jour...)
-								$cputemp0 = $sshconnection->exec($cputemp0armv7l_cmd);
-							}
+							if ($this->getconfiguration('linux_use_temp_cmd')) {
+								$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+								log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+							} 
+							else {
+								$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";	// OK RPi2
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+								
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"; // OK Banana Pi (Cubie surement un jour...)
+									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+								}
+								log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température :: ".$cputemp0_cmd);
+							}							
 						}
-
 					}
 					elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386'){
 						$NF = '';
@@ -857,37 +867,37 @@ class Monitoring extends eqLogic {
 						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
 							if ($this->getconfiguration('linux_use_temp_cmd')) {
 								$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-								log::add("Monitoring","debug", "[LINUX-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
-							} 
-							else
-							{
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+								log::add("Monitoring","debug", "[X86-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+							}
+							else {
 								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// Default
-							}
-							$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-
-							if ($cputemp0 == '') {
-								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"; // Default Zone 1
-								$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
-							}
-							if ($cputemp0 == '') {
-								$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null";	// OK AOpen DE2700
-								$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
-							}
-							if ($cputemp0 == '') {
-								$cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input 2>/dev/null";	// OK AMD Ryzen
-								$cputemp0 = $sshconnection->exec($cputemp0AMD_cmd);
-							}
-							if ($cputemp0 == '') {
-								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")){printf(\"%f\",$4);} }'"; // OK by sensors
 								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+								
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"; // Default Zone 1
+									$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
+								}
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null";	// OK AOpen DE2700
+									$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
+								}
+								if ($cputemp0 == '') {
+									// $cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input 2>/dev/null";	// OK AMD Ryzen
+									$cputemp0AMD_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"; // OK Search temp?_input
+									$cputemp0 = $sshconnection->exec($cputemp0AMD_cmd);
+								}
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")){printf(\"%f\",$4);} }'"; // OK by sensors
+									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+								}
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors
+									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+								}
+								log::add("Monitoring","debug", "[X86-TEMP] Commande Température :: ".$cputemp0_cmd);
 							}
-							if ($cputemp0 == '') {
-								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors
-								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-							}
-							log::add("Monitoring","debug", "[LINUX-TEMP] Commande Température :: ".$cputemp0_cmd);
 						}
-
 					}
 					elseif ($ARMv == '' & $this->getConfiguration('synology') != '1') {
 						$unamecmd = "uname -a | awk '{print $2,$1}'";
@@ -909,10 +919,17 @@ class Monitoring extends eqLogic {
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-								$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-								$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+								} 
+								else
+								{
+									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+								}
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 							}
-
 						}
 						elseif (preg_match("#osmc#", $namedistri)) {
 							$bitdistri = '32';
@@ -929,8 +946,16 @@ class Monitoring extends eqLogic {
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-								$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-								$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+								} 
+								else
+								{
+									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+								}
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 							}
 						}
 						elseif (preg_match("#piCorePlayer#", $uname)) {
@@ -950,10 +975,17 @@ class Monitoring extends eqLogic {
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-								$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-								$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+								} 
+								else
+								{
+									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+								}
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 							}
-
 						}
 						elseif (preg_match("#FreeBSD#", $uname)) {
 							$namedistri_cmd = "uname -a | awk '{ print $1,$3}'";
@@ -982,8 +1014,16 @@ class Monitoring extends eqLogic {
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-								$cputemp0armv6l_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
-								$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add("Monitoring","debug", "[BSD-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+								} 
+								else
+								{
+									$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
+									log::add("Monitoring","debug", "[BSD-TEMP] Commande Température :: ".$cputemp0_cmd);
+								}
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 							}
 						}
 					}
@@ -992,9 +1032,8 @@ class Monitoring extends eqLogic {
 		}
 		elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
 			$cnx_ssh = 'No';
-			$uptime_cmd = "uptime";
 			
-			if($this->getConfiguration('synology') == '1') {
+			if ($this->getConfiguration('synology') == '1') {
 				if ($this->getConfiguration('syno_alt_name') == '1') {
 					$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
 				}
@@ -1016,18 +1055,13 @@ class Monitoring extends eqLogic {
 				$bitdistri = exec($bitdistri_cmd);
 			}
 
+			$uptime_cmd = "uptime";
 			$memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 			$swap_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
-
 			$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
-
 			$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
 
-			$perso_1cmd = $this->getConfiguration('perso1');
-			$perso_2cmd = $this->getConfiguration('perso2');
-
 			$uptime = exec($uptime_cmd);
-
 			$namedistri = exec($namedistri_cmd);
 			$VersionID = trim(exec($VersionID_cmd));
 			$loadav = exec($loadavg_cmd);
@@ -1036,16 +1070,19 @@ class Monitoring extends eqLogic {
 			$memory = exec($memory_cmd);
 			$swap = exec($swap_cmd);
 			
+			$perso_1cmd = $this->getConfiguration('perso1');
+			$perso_2cmd = $this->getConfiguration('perso2');
+
 			if ($perso_1cmd != '') {
-				$perso_1 = exec ($perso_1cmd);
+				$perso_1 = exec($perso_1cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] $perso_1 : '.$perso_1);
 			}
 			if ($perso_2cmd != '') {
-				$perso_2 = exec ($perso_2cmd);
+				$perso_2 = exec($perso_2cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] $perso_2 : '.$perso_2);
 			}
 
-			if($this->getConfiguration('synology') == '1'){
+			if ($this->getConfiguration('synology') == '1'){
 				$uname = '.';
 				$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core";
 				$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
@@ -1054,6 +1091,16 @@ class Monitoring extends eqLogic {
 				$nbcpu = exec($nbcpuARM_cmd);
 				$cpufreq0 = exec($cpufreq0ARM_cmd);
 				$versionsyno = exec($versionsyno_cmd);
+
+				if ($this->getconfiguration('syno_use_temp_path')) {
+					$cputemp0_cmd=$this->getconfiguration('syno_temp_path');
+					log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+				} 
+				else {
+					$cputemp0_cmd="timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null";
+					log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: ".$cputemp0_cmd);
+				}
+				$cputemp0 = exec($cputemp0_cmd);
 
 				if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
 					$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
@@ -1085,9 +1132,15 @@ class Monitoring extends eqLogic {
 				}
 				$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 				if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-					if (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
-						$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp";
-						$cputemp0 = exec($cputemp0armv6l_cmd);
+					if ($this->getconfiguration('linux_use_temp_cmd')) {
+						$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+						$cputemp0 = exec($cputemp0_cmd);
+						log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+					} 
+					elseif (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
+							$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp";
+							$cputemp0 = exec($cputemp0_cmd);
+							log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: ".$cputemp0_cmd);
 					}
 				}
 			}
@@ -1112,15 +1165,23 @@ class Monitoring extends eqLogic {
 				
 				$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 				if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-					if (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
-						$cputemp0RPi2_cmd = "cat /sys/class/thermal/thermal_zone0/temp";	// OK RPi2/3, Odroid
-						$cputemp0 = exec($cputemp0RPi2_cmd);
-					}
-					if ($cputemp0 == '') {
-						if (file_exists('/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1')) {
-							$cputemp0armv7l_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"; // OK Banana Pi (Cubie surement un jour...)
-							$cputemp0 = exec($cputemp0armv7l_cmd);
+					if ($this->getconfiguration('linux_use_temp_cmd')) {
+						$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+						$cputemp0 = exec($cputemp0_cmd);
+						log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+					} 
+					else {
+						if (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
+							$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp"; // OK RPi2/3, Odroid
+							$cputemp0 = exec($cputemp0_cmd);
 						}
+						if ($cputemp0 == '') {
+							if (file_exists('/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1')) {
+								$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"; // OK Banana Pi (Cubie surement un jour...)
+								$cputemp0 = exec($cputemp0_cmd);
+							}
+						}
+						log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température :: ".$cputemp0_cmd);
 					}
 				}
 			}
@@ -1158,27 +1219,40 @@ class Monitoring extends eqLogic {
 				
 				$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 				if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
-					if (file_exists('/sys/devices/virtual/thermal/thermal_zone0/temp')) {
-						$cputemp0RPi2_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp"; // OK Dell Whyse
-						$cputemp0 = exec($cputemp0RPi2_cmd);
-					}
-				
-					if ($cputemp0 == '') {
-						if (file_exists('/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input')) {
-							$cputemp0AOpen_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input";	// OK AOpen DE2700
-							$cputemp0 = exec($cputemp0AOpen_cmd);
+					if ($this->getconfiguration('linux_use_temp_cmd')) {
+						$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+						$cputemp0 = exec($cputemp0_cmd);
+						log::add("Monitoring","debug", "[X86-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+					} 
+					else {
+						if (file_exists('/sys/devices/virtual/thermal/thermal_zone0/temp')) {
+							$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp"; // OK Dell Whyse
+							$cputemp0 = exec($cputemp0_cmd);
+						}					
+						if ($cputemp0 == '') {
+							if (file_exists('/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input')) {
+								$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input";	// OK AOpen DE2700
+								$cputemp0 = exec($cputemp0_cmd);
+							}
 						}
-					}
-				
-					if ($cputemp0 == '') {
-						if (file_exists('/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input')) {
-							$cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input";	// OK AMD Ryzen
-							$cputemp0 = exec($cputemp0AMD_cmd);
+						if ($cputemp0 == '') {
+							$cputemp0_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"; // OK AMD Ryzen
+							$cputemp0 = exec($cputemp0_cmd); 
 						}
+						if ($cputemp0 == '') {
+							$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")){printf(\"%f\",$4);} }'"; // OK by sensors
+							$cputemp0 = exec($cputemp0_cmd);
+						}
+						if ($cputemp0 == '') {
+							$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors MB
+							$cputemp0 = exec($cputemp0_cmd);
+						}
+						log::add("Monitoring","debug", "[X86-TEMP] Commande Température :: ".$cputemp0_cmd);
 					}
 				}
 			}
 		}
+
 		if (isset($cnx_ssh)) {
 			if($this->getConfiguration('maitreesclave') == 'local' || $cnx_ssh == 'OK') {
 				if($this->getConfiguration('synology') == '1'){
@@ -1434,9 +1508,6 @@ class Monitoring extends eqLogic {
 						$hddused = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddata[1]);
 						$hddused_pourc = preg_replace("/[^0-9.]/","",$hdddata[2]);
 						$hddused_pourc = trim($hddused_pourc);
-						/* if ($hddused_pourc < '10') {
-							$hddused_pourc = '0'.$hddused_pourc; // A quoi sert certe conversion ?
-						}*/
 					}
 				}
 
