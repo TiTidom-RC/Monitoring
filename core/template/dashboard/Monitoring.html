@@ -60,11 +60,11 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#loadavg1mn#' === '') {
 					$('#loadavg1mn#id#').append('<span></span>');
-				} else if (parseFloat('#loadavg1mn#') < parseFloat('#loadavg1mnvertinfa#')) {
+				} else if (parseFloat('#loadavg1mn#') < parseFloat('#loadavg1mn_colorlow#')) {
 					$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg1mn#</span>');
-				} else if ((parseFloat('#loadavg1mn#') >= parseFloat('#loadavg1mnorangede#')) && (parseFloat('#loadavg1mn#') <= parseFloat('#loadavg1mnorangea#'))) {
+				} else if ((parseFloat('#loadavg1mn#') >= parseFloat('#loadavg1mn_colorlow#')) && (parseFloat('#loadavg1mn#') <= parseFloat('#loadavg1mn_colorhigh#'))) {
 					$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg1mn#</span>');
-				} else if ((parseFloat('#loadavg1mn#') > parseFloat('#loadavg1mnrougesupa#')) && '#loadavg1mnrougesupa#' !== '') {
+				} else if ((parseFloat('#loadavg1mn#') > parseFloat('#loadavg1mn_colorhigh#')) && '#loadavg1mn_colorhigh#' !== '') {
 					$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg1mn#</span>');
 				} else {
 					$('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor">#loadavg1mn#</span>');
@@ -72,22 +72,22 @@
 
 				if ('#loadavg5mn#' === '') {
 					$('#loadavg5mn#id#').append('<span></span>');
-				} else if (parseFloat('#loadavg5mn#') < parseFloat('#loadavg5mnvertinfa#')) {
+				} else if (parseFloat('#loadavg5mn#') < parseFloat('#loadavg5mn_colorlow#')) {
 					$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg5mn#</span>');
-				} else if ((parseFloat('#loadavg5mn#') >= parseFloat('#loadavg5mnorangede#')) && (parseFloat('#loadavg5mn#') <= parseFloat('#loadavg5mnorangea#'))) {
+				} else if ((parseFloat('#loadavg5mn#') >= parseFloat('#loadavg5mn_colorlow#')) && (parseFloat('#loadavg5mn#') <= parseFloat('#loadavg5mn_colorhigh#'))) {
 					$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg5mn#</span>');
-				} else if ((parseFloat('#loadavg5mn#') > parseFloat('#loadavg5mnrougesupa#')) && '#loadavg5mnrougesupa#' !== '') {
+				} else if ((parseFloat('#loadavg5mn#') > parseFloat('#loadavg5mn_colorhigh#')) && '#loadavg5mn_colorhigh#' !== '') {
 					$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg5mn#</span>');
 				} else {
 					$('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor">#loadavg5mn#</span>');
 				}
 				if ('#loadavg15mn#' === '') {
 					$('#loadavg15mn#id#').append('<span></span>');
-				} else if (parseFloat('#loadavg15mn#') < parseFloat('#loadavg15mnvertinfa#')) {
+				} else if (parseFloat('#loadavg15mn#') < parseFloat('#loadavg15mn_colorlow#')) {
 					$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg15mn#</span>');
-				} else if ((parseFloat('#loadavg15mn#') >= parseFloat('#loadavg15mnorangede#')) && (parseFloat('#loadavg15mn#') <= parseFloat('#loadavg15mnorangea#'))) {
+				} else if ((parseFloat('#loadavg15mn#') >= parseFloat('#loadavg15mn_colorlow#')) && (parseFloat('#loadavg15mn#') <= parseFloat('#loadavg15mn_colorhigh#'))) {
 					$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg15mn#</span>');
-				} else if ((parseFloat('#loadavg15mn#') > parseFloat('#loadavg15mnrougesupa#')) && '#loadavg15mnrougesupa#' !== '') {
+				} else if ((parseFloat('#loadavg15mn#') > parseFloat('#loadavg15mn_colorhigh#')) && '#loadavg15mn_colorhigh#' !== '') {
 					$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg15mn#</span>');
 				} else {
 					$('#loadavg15mn#id#').append(' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor">#loadavg15mn#</span>');
@@ -102,11 +102,11 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#Mempourc#' === '') {
 					$('#Mempourcent#id#').append('<span>#Mem#</span>');
-				} else if ((parseInt('#Mempourc#') > parseInt('#Mempourcvertsupa#')) && '#Mempourcvertsupa#' !== '') {
+				} else if ((parseInt('#Mempourc#') > parseInt('#Mempourc_colorhigh#')) && '#Mempourc_colorhigh#' !== '') {
 					$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-success-color) !important;" >#Mempourc#%</span>)');
-				} else if ((parseInt('#Mempourc#') >= parseInt('#Mempourcorangede#')) && (parseInt('#Mempourc#') <= parseInt('#Mempourcorangea#'))) {
+				} else if ((parseInt('#Mempourc#') >= parseInt('#Mempourc_colorlow#')) && (parseInt('#Mempourc#') <= parseInt('#Mempourc_colorhigh#'))) {
 					$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#Mempourc#%</span>)');
-				} else if (parseInt('#Mempourc#') < parseInt('#Mempourcrougeinfa#')) {
+				} else if (parseInt('#Mempourc#') < parseInt('#Mempourc_colorlow#')) {
 					$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#Mempourc#%</span>)');
 				} else {
 					$('#Mempourcent#id#').append('#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" >#Mempourc#%</span>)');
@@ -121,11 +121,11 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#Swappourc#' === '') {
 					$('#Swappourc#id#').append('<span>#Mem_swap#</span>');
-				} else if ((parseInt('#Swappourc#') > parseInt('#Swappourcvertsupa#')) && '#Swappourcvertsupa#' !== '') {
+				} else if ((parseInt('#Swappourc#') > parseInt('#Swappourc_colorhigh#')) && '#Swappourc_colorhigh#' !== '') {
 					$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-success-color) !important;" >#Swappourc#%</span>)');
-				} else if ((parseInt('#Swappourc#') >= parseInt('#Swappourcorangede#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourcorangea#'))) {
+				} else if ((parseInt('#Swappourc#') >= parseInt('#Swappourc_colorlow#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourc_colorhigh#'))) {
 					$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#Swappourc#%</span>)');
-				} else if (parseInt('#Swappourc#') < parseInt('#Swappourcrougeinfa#')) {
+				} else if (parseInt('#Swappourc#') < parseInt('#Swappourc_colorlow#')) {
 					$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#Swappourc#%</span>)');
 				} else {
 					$('#Swappourc#id#').append('#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" >#Swappourc#%</span>)');
@@ -149,11 +149,11 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#hddpourcused#' === '') {
 					$('#hddpourcused#id#').append('<span></span>');
-				} else if (parseInt('#hddpourcused#') < parseInt('#hddpourcusedvertinfa#')) {
+				} else if (parseInt('#hddpourcused#') < parseInt('#hddpourcused_colorlow#')) {
 					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcused#%</span>)');
-				} else if ((parseInt('#hddpourcused#') >= parseInt('#hddpourcusedorangede#')) && (parseInt('#hddpourcused#') <= parseInt('#hddpourcusedorangea#'))) {
+				} else if ((parseInt('#hddpourcused#') >= parseInt('#hddpourcused_colorlow#')) && (parseInt('#hddpourcused#') <= parseInt('#hddpourcused_colorhigh#'))) {
 					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcused#%</span>)');
-				} else if ((parseInt('#hddpourcused#') > parseInt('#hddpourcusedrougesupa#')) && '#hddpourcusedrougesupa#' !== '') {
+				} else if ((parseInt('#hddpourcused#') > parseInt('#hddpourcused_colorhigh#')) && '#hddpourcused_colorhigh#' !== '') {
 					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcused#%</span>)');
 				} else {
 					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor">#hddpourcused#%</span>)');
@@ -168,11 +168,11 @@
 				}
 				if ('#hddpourcusedv2#' === '') {
 					$('#hddpourcusedv2#id#').append('<span></span>');
-				} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2vertinfa#')) {
+				} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2_colorlow#')) {
 					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedv2#%</span>)');
-				} else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2orangede#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2orangea#'))) {
+				} else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2_colorlow#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2_colorhigh#'))) {
 					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#%</span>)');
-				} else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2rougesupa#')) && '#hddpourcusedv2rougesupa#' !== '') {
+				} else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2_colorhigh#')) && '#hddpourcusedv2_colorhigh#' !== '') {
 					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#%</span>)');
 				} else {
 					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor">#hddpourcusedv2#%</span>)');
@@ -187,11 +187,11 @@
 				}
 				if ('#hddpourcusedusb#' === '') {
 					$('#hddpourcusedusb#id#').append('<span></span>');
-				} else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusbvertinfa#')) {
+				} else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusb_colorlow#')) {
 					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)');
-				} else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusborangede#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusborangea#'))) {
+				} else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusb_colorlow#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusb_colorhigh#'))) {
 					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)');
-				} else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusbrougesupa#')) && '#hddpourcusedusbrougesupa#' !== '') {
+				} else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusb_colorhigh#')) && '#hddpourcusedusb_colorhigh#' !== '') {
 					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)');
 				} else {
 					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor">#hddpourcusedusb#%</span>)');
@@ -205,13 +205,13 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#cpu_temp#' !== '') {
-					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_tempvertinfa#')) {
+					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
 						$('#cpu#id#').append('<span>#cpu# </span>');
 						$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)');
-					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temporangede#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temporangea#'))) {
+					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temp_colorlow#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temp_colorhigh#'))) {
 						$('#cpu#id#').append('<span>#cpu# </span>');
 						$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#cpu_temp#°C</span>)');
-					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temprougesupa#')) && '#cpu_temprougesupa#' !== '') {
+					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temp_colorhigh#')) && '#cpu_temp_colorhigh#' !== '') {
 						$('#cpu#id#').append('<span>#cpu# </span>');
 						$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#cpu_temp#°C</span>)');
 					} else {
@@ -230,11 +230,11 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso1#' !== '') {
-					if (parseFloat('#perso1#') < parseFloat('#perso1vertinfa#')) {
+					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
 						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
-					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1orangede#')) && (parseFloat('#perso1#') <= parseFloat('#perso1orangea#'))) {
+					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
 						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
-					} else if ((parseFloat('#perso1#') > parseFloat('#perso1rougesupa#')) && parseFloat('#perso1rougesupa#') !== '') {
+					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
 						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
 					} else {
 						$('#uniteperso1#id#').append('<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>');
@@ -251,11 +251,11 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso2#' !== '') {
-					if (parseFloat('#perso2#') < parseFloat('#perso2vertinfa#')) {
+					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
 						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2orangede#')) && (parseFloat('#perso2#') <= parseFloat('#perso2orangea#'))) {
+					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
 						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-					} else if ((parseFloat('#perso2#') > parseFloat('#perso2rougesupa#')) && parseFloat('#perso2rougesupa#') !== '') {
+					} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
 						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
 					} else {
 						$('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>');
