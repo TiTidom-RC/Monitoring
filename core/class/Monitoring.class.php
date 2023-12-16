@@ -857,13 +857,18 @@ class Monitoring extends eqLogic {
 						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
 							if ($this->getconfiguration('linux_use_temp_cmd')) {
 								$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+								log::add("Monitoring","debug", "[LINUX-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
 							} 
 							else
 							{
-								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// OK Dell WYSE
+								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// Default
 							}
 							$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 
+							if ($cputemp0 == '') {
+								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"; // Default Zone 1
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
+							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null";	// OK AOpen DE2700
 								$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
@@ -871,6 +876,10 @@ class Monitoring extends eqLogic {
 							if ($cputemp0 == '') {
 								$cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input 2>/dev/null";	// OK AMD Ryzen
 								$cputemp0 = $sshconnection->exec($cputemp0AMD_cmd);
+							}
+							if ($cputemp0 == '') {
+								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")){printf(\"%f\",$4);} }'"; // OK by sensors
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors
