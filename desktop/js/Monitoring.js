@@ -25,24 +25,24 @@ function addCmdToTable(_cmd) {
 	tr += '</td>';
 	tr += '<td>';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin: 5px auto;">';
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin: 1px auto;">';
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
-		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon" style="margin: 5px auto;"><i class="fas fa-flag"></i> Icone</a>';
+		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon" style="margin: 1px auto;"><i class="fas fa-flag"></i> Icone</a>';
 		tr += '<span class="cmdAttr cmdAction" data-l1key="display" data-l2key="icon" style="margin-left : 10px;"></span>';
 	}
 	tr += '</td>';
 	
 	tr += '<td>';
 	if (_cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'loadavg5mn' || _cmd.logicalId == 'loadavg15mn' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddpourcused' || _cmd.logicalId == 'hddpourcusedv2' || _cmd.logicalId == 'hddpourcusedusb') {
-		tr += '<span class="cmdAttr" style="color: green">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 5px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 5px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
+		tr += '<span class="cmdAttr" style="color: green">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	}
 	if (_cmd.logicalId == 'Mempourc' || _cmd.logicalId == 'Swappourc') {
-		tr += '<span class="cmdAttr" style="color: red">[Rouge] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 5px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: green"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 5px auto;width: 60px;display: inherit" /> \< [Vert]</span>';
+		tr += '<span class="cmdAttr" style="color: red">[Rouge] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: green"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Vert]</span>';
 	}
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
-		tr += '<span><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '" style="margin: 5px auto;width: 70%;display: inherit" ></input></span>';
-		tr += '<span class="cmdAttr"> Unité : <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_unite" style="margin: 5px auto;width: 10%;display: inherit" ></input></span>';
-        tr += '<br/><span class="cmdAttr" style="color: green">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 5px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 5px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
+		tr += '<span><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '" style="margin: 1px auto;width: 70%;display: inherit" ></input></span>';
+		tr += '<span class="cmdAttr"> Unité : <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_unite" style="margin: 1px auto;width: 10%;display: inherit" ></input></span>';
+        tr += '<br/><span class="cmdAttr" style="color: green">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	}
 	tr += '</td>';
 	
