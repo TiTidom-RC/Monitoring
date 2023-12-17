@@ -27,7 +27,7 @@ function addCmdToTable(_cmd) {
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin: 1px auto;">';
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
-		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon" style="margin: 1px auto;"><i class="fas fa-flag"></i> Icone</a>';
+		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon" style="margin: 2px auto;"><i class="fas fa-flag"></i> Icone</a>';
 		tr += '<span class="cmdAttr cmdAction" data-l1key="display" data-l2key="icon" style="margin: 1px 1px 1px 10px;"></span>';
 	}
 	tr += '</td>';
