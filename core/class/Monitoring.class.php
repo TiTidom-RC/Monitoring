@@ -94,7 +94,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'uptime');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Démarré depuis', __FILE__));
+			$MonitoringCmd->setName(__('Démarré Depuis', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('uptime');
 			$MonitoringCmd->setType('info');
@@ -105,7 +105,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'loadavg1mn');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Charge système 1 min', __FILE__));
+			$MonitoringCmd->setName(__('Charge Système 1 min', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('loadavg1mn');
 			$MonitoringCmd->setType('info');
@@ -116,7 +116,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'loadavg5mn');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Charge système 5 min', __FILE__));
+			$MonitoringCmd->setName(__('Charge Système 5 min', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('loadavg5mn');
 			$MonitoringCmd->setType('info');
@@ -127,7 +127,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'loadavg15mn');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Charge système 15 min', __FILE__));
+			$MonitoringCmd->setName(__('Charge Système 15 min', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('loadavg15mn');
 			$MonitoringCmd->setType('info');
@@ -138,7 +138,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'Mem');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire (Méga)', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire (RAM)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('Mem');
 			$MonitoringCmd->setType('info');
@@ -149,7 +149,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'Mempourc');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire libre (pourcentage)', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire Libre (%)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('Mempourc');
 			$MonitoringCmd->setType('info');
@@ -171,7 +171,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'Swappourc');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Swap libre (pourcentage)', __FILE__));
+			$MonitoringCmd->setName(__('Swap Libre (%)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('Swappourc');
 			$MonitoringCmd->setType('info');
@@ -182,7 +182,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'ethernet0');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Réseau (M)', __FILE__));
+			$MonitoringCmd->setName(__('Réseau (TX-RX)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('ethernet0');
 			$MonitoringCmd->setType('info');
@@ -204,7 +204,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'hddtotal');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace disque Total', __FILE__));
+			$MonitoringCmd->setName(__('Espace Disque Total', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('hddtotal');
 			$MonitoringCmd->setType('info');
@@ -215,7 +215,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'hddused');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace disque Utilisé', __FILE__));
+			$MonitoringCmd->setName(__('Espace Disque Utilisé', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('hddused');
 			$MonitoringCmd->setType('info');
@@ -226,7 +226,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'hddpourcused');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace disque Utilisé (pourcentage)', __FILE__));
+			$MonitoringCmd->setName(__('Espace Disque Utilisé (%)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('hddpourcused');
 			$MonitoringCmd->setType('info');
@@ -239,7 +239,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Espace disque Total', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume 2 Total', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddtotalv2');
 					$MonitoringCmd->setType('info');
@@ -250,7 +250,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddusedv2');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Espace disque Utilisé', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume 2 Utilisé', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddusedv2');
 					$MonitoringCmd->setType('info');
@@ -261,7 +261,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedv2');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Espace disque Utilisé (pourcentage)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume 2 Utilisé (%)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddpourcusedv2');
 					$MonitoringCmd->setType('info');
@@ -276,7 +276,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Total', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume USB Total', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddtotalusb');
 					$MonitoringCmd->setType('info');
@@ -287,7 +287,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddusedusb');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Utilisé', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume USB Utilisé', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddusedusb');
 					$MonitoringCmd->setType('info');
@@ -298,7 +298,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Utilisé (pourcentage)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume USB Utilisé (%)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddpourcusedusb');
 					$MonitoringCmd->setType('info');
@@ -333,7 +333,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'cnx_ssh');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Statut cnx SSH Scénario', __FILE__));
+			$MonitoringCmd->setName(__('Statut Cnx SSH', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('cnx_ssh');
 			$MonitoringCmd->setType('info');
@@ -367,7 +367,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'reboot');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('reboot', __FILE__));
+			$MonitoringCmd->setName(__('Reboot', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('reboot');
 			$MonitoringCmd->setType('action');
@@ -378,7 +378,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'poweroff');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('poweroff', __FILE__));
+			$MonitoringCmd->setName(__('PowerOff', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('poweroff');
 			$MonitoringCmd->setType('action');
