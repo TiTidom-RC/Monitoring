@@ -25,10 +25,10 @@ function addCmdToTable(_cmd) {
 	tr += '</td>';
 	tr += '<td>';
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin: 5px auto;">';
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin: 5px auto;display: inherit">';
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
-		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon" style="margin: 5px auto;"><i class="fas fa-flag"></i> Icone</a>';
-		tr += '<span class="cmdAttr cmdAction" data-l1key="display" data-l2key="icon" style="margin-left : 10px;"></span>';
+		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon" style="margin: 5px auto;display: inherit"><i class="fas fa-flag"></i> Icone</a>';
+		tr += '<span class="cmdAttr cmdAction" data-l1key="display" data-l2key="icon" style="margin-left : 10px;display: inherit"></span>';
 	}
 	tr += '</td>';
 	
