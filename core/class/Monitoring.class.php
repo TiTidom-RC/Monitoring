@@ -94,7 +94,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'uptime');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Démarré depuis', __FILE__));
+			$MonitoringCmd->setName(__('Démarré Depuis', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('uptime');
 			$MonitoringCmd->setType('info');
@@ -105,7 +105,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'loadavg1mn');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Charge système 1 min', __FILE__));
+			$MonitoringCmd->setName(__('Charge Système 1 min', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('loadavg1mn');
 			$MonitoringCmd->setType('info');
@@ -116,7 +116,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'loadavg5mn');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Charge système 5 min', __FILE__));
+			$MonitoringCmd->setName(__('Charge Système 5 min', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('loadavg5mn');
 			$MonitoringCmd->setType('info');
@@ -127,7 +127,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'loadavg15mn');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Charge système 15 min', __FILE__));
+			$MonitoringCmd->setName(__('Charge Système 15 min', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('loadavg15mn');
 			$MonitoringCmd->setType('info');
@@ -138,7 +138,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'Mem');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire (Méga)', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('Mem');
 			$MonitoringCmd->setType('info');
@@ -149,7 +149,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'Mempourc');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire libre (pourcentage)', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire Libre (Pourcentage)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('Mempourc');
 			$MonitoringCmd->setType('info');
@@ -171,7 +171,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'Swappourc');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Swap libre (pourcentage)', __FILE__));
+			$MonitoringCmd->setName(__('Swap Libre (Pourcentage)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('Swappourc');
 			$MonitoringCmd->setType('info');
@@ -182,7 +182,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'ethernet0');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Réseau (M)', __FILE__));
+			$MonitoringCmd->setName(__('Réseau (TX-RX)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('ethernet0');
 			$MonitoringCmd->setType('info');
@@ -204,7 +204,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'hddtotal');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace disque Total', __FILE__));
+			$MonitoringCmd->setName(__('Espace Disque Total', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('hddtotal');
 			$MonitoringCmd->setType('info');
@@ -215,7 +215,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'hddused');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace disque Utilisé', __FILE__));
+			$MonitoringCmd->setName(__('Espace Disque Utilisé', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('hddused');
 			$MonitoringCmd->setType('info');
@@ -226,7 +226,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'hddpourcused');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace disque Utilisé (pourcentage)', __FILE__));
+			$MonitoringCmd->setName(__('Espace Disque Utilisé (Pourcentage)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('hddpourcused');
 			$MonitoringCmd->setType('info');
@@ -239,7 +239,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Espace disque Total', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume 2 Total', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddtotalv2');
 					$MonitoringCmd->setType('info');
@@ -250,7 +250,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddusedv2');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Espace disque Utilisé', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume 2 Utilisé', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddusedv2');
 					$MonitoringCmd->setType('info');
@@ -261,7 +261,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedv2');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Espace disque Utilisé (pourcentage)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume 2 Utilisé (Pourcentage)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddpourcusedv2');
 					$MonitoringCmd->setType('info');
@@ -276,7 +276,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddtotalusb');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Total', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume USB Total', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddtotalusb');
 					$MonitoringCmd->setType('info');
@@ -287,7 +287,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddusedusb');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Utilisé', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume USB Utilisé', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddusedusb');
 					$MonitoringCmd->setType('info');
@@ -298,7 +298,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedusb');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Espace disque Utilisé (pourcentage)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume USB Utilisé (Pourcentage)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddpourcusedusb');
 					$MonitoringCmd->setType('info');
@@ -333,7 +333,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'cnx_ssh');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Statut cnx SSH Scénario', __FILE__));
+			$MonitoringCmd->setName(__('Statut Cnx SSH', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('cnx_ssh');
 			$MonitoringCmd->setType('info');
@@ -367,7 +367,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'reboot');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('reboot', __FILE__));
+			$MonitoringCmd->setName(__('Reboot', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('reboot');
 			$MonitoringCmd->setType('action');
@@ -378,7 +378,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'poweroff');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('poweroff', __FILE__));
+			$MonitoringCmd->setName(__('PowerOff', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('poweroff');
 			$MonitoringCmd->setType('action');
@@ -398,50 +398,38 @@ class Monitoring extends eqLogic {
 		}
 		$_version = jeedom::versionAlias($_version);
 
-		$replace ['#loadavg1mnvertinfa#'] = $this->getConfiguration('loadavg1mnvertinfa');
-		$replace ['#loadavg5mnvertinfa#'] = $this->getConfiguration('loadavg5mnvertinfa');
-		$replace ['#loadavg15mnvertinfa#'] = $this->getConfiguration('loadavg15mnvertinfa');
-		$replace ['#loadavg1mnorangede#'] = $this->getConfiguration('loadavg1mnorangede');
-		$replace ['#loadavg5mnorangede#'] = $this->getConfiguration('loadavg5mnorangede');
-		$replace ['#loadavg15mnorangede#'] = $this->getConfiguration('loadavg15mnorangede');
-		$replace ['#loadavg1mnorangea#'] = $this->getConfiguration('loadavg1mnorangea');
-		$replace ['#loadavg5mnorangea#'] = $this->getConfiguration('loadavg5mnorangea');
-		$replace ['#loadavg15mnorangea#'] = $this->getConfiguration('loadavg15mnorangea');
-		$replace ['#loadavg1mnrougesupa#'] = $this->getConfiguration('loadavg1mnrougesupa');
-		$replace ['#loadavg5mnrougesupa#'] = $this->getConfiguration('loadavg5mnrougesupa');
-		$replace ['#loadavg15mnrougesupa#'] = $this->getConfiguration('loadavg15mnrougesupa');
-		$replace ['#Mempourcvertsupa#'] = $this->getConfiguration('Mempourcvertsupa');
-		$replace ['#Mempourcorangede#'] = $this->getConfiguration('Mempourcorangede');
-		$replace ['#Mempourcorangea#'] = $this->getConfiguration('Mempourcorangea');
-		$replace ['#Mempourcrougeinfa#'] = $this->getConfiguration('Mempourcrougeinfa');
-		$replace ['#Swappourcvertsupa#'] = $this->getConfiguration('Swappourcvertsupa');
-		$replace ['#Swappourcorangede#'] = $this->getConfiguration('Swappourcorangede');
-		$replace ['#Swappourcorangea#'] = $this->getConfiguration('Swappourcorangea');
-		$replace ['#Swappourcrougeinfa#'] = $this->getConfiguration('Swappourcrougeinfa');
-		$replace ['#cpu_tempvertinfa#'] = $this->getConfiguration('cpu_tempvertinfa');
-		$replace ['#cpu_temporangede#'] = $this->getConfiguration('cpu_temporangede');
-		$replace ['#cpu_temporangea#'] = $this->getConfiguration('cpu_temporangea');
-		$replace ['#cpu_temprougesupa#'] = $this->getConfiguration('cpu_temprougesupa');
-		$replace ['#hddpourcusedvertinfa#'] = $this->getConfiguration('hddpourcusedvertinfa');
-		$replace ['#hddpourcusedorangede#'] = $this->getConfiguration('hddpourcusedorangede');
-		$replace ['#hddpourcusedorangea#'] = $this->getConfiguration('hddpourcusedorangea');
-		$replace ['#hddpourcusedrougesupa#'] = $this->getConfiguration('hddpourcusedrougesupa');
-		$replace ['#hddpourcusedv2vertinfa#'] = $this->getConfiguration('hddpourcusedv2vertinfa');
-		$replace ['#hddpourcusedv2orangede#'] = $this->getConfiguration('hddpourcusedv2orangede');
-		$replace ['#hddpourcusedv2orangea#'] = $this->getConfiguration('hddpourcusedv2orangea');
-		$replace ['#hddpourcusedv2rougesupa#'] = $this->getConfiguration('hddpourcusedv2rougesupa');
-		$replace ['#hddpourcusedusbvertinfa#'] = $this->getConfiguration('hddpourcusedusbvertinfa');
-		$replace ['#hddpourcusedusborangede#'] = $this->getConfiguration('hddpourcusedusborangede');
-		$replace ['#hddpourcusedusborangea#'] = $this->getConfiguration('hddpourcusedusborangea');
-		$replace ['#hddpourcusedusbrougesupa#'] = $this->getConfiguration('hddpourcusedusbrougesupa');
-		$replace ['#perso1vertinfa#'] = $this->getConfiguration('perso1vertinfa');
-		$replace ['#perso1orangede#'] = $this->getConfiguration('perso1orangede');
-		$replace ['#perso1orangea#'] = $this->getConfiguration('perso1orangea');
-		$replace ['#perso1rougesupa#'] = $this->getConfiguration('perso1rougesupa');
-		$replace ['#perso2vertinfa#'] = $this->getConfiguration('perso2vertinfa');
-		$replace ['#perso2orangede#'] = $this->getConfiguration('perso2orangede');
-		$replace ['#perso2orangea#'] = $this->getConfiguration('perso2orangea');
-		$replace ['#perso2rougesupa#'] = $this->getConfiguration('perso2rougesupa');
+		$replace ['#loadavg1mn_colorlow#'] = $this->getConfiguration('loadavg1mn_colorlow');
+		$replace ['#loadavg1mn_colorhigh#'] = $this->getConfiguration('loadavg1mn_colorhigh');
+
+		$replace ['#loadavg5mn_colorlow#'] = $this->getConfiguration('loadavg5mn_colorlow');
+		$replace ['#loadavg5mn_colorhigh#'] = $this->getConfiguration('loadavg5mn_colorhigh');
+
+		$replace ['#loadavg15mn_colorlow#'] = $this->getConfiguration('loadavg15mn_colorlow');
+		$replace ['#loadavg15mn_colorhigh#'] = $this->getConfiguration('loadavg15mn_colorhigh');
+		
+		$replace ['#Mempourc_colorhigh#'] = $this->getConfiguration('Mempourc_colorhigh');
+		$replace ['#Mempourc_colorlow#'] = $this->getConfiguration('Mempourc_colorlow');
+		
+		$replace ['#Swappourc_colorhigh#'] = $this->getConfiguration('Swappourc_colorhigh');
+		$replace ['#Swappourc_colorlow#'] = $this->getConfiguration('Swappourc_colorlow');
+		
+		$replace ['#cpu_temp_colorlow#'] = $this->getConfiguration('cpu_temp_colorlow');
+		$replace ['#cpu_temp_colorhigh#'] = $this->getConfiguration('cpu_temp_colorhigh');
+		
+		$replace ['#hddpourcused_colorlow#'] = $this->getConfiguration('hddpourcused_colorlow');
+		$replace ['#hddpourcused_colorhigh#'] = $this->getConfiguration('hddpourcused_colorhigh');
+
+		$replace ['#hddpourcusedv2_colorlow#'] = $this->getConfiguration('hddpourcusedv2_colorlow');
+		$replace ['#hddpourcusedv2_colorhigh#'] = $this->getConfiguration('hddpourcusedv2_colorhigh');
+
+		$replace ['#hddpourcusedusb_colorlow#'] = $this->getConfiguration('hddpourcusedusb_colorlow');
+		$replace ['#hddpourcusedusb_colorhigh#'] = $this->getConfiguration('hddpourcusedusb_colorhigh');
+
+		$replace ['#perso1_colorlow#'] = $this->getConfiguration('perso1_colorlow');
+		$replace ['#perso1_colorhigh#'] = $this->getConfiguration('perso1_colorhigh');
+
+		$replace ['#perso2_colorlow#'] = $this->getConfiguration('perso2_colorlow');
+		$replace ['#perso2_colorhigh#'] = $this->getConfiguration('perso2_colorhigh');
 
 		$namedistri = $this->getCmd(null,'namedistri');
 		$replace['#namedistri#'] = (is_object($namedistri)) ? $namedistri->execCmd() : '';
