@@ -41,7 +41,7 @@ function addCmdToTable(_cmd) {
 	}
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
 		tr += '<span><input class="cmdAttr eqLogicAttr form-control" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '" style="margin: 5px auto;width: 70%;display: inherit" ></input></span>';
-		tr += '<span> Unité : <input class="cmdAttr eqLogicAttr form-control" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_unite" style="margin: 5px auto;width: 10%;" ></input></span>';
+		tr += '<span> Unité : <input class="cmdAttr eqLogicAttr form-control" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_unite" style="margin: 5px auto;width: 10%;display: inherit" ></input></span>';
         tr += '<br/><span style="color: green">[Vert] \< <input class="cmdAttr eqLogicAttr form-control" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 5px auto;width: 60px;display: inherit" /></span><span style="color: orange"> \u{2264} [Orange] \u{2264} </span><span style="color: red"><input class="cmdAttr eqLogicAttr form-control" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 5px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	}
 	tr += '</td>';
