@@ -12,7 +12,7 @@
 					$('#iconSSH#id#').append('<i title="Connexion SSH KO" class="fas fa-times tooltips" style="font-size : 1.1em;color: var(--al-danger-color) !important;"></i>');
 				}
 			</script>
-			<span title="Eteindre l'équipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right">
+			<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
 				<script>
 					$('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action').on('click', function () {
@@ -24,7 +24,7 @@
 					});
 				</script>
 			</span>
-			<span title="Redémarrer l'équipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right">
+			<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-sync" style="padding-left:5px;"></i></a>
 				<script>
 					$('.reboot[data-cmd_id=#cmd_reboot_id#] .action').on('click', function () {
@@ -44,7 +44,7 @@
 			<span>#namedistri#</span>
 		</div>
 		<div class="tooltips" data-cmd_id="#uptimeid#" style="margin-left:5px;display: #uptime_display#;">
-			<span title="Temps d'activité (uptime)</br><i>Date de valeur : #uptime_value#</br>Date de collecte : #uptime_collect#</i>" class="fas fa-tachometer-alt" style="min-width:15px;"></span>
+			<span title="Temps d'Activité (UpTime)</br><i>Date de valeur : #uptime_value#</br>Date de collecte : #uptime_collect#</i>" class="fas fa-tachometer-alt" style="min-width:15px;"></span>
 			<span id="uptime#id#"></span>
 		</div>
 		<script>
@@ -53,7 +53,7 @@
 			}
 		</script>
 		<div class="tooltips" style="margin-left:5px;display: #loadavg_display#;">
-			<span title="Charge système (load average)</br><i>Date de valeur : #loadavg_value#</br>Date de collecte : #loadavg_collect#</i>" class="fa techno-courbes3" style="width:15px;"></span>
+			<span title="Charge Système (Load Average)</br><i>Date de valeur : #loadavg_value#</br>Date de collecte : #loadavg_collect#</i>" class="fa techno-courbes3" style="width:15px;"></span>
 			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
 		</div>
 		<script>
@@ -95,7 +95,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#;">
-			<span title="Mémoire vive (% libre)</br><i>Date de valeur : #Mem_value#</br>Date de collecte : #Mem_collect#</i>" class="fa techno-memory" style="width:15px;"></span>
+			<span title="Mémoire Vive (% Libre)</br><i>Date de valeur : #Mem_value#</br>Date de collecte : #Mem_collect#</i>" class="fa techno-memory" style="width:15px;"></span>
 			<span id="Mempourcent#id#"></span>
 		</div>
 		<script>
@@ -114,7 +114,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#;">
-			<span title="Mémoire Swap (% libre)</br><i>Date de valeur : #Mem_swap_value#</br>Date de collecte : #Mem_swap_collect#</i>" class="fas fa-list" style="width:15px;"></span>
+			<span title="Mémoire Swap (% Libre)</br><i>Date de valeur : #Mem_swap_value#</br>Date de collecte : #Mem_swap_collect#</i>" class="fas fa-list" style="width:15px;"></span>
 			<span id="Swappourc#id#"></span>
 		</div>
 		<script>
@@ -133,7 +133,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#;">
-			<span title="Trafic réseau (#ethernet0_name#)</br><i>Date de valeur : #ethernet0_value#</br>Date de collecte : #ethernet0_collect#</i>" class="fa techno-fleches" style="width:15px;"></span>
+			<span title="Trafic Réseau (#ethernet0_name#)</br><i>Date de valeur : #ethernet0_value#</br>Date de collecte : #ethernet0_collect#</i>" class="fa techno-fleches" style="width:15px;"></span>
 			<span id="ethernet0#id#"></span>
 		</div>
 		<script>
@@ -142,7 +142,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#;">
-			<span title="Espace disque (% utilisé)</br><i>Date de valeur : #hddtotal_value#</br>Date de collecte : #hddtotal_collect#</i>" class="fas fa-hdd" style="width:15px;"></span>
+			<span title="Espace Disque (% Utilisé)</br><i>Date de valeur : #hddtotal_value#</br>Date de collecte : #hddtotal_collect#</i>" class="fas fa-hdd" style="width:15px;"></span>
 			<span id="hddpourcused#id#"></span>
 		</div>
 		<script>
@@ -164,7 +164,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolume2_display#' == 'OK') {
-					$('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Espace disque Volume 2 Syno (% utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>');
+					$('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>');
 				}
 				if ('#hddpourcusedv2#' === '') {
 					$('#hddpourcusedv2#id#').append('<span></span>');
@@ -183,7 +183,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
+					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
 				}
 				if ('#hddpourcusedusb#' === '') {
 					$('#hddpourcusedusb#id#').append('<span></span>');
@@ -199,7 +199,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#;">
-			<span title="Nombre CPU, fréquence (température)</br><i>Date de valeur : #cpu_value#</br>Date de collecte : #cpu_collect#</i>" class="fa techno-pc" style="width:15px;"></span>
+			<span title="Nombre CPU - Fréquence (Température)</br><i>Date de valeur : #cpu_value#</br>Date de collecte : #cpu_collect#</i>" class="fa techno-pc" style="width:15px;"></span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
 		<script>
