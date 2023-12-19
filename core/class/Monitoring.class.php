@@ -597,6 +597,7 @@ class Monitoring extends eqLogic {
 
 		foreach ($this->getCmd('action') as $cmd) {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "#cmd_" . $cmd->getLogicalId() . "_display#" : "none";
 		}
 
 		$html = template_replace($replace, getTemplate('core', $_version, 'Monitoring','Monitoring'));
