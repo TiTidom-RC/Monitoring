@@ -51,6 +51,21 @@ class Monitoring extends eqLogic {
 		}
 	}
 
+	public static function pullLocal() {
+		foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
+			if ($Monitoring->getConfiguration('maitreesclave') == 'local' && $Monitoring->getIsEnable()) {
+				$Monitoring->getInformations();
+				$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+				$mc->remove();
+				$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
+				$mc->remove();
+				$Monitoring->toHtml('mobile');
+				$Monitoring->toHtml('dashboard');
+				$Monitoring->refreshWidget();
+			}
+		}
+	}
+
 	/* public static function dependancy_info() {
 		$return = array();
 		$return['log'] = 'Monitoring_update';

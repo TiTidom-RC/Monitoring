@@ -30,6 +30,18 @@ function Monitoring_install() {
       $cron->setTimeout(30);
       $cron->save();
     }
+
+    $cronLocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
+    if (!is_object($cronLocal)) {
+      $cronLocal = new cron();
+      $cronLocal->setClass('Monitoring');
+      $cronLocal->setFunction('pullLocal');
+      $cronLocal->setEnable(1);
+      $cronLocal->setDeamon(0);
+      $cronLocal->setSchedule('* * * * *');
+      $cronLocal->setTimeout(30);
+      $cronLocal->save();
+    }
 }
 
 function Monitoring_update() {
@@ -43,6 +55,18 @@ function Monitoring_update() {
       $cron->setSchedule('*/15 * * * *');
       $cron->setTimeout(30);
       $cron->save();
+    }
+
+    $cronlocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
+    if (!is_object($cronlocal)) {
+      $cronLocal = new cron();
+      $cronLocal->setClass('Monitoring');
+      $cronLocal->setFunction('pullLocal');
+      $cronLocal->setEnable(1);
+      $cronLocal->setDeamon(0);
+      $cronLocal->setSchedule('* * * * *');
+      $cronLocal->setTimeout(30);
+      $cronLocal->save();
     }
 
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
