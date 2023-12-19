@@ -24,7 +24,6 @@ use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
 class Monitoring extends eqLogic {
-
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
@@ -40,20 +39,24 @@ class Monitoring extends eqLogic {
 
 	public static function pull() {
 		foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
-			$Monitoring->getInformations();
-			$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-			$mc->remove();
-			$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-			$mc->remove();
-			$Monitoring->toHtml('mobile');
-			$Monitoring->toHtml('dashboard');
-			$Monitoring->refreshWidget();
+			if ($Monitoring->getConfiguration('maitreesclave') != 'local' && $Monitoring->getIsEnable()) {
+				log::add('Monitoring', 'debug', '[PULL] Lancement pull :: '. $Monitoring->getName());
+				$Monitoring->getInformations();
+				$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+				$mc->remove();
+				$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
+				$mc->remove();
+				$Monitoring->toHtml('mobile');
+				$Monitoring->toHtml('dashboard');
+				$Monitoring->refreshWidget();
+			}
 		}
 	}
 
 	public static function pullLocal() {
 		foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 			if ($Monitoring->getConfiguration('maitreesclave') == 'local' && $Monitoring->getIsEnable()) {
+				log::add('Monitoring', 'debug', '[PULL] Lancement pullLocal :: '. $Monitoring->getName());
 				$Monitoring->getInformations();
 				$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
 				$mc->remove();
@@ -93,7 +96,6 @@ class Monitoring extends eqLogic {
 	} */
 
 	public function postSave() {
-
 		$MonitoringCmd = $this->getCmd(null, 'namedistri');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
