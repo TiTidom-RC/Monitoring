@@ -46,7 +46,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			if ($displayInfoValue) {
 			?>
 				<div class="col-sm-2">
-					<legend><i class=" fas fa-comments"></i> {{Aide Community}}</legend>
+					<legend><i class=" fas fa-comments"></i> {{Aide sur Community}}</legend>
 					<div class="eqLogicThumbnailContainer">
 						<div class="cursor eqLogicAction logoSecondary" data-action="createCommunityPost">
 							<i class="fas fa-ambulance"></i>
