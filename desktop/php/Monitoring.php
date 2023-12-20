@@ -49,7 +49,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			}
 			?>
         </div>
-        <legend><i class="fas fa-terminal"></i> {{Mes Monitorings}}</legend>
+        <legend><i class="fas fa-laptop-code"></i> {{Mes Monitorings}}</legend>
 
 		<?php
 		if (count($eqLogics) == 0) {

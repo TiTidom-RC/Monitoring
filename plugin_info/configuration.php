@@ -26,7 +26,7 @@ if (!isConnect()) {
 <form class="form-horizontal">
   <fieldset>
     <div>
-      <legend><i class="fas fa-clipboard-check"></i> {{Mises à jour Auto}} :</legend>
+      <legend><i class="fas fa-tasks"></i> {{Mises à Jour Automatiques}} :</legend>
       <div class="form-group">
         <label class="col-md-4 control-label">{{Equipement Local (1 min)}}
           <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local}}"></i></sup>
