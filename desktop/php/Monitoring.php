@@ -30,7 +30,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
             </div>
             <?php
 			// à conserver
-			// sera afficher uniquement si l'utilisateur est en version 4.4 ou supérieur
+			// sera affiché uniquement si l'utilisateur est en version 4.4 ou supérieur
 			$jeedomVersion  = jeedom::version() ?? '0';
 			$displayInfoValue = version_compare($jeedomVersion, '4.4.0', '>=');
 			if ($displayInfoValue) {
@@ -41,7 +41,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						<div class="cursor eqLogicAction logoSecondary" data-action="createCommunityPost">
 							<i class="fas fa-ambulance"></i>
 							<br>
-							<span style="color:var(--txt-color)">{{Créer un post Community}}</span>
+							<span style="color:var(--txt-color)">{{Créer un Post}}</span>
 						</div>
 					</div>
 				</div>
