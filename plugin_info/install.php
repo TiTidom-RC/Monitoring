@@ -101,8 +101,12 @@ function Monitoring_update() {
 
 function Monitoring_remove() {
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
+    $cronLocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
     if (is_object($cron)) {
         $cron->remove();
     }
+    if (is_object($cronLocal)) {
+      $cronLocal->remove();
+  }
 }
 ?>
