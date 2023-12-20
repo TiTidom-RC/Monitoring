@@ -99,6 +99,9 @@ class Monitoring extends eqLogic {
 	    log::add('Monitoring', 'debug', '[CONFIG] Configuration pullLocal :: '. $value);
   	}
   	
+	public static function postConfig_pull($value) {
+	    log::add('Monitoring', 'debug', '[CONFIG] Configuration pullLocal :: '. $value);
+  	}
 
 	public function postSave() {
 		$MonitoringCmd = $this->getCmd(null, 'namedistri');

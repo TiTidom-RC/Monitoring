@@ -26,19 +26,19 @@ if (!isConnect()) {
 <form class="form-horizontal">
   <fieldset>
     <div class="form-group">
-      <label class="col-md-4 control-label">{{Pull (15 min)}}
-        <sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le paramètre 1 du plugin}}"></i></sup>
+      <label class="col-md-4 control-label">{{Pull Automatique (15 min)}}
+        <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive la mise à jour automatique toutes les 15 minutes des équipements actifs}}"></i></sup>
       </label>
       <div class="col-md-4">
-        <input class="configKey form-control" data-l1key="pull"/>
+        <input type="checkbox" class="configKey form-control" data-l1key="pull"/>
       </div>
     </div>
     <div class="form-group">
-      <label class="col-md-4 control-label">{{Pull Local (1 min}}
-        <sup><i class="fas fa-question-circle tooltips" title="{{Renseignez le paramètre 2 du plugin}}"></i></sup>
+      <label class="col-md-4 control-label">{{Pull Local Automatique (1 min)}}
+        <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive la mise à jour automatique toutes les minutes de l'équipement local}}"></i></sup>
       </label>
       <div class="col-md-4">
-        <input class="configKey form-control" data-l1key="pullLocal"/>
+        <input type="checkbox" class="configKey form-control" data-l1key="pullLocal"/>
       </div>
     </div>
   </fieldset>
