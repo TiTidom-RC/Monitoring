@@ -29,20 +29,21 @@ class Monitoring extends eqLogic {
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
 		$this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
-	  }
-	  public function encrypt() {
+	}
+	
+	public function encrypt() {
 		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
 		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
-	  }
+	}
 
 	public static function pull() {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0') {
-					log::add('Monitoring', 'debug', '[PULL] Lancement pull :: '. $Monitoring->getName());
+					log::add('Monitoring', 'debug', '[PULL] Lancement Pull :: '. $Monitoring->getName());
 					$Monitoring->getInformations();
 					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
 					$mc->remove();
@@ -61,7 +62,7 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') == 'local') {
-					log::add('Monitoring', 'debug', '[PULL] Lancement pullLocal :: '. $Monitoring->getName());
+					log::add('Monitoring', 'debug', '[PULL] Lancement PullLocal :: '. $Monitoring->getName());
 					$Monitoring->getInformations();
 					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
 					$mc->remove();
