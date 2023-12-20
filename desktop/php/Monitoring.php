@@ -19,22 +19,22 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     <div class="cursor eqLogicAction logoPrimary" data-action="add">
                         <i class="fas fa-plus-circle"></i>
                         <br/>
-                        <span>{{Ajouter}}</span>
+                        <span style="color:var(--txt-color)">{{Ajouter}}</span>
 			        </div>
 			        <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
 				        <i class="fas fa-wrench"></i>
 				        <br>
-				        <span>{{Configuration}}</span>
+				        <span style="color:var(--txt-color)">{{Configuration}}</span>
 			        </div>
                     <div class="cursor pluginAction logoSecondary" data-action="openLocation" data-location="<?= $plugin->getDocumentation() ?>">
-				        <i class="fas fa-book-reader"></i>
+				        <i class="fas fa-book-reader icon_blue"></i>
 				        <br>
-				        <span>{{Documentation}}</span>
+				        <span style="color:var(--txt-color)">{{Documentation}}</span>
 			        </div>
         			<div class="cursor pluginAction logoSecondary" data-action="openLocation" data-location="https://community.jeedom.com/tag/plugin-<?= $plugin->getId() ?>">
-				        <i class="fas fa-thumbs-up"></i>
+				        <i class="fas fa-thumbs-up icon_blue"></i>
 				        <br>
-				        <span>{{Community}}</span>
+				        <span style="color:var(--txt-color)">{{Community}}</span>
 			        </div>
 		        </div>
             </div>
@@ -49,7 +49,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 					<legend><i class=" fas fa-comments"></i> {{Aide sur Community}}</legend>
 					<div class="eqLogicThumbnailContainer">
 						<div class="cursor eqLogicAction logoSecondary" data-action="createCommunityPost">
-							<i class="fas fa-ambulance"></i>
+							<i class="fas fa-ambulance icon_red"></i>
 							<br>
 							<span style="color:var(--txt-color)">{{Créer un Post}}</span>
 						</div>
