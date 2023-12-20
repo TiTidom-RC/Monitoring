@@ -313,7 +313,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						    <tr>
 							    <th class="hidden-xs" style="min-width:50px;width:70px;">{{Id}}</th>
 							    <th style="min-width:150px;width:250px;">{{Nom}}</th>
-							    <th style="min-width:260px;">{{Colorisation des valeurs}}</th>
+							    <th style="min-width:350px;">{{Colorisation des valeurs}}</th>
                                 <th style="min-width:260px;">{{Options}}</th>
                                 <th>{{Type}}</th>
                                 <th>{{Etat}}</th>
