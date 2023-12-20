@@ -306,12 +306,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
             <!-- Onglet des commandes de l'équipement -->
 			<div role="tabpanel" class="tab-pane" id="commandtab">
-                <br/><br/>
                 <div class="table-responsive">
 				    <table id="table_cmd" class="table table-bordered table-condensed">
 					    <thead>
 						    <tr>
-							    <th class="hide-xs" style="min-width:50px;width:70px;">{{Id}}</th>
+							    <th class="hidden-xs" style="min-width:50px;width:70px;">{{Id}}</th>
 							    <th style="min-width:220px;width:250px;">{{Nom}}</th>
 							    <th style="min-width:330px;">{{Colorisation des valeurs}}</th>
                                 <th style="min-width:100px;">{{Options}}</th>
