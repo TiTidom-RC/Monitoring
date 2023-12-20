@@ -20,18 +20,24 @@ function addCmdToTable(_cmd) {
 		var _cmd = {configuration: {}};
 	}
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
-	tr += '<td>';
+	tr += '<td class="hidden-xs">';
 	tr += '<span class="cmdAttr" data-l1key="id" ></span>';
 	tr += '</td>';
 	tr += '<td>';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin: 1px auto;">';
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
-		tr += '<a class="cmdAction btn btn-default btn-sm" data-l1key="chooseIcon" style="margin: 1px auto;"><i class="fas fa-flag"></i> Icone</a>';
-		tr += '<span class="cmdAttr cmdAction" data-l1key="display" data-l2key="icon" style="margin: 1px 0px 1px 10px;"></span>';
+		tr += '<div class="input-group">'
+		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
+		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}" style="margin: 1px auto;">';
+		tr += '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>';
+		tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:19px;padding:0 5px 0 0!important;"></span>';
+		tr += '</div>';
+	}
+	else
+	{
+		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
+		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin: 1px auto;">';
 	}
 	tr += '</td>';
-	
 	tr += '<td>';
 	if (_cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'loadavg5mn' || _cmd.logicalId == 'loadavg15mn' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddpourcused' || _cmd.logicalId == 'hddpourcusedv2' || _cmd.logicalId == 'hddpourcusedusb') {
 		tr += '<span class="cmdAttr" style="color: green;font-weight: bold;">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red;font-weight: bold;"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
