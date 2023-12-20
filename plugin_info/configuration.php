@@ -25,20 +25,23 @@ if (!isConnect()) {
 
 <form class="form-horizontal">
   <fieldset>
-    <div class="form-group">
-      <label class="col-md-4 control-label">{{Pull Automatique (15 min)}}
-        <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive la mise à jour automatique toutes les 15 minutes des équipements actifs}}"></i></sup>
-      </label>
-      <div class="col-md-4">
-        <input type="checkbox" class="configKey form-control" data-l1key="conf::pull" checked />
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="col-md-4 control-label">{{Pull Local Automatique (1 min)}}
-        <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive la mise à jour automatique toutes les minutes de l'équipement local}}"></i></sup>
-      </label>
-      <div class="col-md-4">
-        <input type="checkbox" class="configKey form-control" data-l1key="conf::pullLocal" checked />
+    <div>
+      <legend><i class="fas fa-clock"></i> {{Cron::Pull}}</legend>
+      <div class="form-group">
+        <label class="col-md-4 control-label">{{Mises à jour Auto de l'équipement local (1 min)}}
+          <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive les mises à jour automatiques toutes les minutes de l'équipement local}}"></i></sup>
+        </label>
+        <div class="col-md-4">
+          <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" checked />
+        </div>
+      </div>  
+      <div class="form-group">
+        <label class="col-md-4 control-label">{{Mises à jour Auto des équipements distants (15 min)}}
+          <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive les mises à jour automatiques toutes les 15 minutes des équipements distants}}"></i></sup>
+        </label>
+        <div class="col-md-4">
+          <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />
+        </div>
       </div>
     </div>
   </fieldset>

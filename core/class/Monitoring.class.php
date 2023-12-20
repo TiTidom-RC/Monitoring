@@ -38,8 +38,8 @@ class Monitoring extends eqLogic {
 	  }
 
 	public static function pull() {
-		log::add('Monitoring', 'debug', '[PULL] Config pull :: '. config::byKey('conf::pull', 'Monitoring'));
-		if (config::byKey('conf::pull', 'Monitoring') == '1') {
+		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
+		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') != 'local') {
 					log::add('Monitoring', 'debug', '[PULL] Lancement pull :: '. $Monitoring->getName());
@@ -57,8 +57,8 @@ class Monitoring extends eqLogic {
 	}
 
 	public static function pullLocal() {
-		log::add('Monitoring', 'debug', '[PULL] Config pullLocal :: '. config::byKey('conf::pullLocal', 'Monitoring'));
-		if (config::byKey('conf::pullLocal', 'Monitoring') == '1') {
+		log::add('Monitoring', 'debug', '[PULL] Config PullLocal :: '. config::byKey('configPullLocal', 'Monitoring'));
+		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') == 'local') {
 					log::add('Monitoring', 'debug', '[PULL] Lancement pullLocal :: '. $Monitoring->getName());
@@ -101,12 +101,12 @@ class Monitoring extends eqLogic {
 		exec($cmd);
 	} */
 
-  	public static function postConfig_pullLocal($value) {
-	    log::add('Monitoring', 'debug', '[CONFIG] Configuration pullLocal :: '. $value);
+  	public static function postConfig_configPullLocal($value) {
+	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
   	}
   	
-	public static function postConfig_pull($value) {
-	    log::add('Monitoring', 'debug', '[CONFIG] Configuration pullLocal :: '. $value);
+	public static function postConfig_configPull($value) {
+	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: '. $value);
   	}
 
 	public function postSave() {
