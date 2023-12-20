@@ -41,7 +41,7 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
-				if ($Monitoring->getConfiguration('maitreesclave') != 'local') {
+				if ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0') {
 					log::add('Monitoring', 'debug', '[PULL] Lancement pull :: '. $Monitoring->getName());
 					$Monitoring->getInformations();
 					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
