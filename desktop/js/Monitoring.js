@@ -64,7 +64,7 @@ function addCmdToTable(_cmd) {
 	tr += '<td>';
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
 		tr += '<span class="type" type="info"></span>';
-		tr += '<span disabled class="subType" subType="' + init(_cmd.subType) + '"></span>';
+		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	}
 	tr += '</td>';
 
