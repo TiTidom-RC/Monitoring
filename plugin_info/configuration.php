@@ -26,18 +26,18 @@ if (!isConnect()) {
 <form class="form-horizontal">
   <fieldset>
     <div>
-      <legend><i class="fas fa-clock"></i> {{Cron::Pull}}</legend>
+      <legend><i class="fas fa-clipboard-check"></i> {{Mises à jour Auto}} :</legend>
       <div class="form-group">
-        <label class="col-md-4 control-label">{{Mises à jour Auto de l'équipement local (1 min)}}
-          <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive les mises à jour automatiques toutes les minutes de l'équipement local}}"></i></sup>
+        <label class="col-md-4 control-label">{{Equipement Local (1 min)}}
+          <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local}}"></i></sup>
         </label>
         <div class="col-md-4">
           <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" checked />
         </div>
       </div>  
       <div class="form-group">
-        <label class="col-md-4 control-label">{{Mises à jour Auto des équipements distants (15 min)}}
-          <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive les mises à jour automatiques toutes les 15 minutes des équipements distants}}"></i></sup>
+        <label class="col-md-4 control-label">{{Equipements Distants (15 min)}}
+          <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les 15 minutes) des équipements distants}}"></i></sup>
         </label>
         <div class="col-md-4">
           <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />

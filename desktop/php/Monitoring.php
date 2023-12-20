@@ -49,7 +49,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			}
 			?>
         </div>
-        <legend><i class="fas fa-table"></i> {{Mes Monitorings}}</legend>
+        <legend><i class="fas fa-terminal"></i> {{Mes Monitorings}}</legend>
 
 		<?php
 		if (count($eqLogics) == 0) {
@@ -306,6 +306,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
             <!-- Onglet des commandes de l'équipement -->
 			<div role="tabpanel" class="tab-pane" id="commandtab">
+                <br><br>
                 <div class="table-responsive">
 				    <table id="table_cmd" class="table table-bordered table-condensed">
 					    <thead>
