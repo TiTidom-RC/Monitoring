@@ -30,7 +30,7 @@ if (!isConnect()) {
         <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive la mise à jour automatique toutes les 15 minutes des équipements actifs}}"></i></sup>
       </label>
       <div class="col-md-4">
-        <input type="checkbox" class="configKey form-control" data-l1key="pull" checked />
+        <input type="checkbox" class="configKey form-control" data-l1key="conf::pull" checked />
       </div>
     </div>
     <div class="form-group">
@@ -38,7 +38,7 @@ if (!isConnect()) {
         <sup><i class="fas fa-question-circle tooltips" title="{{Active ou désactive la mise à jour automatique toutes les minutes de l'équipement local}}"></i></sup>
       </label>
       <div class="col-md-4">
-        <input type="checkbox" class="configKey form-control" data-l1key="pullLocal" checked />
+        <input type="checkbox" class="configKey form-control" data-l1key="conf::pullLocal" checked />
       </div>
     </div>
   </fieldset>
