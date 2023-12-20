@@ -311,7 +311,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				    <table id="table_cmd" class="table table-bordered table-condensed">
 					    <thead>
 						    <tr>
-							    <th style="min-width:50px;width:70px;">{{Id}}</th>
+							    <th class="hide-xs" style="min-width:50px;width:70px;">{{Id}}</th>
 							    <th style="min-width:220px;width:250px;">{{Nom}}</th>
 							    <th style="min-width:330px;">{{Colorisation des valeurs}}</th>
                                 <th style="min-width:100px;">{{Options}}</th>
