@@ -51,14 +51,14 @@ function addCmdToTable(_cmd) {
 		tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked/> {{Afficher}}<br/></span>';
 	}
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'loadavg5mn' || _cmd.logicalId == 'loadavg15mn' || _cmd.logicalId == 'Mempourc' || _cmd.logicalId == 'Swappourc' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddpourcused' || _cmd.logicalId == 'hddpourcusedv2' || _cmd.logicalId == 'hddpourcusedusb') {
-		tr += '<span><input type="checkbox" class="cmdAttr" data-l1key="isHistorized"/> {{Historiser}}</span>';
+		tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isHistorized"/> {{Historiser}}</span>';
 	}
 	tr += '</td>';
 
 	tr += '<td>';
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
-		tr += '<span style="width: 80px;" class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
-		tr += '<span style="width: 80px;" class="subType" subType="' + init(_cmd.subType) + '"></span>';
+		tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
+		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	}
 	tr += '</td>';
 
