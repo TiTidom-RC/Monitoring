@@ -38,6 +38,7 @@ class Monitoring extends eqLogic {
 	  }
 
 	public static function pull() {
+		log::add('Monitoring', 'debug', '[PULL] Config pull :: '. config::byKey('conf::pull'));
 		if (config::byKey('conf::pull')) {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') != 'local') {
@@ -56,6 +57,7 @@ class Monitoring extends eqLogic {
 	}
 
 	public static function pullLocal() {
+		log::add('Monitoring', 'debug', '[PULL] Config pullLocal :: '. config::byKey('conf::pullLocal'));
 		if (config::byKey('conf::pullLocal')) {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') == 'local') {
