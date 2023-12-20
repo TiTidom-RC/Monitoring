@@ -29,7 +29,7 @@ function addCmdToTable(_cmd) {
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}" style="margin: 1px auto;">';
 		tr += '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>';
-		tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:15px;padding:0 5px 0 0!important;"></span>';
+		tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="margin: 1px auto;font-size:18px;padding:0 5px 0 0!important;"></span>';
 		tr += '</div>';
 	}
 	else
