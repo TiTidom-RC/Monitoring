@@ -38,8 +38,8 @@ class Monitoring extends eqLogic {
 	  }
 
 	public static function pull() {
-		log::add('Monitoring', 'debug', '[PULL] Config pull :: '. config::byKey('conf::pull'));
-		if (config::byKey('conf::pull')) {
+		log::add('Monitoring', 'debug', '[PULL] Config pull :: '. config::byKey('conf::pull', 'Monitoring'));
+		if (config::byKey('conf::pull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') != 'local') {
 					log::add('Monitoring', 'debug', '[PULL] Lancement pull :: '. $Monitoring->getName());
@@ -57,8 +57,8 @@ class Monitoring extends eqLogic {
 	}
 
 	public static function pullLocal() {
-		log::add('Monitoring', 'debug', '[PULL] Config pullLocal :: '. config::byKey('conf::pullLocal'));
-		if (config::byKey('conf::pullLocal')) {
+		log::add('Monitoring', 'debug', '[PULL] Config pullLocal :: '. config::byKey('conf::pullLocal', 'Monitoring'));
+		if (config::byKey('conf::pullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') == 'local') {
 					log::add('Monitoring', 'debug', '[PULL] Lancement pullLocal :: '. $Monitoring->getName());
