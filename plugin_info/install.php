@@ -42,6 +42,13 @@ function Monitoring_install() {
       $cronLocal->setTimeout(1);
       $cronLocal->save();
     }
+
+    if (config::byKey('conf::pull', 'Monitoring') == '') {
+      config::save('conf::pull', '1', 'Monitoring');
+    }
+    if (config::byKey('conf::pullLocal', 'Monitoring') == '') {
+      config::save('conf::pullLocal', '1', 'Monitoring');
+    }
 }
 
 function Monitoring_update() {
@@ -67,6 +74,13 @@ function Monitoring_update() {
       $cronLocal->setSchedule('* * * * *');
       $cronLocal->setTimeout(1);
       $cronLocal->save();
+    }
+
+    if (config::byKey('conf::pull', 'Monitoring') == '') {
+      config::save('conf::pull', '1', 'Monitoring');
+    }
+    if (config::byKey('conf::pullLocal', 'Monitoring') == '') {
+      config::save('conf::pullLocal', '1', 'Monitoring');
     }
 
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
