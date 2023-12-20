@@ -24,30 +24,55 @@ use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
 class Monitoring extends eqLogic {
-
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
 		$this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
-	  }
-	  public function encrypt() {
+	}
+	
+	public function encrypt() {
 		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
 		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
-	  }
+	}
 
 	public static function pull() {
-		foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
-			$Monitoring->getInformations();
-			$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-			$mc->remove();
-			$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-			$mc->remove();
-			$Monitoring->toHtml('mobile');
-			$Monitoring->toHtml('dashboard');
-			$Monitoring->refreshWidget();
+		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
+		if (config::byKey('configPull', 'Monitoring') == '1') {
+			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
+				if ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0') {
+					log::add('Monitoring', 'debug', '[PULL] Lancement Pull :: '. $Monitoring->getName());
+					$Monitoring->getInformations();
+					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+					$mc->remove();
+					$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
+					$mc->remove();
+					$Monitoring->toHtml('mobile');
+					$Monitoring->toHtml('dashboard');
+					$Monitoring->refreshWidget();
+				}
+			}
+		}
+	}
+
+	public static function pullLocal() {
+		log::add('Monitoring', 'debug', '[PULL] Config PullLocal :: '. config::byKey('configPullLocal', 'Monitoring'));
+		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
+			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
+				if ($Monitoring->getConfiguration('maitreesclave') == 'local') {
+					log::add('Monitoring', 'debug', '[PULL] Lancement PullLocal :: '. $Monitoring->getName());
+					$Monitoring->getInformations();
+					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+					$mc->remove();
+					$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
+					$mc->remove();
+					$Monitoring->toHtml('mobile');
+					$Monitoring->toHtml('dashboard');
+					$Monitoring->refreshWidget();
+				}
+			}
 		}
 	}
 
@@ -77,8 +102,15 @@ class Monitoring extends eqLogic {
 		exec($cmd);
 	} */
 
-	public function postSave() {
+  	public static function postConfig_configPullLocal($value) {
+	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
+  	}
+  	
+	public static function postConfig_configPull($value) {
+	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: '. $value);
+  	}
 
+	public function postSave() {
 		$MonitoringCmd = $this->getCmd(null, 'namedistri');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -707,11 +739,11 @@ class Monitoring extends eqLogic {
 
 					if ($perso_1cmd != '') {
 						$perso_1 = $sshconnection->exec($perso_1cmd);
-						log::add('Monitoring', 'debug', '[SSH] $perso_1 : '.$perso_1);
+						log::add('Monitoring', 'debug', '[SSH] Perso1 :: '.$perso_1);
 					}
 					if ($perso_2cmd != '') {
 						$perso_2 = $sshconnection->exec($perso_2cmd);
-						log::add('Monitoring', 'debug', '[SSH] $perso_2 : '.$perso_2);
+						log::add('Monitoring', 'debug', '[SSH] Perso2 :: '.$perso_2);
 					}
 					
 					if($this->getConfiguration('synology') == '1') {
@@ -1064,11 +1096,11 @@ class Monitoring extends eqLogic {
 
 			if ($perso_1cmd != '') {
 				$perso_1 = exec($perso_1cmd);
-				log::add('Monitoring', 'debug', '[LOCAL] $perso_1 : '.$perso_1);
+				log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: '.$perso_1);
 			}
 			if ($perso_2cmd != '') {
 				$perso_2 = exec($perso_2cmd);
-				log::add('Monitoring', 'debug', '[LOCAL] $perso_2 : '.$perso_2);
+				log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: '.$perso_2);
 			}
 
 			if ($this->getConfiguration('synology') == '1'){
@@ -1247,14 +1279,14 @@ class Monitoring extends eqLogic {
 				if($this->getConfiguration('synology') == '1'){
 					if (isset($versionsyno)) {
 						parse_str($versionsyno, $versionsyno_DSM);
-						log::add('Monitoring', 'debug', '[DSM] Parse version OK');
+						log::add('Monitoring', 'debug', '[DSM] Parse version :: OK');
 
 						if (isset($versionsyno_DSM['productversion']) && isset($versionsyno_DSM['buildnumber']) && isset($versionsyno_DSM['smallfixnumber'])) {
-							log::add('Monitoring', 'debug', '[DSM/SRM] Version : DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
+							log::add('Monitoring', 'debug', '[DSM/SRM] Version :: DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
 							$versionsyno_TXT = 'DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber'];
 						}
 						else {
-							log::add('Monitoring', 'debug', '[DSM/SRM] KO for Version !');
+							log::add('Monitoring', 'debug', '[DSM/SRM] Version :: KO');
 							$versionsyno_TXT = '';
 						}
 
@@ -1333,20 +1365,20 @@ class Monitoring extends eqLogic {
 						if($this->getConfiguration('synology') == '1'){
 							if (isset($memory[3])) {
 								$memorylibre = intval($memory[3]);
-								log::add('Monitoring', 'debug', '[Memory] Version Syno ('.$VersionID.') / Mémoire Libre = '.$memorylibre);
+								log::add('Monitoring', 'debug', '[Memory] Version Syno ('.$VersionID.') / Mémoire Libre :: '.$memorylibre);
 							}
 						}
 						else {
 							if (isset($memory[3])) {
 								$memorylibre = intval($memory[3]);
-								log::add('Monitoring', 'debug', '[Memory] Version Linux ('.$VersionID.') / Mémoire Libre = '.$memorylibre);
+								log::add('Monitoring', 'debug', '[Memory] Version Linux ('.$VersionID.') / Mémoire Libre :: '.$memorylibre);
 							}
 						}
 						
 						if (isset($memory[0]) && isset($memorylibre)) {
 							if (intval($memory[0]) != 0) {
 								$memorylibre_pourc = round(intval($memorylibre) / intval($memory[0]) * 100);
-								log::add('Monitoring', 'debug', '[Memory] Memorylibre% = '.$memorylibre_pourc);
+								log::add('Monitoring', 'debug', '[Memory] Memorylibre% :: '.$memorylibre_pourc);
 							}
 							else {
 								$memorylibre_pourc = 0;
@@ -1480,10 +1512,10 @@ class Monitoring extends eqLogic {
 						}
 						$ethernet0 = 'TX : '.$ReseauTX.' - RX : '.$ReseauRX;
 						$ethernet0_name = $ReseauRXTX[0];
-						log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau (RX / TX) : '.$ethernet0_name.' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
+						log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau (RX / TX) :: '.$ethernet0_name.' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
 					}
 					else {
-						log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau KO !');
+						log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau :: KO');
 					}
 				}
 
