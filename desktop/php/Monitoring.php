@@ -27,15 +27,15 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				        <span>{{Configuration}}</span>
 			        </div>
                     <div class="cursor pluginAction logoSecondary" data-action="openLocation" data-location="<?= $plugin->getDocumentation() ?>">
-				<i class="icon fas fa-book-reader"></i>
-				<br>
-				<span>{{Documentation}}</span>
-			</div>
-			<div class="cursor pluginAction logoSecondary" data-action="openLocation" data-location="https://community.jeedom.com/tags/plugin-<?= $plugin->getId() ?>">
-				<i class="fas fa-comments"></i>
-				<br>
-				<span>{{Community}}</span>
-			</div>
+				        <i class="fas fa-book-reader"></i>
+				        <br>
+				        <span>{{Documentation}}</span>
+			        </div>
+        			<div class="cursor pluginAction logoSecondary" data-action="openLocation" data-location="https://community.jeedom.com/tags/plugin-<?= $plugin->getId() ?>">
+				        <i class="fas fa-thumbs-up"></i>
+				        <br>
+				        <span>{{Community}}</span>
+			        </div>
 		        </div>
             </div>
             <?php
@@ -46,7 +46,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			if ($displayInfoValue) {
 			?>
 				<div class="col-sm-2">
-					<legend><i class=" fas fa-comments"></i> {{Community}}</legend>
+					<legend><i class=" fas fa-comments"></i> {{Aide Community}}</legend>
 					<div class="eqLogicThumbnailContainer">
 						<div class="cursor eqLogicAction logoSecondary" data-action="createCommunityPost">
 							<i class="fas fa-ambulance"></i>

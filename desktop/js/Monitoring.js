@@ -1,4 +1,3 @@
-
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -15,6 +14,17 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* Permet la réorganisation des commandes dans l'équipement */
+$("#table_cmd").sortable({
+	axis: "y",
+	cursor: "move",
+	items: ".cmd",
+	placeholder: "ui-state-highlight",
+	tolerance: "intersect",
+	forcePlaceholderSize: true
+  });
+
+/* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
 		var _cmd = {configuration: {}};
@@ -85,6 +95,10 @@ function addCmdToTable(_cmd) {
 	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
+
+$('.pluginAction[data-action=openLocation]').on('click', function () {
+	window.open($(this).attr("data-location"), "_blank", null);
+});
 
 $(".eqLogicAttr[data-l2key='synology']").on('change', function () {
 	if(this.checked){
