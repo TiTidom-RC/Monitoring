@@ -739,11 +739,11 @@ class Monitoring extends eqLogic {
 
 					if ($perso_1cmd != '') {
 						$perso_1 = $sshconnection->exec($perso_1cmd);
-						log::add('Monitoring', 'debug', '[SSH] $perso_1 : '.$perso_1);
+						log::add('Monitoring', 'debug', '[SSH] Perso1 :: '.$perso_1);
 					}
 					if ($perso_2cmd != '') {
 						$perso_2 = $sshconnection->exec($perso_2cmd);
-						log::add('Monitoring', 'debug', '[SSH] $perso_2 : '.$perso_2);
+						log::add('Monitoring', 'debug', '[SSH] Perso2 :: '.$perso_2);
 					}
 					
 					if($this->getConfiguration('synology') == '1') {
@@ -1096,11 +1096,11 @@ class Monitoring extends eqLogic {
 
 			if ($perso_1cmd != '') {
 				$perso_1 = exec($perso_1cmd);
-				log::add('Monitoring', 'debug', '[LOCAL] $perso_1 : '.$perso_1);
+				log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: '.$perso_1);
 			}
 			if ($perso_2cmd != '') {
 				$perso_2 = exec($perso_2cmd);
-				log::add('Monitoring', 'debug', '[LOCAL] $perso_2 : '.$perso_2);
+				log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: '.$perso_2);
 			}
 
 			if ($this->getConfiguration('synology') == '1'){
@@ -1279,14 +1279,14 @@ class Monitoring extends eqLogic {
 				if($this->getConfiguration('synology') == '1'){
 					if (isset($versionsyno)) {
 						parse_str($versionsyno, $versionsyno_DSM);
-						log::add('Monitoring', 'debug', '[DSM] Parse version OK');
+						log::add('Monitoring', 'debug', '[DSM] Parse version :: OK');
 
 						if (isset($versionsyno_DSM['productversion']) && isset($versionsyno_DSM['buildnumber']) && isset($versionsyno_DSM['smallfixnumber'])) {
-							log::add('Monitoring', 'debug', '[DSM/SRM] Version : DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
+							log::add('Monitoring', 'debug', '[DSM/SRM] Version :: DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
 							$versionsyno_TXT = 'DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber'];
 						}
 						else {
-							log::add('Monitoring', 'debug', '[DSM/SRM] KO for Version !');
+							log::add('Monitoring', 'debug', '[DSM/SRM] Version :: KO');
 							$versionsyno_TXT = '';
 						}
 
@@ -1365,20 +1365,20 @@ class Monitoring extends eqLogic {
 						if($this->getConfiguration('synology') == '1'){
 							if (isset($memory[3])) {
 								$memorylibre = intval($memory[3]);
-								log::add('Monitoring', 'debug', '[Memory] Version Syno ('.$VersionID.') / Mémoire Libre = '.$memorylibre);
+								log::add('Monitoring', 'debug', '[Memory] Version Syno ('.$VersionID.') / Mémoire Libre :: '.$memorylibre);
 							}
 						}
 						else {
 							if (isset($memory[3])) {
 								$memorylibre = intval($memory[3]);
-								log::add('Monitoring', 'debug', '[Memory] Version Linux ('.$VersionID.') / Mémoire Libre = '.$memorylibre);
+								log::add('Monitoring', 'debug', '[Memory] Version Linux ('.$VersionID.') / Mémoire Libre :: '.$memorylibre);
 							}
 						}
 						
 						if (isset($memory[0]) && isset($memorylibre)) {
 							if (intval($memory[0]) != 0) {
 								$memorylibre_pourc = round(intval($memorylibre) / intval($memory[0]) * 100);
-								log::add('Monitoring', 'debug', '[Memory] Memorylibre% = '.$memorylibre_pourc);
+								log::add('Monitoring', 'debug', '[Memory] Memorylibre% :: '.$memorylibre_pourc);
 							}
 							else {
 								$memorylibre_pourc = 0;
@@ -1512,10 +1512,10 @@ class Monitoring extends eqLogic {
 						}
 						$ethernet0 = 'TX : '.$ReseauTX.' - RX : '.$ReseauRX;
 						$ethernet0_name = $ReseauRXTX[0];
-						log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau (RX / TX) : '.$ethernet0_name.' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
+						log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau (RX / TX) :: '.$ethernet0_name.' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
 					}
 					else {
-						log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau KO !');
+						log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau :: KO');
 					}
 				}
 
