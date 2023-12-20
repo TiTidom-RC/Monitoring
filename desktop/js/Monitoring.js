@@ -57,8 +57,8 @@ function addCmdToTable(_cmd) {
 
 	tr += '<td>';
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
-		tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
-		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
+		tr += '<span style="width: 80px;" class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>';
+		tr += '<span style="width: 80px;" class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	}
 	tr += '</td>';
 
