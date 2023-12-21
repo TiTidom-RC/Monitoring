@@ -47,7 +47,7 @@ function Monitoring_install() {
       config::save('configPull', '1', 'Monitoring');
     }
     if (config::byKey('configPullLocal', 'Monitoring') == '') {
-      config::save('configPullLocal', '1', 'Monitoring');
+      config::save('configPullLocal', '0', 'Monitoring');
     }
 }
 
@@ -80,7 +80,7 @@ function Monitoring_update() {
       config::save('configPull', '1', 'Monitoring');
     }
     if (config::byKey('configPullLocal', 'Monitoring') == '') {
-      config::save('configPullLocal', '1', 'Monitoring');
+      config::save('configPullLocal', '0', 'Monitoring');
     }
 
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
