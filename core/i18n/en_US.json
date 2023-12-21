@@ -52,6 +52,9 @@
         "Ajouter Monitoring": "Add a Monitoring",
         "Gestion": "Management",
         "Ajouter": "Add",
+        "Documentation": "Documentation",
+        "Aide sur Community": "Help on Community",
+        "Créer un Post": "Create a Post",
         "Configuration": "Setup",
         "Configuration avancée": "Advanced configuration",
         "Equipement": "Device",
@@ -101,8 +104,11 @@
         "Historiser": "Historize",
         "Tester": "Test"
     },
-    "plugins\/Monitoring\/plugin_info\/info.xml": {
-        "Plugin de Monitoring": "Plugin Monitoring",
-        "Aucune": "None"
+    "plugins\/Monitoring\/plugin_info\/configuration.php": {
+        "Mises à jour Automatiques": "Automatic Updates",
+        "Equipement Local (1 min)": "Local Device (1 min)",
+        "Equipements Distants (15 min)": "Remote Devices (15 min)",
+        "Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local": "Enable or Disable auto updates (every minute) of local device",
+        "Activer ou Désactiver les MàJ auto (toutes les 15 minutes) des équipements distants": "Enable or Disable auto updates (every 15 minutes) of remote devices"
     }
 }
