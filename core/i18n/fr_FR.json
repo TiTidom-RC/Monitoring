@@ -42,6 +42,7 @@
         "Options": "Options",
         "Actions": "Actions",
         "Etat": "Etat",
+        "Dupliquer": "Dupliquer",
         "Supprimer": "Supprimer",
         "Sauvegarder": "Sauvegarder",
         "Ajouter un Monitoring": "Ajouter un Monitoring",
@@ -52,6 +53,9 @@
         "Ajouter Monitoring": "Ajouter Monitoring",
         "Gestion": "Gestion",
         "Ajouter": "Ajouter",
+        "Documentation": "Documentation",
+        "Aide sur Community": "Aide sur Community",
+        "Créer un Post": "Créer un Post",
         "Configuration": "Configuration",
         "Configuration avancée": "Configuration avancée",
         "Equipement": "Equipement",
@@ -101,8 +105,11 @@
         "Historiser": "Historiser",
         "Tester": "Tester"
     },
-    "plugins\/Monitoring\/plugin_info\/info.xml": {
-        "Plugin de Monitoring": "Plugin de Monitoring",
-        "Aucune": "Aucune"
+    "plugins\/Monitoring\/plugin_info\/configuration.php": {
+        "Mises à jour Automatiques": "Mises à jour Automatiques",
+        "Equipement Local (1 min)": "Equipement Local (1 min)",
+        "Equipements Distants (15 min)": "Equipements Distants (15 min)",
+        "Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local": "Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local",
+        "Activer ou Désactiver les MàJ auto (toutes les 15 minutes) des équipements distants": "Activer ou Désactiver les MàJ auto (toutes les 15 minutes) des équipements distants"
     }
 }

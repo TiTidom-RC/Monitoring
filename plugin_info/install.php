@@ -27,8 +27,27 @@ function Monitoring_install() {
       $cron->setEnable(1);
       $cron->setDeamon(0);
       $cron->setSchedule('*/15 * * * *');
-      $cron->setTimeout(30);
+      $cron->setTimeout(15);
       $cron->save();
+    }
+
+    $cronLocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
+    if (!is_object($cronLocal)) {
+      $cronLocal = new cron();
+      $cronLocal->setClass('Monitoring');
+      $cronLocal->setFunction('pullLocal');
+      $cronLocal->setEnable(1);
+      $cronLocal->setDeamon(0);
+      $cronLocal->setSchedule('* * * * *');
+      $cronLocal->setTimeout(1);
+      $cronLocal->save();
+    }
+
+    if (config::byKey('configPull', 'Monitoring') == '') {
+      config::save('configPull', '1', 'Monitoring');
+    }
+    if (config::byKey('configPullLocal', 'Monitoring') == '') {
+      config::save('configPullLocal', '0', 'Monitoring');
     }
 }
 
@@ -41,8 +60,27 @@ function Monitoring_update() {
       $cron->setEnable(1);
       $cron->setDeamon(0);
       $cron->setSchedule('*/15 * * * *');
-      $cron->setTimeout(30);
+      $cron->setTimeout(15);
       $cron->save();
+    }
+
+    $cronLocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
+    if (!is_object($cronLocal)) {
+      $cronLocal = new cron();
+      $cronLocal->setClass('Monitoring');
+      $cronLocal->setFunction('pullLocal');
+      $cronLocal->setEnable(1);
+      $cronLocal->setDeamon(0);
+      $cronLocal->setSchedule('* * * * *');
+      $cronLocal->setTimeout(1);
+      $cronLocal->save();
+    }
+
+    if (config::byKey('configPull', 'Monitoring') == '') {
+      config::save('configPull', '1', 'Monitoring');
+    }
+    if (config::byKey('configPullLocal', 'Monitoring') == '') {
+      config::save('configPullLocal', '0', 'Monitoring');
     }
 
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
@@ -77,8 +115,12 @@ function Monitoring_update() {
 
 function Monitoring_remove() {
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
+    $cronLocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
     if (is_object($cron)) {
         $cron->remove();
     }
+    if (is_object($cronLocal)) {
+      $cronLocal->remove();
+  }
 }
 ?>
