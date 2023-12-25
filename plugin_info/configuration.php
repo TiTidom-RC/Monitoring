@@ -32,7 +32,7 @@ if (!isConnect()) {
           <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local}}"></i></sup>
         </label>
         <div class="col-md-4">
-          <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" checked />
+          <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" />
         </div>
       </div>  
       <div class="form-group">
