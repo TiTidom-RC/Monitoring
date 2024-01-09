@@ -656,6 +656,10 @@ class Monitoring extends eqLogic {
 
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
+		
+		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible()) ? 'OK' : '';
+		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
+		
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
@@ -737,11 +741,11 @@ class Monitoring extends eqLogic {
 					$perso_1cmd = $this->getConfiguration('perso1');
 					$perso_2cmd = $this->getConfiguration('perso2');
 
-					if ($perso_1cmd != '') {
+					if ($perso_1cmd != '' && $Perso1Visible == 'OK') {
 						$perso_1 = $sshconnection->exec($perso_1cmd);
 						log::add('Monitoring', 'debug', '[SSH] Perso1 :: '.$perso_1);
 					}
-					if ($perso_2cmd != '') {
+					if ($perso_2cmd != '' && $Perso2Visible == 'OK') {
 						$perso_2 = $sshconnection->exec($perso_2cmd);
 						log::add('Monitoring', 'debug', '[SSH] Perso2 :: '.$perso_2);
 					}
@@ -1094,11 +1098,11 @@ class Monitoring extends eqLogic {
 			$perso_1cmd = $this->getConfiguration('perso1');
 			$perso_2cmd = $this->getConfiguration('perso2');
 
-			if ($perso_1cmd != '') {
+			if ($perso_1cmd != '' && $Perso1Visible == 'OK') {
 				$perso_1 = exec($perso_1cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: '.$perso_1);
 			}
-			if ($perso_2cmd != '') {
+			if ($perso_2cmd != '' && $Perso1Visible == 'OK') {
 				$perso_2 = exec($perso_2cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: '.$perso_2);
 			}
