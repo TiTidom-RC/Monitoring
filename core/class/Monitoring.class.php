@@ -76,32 +76,6 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	/* public static function dependancy_info() {
-		$return = array();
-		$return['log'] = 'Monitoring_update';
-		$return['progress_file'] = '/tmp/dependancy_monitoring_in_progress';
-		if (file_exists('/tmp/dependancy_monitoring_in_progress')) {
-			$return['state'] = 'in_progress';
-		} else {
-			if (exec('apt list --installed 2>/dev/null | grep php-phpseclib | wc -l') != 0) {
-				$return['state'] = 'ok';
-			} else {
-				$return['state'] = 'nok';
-			}
-		}
-		return $return;
-	}
-
-	public static function dependancy_install() {
-		if (file_exists('/tmp/compilation_monitoring_in_progress')) {
-			return;
-		}
-		log::remove('Monitoring_update');
-		$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../resources/install.sh';
-		$cmd .= ' >> ' . log::getPathToLog('Monitoring_update') . ' 2>&1 &';
-		exec($cmd);
-	} */
-
   	public static function postConfig_configPullLocal($value) {
 	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
   	}
@@ -636,6 +610,30 @@ class Monitoring extends eqLogic {
 		cache::set('MonitoringWidget' . $_version . $this->getId(), $html, 0);
 		return $html;
 	}
+
+
+	public static function getPluginVersion()
+    {
+        $pluginVersion = '0.0.0';
+		try {
+			if (!file_exists(dirname(__FILE__) . '/../../plugin_info/info.json')) {
+				log::add('Monitoring', 'warning', '[VERSION] fichier info.json manquant');
+			}
+			$data = json_decode(file_get_contents(dirname(__FILE__) . '/../../plugin_info/info.json'), true);
+			if (!is_array($data)) {
+				log::add('Monitoring', 'warning', '[VERSION] Impossible de décoder le fichier info.json');
+			}
+			try {
+				$pluginVersion = $data['pluginVersion'];
+			} catch (\Exception $e) {
+				log::add('Monitoring', 'warning', '[VERSION] Impossible de récupérer la version du plugin');
+			}
+		}
+		catch (\Exception $e) {
+			log::add('Monitoring', 'debug', '[VERSION] Get ERROR :: ' . $e->getMessage());
+		}
+        return $pluginVersion;
+    }
 
 	public function getInformations() {
 		$bitdistri_cmd = '';
