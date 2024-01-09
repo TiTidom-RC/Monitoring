@@ -27,7 +27,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 				        <span style="color:var(--txt-color)">{{Configuration}}</span>
 			        </div>
                     <div class="cursor pluginAction logoSecondary" data-action="openLocation" data-location="<?= $plugin->getDocumentation() ?>">
-				        <i class="fas fa-book-reader icon_blue"></i>
+				        <i class="fas fa-book icon_blue"></i>
 				        <br>
 				        <span style="color:var(--txt-color)">{{Documentation}}</span>
 			        </div>
