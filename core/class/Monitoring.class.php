@@ -632,7 +632,7 @@ class Monitoring extends eqLogic {
 		catch (\Exception $e) {
 			log::add('Monitoring', 'debug', '[VERSION] Get ERROR :: ' . $e->getMessage());
 		}
-		log::add('Monitoring', 'debug', '[VERSION] PluginVersion :: ' . $pluginVersion);
+		log::add('Monitoring', 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
         return $pluginVersion;
     }
 
