@@ -21,6 +21,7 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 function Monitoring_install() {
     $pluginVersion = Monitoring::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
+    log::add('Monitoring', 'debug', '[VERSION] Plugin Version :: ' . $pluginVersion);
   
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
     if (!is_object($cron)) {
@@ -57,6 +58,7 @@ function Monitoring_install() {
 function Monitoring_update() {
     $pluginVersion = Monitoring::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
+    log::add('Monitoring', 'debug', '[VERSION] Plugin Version :: ' . $pluginVersion);
   
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
     if (!is_object($cron)) {
