@@ -797,7 +797,7 @@ class Monitoring extends eqLogic {
 
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
 						$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);						
-						if (cpufreq0 == '') {
+						if ($cpufreq0 == '') {
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
 							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
 						}
@@ -1046,6 +1046,48 @@ class Monitoring extends eqLogic {
 								{
 									$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
 									log::add("Monitoring","debug", "[BSD-TEMP] Commande Température :: ".$cputemp0_cmd);
+								}
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+							}
+						}
+						elseif (preg_match("#medion#", $uname)) {
+							$nbcpu = '';
+							$cpufreq0 = '';
+							$cputemp0 = '';
+
+							$ARMv = "arm";
+
+							$namedistri_cmd = "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'";
+							$VersionID_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
+							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
+							$hdd_cmd = "LC_ALL=C df -h | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
+							
+							$namedistri = $sshconnection->exec($namedistri_cmd);
+							$VersionID = trim($sshconnection->exec($VersionID_cmd));
+							$bitdistri = $sshconnection->exec($bitdistri_cmd);
+							$hdd = $sshconnection->exec($hdd_cmd);
+
+
+							$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
+							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
+							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);						
+							if ($cpufreq0 == '') {
+								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+							}
+
+							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
+							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+								} 
+								else
+								{
+									$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
+									log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température :: ".$cputemp0_cmd);
 								}
 								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 							}
@@ -1577,7 +1619,7 @@ class Monitoring extends eqLogic {
 						}
 					}
 					elseif ($ARMv == 'arm') {
-						if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $namedistri) || preg_match("#piCorePlayer#", $uname)) {
+						if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $namedistri) || preg_match("#piCorePlayer#", $uname) || preg_match("#medion#", $uname)) {
 							if ((floatval($cpufreq0) / 1000) > 1000) {
 								$cpufreq0 = round(floatval($cpufreq0) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
 							}
