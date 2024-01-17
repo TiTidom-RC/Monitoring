@@ -1067,6 +1067,10 @@ class Monitoring extends eqLogic {
 							$bitdistri = $sshconnection->exec($bitdistri_cmd);
 							$hdd = $sshconnection->exec($hdd_cmd);
 
+							if (isset($namedistri) && isset($VersionID)) {
+								$namedistri = "Medion/Linux " . $VersionID . " (" . $namedistri . ")";
+								log::add('Monitoring', 'debug', '[MEDION] Distribution :: ' . $namedistri);
+							}
 
 							$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
