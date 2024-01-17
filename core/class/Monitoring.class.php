@@ -1060,7 +1060,7 @@ class Monitoring extends eqLogic {
 							$namedistri_cmd = "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'";
 							$VersionID_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
 							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
-							$hdd_cmd = "LC_ALL=C df -h | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
 							
 							$namedistri = $sshconnection->exec($namedistri_cmd);
 							$VersionID = trim($sshconnection->exec($VersionID_cmd));
