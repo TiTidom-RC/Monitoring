@@ -76,32 +76,6 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	/* public static function dependancy_info() {
-		$return = array();
-		$return['log'] = 'Monitoring_update';
-		$return['progress_file'] = '/tmp/dependancy_monitoring_in_progress';
-		if (file_exists('/tmp/dependancy_monitoring_in_progress')) {
-			$return['state'] = 'in_progress';
-		} else {
-			if (exec('apt list --installed 2>/dev/null | grep php-phpseclib | wc -l') != 0) {
-				$return['state'] = 'ok';
-			} else {
-				$return['state'] = 'nok';
-			}
-		}
-		return $return;
-	}
-
-	public static function dependancy_install() {
-		if (file_exists('/tmp/compilation_monitoring_in_progress')) {
-			return;
-		}
-		log::remove('Monitoring_update');
-		$cmd = 'sudo /bin/bash ' . dirname(__FILE__) . '/../../resources/install.sh';
-		$cmd .= ' >> ' . log::getPathToLog('Monitoring_update') . ' 2>&1 &';
-		exec($cmd);
-	} */
-
   	public static function postConfig_configPullLocal($value) {
 	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
   	}
@@ -637,6 +611,31 @@ class Monitoring extends eqLogic {
 		return $html;
 	}
 
+
+	public static function getPluginVersion()
+    {
+        $pluginVersion = '0.0.0';
+		try {
+			if (!file_exists(dirname(__FILE__) . '/../../plugin_info/info.json')) {
+				log::add('Monitoring', 'warning', '[VERSION] fichier info.json manquant');
+			}
+			$data = json_decode(file_get_contents(dirname(__FILE__) . '/../../plugin_info/info.json'), true);
+			if (!is_array($data)) {
+				log::add('Monitoring', 'warning', '[VERSION] Impossible de décoder le fichier info.json');
+			}
+			try {
+				$pluginVersion = $data['pluginVersion'];
+			} catch (\Exception $e) {
+				log::add('Monitoring', 'warning', '[VERSION] Impossible de récupérer la version du plugin');
+			}
+		}
+		catch (\Exception $e) {
+			log::add('Monitoring', 'debug', '[VERSION] Get ERROR :: ' . $e->getMessage());
+		}
+		log::add('Monitoring', 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
+        return $pluginVersion;
+    }
+
 	public function getInformations() {
 		$bitdistri_cmd = '';
 		$uname = "Inconnu";
@@ -656,6 +655,10 @@ class Monitoring extends eqLogic {
 
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
+		
+		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible()) ? 'OK' : '';
+		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
+		
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
@@ -737,11 +740,11 @@ class Monitoring extends eqLogic {
 					$perso_1cmd = $this->getConfiguration('perso1');
 					$perso_2cmd = $this->getConfiguration('perso2');
 
-					if ($perso_1cmd != '') {
+					if ($perso_1cmd != '' && $Perso1Visible == 'OK') {
 						$perso_1 = $sshconnection->exec($perso_1cmd);
 						log::add('Monitoring', 'debug', '[SSH] Perso1 :: '.$perso_1);
 					}
-					if ($perso_2cmd != '') {
+					if ($perso_2cmd != '' && $Perso2Visible == 'OK') {
 						$perso_2 = $sshconnection->exec($perso_2cmd);
 						log::add('Monitoring', 'debug', '[SSH] Perso2 :: '.$perso_2);
 					}
@@ -794,7 +797,7 @@ class Monitoring extends eqLogic {
 
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
 						$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);						
-						if (cpufreq0 == '') {
+						if ($cpufreq0 == '') {
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
 							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
 						}
@@ -1047,6 +1050,52 @@ class Monitoring extends eqLogic {
 								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 							}
 						}
+						elseif (preg_match("#medion#", $uname)) {
+							$nbcpu = '';
+							$cpufreq0 = '';
+							$cputemp0 = '';
+
+							$ARMv = "arm";
+
+							$namedistri_cmd = "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'";
+							$VersionID_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
+							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
+							$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
+							
+							$namedistri = $sshconnection->exec($namedistri_cmd);
+							$VersionID = trim($sshconnection->exec($VersionID_cmd));
+							$bitdistri = $sshconnection->exec($bitdistri_cmd);
+							$hdd = $sshconnection->exec($hdd_cmd);
+
+							if (isset($namedistri) && isset($VersionID)) {
+								$namedistri = "Medion/Linux " . $VersionID . " (" . $namedistri . ")";
+								log::add('Monitoring', 'debug', '[MEDION] Distribution :: ' . $namedistri);
+							}
+
+							$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
+							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
+							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);						
+							if ($cpufreq0 == '') {
+								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+							}
+
+							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
+							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+								} 
+								else
+								{
+									$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
+									log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température :: ".$cputemp0_cmd);
+								}
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+							}
+						}
 					}
 				}
 			}
@@ -1094,11 +1143,11 @@ class Monitoring extends eqLogic {
 			$perso_1cmd = $this->getConfiguration('perso1');
 			$perso_2cmd = $this->getConfiguration('perso2');
 
-			if ($perso_1cmd != '') {
+			if ($perso_1cmd != '' && $Perso1Visible == 'OK') {
 				$perso_1 = exec($perso_1cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: '.$perso_1);
 			}
-			if ($perso_2cmd != '') {
+			if ($perso_2cmd != '' && $Perso1Visible == 'OK') {
 				$perso_2 = exec($perso_2cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: '.$perso_2);
 			}
@@ -1574,7 +1623,7 @@ class Monitoring extends eqLogic {
 						}
 					}
 					elseif ($ARMv == 'arm') {
-						if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $namedistri) || preg_match("#piCorePlayer#", $uname)) {
+						if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $namedistri) || preg_match("#piCorePlayer#", $uname) || preg_match("#medion#", $uname)) {
 							if ((floatval($cpufreq0) / 1000) > 1000) {
 								$cpufreq0 = round(floatval($cpufreq0) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
 							}

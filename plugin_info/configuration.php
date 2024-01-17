@@ -26,13 +26,22 @@ if (!isConnect()) {
 <form class="form-horizontal">
   <fieldset>
     <div>
+      <legend><i class="fas fa-info"></i> {{Plugin}}</legend>
+      <div class="form-group">
+        <label class="col-md-4 control-label">{{Version}}
+          <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin à indiquer sur Community}}"></i></sup>
+        </label>
+        <div class="col-md-1">
+          <input class="configKey form-control" data-l1key="pluginVersion" readonly />
+        </div>
+      </div>
       <legend><i class="fas fa-tasks"></i> {{Mises à jour Automatiques}} :</legend>
       <div class="form-group">
         <label class="col-md-4 control-label">{{Equipement Local (1 min)}}
           <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local}}"></i></sup>
         </label>
         <div class="col-md-4">
-          <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" checked />
+          <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" />
         </div>
       </div>  
       <div class="form-group">
