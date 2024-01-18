@@ -375,9 +375,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('perso1');
 			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('string');	
+			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->save();
 		}
-		$MonitoringCmd->save();
 
 		$MonitoringCmd = $this->getCmd(null, 'reboot');
 		if (!is_object($MonitoringCmd)) {
