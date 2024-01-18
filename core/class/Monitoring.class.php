@@ -663,7 +663,9 @@ class Monitoring extends eqLogic {
 		}
 
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
+		log::add('Monitoring', 'debug', '[SynoV2Visible] SynoV2 :: '. $SynoV2Visible);
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
+		log::add('Monitoring', 'debug', '[SynoUSBVisible] SynoUSB :: '. $SynoUSBVisible);
 		
 		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible()) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[Perso1Visible] Perso1 :: '. $Perso1Visible);
