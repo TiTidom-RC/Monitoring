@@ -87,9 +87,9 @@ class Monitoring extends eqLogic {
 	public function postUpdate() {
 		log::add('Monitoring', 'debug', '[PostUpdate] Je suis là !');
 		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible()) ? 'OK' : '';
-		log::add('Monitoring', 'debug', '[Perso1Visible] Perso1 :: '. $Perso1Visible);
+		log::add('Monitoring', 'debug', '[PostUpdate][Perso1Visible] Perso1 :: '. $Perso1Visible);
 		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
-		log::add('Monitoring', 'debug', '[Perso2Visible] Perso2 :: '. $Perso2Visible);
+		log::add('Monitoring', 'debug', '[PostUpdate][Perso2Visible] Perso2 :: '. $Perso2Visible);
 		
 	}
 
@@ -375,9 +375,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('perso1');
 			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->save();
+			$MonitoringCmd->setSubType('string');	
 		}
+		$MonitoringCmd->save();
 
 		$MonitoringCmd = $this->getCmd(null, 'reboot');
 		if (!is_object($MonitoringCmd)) {
