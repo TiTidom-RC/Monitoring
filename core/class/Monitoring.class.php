@@ -85,12 +85,12 @@ class Monitoring extends eqLogic {
   	}
 
 	public function postUpdate() {
-		log::add('Monitoring', 'debug', '[PostUpdate] Je suis là !');
+		log::add('Monitoring', 'debug', '[PostUpdate] Fonction PostUpdate :: DEBUT');
 		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible() == '1') ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[PostUpdate][Perso1Visible] Perso1 :: '. $Perso1Visible);
 		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[PostUpdate][Perso2Visible] Perso2 :: '. $Perso2Visible);
-		
+		log::add('Monitoring', 'debug', '[PostUpdate] Fonction PostUpdate :: FIN');
 	}
 
 	public function postSave() {
@@ -663,18 +663,14 @@ class Monitoring extends eqLogic {
 		}
 
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
-		log::add('Monitoring', 'debug', '[SynoV2Visible] SynoV2 :: '. $SynoV2Visible);
+		log::add('Monitoring', 'debug', '[GetInfo][SynoV2Visible] SynoV2 :: '. $SynoV2Visible);
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
-		log::add('Monitoring', 'debug', '[SynoUSBVisible] SynoUSB :: '. $SynoUSBVisible);
-
-		$perso1Cmd = $this->getCmd(null,'perso1');
-		$perso1getVisible = $perso1Cmd->getIsVisible();
-		log::add('Monitoring', 'debug', '[Perso1Visible][TEST] Perso1 :: '. $perso1getVisible);
+		log::add('Monitoring', 'debug', '[GetInfo][SynoUSBVisible] SynoUSB :: '. $SynoUSBVisible);
 
 		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible()) ? 'OK' : '';
-		log::add('Monitoring', 'debug', '[Perso1Visible] Perso1 :: '. $Perso1Visible);
+		log::add('Monitoring', 'debug', '[GetInfo][Perso1Visible] Perso1 :: '. $Perso1Visible);
 		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
-		log::add('Monitoring', 'debug', '[Perso2Visible] Perso2 :: '. $Perso2Visible);
+		log::add('Monitoring', 'debug', '[GetInfo][Perso2Visible] Perso2 :: '. $Perso2Visible);
 
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
