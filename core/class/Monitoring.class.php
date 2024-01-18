@@ -84,6 +84,10 @@ class Monitoring extends eqLogic {
 	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: '. $value);
   	}
 
+	public function postUpdate() {
+		log::add('Monitoring', 'debug', '[PostUpdate] Je suis là !');
+	}
+
 	public function postSave() {
 		$MonitoringCmd = $this->getCmd(null, 'namedistri');
 		if (!is_object($MonitoringCmd)) {
