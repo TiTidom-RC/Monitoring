@@ -86,6 +86,11 @@ class Monitoring extends eqLogic {
 
 	public function postUpdate() {
 		log::add('Monitoring', 'debug', '[PostUpdate] Je suis là !');
+		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible()) ? 'OK' : '';
+		log::add('Monitoring', 'debug', '[Perso1Visible] Perso1 :: '. $Perso1Visible);
+		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
+		log::add('Monitoring', 'debug', '[Perso2Visible] Perso2 :: '. $Perso2Visible);
+		
 	}
 
 	public function postSave() {
