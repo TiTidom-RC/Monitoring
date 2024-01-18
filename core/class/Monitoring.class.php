@@ -659,7 +659,7 @@ class Monitoring extends eqLogic {
 		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible()) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[Perso1Visible] Perso1 :: '. $Perso1Visible);
 		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
-		log::add('Monitoring', 'debug', '[Perso1Visible] Perso1 :: '. $Perso2Visible);
+		log::add('Monitoring', 'debug', '[Perso2Visible] Perso2 :: '. $Perso2Visible);
 
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
