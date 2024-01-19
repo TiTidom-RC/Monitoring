@@ -401,7 +401,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		sleep(2);
+
+		$id = this->getId();
+		log::add('Monitoring', 'warning', '[PostSave] $id :: ' . $id);
 		$this->getInformations();
 	}
 
