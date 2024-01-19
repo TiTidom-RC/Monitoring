@@ -1159,7 +1159,7 @@ class Monitoring extends eqLogic {
 				$perso_1 = exec($perso_1cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: '.$perso_1);
 			}
-			if ($perso_2cmd != '' && $Perso1Visible == 'OK') {
+			if ($perso_2cmd != '' && $Perso2Visible == 'OK') {
 				$perso_2 = exec($perso_2cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: '.$perso_2);
 			}
