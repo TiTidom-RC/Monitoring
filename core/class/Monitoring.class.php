@@ -404,6 +404,11 @@ class Monitoring extends eqLogic {
 
 		// $id = this->getEqLogic();
 		// log::add('Monitoring', 'warning', '[PostSave] $id :: ' . str($id));
+		sleep(1);
+		sleep(1);
+		sleep(1);
+		sleep(1);
+		sleep(1);
 		$this->getInformations();
 	}
 
