@@ -815,7 +815,7 @@ class Monitoring extends eqLogic {
 						}
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+						if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 							if ($this->getconfiguration('linux_use_temp_cmd')) {
 								$cputemp0armv6l_cmd=$this->getconfiguration('linux_temp_cmd');
 								log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: ".$cputemp0armv6l_cmd);	
@@ -846,7 +846,7 @@ class Monitoring extends eqLogic {
 						$hdd = $sshconnection->exec($hdd_cmd);
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+						if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 							if ($this->getconfiguration('linux_use_temp_cmd')) {
 								$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
@@ -900,7 +900,7 @@ class Monitoring extends eqLogic {
 						$cpufreq=preg_replace("/[^0-9.]/","",$cpufreq);
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+						if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 							if ($this->getconfiguration('linux_use_temp_cmd')) {
 								$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
@@ -954,7 +954,7 @@ class Monitoring extends eqLogic {
 							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
@@ -981,7 +981,7 @@ class Monitoring extends eqLogic {
 							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
@@ -1010,7 +1010,7 @@ class Monitoring extends eqLogic {
 							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 									log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
@@ -1049,7 +1049,7 @@ class Monitoring extends eqLogic {
 							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 									log::add("Monitoring","debug", "[BSD-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
@@ -1095,7 +1095,7 @@ class Monitoring extends eqLogic {
 							}
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 									log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
@@ -1213,7 +1213,7 @@ class Monitoring extends eqLogic {
 					}
 				}
 				$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-				if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+				if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 					if ($this->getconfiguration('linux_use_temp_cmd')) {
 						$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 						$cputemp0 = exec($cputemp0_cmd);
@@ -1246,7 +1246,7 @@ class Monitoring extends eqLogic {
 				}	
 				
 				$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-				if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+				if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 					if ($this->getconfiguration('linux_use_temp_cmd')) {
 						$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 						$cputemp0 = exec($cputemp0_cmd);
@@ -1300,7 +1300,7 @@ class Monitoring extends eqLogic {
 				$cpufreq = preg_replace("/[^0-9.]/","",$cpufreq);
 				
 				$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-				if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+				if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 					if ($this->getconfiguration('linux_use_temp_cmd')) {
 						$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 						$cputemp0 = exec($cputemp0_cmd);
@@ -1368,7 +1368,7 @@ class Monitoring extends eqLogic {
 				}
 				
 				// Syno Volume 2
-				if($SynoV2Visible == 'OK' && $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1'){
+				if(/* $SynoV2Visible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1'){
 					if (isset($hddv2)) {
 						$hdddatav2 = explode(' ', $hddv2);
 						if (isset($hdddatav2[0]) && isset($hdddatav2[1]) && isset($hdddatav2[2])) {
@@ -1381,7 +1381,7 @@ class Monitoring extends eqLogic {
 				}
 
 				// Syno Volume USB 
-				if($SynoUSBVisible == 'OK' && $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1'){
+				if(/* $SynoUSBVisible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1'){
 					if (isset($hddusb)) {
 						$hdddatausb = explode(' ', $hddusb);
 						if (isset($hdddatausb[0]) && isset($hdddatausb[1]) && isset($hdddatausb[2])) {
@@ -1603,7 +1603,7 @@ class Monitoring extends eqLogic {
 						}
 						
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+						if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 							if (floatval($cputemp0) > 200){
 								$cputemp0 = floatval($cputemp0) / 1000;
 								$cputemp0 = round(floatval($cputemp0), 1);
@@ -1620,7 +1620,7 @@ class Monitoring extends eqLogic {
 						}
 						
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-						if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+						if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 							if (floatval($cputemp0) > 200){
 								$cputemp0 = floatval($cputemp0) / 1000;
 								$cputemp0 = round(floatval($cputemp0), 1);
@@ -1643,7 +1643,7 @@ class Monitoring extends eqLogic {
 								$cpufreq0 = round(floatval($cpufreq0) / 1000) . " MHz";
 							}
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) && $cputemp_cmd->getIsVisible() == 1) {
+							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if (floatval($cputemp0) > 200){
 									$cputemp0 = floatval($cputemp0) / 1000;
 									$cputemp0 = round(floatval($cputemp0), 1);
@@ -1698,7 +1698,7 @@ class Monitoring extends eqLogic {
 					'perso1' => $perso_1,
 					'perso2' => $perso_2,
 				);
-				if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1'){
+				if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1'){
 					$dataresultv2 = array(
 						'hddtotalv2' => $hddtotalv2,
 						'hddusedv2' => $hddusedv2,
@@ -1707,7 +1707,7 @@ class Monitoring extends eqLogic {
 				}
 
 				// Syno Volume USB
-				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+				if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1'){
 					$dataresultusb = array(
 						'hddtotalusb' => $hddtotalusb,
 						'hddusedusb' => $hddusedusb,
@@ -1775,7 +1775,7 @@ class Monitoring extends eqLogic {
 					$hddused_pourc->event($dataresult['hddpourcused']);
 				}
 
-				if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1'){
+				if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1'){
 					$hddtotalv2 = $this->getCmd(null,'hddtotalv2');
 					if(is_object($hddtotalv2)){
 						$hddtotalv2->event($dataresultv2['hddtotalv2']);
@@ -1790,7 +1790,7 @@ class Monitoring extends eqLogic {
 					}
 				}
 
-				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+				if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1'){
 					$hddtotalusb = $this->getCmd(null,'hddtotalusb');
 					if(is_object($hddtotalusb)){
 						$hddtotalusb->event($dataresultusb['hddtotalusb']);
