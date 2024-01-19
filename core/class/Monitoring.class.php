@@ -356,6 +356,17 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
+		$MonitoringCmd = $this->getCmd(null, 'perso1');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('perso1', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('perso1');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->save();
+		}
 
 		$MonitoringCmd = $this->getCmd(null, 'perso2');
 		if (!is_object($MonitoringCmd)) {
@@ -365,17 +376,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('perso2');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'perso1');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('perso1', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('perso1');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->save();
 		}
 
