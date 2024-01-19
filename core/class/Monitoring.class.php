@@ -85,12 +85,12 @@ class Monitoring extends eqLogic {
   	}
 
 	public function postUpdate() {
-		log::add('Monitoring', 'debug', '[PostUpdate] Fonction PostUpdate :: DEBUT');
+		/* log::add('Monitoring', 'debug', '[PostUpdate] Fonction PostUpdate :: DEBUT');
 		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible() == '1') ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[PostUpdate][Perso1Visible] Perso1 :: '. $Perso1Visible);
 		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[PostUpdate][Perso2Visible] Perso2 :: '. $Perso2Visible);
-		log::add('Monitoring', 'debug', '[PostUpdate] Fonction PostUpdate :: FIN');
+		log::add('Monitoring', 'debug', '[PostUpdate] Fonction PostUpdate :: FIN'); */
 	}
 
 	public function postSave() {
@@ -662,7 +662,7 @@ class Monitoring extends eqLogic {
 			$cartereseau = $this->getConfiguration('cartereseau');
 		}
 
-		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
+		/* $SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[GetInfo][SynoV2Visible] SynoV2 :: '. $SynoV2Visible);
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[GetInfo][SynoUSBVisible] SynoUSB :: '. $SynoUSBVisible);
@@ -670,7 +670,7 @@ class Monitoring extends eqLogic {
 		$Perso1Visible = ((is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible())) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[GetInfo][Perso1Visible] Perso1 :: '. $Perso1Visible);
 		$Perso2Visible = ((is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible())) ? 'OK' : '';
-		log::add('Monitoring', 'debug', '[GetInfo][Perso2Visible] Perso2 :: '. $Perso2Visible);
+		log::add('Monitoring', 'debug', '[GetInfo][Perso2Visible] Perso2 :: '. $Perso2Visible); */
 
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
@@ -752,11 +752,11 @@ class Monitoring extends eqLogic {
 					$perso_1cmd = $this->getConfiguration('perso1');
 					$perso_2cmd = $this->getConfiguration('perso2');
 
-					if ($perso_1cmd != '' && $Perso1Visible == 'OK') {
+					if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
 						$perso_1 = $sshconnection->exec($perso_1cmd);
 						log::add('Monitoring', 'debug', '[SSH] Perso1 :: '.$perso_1);
 					}
-					if ($perso_2cmd != '' && $Perso2Visible == 'OK') {
+					if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
 						$perso_2 = $sshconnection->exec($perso_2cmd);
 						log::add('Monitoring', 'debug', '[SSH] Perso2 :: '.$perso_2);
 					}
@@ -788,12 +788,12 @@ class Monitoring extends eqLogic {
 						}
 						$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 					
-						if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
+						if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
 							$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 							$hddv2 = $sshconnection->exec($hddv2cmd);
 						}
 
-						if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1') {
+						if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
 							$hddusbcmd = "df -h | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 							$hddusb = $sshconnection->exec($hddusbcmd);
 						}
@@ -1155,11 +1155,11 @@ class Monitoring extends eqLogic {
 			$perso_1cmd = $this->getConfiguration('perso1');
 			$perso_2cmd = $this->getConfiguration('perso2');
 
-			if ($perso_1cmd != '' && $Perso1Visible == 'OK') {
+			if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
 				$perso_1 = exec($perso_1cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: '.$perso_1);
 			}
-			if ($perso_2cmd != '' && $Perso2Visible == 'OK') {
+			if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
 				$perso_2 = exec($perso_2cmd);
 				log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: '.$perso_2);
 			}
@@ -1184,12 +1184,12 @@ class Monitoring extends eqLogic {
 				}
 				$cputemp0 = exec($cputemp0_cmd);
 
-				if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
+				if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
 					$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 					$hddv2 = exec($hddv2cmd);
 				}
 
-				if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1') {
+				if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
 					$hddusbcmd = "df -h | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 					$hddusb = exec($hddusbcmd);
 				}
