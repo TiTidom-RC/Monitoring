@@ -401,10 +401,6 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-
-		// $id = this->getEqLogic();
-		// log::add('Monitoring', 'warning', '[PostSave] $id :: ' . str($id));
-		$this->refresh();
 		$this->getInformations();
 	}
 
@@ -671,9 +667,9 @@ class Monitoring extends eqLogic {
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[GetInfo][SynoUSBVisible] SynoUSB :: '. $SynoUSBVisible);
 
-		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible()) ? 'OK' : '';
+		$Perso1Visible = ((is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible())) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[GetInfo][Perso1Visible] Perso1 :: '. $Perso1Visible);
-		$Perso2Visible = (is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible()) ? 'OK' : '';
+		$Perso2Visible = ((is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible())) ? 'OK' : '';
 		log::add('Monitoring', 'debug', '[GetInfo][Perso2Visible] Perso2 :: '. $Perso2Visible);
 
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
