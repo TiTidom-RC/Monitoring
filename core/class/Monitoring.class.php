@@ -402,7 +402,7 @@ class Monitoring extends eqLogic {
 		}
 
 
-		$id = this->getId();
+		$id = this->getEqLogic();
 		log::add('Monitoring', 'warning', '[PostSave] $id :: ' . str($id));
 		$id->getInformations();
 	}
