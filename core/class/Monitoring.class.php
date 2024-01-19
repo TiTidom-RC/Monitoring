@@ -403,8 +403,8 @@ class Monitoring extends eqLogic {
 
 
 		$id = this->getId();
-		log::add('Monitoring', 'warning', '[PostSave] $id :: ' . $id);
-		$this->getInformations();
+		log::add('Monitoring', 'warning', '[PostSave] $id :: ' . str($id));
+		$id->getInformations();
 	}
 
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
