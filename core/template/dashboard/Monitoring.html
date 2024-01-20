@@ -204,7 +204,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#cpu_temp#' !== '') {
+				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' != 'None') {
 					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
 						$('#cpu#id#').append('<span>#cpu# </span>');
 						$('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)');

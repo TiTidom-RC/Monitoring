@@ -1685,7 +1685,8 @@ class Monitoring extends eqLogic {
 				if (empty($memorylibre_pourc)) {$memorylibre_pourc = '';}
 				if (empty($Memswap)) {$Memswap = '';}
 				if (empty($swaplibre_pourc)) {$swaplibre_pourc = '';}
-
+				# TODO ajouter les commandes type syno ou temp
+				
 				$dataresult = array(
 					'namedistri' => $namedistri,
 					'uptime' => $uptime,
