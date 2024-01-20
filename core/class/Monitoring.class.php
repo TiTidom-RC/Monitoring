@@ -580,6 +580,7 @@ class Monitoring extends eqLogic {
 		$cpu_temp = $this->getCmd(null,'cpu_temp');
 		$replace['#cpu_temp#'] = (is_object($cpu_temp)) ? $cpu_temp->execCmd() : '';
 		$replace['#cpu_tempid#'] = is_object($cpu_temp) ? $cpu_temp->getId() : '';
+		$replace['#cpu_temp_display#'] = (is_object($cpu_temp) && $cpu_temp->getIsVisible()) ? 'OK' : '';
 
 		$perso1 = $this->getCmd(null,'perso1');
 		$replace['#perso1#'] = (is_object($perso1)) ? $perso1->execCmd() : '';
@@ -1685,6 +1686,7 @@ class Monitoring extends eqLogic {
 				if (empty($memorylibre_pourc)) {$memorylibre_pourc = '';}
 				if (empty($Memswap)) {$Memswap = '';}
 				if (empty($swaplibre_pourc)) {$swaplibre_pourc = '';}
+				# TODO ajouter les commandes type syno ou temp
 
 				$dataresult = array(
 					'namedistri' => $namedistri,
