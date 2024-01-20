@@ -1377,6 +1377,10 @@ class Monitoring extends eqLogic {
 							$hddusedv2 = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatav2[1]);
 							$hddusedv2_pourc = preg_replace("/[^0-9.]/","",$hdddatav2[2]);
 							$hddusedv2_pourc = trim($hddusedv2_pourc);
+						} else {
+							$hddtotalv2 = '';
+							$hddusedv2 = '';
+							$hddusedv2_pourc = '';
 						}
 					}
 				}
@@ -1390,6 +1394,10 @@ class Monitoring extends eqLogic {
 							$hddusedusb = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatausb[1]);
 							$hddusedusb_pourc = preg_replace("/[^0-9.]/","",$hdddatausb[2]);
 							$hddusedusb_pourc = trim($hddusedusb_pourc);
+						} else {
+							$hddtotalusb = '';
+							$hddusedusb = '';
+							$hddusedusb_pourc = '';
 						}
 					}
 				}
