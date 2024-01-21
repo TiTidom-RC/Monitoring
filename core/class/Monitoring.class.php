@@ -1938,6 +1938,7 @@ class Monitoring extends eqLogic {
 					else {
 						switch ($paramaction) {
 							case "reboot":
+								log::add('Monitoring','info','[SSH-REBOOT] Lancement commande distante REBOOT :: '. $equipement);
 								try {
 									// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 									$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
@@ -1945,9 +1946,9 @@ class Monitoring extends eqLogic {
 								} catch (Exception $e) {
 									log::add('Monitoring','debug','[SSH-REBOOT] Exception [REBOOT] :: '. $equipement .' :: '. $e->getMessage());	
 								}
-								log::add('Monitoring','info','[SSH-REBOOT] Lancement commande distante REBOOT :: '. $equipement);
 								break;
 							case "poweroff":
+								log::add('Monitoring','info','[SSH-OFF] Lancement commande distante POWEROFF :: '. $equipement);
 								try {
 									// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
 									$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
