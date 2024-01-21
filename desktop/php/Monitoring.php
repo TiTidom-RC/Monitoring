@@ -38,26 +38,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 			        </div>
 		        </div>
             </div>
-            <?php
-			// à conserver
-			// sera affiché uniquement si l'utilisateur est en version 4.4 ou supérieur
-			$jeedomVersion  = jeedom::version() ?? '0';
-			$displayInfoValue = version_compare($jeedomVersion, '4.4.0', '>=');
-			if ($displayInfoValue) {
-			?>
-				<div class="col-sm-2">
-					<legend><i class=" fas fa-comments"></i> {{Aide sur Community}}</legend>
-					<div class="eqLogicThumbnailContainer">
-						<div class="cursor eqLogicAction logoSecondary" data-action="createCommunityPost">
-							<i class="fas fa-ambulance icon_red"></i>
-							<br>
-							<span style="color:var(--txt-color)">{{Créer un Post}}</span>
-						</div>
-					</div>
-				</div>
-			<?php
-			}
-			?>
         </div>
         <legend><i class="fas fa-laptop-code"></i> {{Mes Monitorings}}</legend>
 

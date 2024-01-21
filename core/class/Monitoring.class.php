@@ -1963,6 +1963,7 @@ class Monitoring extends eqLogic {
 			}
 		}
 		elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
+			$equipement = $this->getName();
 			if($this->getConfiguration('synology') == '1'){
 				switch ($paramaction) {
 					case "reboot":
@@ -2006,9 +2007,9 @@ class MonitoringCmd extends cmd {
 		$eqLogic = $this->getEqLogic();
 		$paramaction = $this->getLogicalId();
 
-		if ( $this->GetType = "action" ) {
+		if ($this->getType() == "action") {
 			$eqLogic->getCmd();
-			$contentCmd = $eqLogic->getCaseAction($paramaction);
+			$eqLogic->getCaseAction($paramaction);
 		} else {
 			throw new Exception(__('Commande non implémentée actuellement', __FILE__));
 		}
