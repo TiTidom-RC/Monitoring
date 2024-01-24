@@ -774,7 +774,7 @@ class Monitoring extends eqLogic {
 							$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
 							$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
 							
-							$hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "df -h 2>/dev/null| grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
@@ -792,12 +792,12 @@ class Monitoring extends eqLogic {
 							$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 						
 							if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
-								$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+								$hddv2cmd = "df -h 2>/dev/null| grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 								$hddv2 = $sshconnection->exec($hddv2cmd);
 							}
 
 							if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
-								$hddusbcmd = "df -h | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+								$hddusbcmd = "df -h 2>/dev/null| grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 								$hddusb = $sshconnection->exec($hddusbcmd);
 							}
 						}	
@@ -807,7 +807,7 @@ class Monitoring extends eqLogic {
 							
 							$uname = '.';
 
-							$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
@@ -845,7 +845,7 @@ class Monitoring extends eqLogic {
 								$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
 							}
 
-							$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
@@ -881,7 +881,7 @@ class Monitoring extends eqLogic {
 							}
 							$nbcpu = preg_replace("/[^0-9]/","",$nbcpu);
 
-							$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
 							$cpufreqVM_cmd = "lscpu | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
@@ -950,7 +950,7 @@ class Monitoring extends eqLogic {
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo | wc -l";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
-								$hdd_cmd = "df -h | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
+								$hdd_cmd = "df -h 2>/dev/null| grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -977,7 +977,7 @@ class Monitoring extends eqLogic {
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo | wc -l";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
-								$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+								$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -1006,7 +1006,7 @@ class Monitoring extends eqLogic {
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo | wc -l";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
-								$hdd_cmd = "df -h | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
+								$hdd_cmd = "df -h 2>/dev/null| grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -1045,7 +1045,7 @@ class Monitoring extends eqLogic {
 								$nbcpuARM_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
-								$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+								$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
 
 								$cpufreq0ARM_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
@@ -1125,7 +1125,7 @@ class Monitoring extends eqLogic {
 					else {
 						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 					}
-					$hdd_cmd = "df -h | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
+					$hdd_cmd = "df -h 2>/dev/null| grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 					$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 				}
 				else {
@@ -1133,7 +1133,7 @@ class Monitoring extends eqLogic {
 					$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
 					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 					
-					$hdd_cmd = "df -h | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+					$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 					$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 					
 					$ARMv = exec($ARMv_cmd);
@@ -1188,12 +1188,12 @@ class Monitoring extends eqLogic {
 					$cputemp0 = exec($cputemp0_cmd);
 
 					if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
-						$hddv2cmd = "df -h | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+						$hddv2cmd = "df -h 2>/dev/null| grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 						$hddv2 = exec($hddv2cmd);
 					}
 
 					if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
-						$hddusbcmd = "df -h | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+						$hddusbcmd = "df -h 2>/dev/null| grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 						$hddusb = exec($hddusbcmd);
 					}
 				}
