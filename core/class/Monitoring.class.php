@@ -660,7 +660,7 @@ class Monitoring extends eqLogic {
 				$cartereseau = $this->getConfiguration('cartereseauautre');
 			}
 			elseif ($this->getConfiguration('cartereseau') == 'netauto') {
-			$cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1)";
+				$cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1)";
 			} else {
 				$cartereseau = $this->getConfiguration('cartereseau');
 			}
@@ -736,10 +736,10 @@ class Monitoring extends eqLogic {
 							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 						}
 
-						$memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
-						$swap_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
-						$loadavg_cmd = "cat /proc/loadavg";
-						$ReseauRXTX_cmd = "cat /proc/net/dev | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
+						$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
+						$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
+						$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
+						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
 
 						$ARMv = trim($sshconnection->exec($ARMv_cmd));
 						$uptime = $sshconnection->exec($uptime_cmd);
@@ -774,7 +774,7 @@ class Monitoring extends eqLogic {
 							$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
 							$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
 							
-							$hdd_cmd = "df -h 2>/dev/null| grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
@@ -792,22 +792,22 @@ class Monitoring extends eqLogic {
 							$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 						
 							if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
-								$hddv2cmd = "df -h 2>/dev/null| grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+								$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 								$hddv2 = $sshconnection->exec($hddv2cmd);
 							}
 
 							if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
-								$hddusbcmd = "df -h 2>/dev/null| grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+								$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 								$hddusb = $sshconnection->exec($hddusbcmd);
 							}
 						}	
 						elseif ($ARMv == 'armv6l') {
-							$nbcpuARM_cmd = "lscpu | grep 'CPU(s):' | awk '{ print $2 }'";
+							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
 							$uname = '.';
 
-							$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
@@ -832,7 +832,7 @@ class Monitoring extends eqLogic {
 
 						}
 						elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64'){
-							$nbcpuARM_cmd = "lscpu | grep '^CPU(s):' | awk '{ print $2 }'";
+							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
 							$uname = '.';
@@ -845,7 +845,7 @@ class Monitoring extends eqLogic {
 								$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
 							}
 
-							$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
@@ -872,32 +872,32 @@ class Monitoring extends eqLogic {
 							$cputemp0 ='';
 							$uname = '.';
 							
-							$nbcpuVM_cmd = "lscpu | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
+							$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
 							$nbcpu = $sshconnection->exec($nbcpuVM_cmd);
 
 							if ($nbcpu == '') {
-								$nbcpuVMbis_cmd = "lscpu | grep '^CPU(s):' | awk '{ print $2 }'"; // OK pour LXC Linux/Ubuntu
+								$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'"; // OK pour LXC Linux/Ubuntu
 								$nbcpu = $sshconnection->exec($nbcpuVMbis_cmd);
 							}
 							$nbcpu = preg_replace("/[^0-9]/","",$nbcpu);
 
-							$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
-							$cpufreqVM_cmd = "lscpu | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
+							$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
 							$cpufreq = $sshconnection->exec($cpufreqVM_cmd);
 
 							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "lscpu | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
+								$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
 								$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
 							}
 
 							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "lscpu | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
+								$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
 								$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
 							}
 							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "cat /proc/cpuinfo | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
+								$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
 								$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
 							}
 							$cpufreq=preg_replace("/[^0-9.]/","",$cpufreq);
@@ -939,7 +939,7 @@ class Monitoring extends eqLogic {
 							}
 						}
 						elseif ($ARMv == '' & $this->getConfiguration('synology') != '1') {
-							$unamecmd = "uname -a | awk '{print $2,$1}'";
+							$unamecmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
 							$unamedata = $sshconnection->exec($unamecmd);
 							$uname = $unamedata;
 
@@ -947,10 +947,10 @@ class Monitoring extends eqLogic {
 								$bitdistri = '32';
 								$ARMv = 'arm';
 
-								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo | wc -l";
+								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
-								$hdd_cmd = "df -h 2>/dev/null| grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
+								$hdd_cmd = "df -h 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -974,10 +974,10 @@ class Monitoring extends eqLogic {
 								$bitdistri = '32';
 								$ARMv = 'arm';
 
-								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo | wc -l";
+								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
-								$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+								$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -1000,13 +1000,13 @@ class Monitoring extends eqLogic {
 							elseif (preg_match("#piCorePlayer#", $uname)) {
 								$bitdistri = '32';
 								$ARMv = 'arm';
-								$namedistri_cmd = "uname -a | awk '{print $2,$3}'";
+								$namedistri_cmd = "uname -a 2>/dev/null | awk '{print $2,$3}'";
 								$namedistri = $sshconnection->exec($namedistri_cmd);
 
-								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo | wc -l";
+								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
-								$hdd_cmd = "df -h 2>/dev/null| grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
+								$hdd_cmd = "df -h 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -1027,7 +1027,7 @@ class Monitoring extends eqLogic {
 								}
 							}
 							elseif (preg_match("#FreeBSD#", $uname)) {
-								$namedistri_cmd = "uname -a | awk '{ print $1,$3}'";
+								$namedistri_cmd = "uname -a 2>/dev/null | awk '{ print $1,$3}'";
 								$namedistri = $sshconnection->exec($namedistri_cmd);
 
 								$ARMv_cmd = "sysctl hw.machine | awk '{ print $2}'";
@@ -1045,7 +1045,7 @@ class Monitoring extends eqLogic {
 								$nbcpuARM_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
-								$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+								$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
 
 								$cpufreq0ARM_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
@@ -1125,7 +1125,7 @@ class Monitoring extends eqLogic {
 					else {
 						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 					}
-					$hdd_cmd = "df -h 2>/dev/null| grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
+					$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 					$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 				}
 				else {
@@ -1133,7 +1133,7 @@ class Monitoring extends eqLogic {
 					$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
 					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 					
-					$hdd_cmd = "df -h 2>/dev/null| grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 					$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 					
 					$ARMv = exec($ARMv_cmd);
@@ -1141,8 +1141,8 @@ class Monitoring extends eqLogic {
 				}
 
 				$uptime_cmd = "uptime";
-				$memory_cmd = "free | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
-				$swap_cmd = "free | awk -F':' '/Swap|Partition d.échange|Échange/ { print $2 }' | awk '{ print $1,$2,$3}'";
+				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
+				$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 				$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
 				$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
 
@@ -1169,8 +1169,8 @@ class Monitoring extends eqLogic {
 
 				if ($this->getConfiguration('synology') == '1'){
 					$uname = '.';
-					$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core";
-					$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
+					$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
+					$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
 					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
 
 					$nbcpu = exec($nbcpuARM_cmd);
@@ -1188,12 +1188,12 @@ class Monitoring extends eqLogic {
 					$cputemp0 = exec($cputemp0_cmd);
 
 					if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
-						$hddv2cmd = "df -h 2>/dev/null| grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+						$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 						$hddv2 = exec($hddv2cmd);
 					}
 
 					if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
-						$hddusbcmd = "df -h 2>/dev/null| grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+						$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
 						$hddusb = exec($hddusbcmd);
 					}
 				}
@@ -1202,7 +1202,7 @@ class Monitoring extends eqLogic {
 					$cpufreq0 = '';
 					$cputemp0 = '';
 
-					$nbcpuARM_cmd = "lscpu | grep 'CPU(s):' | awk '{ print $2 }'";
+					$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
 					$nbcpu = exec($nbcpuARM_cmd);
 					
 					if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq')) {
@@ -1234,7 +1234,7 @@ class Monitoring extends eqLogic {
 					$cputemp0 = '';
 					$cpufreq0 = '';
 
-					$nbcpuARM_cmd = "lscpu | grep '^CPU(s):' | awk '{ print $2 }'";
+					$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
 					$nbcpu = exec($nbcpuARM_cmd);
 					
 					if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq')) {
@@ -1276,28 +1276,28 @@ class Monitoring extends eqLogic {
 					$cputemp0 = '';
 					$cpufreq = '';
 
-					$nbcpuVM_cmd = "lscpu | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
+					$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
 					$nbcpu = exec($nbcpuVM_cmd);
 
 					if ($nbcpu == ''){
-						$nbcpuVMbis_cmd = "lscpu | grep '^CPU(s):' | awk '{ print $NF }'"; // OK pour LXC Linux/Ubuntu
+						$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $NF }'"; // OK pour LXC Linux/Ubuntu
 						$nbcpu = exec($nbcpuVMbis_cmd);
 					}
 					$nbcpu = preg_replace("/[^0-9]/","",$nbcpu);
 					
-					$cpufreqVM_cmd = "lscpu | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
+					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
 					$cpufreq = exec($cpufreqVM_cmd);
 					
 					if ($cpufreq == ''){
-						$cpufreqVMbis_cmd = "lscpu | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
+						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
 						$cpufreq = exec($cpufreqVMbis_cmd);
 					}
 					if ($cpufreq == ''){
-						$cpufreqVMbis_cmd = "lscpu | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
+						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
 						$cpufreq = exec($cpufreqVMbis_cmd);
 					}
 					if ($cpufreq == ''){
-						$cpufreqVMbis_cmd = "cat /proc/cpuinfo | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
+						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
 						$cpufreq = exec($cpufreqVMbis_cmd);
 					}
 					$cpufreq = preg_replace("/[^0-9.]/","",$cpufreq);
