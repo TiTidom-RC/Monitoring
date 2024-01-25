@@ -259,6 +259,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-md-2 control-label" >{{HDD eSATA}}</label>
+                                        <div class="col-md-8">
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyesata" />
+                                            <span style="font-size: 85%;">({{A cocher si vous avez un disque eSATA}})</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-md-2 control-label" >{{Temp (Alt)}}</label>
                                         <div class="col-md-8">
                                             <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="syno_use_temp_path" />

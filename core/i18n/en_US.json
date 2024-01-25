@@ -50,6 +50,7 @@
         "Local ou Distant ?": "Local or Remote ?",
         "Volume 2": "Volume 2",
         "HDD USB": "HDD USB",
+        "HDD eSATA": "HDD eSATA",
         "Ajouter Monitoring": "Add a Monitoring",
         "Gestion": "Management",
         "Ajouter": "Add",
@@ -69,6 +70,7 @@
         "A cocher si le nom du modèle de votre Syno est mal détecté": "Check if Syno model name is poorly detected",
         "A cocher si vous avez un 2ème volume disque": "Check if you have a 2nd disk volume",
         "A cocher si vous avez un disque USB": "Check if you have a USB disk",
+        "A cocher si vous avez un disque eSATA": "Check if you have a eSATA disk",
         "A cocher pour spécifier la commande de récupération de température": "Check to specify custom command to retrieve temp"
     },
     "plugins\/Monitoring\/core\/class\/Monitoring.class.php": {
@@ -97,6 +99,9 @@
         "Syno Volume USB Total": "Total Syno Volume USB",
         "Syno Volume USB Utilisé": "Syno Volume USB Used",
         "Syno Volume USB Utilisé (Pourcentage)": "Syno Volume USB Used (Percentage)",
+        "Syno Volume eSATA Total": "Total Syno Volume eSATA",
+        "Syno Volume eSATA Utilisé": "Syno Volume eSATA Used",
+        "Syno Volume eSATA Utilisé (Pourcentage)": "Syno Volume eSATA Used (Percentage)",
         "Reboot": "Reboot",
         "PowerOff": "PowerOff"
     },
