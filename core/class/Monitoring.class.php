@@ -250,6 +250,7 @@ class Monitoring extends eqLogic {
 		}
 
 		if ($this->getConfiguration('synology') == '1') {
+			// Synology volume 2
 			if ($this->getConfiguration('synologyv2') == '1') {
 				$MonitoringCmd = $this->getCmd(null, 'hddtotalv2');
 				if (!is_object($MonitoringCmd)) {
@@ -316,6 +317,42 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setName(__('Syno Volume USB Utilisé (Pourcentage)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('hddpourcusedusb');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->save();
+				}
+			}
+
+			// Synology volume eSATA
+			if ($this->getConfiguration('synologyesata') == '1') {
+				$MonitoringCmd = $this->getCmd(null, 'hddtotalesata');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume eSATA Total', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddtotalesata');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('string');
+					$MonitoringCmd->save();
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'hddusedesata');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume eSATA Utilisé', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddusedesata');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('string');
+					$MonitoringCmd->save();
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'hddpourcusedesata');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume eSATA Utilisé (Pourcentage)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('hddpourcusedesata');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->save();
@@ -565,6 +602,27 @@ class Monitoring extends eqLogic {
         	$replace['#hddtotalusb_value#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? $hddtotalusb->getValueDate() : "-";
 		}
 
+		// Syno Volume eSATA
+		$SynoeSATAVisible = (is_object($this->getCmd(null,'hddtotalesata')) && $this->getCmd(null,'hddtotalesata')->getIsVisible()) ? 'OK' : '';
+
+		if($this->getConfiguration('synology') == '1' && $SynoeSATAVisible == 'OK' && $this->getConfiguration('synologyesata') == '1'){
+			$hddusedesata = $this->getCmd(null,'hddusedesata');
+			$replace['#hddusedesata#'] = (is_object($hddusedesata)) ? $hddusedesata->execCmd() : '';
+			$replace['#hddusedesataid#'] = is_object($hddusedesata) ? $hddusedesata->getId() : '';
+
+			$hddusedesata_pourc = $this->getCmd(null,'hddpourcusedesata');
+			$replace['#hddpourcusedesata#'] = (is_object($hddusedesata_pourc)) ? $hddusedesata_pourc->execCmd() : '';
+			$replace['#hddpourcusedesataid#'] = is_object($hddusedesata_pourc) ? $hddusedesata_pourc->getId() : '';
+
+			$hddtotalesata = $this->getCmd(null,'hddtotalesata');
+			$replace['#hddtotalesata#'] = (is_object($hddtotalesata)) ? $hddtotalesata->execCmd() : '';
+			$replace['#hddtotalesataid#'] = is_object($hddtotalesata) ? $hddtotalesata->getId() : '';
+			$replace['#hddusedesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? "#hddusedesata_display#" : "none";
+			$replace['#synovolumeesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? 'OK' : '';
+			$replace['#hddtotalesata_collect#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? $hddtotalesata->getCollectDate() : "-";
+        	$replace['#hddtotalesata_value#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? $hddtotalesata->getValueDate() : "-";
+		}
+
 		$cnx_ssh = $this->getCmd(null,'cnx_ssh');
 		$replace['#cnx_ssh#'] = (is_object($cnx_ssh)) ? $cnx_ssh->execCmd() : '';
 		$replace['#cnx_sshid#'] = is_object($cnx_ssh) ? $cnx_ssh->getId() : '';
@@ -766,7 +824,7 @@ class Monitoring extends eqLogic {
 						
 						if($this->getConfiguration('synology') == '1') {
 							$platform_cmd = "get_key_value /etc/synoinfo.conf unique | cut -d'_' -f2";
-							$synoplatorm = $sshconnection->exec($platform_cmd);
+							$synoplatform = $sshconnection->exec($platform_cmd);
 
 							$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
@@ -799,6 +857,11 @@ class Monitoring extends eqLogic {
 							if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
 								$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 								$hddusb = $sshconnection->exec($hddusbcmd);
+							}
+
+							if($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1') {
+								$hddesatacmd = "df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+								$hddesata = $sshconnection->exec($hddesatacmd);
 							}
 						}	
 						elseif ($ARMv == 'armv6l') {
@@ -1188,13 +1251,18 @@ class Monitoring extends eqLogic {
 					$cputemp0 = exec($cputemp0_cmd);
 
 					if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
-						$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+						$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hddv2 = exec($hddv2cmd);
 					}
 
 					if($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
-						$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }' | cut -d '%' -f1";
+						$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hddusb = exec($hddusbcmd);
+					}
+
+					if($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1') {
+						$hddesatacmd = "df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hddesata = exec($hddesatacmd);
 					}
 				}
 				elseif ($ARMv == 'armv6l') {
@@ -1400,6 +1468,23 @@ class Monitoring extends eqLogic {
 								$hddtotalusb = '';
 								$hddusedusb = '';
 								$hddusedusb_pourc = '';
+							}
+						}
+					}
+
+					// Syno Volume eSATA 
+					if(/* $SynoeSATAVisible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1'){
+						if (isset($hddesata)) {
+							$hdddataesata = explode(' ', $hddesata);
+							if (isset($hdddataesata[0]) && isset($hdddataesata[1]) && isset($hdddataesata[2])) {
+								$hddtotalesata = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddataesata[0]);
+								$hddusedesata = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddataesata[1]);
+								$hddusedesata_pourc = preg_replace("/[^0-9.]/","",$hdddataesata[2]);
+								$hddusedesata_pourc = trim($hddusedesata_pourc);
+							} else {
+								$hddtotalesata = '';
+								$hddusedesata = '';
+								$hddusedesata_pourc = '';
 							}
 						}
 					}
@@ -1727,6 +1812,15 @@ class Monitoring extends eqLogic {
 						);
 					}
 
+					// Syno Volume eSATA
+					if($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1'){
+						$dataresultesata = array(
+							'hddtotalesata' => $hddtotalesata,
+							'hddusedesata' => $hddusedesata,
+							'hddpourcusedesata' => $hddusedesata_pourc,
+						);
+					}
+
 					$namedistri = $this->getCmd(null,'namedistri');
 					if(is_object($namedistri)){
 						$namedistri->event($dataresult['namedistri']);
@@ -1814,6 +1908,21 @@ class Monitoring extends eqLogic {
 						$hddusedusb_pourc = $this->getCmd(null,'hddpourcusedusb');
 						if(is_object($hddusedusb_pourc)){
 							$hddusedusb_pourc->event($dataresultusb['hddpourcusedusb']);
+						}
+					}
+
+					if($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1'){
+						$hddtotalesata = $this->getCmd(null,'hddtotalesata');
+						if(is_object($hddtotalesata)){
+							$hddtotalesata->event($dataresultesata['hddtotalesata']);
+						}
+						$hddusedesata = $this->getCmd(null,'hddusedesata');
+						if(is_object($hddusedesata)){
+							$hddusedesata->event($dataresultesata['hddusedesata']);
+						}
+						$hddusedesata_pourc = $this->getCmd(null,'hddpourcusedesata');
+						if(is_object($hddusedesata_pourc)){
+							$hddusedesata_pourc->event($dataresultesata['hddpourcusedesata']);
 						}
 					}
 
