@@ -478,6 +478,9 @@ class Monitoring extends eqLogic {
 		$replace ['#hddpourcusedusb_colorlow#'] = $this->getConfiguration('hddpourcusedusb_colorlow');
 		$replace ['#hddpourcusedusb_colorhigh#'] = $this->getConfiguration('hddpourcusedusb_colorhigh');
 
+		$replace ['#hddpourcusedesata_colorlow#'] = $this->getConfiguration('hddpourcusedesata_colorlow');
+		$replace ['#hddpourcusedesata_colorhigh#'] = $this->getConfiguration('hddpourcusedesata_colorhigh');
+
 		$replace ['#perso1_colorlow#'] = $this->getConfiguration('perso1_colorlow');
 		$replace ['#perso1_colorhigh#'] = $this->getConfiguration('perso1_colorhigh');
 
