@@ -23,6 +23,8 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
+define('NET_SSH2_LOGGING', NET_SSH2_LOG_COMPLEX);
+
 class Monitoring extends eqLogic {
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
@@ -770,7 +772,9 @@ class Monitoring extends eqLogic {
 					}
 
 					try {
-						$sshconnection->login($user, $keyOrPwd);
+						if (!$sshconnection->login($user, $keyOrPwd)) {
+							log::add('Monitoring', 'error', '[SSH-Login] Login ERROR :: '. $equipement . ' :: ' . $user);
+						}
 					} catch (Exception $e) {
 						log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: '. $equipement .' :: '. $e->getMessage());
 						$cnx_ssh = 'KO';
@@ -802,8 +806,21 @@ class Monitoring extends eqLogic {
 						$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
 						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
 
-						$ARMv = trim($sshconnection->exec($ARMv_cmd));
-						$uptime = $sshconnection->exec($uptime_cmd);
+						try {
+							$ARMv = trim($sshconnection->exec($ARMv_cmd));
+							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+						} catch (Exception $e) {
+							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception :: '. $equipement .' :: ' . $e->getMessage());
+						}
+						try {
+							$uptime = $sshconnection->exec($uptime_cmd);
+							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+						} catch (Exception $e) {
+							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception :: '. $equipement .' :: ' . $e->getMessage());
+						}
+						
 						$VersionID = trim($sshconnection->exec($VersionID_cmd));
 						$namedistri = $sshconnection->exec($namedistri_cmd);
 						$bitdistri = $sshconnection->exec($bitdistri_cmd);
