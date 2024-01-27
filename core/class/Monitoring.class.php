@@ -790,7 +790,6 @@ class Monitoring extends eqLogic {
 						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
 						// $uptime_cmd = "uptime";
-						// $uptime_cmd = "uptime -p | awk -F'up ' '{ print $2 }'";
 						$uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
 
 						if($this->getConfiguration('synology') == '1') {
@@ -817,7 +816,7 @@ class Monitoring extends eqLogic {
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
 							log::add('Monitoring', 'info', '[SSH-ARMV] ARMv :: '. $equipement .' :: ' . $ARMv);
-							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$ARMv = '';
 							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
