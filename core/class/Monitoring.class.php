@@ -23,8 +23,6 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
-define('NET_SSH2_LOGGING', NET_SSH2_LOG_COMPLEX);
-
 class Monitoring extends eqLogic {
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
@@ -712,6 +710,7 @@ class Monitoring extends eqLogic {
 
 	public function getInformations() {
 		try {
+			define('NET_SSH2_LOGGING', 2);
 			$bitdistri_cmd = '';
 			$uname = "Inconnu";
 			$Mem = '';
