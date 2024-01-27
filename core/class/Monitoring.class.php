@@ -1540,7 +1540,7 @@ class Monitoring extends eqLogic {
 						if (intval($uptime_jours) > 0) {
 							$uptime_res .= $uptime_jours . ' jour(s), '; 
 						}
-						$uptime = $uptime_res . $uptime_hours . 'h ' . $uptime_minutes . 'm ' . $uptime_seconds; 
+						$uptime = $uptime_res . $uptime_hours . 'h ' . $uptime_minutes . 'm ' . $uptime_seconds . 's';
 
 						/* $dataen = array("weeks", "week", "days", "day", "hours", "hour");
 						$datafr = array("semaines", "semaine", "jours", "jour", "heures", "heure");
