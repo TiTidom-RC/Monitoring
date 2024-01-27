@@ -798,7 +798,7 @@ class Monitoring extends eqLogic {
 						}
 						else {
 							// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
-							$namedistri_cmd ="awk -F'=' '/PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
+							$namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 						}
