@@ -23,7 +23,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
+define('NET_SSH2_LOGGING', 2);
+
 class Monitoring extends eqLogic {
+
+	
+
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
@@ -702,7 +707,7 @@ class Monitoring extends eqLogic {
 			}
 		}
 		catch (\Exception $e) {
-			log::add('Monitoring', 'debug', '[VERSION] Get ERROR :: ' . $e->getMessage());
+			log::add('Monitoring', 'warning', '[VERSION] Get ERROR :: ' . $e->getMessage());
 		}
 		log::add('Monitoring', 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
         return $pluginVersion;
@@ -710,13 +715,13 @@ class Monitoring extends eqLogic {
 
 	public function getInformations() {
 		try {
-			define('NET_SSH2_LOGGING', 2);
 			$bitdistri_cmd = '';
 			$uname = "Inconnu";
 			$Mem = '';
 			$memorylibre_pourc = '';
 			$ethernet0 = '';
 			$ethernet0_name = '';
+			$equipement = $this->getName();
 
 			if ($this->getConfiguration('cartereseau') == 'netautre'){
 				$cartereseau = $this->getConfiguration('cartereseauautre');
@@ -745,45 +750,47 @@ class Monitoring extends eqLogic {
 				$pass = $this->getConfiguration('password');
 				$sshkey = $this->getConfiguration('ssh-key');
 				$sshpassphrase = $this->getConfiguration('ssh-passphrase');
-				$equipement = $this->getName();
 				$cnx_ssh = '';
 
 				try {
 					$sshconnection = new SSH2($ip,$port);
-					log::add('Monitoring', 'debug', '[SSH-New] Connexion SSH :: '. $equipement .' :: OK');
+					log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: OK');
 				} catch (Exception $e) {
-					log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
+					log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
 				}
 				if ($cnx_ssh != 'KO') {
 					if ($confLocalOrRemote == 'deporte-key') {
 						try {
 							$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-							log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: '. $equipement .' :: OK');
+							log::add('Monitoring', 'debug', '[SSH-CMD] PublicKeyLoader :: '. $equipement .' :: OK');
 						} catch (Exception $e) {
-							log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $equipement .' :: '. $e->getMessage());
+							log::add('Monitoring', 'error', '[SSH-CMD] PublicKeyLoader :: '. $equipement .' :: '. $e->getMessage());
 							$keyOrPwd = '';
 						}
 					}
 					else {
 						$keyOrPwd = $pass;
-						log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe :: '. $equipement);
+						log::add('Monitoring', 'debug', '[SSH-CMD] Authentification SSH par Mot de passe :: '. $equipement);
 					}
 
 					try {
 						if (!$sshconnection->login($user, $keyOrPwd)) {
-							log::add('Monitoring', 'error', '[SSH-Login] Login ERROR :: '. $equipement . ' :: ' . $user);
+							log::add('Monitoring', 'error', '[SSH-CMD] Login ERROR :: '. $equipement . ' :: ' . $user);
+							$cnx_ssh = 'KO';
 						}
 					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: '. $equipement .' :: '. $e->getMessage());
+						log::add('Monitoring', 'error', '[SSH-CMD] Authentification SSH :: '. $equipement .' :: '. $e->getMessage());
 						$cnx_ssh = 'KO';
 					}
 					if ($cnx_ssh != 'KO') {
 						$cnx_ssh = 'OK';
-						log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '. $equipement .' :: OK');
+						log::add('Monitoring', 'debug', '[SSH-CMD] Authentification SSH :: '. $equipement .' :: OK');
 
-						$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-						$uptime_cmd = "uptime";
+						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
+						// $uptime_cmd = "uptime";
+						$uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
 
 						if($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
@@ -795,7 +802,8 @@ class Monitoring extends eqLogic {
 							$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 						}
 						else {
-							$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+							// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+							$namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 						}
@@ -806,18 +814,22 @@ class Monitoring extends eqLogic {
 						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
 
 						try {
-							$ARMv = trim($sshconnection->exec($ARMv_cmd));
-							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							$ARMv = $sshconnection->exec($ARMv_cmd);
+							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv :: '. $equipement .' :: ' . $ARMv);
+							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
-							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
-							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception :: '. $equipement .' :: ' . $e->getMessage());
+							$ARMv = '';
+							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception :: '. $equipement .' :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						}
 						try {
 							$uptime = $sshconnection->exec($uptime_cmd);
-							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime :: '. $equipement .' :: ' . $uptime);
+							// log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
-							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							$uptime = '';
 							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception :: '. $equipement .' :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						}
 						
 						$VersionID = trim($sshconnection->exec($VersionID_cmd));
@@ -834,11 +846,11 @@ class Monitoring extends eqLogic {
 
 						if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
 							$perso_1 = $sshconnection->exec($perso_1cmd);
-							log::add('Monitoring', 'debug', '[SSH] Perso1 :: '.$perso_1);
+							log::add('Monitoring', 'debug', '[SSH-CMD] Perso1 :: ' . $equipement . ' :: ' . $perso_1);
 						}
 						if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
 							$perso_2 = $sshconnection->exec($perso_2cmd);
-							log::add('Monitoring', 'debug', '[SSH] Perso2 :: '.$perso_2);
+							log::add('Monitoring', 'debug', '[SSH-CMD] Perso2 :: ' . $equipement . ' :: ' . $perso_2);
 						}
 						
 						if($this->getConfiguration('synology') == '1') {
@@ -847,6 +859,8 @@ class Monitoring extends eqLogic {
 
 							$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+
+							log::add('Monitoring', 'debug', '[SSH-CMD] NbCPU :: '. $equipement .' :: ' . $nbcpu);
 
 							$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
 							$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
@@ -860,11 +874,11 @@ class Monitoring extends eqLogic {
 
 							if ($this->getconfiguration('syno_use_temp_path')) {
 								$cputemp0_cmd=$this->getconfiguration('syno_temp_path');
-								log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+								log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 							} 
 							else {
 								$cputemp0_cmd="timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
-								log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: ".$cputemp0_cmd);
+								log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 							}
 							$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 						
@@ -887,6 +901,8 @@ class Monitoring extends eqLogic {
 							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
+							log::add('Monitoring', 'debug', '[SSH-CMD] NbCPU :: '. $equipement .' :: ' . $nbcpu);
+
 							$uname = '.';
 
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
@@ -903,11 +919,11 @@ class Monitoring extends eqLogic {
 							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0armv6l_cmd=$this->getconfiguration('linux_temp_cmd');
-									log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: ".$cputemp0armv6l_cmd);	
+									log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0armv6l_cmd);	
 								} 
 								else {
 									$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-									log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: ".$cputemp0armv6l_cmd);
+									log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0armv6l_cmd);
 								}
 								$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
 							}
@@ -917,6 +933,8 @@ class Monitoring extends eqLogic {
 							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
+							log::add('Monitoring', 'debug', '[SSH-CMD] NbCPU :: '. $equipement .' :: ' . $nbcpu);
+
 							$uname = '.';
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
@@ -935,7 +953,7 @@ class Monitoring extends eqLogic {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+									log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);	
 								} 
 								else {
 									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";	// OK RPi2
@@ -945,7 +963,7 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"; // OK Banana Pi (Cubie surement un jour...)
 										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 									}
-									log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température :: ".$cputemp0_cmd);
+									log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 								}							
 							}
 						}
@@ -962,6 +980,7 @@ class Monitoring extends eqLogic {
 								$nbcpu = $sshconnection->exec($nbcpuVMbis_cmd);
 							}
 							$nbcpu = preg_replace("/[^0-9]/","",$nbcpu);
+							log::add('Monitoring', 'debug', '[SSH-CMD] NbCPU :: ' . $equipement . ' :: ' . $nbcpu);
 
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
@@ -989,7 +1008,7 @@ class Monitoring extends eqLogic {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									log::add("Monitoring","debug", "[X86-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+									log::add("Monitoring","debug", "[X86-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);	
 								}
 								else {
 									$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// Default
@@ -1016,7 +1035,7 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors
 										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 									}
-									log::add("Monitoring","debug", "[X86-TEMP] Commande Température :: ".$cputemp0_cmd);
+									log::add("Monitoring","debug", "[X86-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 								}
 							}
 						}
@@ -1031,6 +1050,7 @@ class Monitoring extends eqLogic {
 
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								log::add('Monitoring', 'debug', '[SSH-CMD] NbCPU :: ' . $equipement . ' :: ' . $nbcpu);
 
 								$hdd_cmd = "df -h 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
 								$hdd = $sshconnection->exec($hdd_cmd);
@@ -1042,12 +1062,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1069,12 +1089,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1098,12 +1118,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1137,12 +1157,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[BSD-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[BSD-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
-										log::add("Monitoring","debug", "[BSD-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[BSD-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1166,7 +1186,7 @@ class Monitoring extends eqLogic {
 
 								if (isset($namedistri) && isset($VersionID)) {
 									$namedistri = "Medion/Linux " . $VersionID . " (" . $namedistri . ")";
-									log::add('Monitoring', 'debug', '[MEDION] Distribution :: ' . $namedistri);
+									log::add('Monitoring', 'debug', '[MEDION] Distribution :: ' . $equipement . " :: " . $namedistri);
 								}
 
 								$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
@@ -1183,12 +1203,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
-										log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1212,7 +1232,8 @@ class Monitoring extends eqLogic {
 				}
 				else {
 					$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-					$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+					// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+					$namedistri_cmd ="awk -F'=' '/PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 					
 					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
@@ -1222,7 +1243,9 @@ class Monitoring extends eqLogic {
 					$bitdistri = exec($bitdistri_cmd);
 				}
 
-				$uptime_cmd = "uptime";
+				// $uptime_cmd = "uptime";
+				$uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+
 				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 				$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 				$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
@@ -1242,11 +1265,11 @@ class Monitoring extends eqLogic {
 
 				if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
 					$perso_1 = exec($perso_1cmd);
-					log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: '.$perso_1);
+					log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: ' . $equipement . " :: " . $perso_1);
 				}
 				if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
 					$perso_2 = exec($perso_2cmd);
-					log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: '.$perso_2);
+					log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: ' . $equipement . " :: " . $perso_2);
 				}
 
 				if ($this->getConfiguration('synology') == '1'){
@@ -1261,11 +1284,11 @@ class Monitoring extends eqLogic {
 
 					if ($this->getconfiguration('syno_use_temp_path')) {
 						$cputemp0_cmd=$this->getconfiguration('syno_temp_path');
-						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 					} 
 					else {
 						$cputemp0_cmd="timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null";
-						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: ".$cputemp0_cmd);
+						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 					}
 					$cputemp0 = exec($cputemp0_cmd);
 
@@ -1307,12 +1330,12 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							$cputemp0 = exec($cputemp0_cmd);
-							log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+							log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);	
 						} 
 						elseif (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
 								$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp";
 								$cputemp0 = exec($cputemp0_cmd);
-								log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: ".$cputemp0_cmd);
+								log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 						}
 					}
 				}
@@ -1340,7 +1363,7 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							$cputemp0 = exec($cputemp0_cmd);
-							log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+							log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);	
 						} 
 						else {
 							if (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
@@ -1353,7 +1376,7 @@ class Monitoring extends eqLogic {
 									$cputemp0 = exec($cputemp0_cmd);
 								}
 							}
-							log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température :: ".$cputemp0_cmd);
+							log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 						}
 					}
 				}
@@ -1394,7 +1417,7 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							$cputemp0 = exec($cputemp0_cmd);
-							log::add("Monitoring","debug", "[X86-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+							log::add("Monitoring","debug", "[X86-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);	
 						} 
 						else {
 							if (file_exists('/sys/devices/virtual/thermal/thermal_zone0/temp')) {
@@ -1419,7 +1442,7 @@ class Monitoring extends eqLogic {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors MB
 								$cputemp0 = exec($cputemp0_cmd);
 							}
-							log::add("Monitoring","debug", "[X86-TEMP] Commande Température :: ".$cputemp0_cmd);
+							log::add("Monitoring","debug", "[X86-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 						}
 					}
 				}
@@ -1430,14 +1453,14 @@ class Monitoring extends eqLogic {
 					if($this->getConfiguration('synology') == '1'){
 						if (isset($versionsyno)) {
 							parse_str($versionsyno, $versionsyno_DSM);
-							log::add('Monitoring', 'debug', '[DSM] Parse version :: OK');
+							log::add('Monitoring', 'debug', '[DSM] Parse version :: '  . $equipement . ' :: OK');
 
 							if (isset($versionsyno_DSM['productversion']) && isset($versionsyno_DSM['buildnumber']) && isset($versionsyno_DSM['smallfixnumber'])) {
-								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
+								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: ' . $equipement . ' :: DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
 								$versionsyno_TXT = 'DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber'];
 							}
 							else {
-								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: KO');
+								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: ' . $equipement . ' :: KO');
 								$versionsyno_TXT = '';
 							}
 
@@ -1453,6 +1476,9 @@ class Monitoring extends eqLogic {
 							$namedistrifin = str_ireplace('"', '', $namedistrifin);
 							if (isset($namedistri) && isset($namedistrifin) && isset($bitdistri) && isset($ARMv)) {
 								$namedistri = $namedistrifin.' '.$bitdistri.'bits ('.$ARMv.')';
+							}
+							else {
+								$namedistri = $namedistrifin;
 							}
 						}
 					}
@@ -1509,7 +1535,22 @@ class Monitoring extends eqLogic {
 					}
 
 					if (isset($uptime)) {
-						$datauptime = explode(' up ', $uptime);
+						$uptime_jours = sprintf('%d', floor(floatval($uptime) / 86400));
+						$uptime_hours = sprintf('%d', floor((floatval($uptime) % 86400) / 3600));
+						$uptime_minutes = sprintf('%02d', floor((floatval($uptime) % 3600) / 60));
+						$uptime_seconds = sprintf('%0.2f', fmod(floatval($uptime), 60));
+
+						$uptime_res = '';
+						if (intval($uptime_jours) > 0) {
+							$uptime_res .= $uptime_jours . ' jour(s), '; 
+						}
+						$uptime = $uptime_res . $uptime_hours . 'h ' . $uptime_minutes . 'min ' . $uptime_seconds . 's';
+
+						/* $dataen = array("weeks", "week", "days", "day", "hours", "hour");
+						$datafr = array("semaines", "semaine", "jours", "jour", "heures", "heure");
+						$uptime = str_replace($dataen, $datafr, $uptime); */
+
+						/* $datauptime = explode(' up ', $uptime);
 						if (isset($datauptime[0]) && isset($datauptime[1])) {
 							$datauptime = explode(', ', $datauptime[1]);
 							$datauptime = str_replace("days", "jour(s)", $datauptime);
@@ -1523,7 +1564,7 @@ class Monitoring extends eqLogic {
 									$uptime = $datauptime[0].' et '.$datauptime[1];
 								}
 							}
-						}
+						} */
 					}
 
 					if (isset($loadav)) {
@@ -1541,20 +1582,20 @@ class Monitoring extends eqLogic {
 							if($this->getConfiguration('synology') == '1'){
 								if (isset($memory[3])) {
 									$memorylibre = intval($memory[3]);
-									log::add('Monitoring', 'debug', '[Memory] Version Syno ('.$VersionID.') / Mémoire Libre :: '.$memorylibre);
+									log::add('Monitoring', 'debug', '[Memory] Version Syno (' . $equipement . ' :: ' . $VersionID . ') / Mémoire Libre :: '.$memorylibre);
 								}
 							}
 							else {
 								if (isset($memory[3])) {
 									$memorylibre = intval($memory[3]);
-									log::add('Monitoring', 'debug', '[Memory] Version Linux ('.$VersionID.') / Mémoire Libre :: '.$memorylibre);
+									log::add('Monitoring', 'debug', '[Memory] Version Linux (' . $equipement . ' :: ' . $VersionID . ') / Mémoire Libre :: '.$memorylibre);
 								}
 							}
 							
 							if (isset($memory[0]) && isset($memorylibre)) {
 								if (intval($memory[0]) != 0) {
 									$memorylibre_pourc = round(intval($memorylibre) / intval($memory[0]) * 100);
-									log::add('Monitoring', 'debug', '[Memory] Memorylibre% :: '.$memorylibre_pourc);
+									log::add('Monitoring', 'debug', '[Memory] Memorylibre% :: ' . $equipement . ' :: ' . $memorylibre_pourc);
 								}
 								else {
 									$memorylibre_pourc = 0;
@@ -1688,10 +1729,10 @@ class Monitoring extends eqLogic {
 							}
 							$ethernet0 = 'TX : '.$ReseauTX.' - RX : '.$ReseauRX;
 							$ethernet0_name = $ReseauRXTX[0];
-							log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau (RX / TX) :: '.$ethernet0_name.' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
+							log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau (RX / TX) :: ' . $equipement . ' :: ' .$ethernet0_name.' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
 						}
 						else {
-							log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau :: KO');
+							log::add('Monitoring', 'error', '[RESEAU] Nom de la carte réseau :: ' . $equipement . ' :: KO');
 						}
 					}
 
@@ -2017,34 +2058,37 @@ class Monitoring extends eqLogic {
 
 			try {
 				$sshconnection = new SSH2($ip,$port);
-				log::add('Monitoring', 'debug', '[SSH-New] Connexion SSH :: '. $equipement .' :: OK');
+				log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: OK');
 			} catch (Exception $e) {
-				log::add('Monitoring', 'error', '[SSH-New] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
+				log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			}
 			if ($cnx_ssh != 'KO') {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
 						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-						log::add('Monitoring', 'debug', '[SSH-Key] PublicKeyLoader :: '. $equipement .' :: OK');
+						log::add('Monitoring', 'debug', '[SSH-CMD] PublicKeyLoader :: '. $equipement .' :: OK');
 					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '[SSH-Key] PublicKeyLoader :: '. $equipement .' :: '. $e->getMessage());
+						log::add('Monitoring', 'error', '[SSH-CMD] PublicKeyLoader :: '. $equipement .' :: '. $e->getMessage());
 						$keyOrPwd = '';
 					}
 				}
 				else {
 					$keyOrPwd = $pass;
-					log::add('Monitoring', 'debug', '[SSH-Pwd] Authentification SSH par Mot de passe :: '. $equipement);
+					log::add('Monitoring', 'debug', '[SSH-CMD] Authentification SSH par Mot de passe :: '. $equipement);
 				}
 
 				try {
-					$sshconnection->login($user, $keyOrPwd);			
+					if (!$sshconnection->login($user, $keyOrPwd)) {
+						log::add('Monitoring', 'error', '[SSH-CMD] Login ERROR :: '. $equipement . ' :: ' . $user);
+						$cnx_ssh = 'KO';
+					}
 				} catch (Exception $e) {
-					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '. $equipement .' :: '. $e->getMessage());
+					log::add('Monitoring', 'error', '[SSH-CMD] Authentification SSH :: '. $equipement .' :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
 				}		
 				if ($cnx_ssh != 'KO') {
-					log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '. $equipement .' :: OK');
+					log::add('Monitoring', 'debug', '[SSH-CMD] Authentification SSH :: '. $equipement .' :: OK');
 					if($this->getConfiguration('synology') == '1'){
 						switch ($paramaction) {
 							case "reboot":
@@ -2052,9 +2096,9 @@ class Monitoring extends eqLogic {
 									$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null & /sbin/shutdown -r now >/dev/null";
 									$sshconnection->exec($rebootcmd);
 								} catch (Exception $e) {
-									log::add('Monitoring','debug','[SYNO-REBOOT] Exception [REBOOT] :: '. $equipement .' :: '. $e->getMessage());	
+									log::add('Monitoring', 'debug', '[SYNO-REBOOT] Exception [REBOOT] :: '. $equipement .' :: '. $e->getMessage());	
 								}
-								log::add('Monitoring','info','[SYNO-REBOOT] Lancement commande distante REBOOT :: '. $equipement);
+								log::add('Monitoring', 'info', '[SYNO-REBOOT] Lancement commande distante REBOOT :: '. $equipement);
 								break;
 							case "poweroff":
 								try {
@@ -2062,34 +2106,34 @@ class Monitoring extends eqLogic {
 									$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
 									$sshconnection->exec($poweroffcmd);
 								} catch (Exception $e) {
-									log::add('Monitoring','debug','[SYNO-OFF] Exception [POWEROFF] :: '. $equipement .' :: '. $e->getMessage());	
+									log::add('Monitoring', 'debug', '[SYNO-OFF] Exception [POWEROFF] :: '. $equipement .' :: '. $e->getMessage());
 								}
-								log::add('Monitoring','info','[SYNO-OFF] Lancement commande distante POWEROFF :: '. $equipement);
+								log::add('Monitoring', 'info', '[SYNO-OFF] Lancement commande distante POWEROFF :: '. $equipement);
 								break;
 						}
 					}
 					else {
 						switch ($paramaction) {
 							case "reboot":
-								log::add('Monitoring','info','[SSH-REBOOT] Lancement commande distante REBOOT :: '. $equipement);
+								log::add('Monitoring', 'info', '[SSH-REBOOT] Lancement commande distante REBOOT :: '. $equipement);
 								try {
 									// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 									$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
 									$sshconnection->exec($rebootcmd);
 								} catch (Exception $e) {
-									log::add('Monitoring','debug','[SSH-REBOOT] Exception [REBOOT] :: '. $equipement .' :: '. $e->getMessage());	
+									log::add('Monitoring', 'debug', '[SSH-REBOOT] Exception [REBOOT] :: '. $equipement .' :: '. $e->getMessage());	
 								}
 								break;
 							case "poweroff":
-								log::add('Monitoring','info','[SSH-OFF] Lancement commande distante POWEROFF :: '. $equipement);
+								log::add('Monitoring', 'info', '[SSH-OFF] Lancement commande distante POWEROFF :: '. $equipement);
 								try {
 									// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
 									$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
 									$sshconnection->exec($poweroffcmd);
 								} catch (Exception $e) {
-									log::add('Monitoring','debug','[SSH-OFF] Exception [POWEROFF] :: '. $equipement .' :: '. $e->getMessage());	
+									log::add('Monitoring', 'debug', '[SSH-OFF] Exception [POWEROFF] :: '. $equipement .' :: '. $e->getMessage());	
 								}
-								log::add('Monitoring','info','[SSH-OFF] Lancement commande distante POWEROFF :: '. $equipement);
+								log::add('Monitoring', 'info', '[SSH-OFF] Lancement commande distante POWEROFF :: '. $equipement);
 								break;
 						}
 					}
@@ -2102,12 +2146,12 @@ class Monitoring extends eqLogic {
 				switch ($paramaction) {
 					case "reboot":
 						$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null & /sbin/shutdown -r now >/dev/null";
-						log::add('Monitoring','info','[SYNO-REBOOT] Lancement commande locale REBOOT :: '. $equipement);
+						log::add('Monitoring', 'info', '[SYNO-REBOOT] Lancement commande locale REBOOT :: '. $equipement);
 						exec($rebootcmd);
 						break;
 					case "poweroff":
 						$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
-						log::add('Monitoring','info','[SYNO-OFF] Lancement commande locale POWEROFF :: '. $equipement);
+						log::add('Monitoring', 'info', '[SYNO-OFF] Lancement commande locale POWEROFF :: '. $equipement);
 						exec($poweroffcmd);
 						break;
 				}
@@ -2117,13 +2161,13 @@ class Monitoring extends eqLogic {
 					case "reboot":
 						// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 						$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
-						log::add('Monitoring','debug','[LINUX-REBOOT] Lancement commande locale REBOOT :: '. $equipement);
+						log::add('Monitoring', 'info', '[LINUX-REBOOT] Lancement commande locale REBOOT :: '. $equipement);
 						exec($rebootcmd);
 						break;
 					case "poweroff":
 						// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
 						$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
-						log::add('Monitoring','debug','[LINUX-OFF] Lancement commande locale POWEROFF :: '. $equipement);
+						log::add('Monitoring', 'info', '[LINUX-OFF] Lancement commande locale POWEROFF :: '. $equipement);
 						exec($poweroffcmd);
 						break;
 				}
