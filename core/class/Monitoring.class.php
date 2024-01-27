@@ -721,6 +721,7 @@ class Monitoring extends eqLogic {
 			$memorylibre_pourc = '';
 			$ethernet0 = '';
 			$ethernet0_name = '';
+			$equipement = $this->getName();
 
 			if ($this->getConfiguration('cartereseau') == 'netautre'){
 				$cartereseau = $this->getConfiguration('cartereseauautre');
@@ -749,7 +750,6 @@ class Monitoring extends eqLogic {
 				$pass = $this->getConfiguration('password');
 				$sshkey = $this->getConfiguration('ssh-key');
 				$sshpassphrase = $this->getConfiguration('ssh-passphrase');
-				$equipement = $this->getName();
 				$cnx_ssh = '';
 
 				try {
