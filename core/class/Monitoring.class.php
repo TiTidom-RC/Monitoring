@@ -784,7 +784,7 @@ class Monitoring extends eqLogic {
 						log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '. $equipement .' :: OK');
 
 						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d ' '";
+						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
 						// $uptime_cmd = "uptime";
 						$uptime_cmd = "uptime -p | awk -F'up ' '{ print $2 }'";
 						if($this->getConfiguration('synology') == '1') {
