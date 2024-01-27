@@ -1062,12 +1062,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1089,12 +1089,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1118,12 +1118,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[ARM-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1157,12 +1157,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[BSD-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[BSD-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
-										log::add("Monitoring","debug", "[BSD-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[BSD-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1186,7 +1186,7 @@ class Monitoring extends eqLogic {
 
 								if (isset($namedistri) && isset($VersionID)) {
 									$namedistri = "Medion/Linux " . $VersionID . " (" . $namedistri . ")";
-									log::add('Monitoring', 'debug', '[MEDION] Distribution :: ' . $namedistri);
+									log::add('Monitoring', 'debug', '[MEDION] Distribution :: ' . $equipement . " :: " . $namedistri);
 								}
 
 								$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
@@ -1203,12 +1203,12 @@ class Monitoring extends eqLogic {
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 									} 
 									else
 									{
 										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
-										log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température :: ".$cputemp0_cmd);
+										log::add("Monitoring","debug", "[MEDION-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 									}
 									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 								}
@@ -1265,11 +1265,11 @@ class Monitoring extends eqLogic {
 
 				if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
 					$perso_1 = exec($perso_1cmd);
-					log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: '.$perso_1);
+					log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: ' . $equipement . " :: " . $perso_1);
 				}
 				if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
 					$perso_2 = exec($perso_2cmd);
-					log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: '.$perso_2);
+					log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: ' . $equipement . " :: " . $perso_2);
 				}
 
 				if ($this->getConfiguration('synology') == '1'){
@@ -1284,11 +1284,11 @@ class Monitoring extends eqLogic {
 
 					if ($this->getconfiguration('syno_use_temp_path')) {
 						$cputemp0_cmd=$this->getconfiguration('syno_temp_path');
-						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);
+						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);
 					} 
 					else {
 						$cputemp0_cmd="timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null";
-						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: ".$cputemp0_cmd);
+						log::add("Monitoring","debug", "[SYNO-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 					}
 					$cputemp0 = exec($cputemp0_cmd);
 
@@ -1330,12 +1330,12 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							$cputemp0 = exec($cputemp0_cmd);
-							log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+							log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);	
 						} 
 						elseif (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
 								$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp";
 								$cputemp0 = exec($cputemp0_cmd);
-								log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: ".$cputemp0_cmd);
+								log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 						}
 					}
 				}
@@ -1363,7 +1363,7 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							$cputemp0 = exec($cputemp0_cmd);
-							log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+							log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);	
 						} 
 						else {
 							if (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
@@ -1376,7 +1376,7 @@ class Monitoring extends eqLogic {
 									$cputemp0 = exec($cputemp0_cmd);
 								}
 							}
-							log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température :: ".$cputemp0_cmd);
+							log::add("Monitoring","debug", "[AARCH64-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 						}
 					}
 				}
@@ -1417,7 +1417,7 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							$cputemp0 = exec($cputemp0_cmd);
-							log::add("Monitoring","debug", "[X86-TEMP] Commande Température (Custom) :: ".$cputemp0_cmd);	
+							log::add("Monitoring","debug", "[X86-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0_cmd);	
 						} 
 						else {
 							if (file_exists('/sys/devices/virtual/thermal/thermal_zone0/temp')) {
@@ -1442,7 +1442,7 @@ class Monitoring extends eqLogic {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors MB
 								$cputemp0 = exec($cputemp0_cmd);
 							}
-							log::add("Monitoring","debug", "[X86-TEMP] Commande Température :: ".$cputemp0_cmd);
+							log::add("Monitoring","debug", "[X86-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0_cmd);
 						}
 					}
 				}
@@ -1453,14 +1453,14 @@ class Monitoring extends eqLogic {
 					if($this->getConfiguration('synology') == '1'){
 						if (isset($versionsyno)) {
 							parse_str($versionsyno, $versionsyno_DSM);
-							log::add('Monitoring', 'debug', '[DSM] Parse version :: OK');
+							log::add('Monitoring', 'debug', '[DSM] Parse version :: '  . $equipement . ' :: OK');
 
 							if (isset($versionsyno_DSM['productversion']) && isset($versionsyno_DSM['buildnumber']) && isset($versionsyno_DSM['smallfixnumber'])) {
-								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
+								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: ' . $equipement . ' :: DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
 								$versionsyno_TXT = 'DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber'];
 							}
 							else {
-								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: KO');
+								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: ' . $equipement . ' :: KO');
 								$versionsyno_TXT = '';
 							}
 
