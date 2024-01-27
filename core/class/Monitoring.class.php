@@ -810,7 +810,8 @@ class Monitoring extends eqLogic {
 
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
-							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							log::add('Monitoring', 'info', '[SSH-ARMV] Armv :: '. $equipement .' :: ' . $ARMv);
+							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$ARMv = '';
 							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
@@ -818,7 +819,8 @@ class Monitoring extends eqLogic {
 						}
 						try {
 							$uptime = $sshconnection->exec($uptime_cmd);
-							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							log::add('Monitoring', 'info', '[SSH-UPTIME] Uptime :: '. $equipement .' :: ' . $uptime);
+							// log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$uptime = '';
 							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
