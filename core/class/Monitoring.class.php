@@ -710,7 +710,7 @@ class Monitoring extends eqLogic {
 
 	public function getInformations() {
 		try {
-			define('NET_SSH2_LOGGING', 2);
+			// define('NET_SSH2_LOGGING', 2);
 			$bitdistri_cmd = '';
 			$uname = "Inconnu";
 			$Mem = '';
