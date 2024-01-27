@@ -1240,7 +1240,7 @@ class Monitoring extends eqLogic {
 				}
 
 				// $uptime_cmd = "uptime";
-				$uptime_cmd = "uptime -p | awk -F'up ' '{ print $2 }'";
+				$uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
 
 				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 				$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
