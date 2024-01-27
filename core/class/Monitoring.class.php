@@ -1534,7 +1534,7 @@ class Monitoring extends eqLogic {
 						$uptime_jours = sprintf('%d', floor(floatval($uptime) / 86400));
 						$uptime_hours = sprintf('%02d', floor((floatval($uptime) % 86400) / 3600));
 						$uptime_minutes = sprintf('%02d', floor((floatval($uptime) % 3600) / 60));
-						$uptime_seconds = sprintf('%02d', floor(floatval($uptime) % 60));
+						$uptime_seconds = sprintf('%0.2f', floatval($uptime) % 60);
 
 						$uptime_res = '';
 						if (intval($uptime_jours) > 0) {
