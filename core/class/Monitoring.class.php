@@ -23,7 +23,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
 
+define('NET_SSH2_LOGGING', 2);
+
 class Monitoring extends eqLogic {
+
+	
+
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
@@ -710,7 +715,6 @@ class Monitoring extends eqLogic {
 
 	public function getInformations() {
 		try {
-			// define('NET_SSH2_LOGGING', 2);
 			$bitdistri_cmd = '';
 			$uname = "Inconnu";
 			$Mem = '';
@@ -786,7 +790,9 @@ class Monitoring extends eqLogic {
 						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
 						// $uptime_cmd = "uptime";
-						$uptime_cmd = "uptime -p | awk -F'up ' '{ print $2 }'";
+						// $uptime_cmd = "uptime -p | awk -F'up ' '{ print $2 }'";
+						$uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+
 						if($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
 								$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
@@ -810,12 +816,12 @@ class Monitoring extends eqLogic {
 
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
-							log::add('Monitoring', 'info', '[SSH-ARMV] Armv :: '. $equipement .' :: ' . $ARMv);
+							log::add('Monitoring', 'info', '[SSH-ARMV] ARMv :: '. $equipement .' :: ' . $ARMv);
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$ARMv = '';
-							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
-							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception :: '. $equipement .' :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
+							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception :: '. $equipement .' :: ' . $e->getMessage());
 						}
 						try {
 							$uptime = $sshconnection->exec($uptime_cmd);
@@ -1525,9 +1531,20 @@ class Monitoring extends eqLogic {
 					}
 
 					if (isset($uptime)) {
-						$dataen = array("weeks", "week", "days", "day", "hours", "hour");
+						$uptime_jours = sprintf('%d', floor(intval($uptime) % 86400));
+						$uptime_hours = sprintf('%02d', floor((intval($uptime) % 86400) / 3600));
+						$uptime_minutes = sprintf('%02d', floor((intval($uptime) % 3600) / 60));
+						$uptime_seconds = sprintf('%02d', floor(intval($uptime) % 60));
+
+						$uptime_res = '';
+						if (intval($uptime_jours) > 0) {
+							$uptime_res .= $uptime_jours . ' jour(s), '; 
+						}
+						$uptime = $uptime_res . $uptime_hours . 'h ' . $uptime_minutes . 'm ' . $uptime_seconds; 
+
+						/* $dataen = array("weeks", "week", "days", "day", "hours", "hour");
 						$datafr = array("semaines", "semaine", "jours", "jour", "heures", "heure");
-						$uptime = str_replace($dataen, $datafr, $uptime);
+						$uptime = str_replace($dataen, $datafr, $uptime); */
 
 						/* $datauptime = explode(' up ', $uptime);
 						if (isset($datauptime[0]) && isset($datauptime[1])) {
