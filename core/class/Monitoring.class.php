@@ -773,6 +773,7 @@ class Monitoring extends eqLogic {
 					try {
 						if (!$sshconnection->login($user, $keyOrPwd)) {
 							log::add('Monitoring', 'error', '[SSH-Login] Login ERROR :: '. $equipement . ' :: ' . $user);
+							$cnx_ssh = 'KO';
 						}
 					} catch (Exception $e) {
 						log::add('Monitoring', 'error', '[SSH-Login] Authentification SSH :: '. $equipement .' :: '. $e->getMessage());
@@ -782,9 +783,10 @@ class Monitoring extends eqLogic {
 						$cnx_ssh = 'OK';
 						log::add('Monitoring', 'debug', '[SSH-Login] Authentification SSH :: '. $equipement .' :: OK');
 
-						$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-						$uptime_cmd = "uptime";
-
+						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d ' '";
+						// $uptime_cmd = "uptime";
+						$uptime_cmd = "uptime -p | awk -F'up ' '{ print $2 }'";
 						if($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
 								$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
@@ -795,7 +797,8 @@ class Monitoring extends eqLogic {
 							$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 						}
 						else {
-							$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+							// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+							$namedistri_cmd ="awk -F'=' '/PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 						}
@@ -806,9 +809,10 @@ class Monitoring extends eqLogic {
 						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
 
 						try {
-							$ARMv = trim($sshconnection->exec($ARMv_cmd));
+							$ARMv = $sshconnection->exec($ARMv_cmd);
 							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
+							$ARMv = '';
 							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 							log::add('Monitoring', 'debug', '[SSH-CMD] Armv Exception :: '. $equipement .' :: ' . $e->getMessage());
 						}
@@ -816,6 +820,7 @@ class Monitoring extends eqLogic {
 							$uptime = $sshconnection->exec($uptime_cmd);
 							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
+							$uptime = '';
 							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception :: '. $equipement .' :: ' . $e->getMessage());
 						}
@@ -1212,7 +1217,8 @@ class Monitoring extends eqLogic {
 				}
 				else {
 					$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-					$namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+					// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
+					$namedistri_cmd ="awk -F'=' '/PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 					
 					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
@@ -1222,7 +1228,9 @@ class Monitoring extends eqLogic {
 					$bitdistri = exec($bitdistri_cmd);
 				}
 
-				$uptime_cmd = "uptime";
+				// $uptime_cmd = "uptime";
+				$uptime_cmd = "uptime -p | awk -F'up ' '{ print $2 }'";
+
 				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 				$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 				$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
@@ -1454,6 +1462,9 @@ class Monitoring extends eqLogic {
 							if (isset($namedistri) && isset($namedistrifin) && isset($bitdistri) && isset($ARMv)) {
 								$namedistri = $namedistrifin.' '.$bitdistri.'bits ('.$ARMv.')';
 							}
+							else {
+								$namedistri = $namedistrifin;
+							}
 						}
 					}
 					
@@ -1509,7 +1520,11 @@ class Monitoring extends eqLogic {
 					}
 
 					if (isset($uptime)) {
-						$datauptime = explode(' up ', $uptime);
+						$dataen = array("week,", "weeks,", "day,", "days,", "hour,", "hours,");
+						$datafr = array("Semaine ", "Semaines ", "Jour ", "Jours ", "Heure ", "Heures ");
+						$uptime = str_replace($dataen, $datafr, $uptime);
+
+						/* $datauptime = explode(' up ', $uptime);
 						if (isset($datauptime[0]) && isset($datauptime[1])) {
 							$datauptime = explode(', ', $datauptime[1]);
 							$datauptime = str_replace("days", "jour(s)", $datauptime);
@@ -1523,7 +1538,7 @@ class Monitoring extends eqLogic {
 									$uptime = $datauptime[0].' et '.$datauptime[1];
 								}
 							}
-						}
+						} */
 					}
 
 					if (isset($loadav)) {
