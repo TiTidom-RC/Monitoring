@@ -924,6 +924,8 @@ class Monitoring extends eqLogic {
 							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
+							log::add('Monitoring', 'info', '[SSH-CPU] NbCpu :: '. $equipement .' :: ' . $nbcpu);
+
 							$uname = '.';
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
@@ -969,6 +971,7 @@ class Monitoring extends eqLogic {
 								$nbcpu = $sshconnection->exec($nbcpuVMbis_cmd);
 							}
 							$nbcpu = preg_replace("/[^0-9]/","",$nbcpu);
+							log::add('Monitoring', 'info', '[SSH-CPU] NbCpu :: '. $equipement .' :: ' . $nbcpu);
 
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
