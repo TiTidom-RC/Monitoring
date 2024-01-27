@@ -1520,8 +1520,8 @@ class Monitoring extends eqLogic {
 					}
 
 					if (isset($uptime)) {
-						$dataen = array("week,", "weeks,", "day,", "days,", "hour,", "hours,");
-						$datafr = array("semaine ", "semaines ", "jour ", "jours ", "heure ", "heures ");
+						$dataen = array("weeks", "week", "days", "day", "hours", "hour");
+						$datafr = array("semaines", "semaine", "jours", "jour", "heures", "heure");
 						$uptime = str_replace($dataen, $datafr, $uptime);
 
 						/* $datauptime = explode(' up ', $uptime);
