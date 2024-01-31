@@ -831,7 +831,7 @@ class Monitoring extends eqLogic {
 						}
 						try {
 							$uptime = $sshconnection->exec($uptime_cmd);
-							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime :: '. $equipement .' :: ' . $uptime);
+							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime :: '. $equipement .' :: >' . $uptime . '<');
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$uptime = '';
