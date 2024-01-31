@@ -827,7 +827,7 @@ class Monitoring extends eqLogic {
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$ARMv = '';
-							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception :: '. $equipement .' :: ' . $e->getMessage());
+							log::add('Monitoring', 'error', '[SSH-CMD] ARMv Exception :: '. $equipement .' :: ' . $e->getMessage());
 							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						}
 						try {
@@ -836,7 +836,7 @@ class Monitoring extends eqLogic {
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$uptime = '';
-							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception :: '. $equipement .' :: ' . $e->getMessage());
+							log::add('Monitoring', 'error', '[SSH-CMD] Uptime Exception :: '. $equipement .' :: ' . $e->getMessage());
 							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						}
 						
@@ -928,11 +928,11 @@ class Monitoring extends eqLogic {
 							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0armv6l_cmd=$this->getconfiguration('linux_temp_cmd');
-									log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0armv6l_cmd);	
+									log::add("Monitoring", "info", "[ARM6L-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0armv6l_cmd);	
 								} 
 								else {
 									$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-									log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0armv6l_cmd);
+									log::add("Monitoring", "info", "[ARM6L-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0armv6l_cmd);
 								}
 								$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
 							}
@@ -1484,7 +1484,7 @@ class Monitoring extends eqLogic {
 								$versionsyno_TXT = 'DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'];
 							}
 							else {
-								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: ' . $equipement . ' :: KO');
+								log::add('Monitoring', 'error', '[DSM/SRM] Version :: ' . $equipement . ' :: KO');
 								$versionsyno_TXT = '';
 							}
 
