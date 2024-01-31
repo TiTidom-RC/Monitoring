@@ -2067,7 +2067,7 @@ class Monitoring extends eqLogic {
 			}
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[GetInfos] Exception (Line ' . $e->getLine() . ') :: '. $e->getMessage());
-			log::add('Monitoring', 'error', '[GetInfos] Exception Trace :: '. json_encode($e->getTrace()));
+			log::add('Monitoring', 'debug', '[GetInfos] Exception Trace :: '. json_encode($e->getTrace()));
 		}
 	}
 
