@@ -822,7 +822,7 @@ class Monitoring extends eqLogic {
 
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
-							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv :: '. $equipement .' :: ' . $ARMv);
+							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv :: '. $equipement .' :: >' . $ARMv . '<');
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$ARMv = '';
