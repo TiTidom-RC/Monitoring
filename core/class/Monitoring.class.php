@@ -48,7 +48,7 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0') {
-					log::add('Monitoring', 'debug', '[PULL] Lancement (15min) :: '. $Monitoring->getName());
+					log::add('Monitoring', 'info', '[PULL] Lancement (15min) :: '. $Monitoring->getName());
 					$Monitoring->getInformations();
 					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
 					$mc->remove();
@@ -67,7 +67,7 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('maitreesclave') == 'local') {
-					log::add('Monitoring', 'debug', '[PULLLOCAL] Lancement (1min) :: '. $Monitoring->getName());
+					log::add('Monitoring', 'info', '[PULLLOCAL] Lancement (1min) :: '. $Monitoring->getName());
 					$Monitoring->getInformations();
 					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
 					$mc->remove();
@@ -827,7 +827,7 @@ class Monitoring extends eqLogic {
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$ARMv = '';
-							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception :: '. $equipement .' :: ' . $e->getMessage());
+							log::add('Monitoring', 'error', '[SSH-CMD] ARMv Exception :: '. $equipement .' :: ' . $e->getMessage());
 							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						}
 						try {
@@ -836,7 +836,7 @@ class Monitoring extends eqLogic {
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$uptime = '';
-							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception :: '. $equipement .' :: ' . $e->getMessage());
+							log::add('Monitoring', 'error', '[SSH-CMD] Uptime Exception :: '. $equipement .' :: ' . $e->getMessage());
 							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Exception Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						}
 						
@@ -928,11 +928,11 @@ class Monitoring extends eqLogic {
 							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0armv6l_cmd=$this->getconfiguration('linux_temp_cmd');
-									log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0armv6l_cmd);	
+									log::add("Monitoring", "info", "[ARM6L-TEMP] Commande Température (Custom) :: " . $equipement . " :: " . $cputemp0armv6l_cmd);	
 								} 
 								else {
 									$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-									log::add("Monitoring","debug", "[ARM6L-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0armv6l_cmd);
+									log::add("Monitoring", "info", "[ARM6L-TEMP] Commande Température :: " . $equipement . " :: " . $cputemp0armv6l_cmd);
 								}
 								$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
 							}
@@ -1484,7 +1484,7 @@ class Monitoring extends eqLogic {
 								$versionsyno_TXT = 'DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'];
 							}
 							else {
-								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: ' . $equipement . ' :: KO');
+								log::add('Monitoring', 'error', '[DSM/SRM] Version :: ' . $equipement . ' :: KO');
 								$versionsyno_TXT = '';
 							}
 
@@ -2067,7 +2067,7 @@ class Monitoring extends eqLogic {
 			}
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[GetInfos] Exception (Line ' . $e->getLine() . ') :: '. $e->getMessage());
-			log::add('Monitoring', 'error', '[GetInfos] Exception Trace :: '. json_encode($e->getTrace()));
+			log::add('Monitoring', 'debug', '[GetInfos] Exception Trace :: '. json_encode($e->getTrace()));
 		}
 	}
 
