@@ -789,11 +789,11 @@ class Monitoring extends eqLogic {
 
 						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 						// $ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
-						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk '{ sub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 
 						// $uptime_cmd = "uptime";
 						// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
-						$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+						$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk '{ sub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 
 						if($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
