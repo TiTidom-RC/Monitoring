@@ -193,7 +193,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé) || Date valeur : #hddtotalusb_value# || Date collecte : #hddtotalusb_collect#" class="fas fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
+					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé) || Date valeur : #hddtotalusb_value# || Date collecte : #hddtotalusb_collect#" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
 				}
 				if ('#hddpourcusedusb#' === '') {
 					$('#hddpourcusedusb#id#').append('<span></span>');
@@ -208,6 +208,25 @@
 				}
 			}
 		</script>
+		<div id="synovolesata#id#"></div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#synovolumeesata_display#' == 'OK') {
+					$('#synovolesata#id#').append('<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Espace disque Volume eSATA Syno (% utilisé) || Date valeur : #hddtotalesata_value# || Date collecte : #hddtotalesata_collect#" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>');
+				}
+				if ('#hddpourcusedesata#' === '') {
+					$('#hddpourcusedesata#id#').append('<span></span>');
+				} else if (parseInt('#hddpourcusedesata#') < parseInt('#hddpourcusedesata_colorlow#')) {
+					$('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span style="color: var(--al-success-color) !important;">#hddpourcusedesata#%</span>)');
+				} else if ((parseInt('#hddpourcusedesata#') >= parseInt('#hddpourcusedesata_colorlow#')) && (parseInt('#hddpourcusedesata#') <= parseInt('#hddpourcusedesata_colorhigh#'))) {
+					$('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span style="color: var(--al-warning-color) !important;">#hddpourcusedesata#%</span>)');
+				} else if ((parseInt('#hddpourcusedesata#') > parseInt('#hddpourcusedesata_colorhigh#')) && '#hddpourcusedesata_colorhigh#' !== '') {
+					$('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span style="color: var(--al-danger-color) !important;">#hddpourcusedesata#%</span>)');
+				} else {
+					$('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span>#hddpourcusedesata#%</span>)');
+				}
+			}
+		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #cpu_display#;">
 			<span
 				title="Nombre CPU, fréquence (température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#"
@@ -216,7 +235,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#cpu_temp#' !== '') {
+				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' == 'OK') {
 					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
 						$('#cpu#id#').append('<span>#cpu# </span>');
 						$('#cpu_temp#id#').append('(<span style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)');
