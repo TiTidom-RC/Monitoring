@@ -803,14 +803,14 @@ class Monitoring extends eqLogic {
 								$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 							}
 							// $VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
-							$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }'";
+							$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 						}
 						else {
 							// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
 							// $namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
-							$namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }'";
+							$namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 
-							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }'";
+							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 						}
 
@@ -818,7 +818,7 @@ class Monitoring extends eqLogic {
 						$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 						$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
 						// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
-						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk '{ gsub(/:/, \"\"); print }'";
+						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
 
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
@@ -877,7 +877,7 @@ class Monitoring extends eqLogic {
 
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
-							$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+							$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 							$versionsyno = $sshconnection->exec($versionsyno_cmd);
 
 							if ($this->getconfiguration('syno_use_temp_path')) {
@@ -1237,7 +1237,7 @@ class Monitoring extends eqLogic {
 					}
 					$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 					// $VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
-					$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }'";
+					$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | -v ORS=\"\" awk '{ gsub(/\"/, \"\"); print }'";
 				}
 				else {
 					// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
@@ -1245,10 +1245,10 @@ class Monitoring extends eqLogic {
 					
 					// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
 					// $namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
-					$namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }'";
+					$namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 					
 					// $VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
-					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }'";
+					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 					
 					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 					$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
@@ -1266,7 +1266,7 @@ class Monitoring extends eqLogic {
 				$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
 				
 				// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
-				$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
+				$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
 				
 				$uptime = exec($uptime_cmd);
 				$namedistri = exec($namedistri_cmd);
@@ -1295,7 +1295,7 @@ class Monitoring extends eqLogic {
 					$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
 					
 					// $versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
-					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 
 					$nbcpu = exec($nbcpuARM_cmd);
 					$cpufreq0 = exec($cpufreq0ARM_cmd);
