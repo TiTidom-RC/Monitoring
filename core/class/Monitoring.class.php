@@ -788,9 +788,12 @@ class Monitoring extends eqLogic {
 						log::add('Monitoring', 'debug', '[SSH-CMD] Authentification SSH :: '. $equipement .' :: OK');
 
 						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
+						// $ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
+						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+
 						// $uptime_cmd = "uptime";
-						$uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+						// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+						$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 
 						if($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
@@ -799,23 +802,27 @@ class Monitoring extends eqLogic {
 							else {
 								$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 							}
-							$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
+							// $VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
+							$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 						}
 						else {
 							// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
-							$namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
-							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
+							// $namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
+							$namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+
+							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 						}
 
 						$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 						$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 						$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
-						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
+						// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
+						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
 
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
-							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv :: '. $equipement .' :: ' . $ARMv);
+							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv :: '. $equipement .' :: >' . $ARMv . '<');
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$ARMv = '';
@@ -824,7 +831,7 @@ class Monitoring extends eqLogic {
 						}
 						try {
 							$uptime = $sshconnection->exec($uptime_cmd);
-							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime :: '. $equipement .' :: ' . $uptime);
+							log::add('Monitoring', 'debug', '[SSH-CMD] Uptime :: '. $equipement .' :: >' . $uptime . '<');
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Uptime Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
 							$uptime = '';
@@ -854,22 +861,23 @@ class Monitoring extends eqLogic {
 						}
 						
 						if($this->getConfiguration('synology') == '1') {
-							$platform_cmd = "get_key_value /etc/synoinfo.conf unique | cut -d'_' -f2";
-							$synoplatform = $sshconnection->exec($platform_cmd);
+							// $platform_cmd = "get_key_value /etc/synoinfo.conf unique | cut -d'_' -f2";
+							// $synoplatform = $sshconnection->exec($platform_cmd);
 
-							$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core";
+							$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 
 							log::add('Monitoring', 'debug', '[SSH-CMD] NbCPU :: '. $equipement .' :: ' . $nbcpu);
 
-							$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock";
+							$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
 							$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
 							
 							$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $sshconnection->exec($hdd_cmd);
 
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
-							$versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+							$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 							$versionsyno = $sshconnection->exec($versionsyno_cmd);
 
 							if ($this->getconfiguration('syno_use_temp_path')) {
@@ -1228,13 +1236,19 @@ class Monitoring extends eqLogic {
 						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 					}
 					$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
-					$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
+					// $VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
+					$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | -v ORS=\"\" awk '{ gsub(/\"/, \"\"); print }'";
 				}
 				else {
-					$ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+					// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+					$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+					
 					// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
-					$namedistri_cmd ="awk -F'=' '/PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
-					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
+					// $namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
+					$namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+					
+					// $VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
+					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 					
 					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 					$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
@@ -1244,13 +1258,16 @@ class Monitoring extends eqLogic {
 				}
 
 				// $uptime_cmd = "uptime";
-				$uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+				// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+				$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 
 				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 				$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 				$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
-				$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
-
+				
+				// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
+				$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
+				
 				$uptime = exec($uptime_cmd);
 				$namedistri = exec($namedistri_cmd);
 				$VersionID = trim(exec($VersionID_cmd));
@@ -1276,7 +1293,9 @@ class Monitoring extends eqLogic {
 					$uname = '.';
 					$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
 					$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
-					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
+					
+					// $versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
+					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 
 					$nbcpu = exec($nbcpuARM_cmd);
 					$cpufreq0 = exec($cpufreq0ARM_cmd);
@@ -1458,6 +1477,10 @@ class Monitoring extends eqLogic {
 							if (isset($versionsyno_DSM['productversion']) && isset($versionsyno_DSM['buildnumber']) && isset($versionsyno_DSM['smallfixnumber'])) {
 								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: ' . $equipement . ' :: DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber']);
 								$versionsyno_TXT = 'DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'].' Update '.$versionsyno_DSM['smallfixnumber'];
+							} 
+							elseif (isset($versionsyno_DSM['productversion']) && isset($versionsyno_DSM['buildnumber'])) {
+								log::add('Monitoring', 'debug', '[DSM/SRM] Version (Version-Build) :: ' . $equipement . ' :: DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber']);
+								$versionsyno_TXT = 'DSM '.$versionsyno_DSM['productversion'].'-'.$versionsyno_DSM['buildnumber'];
 							}
 							else {
 								log::add('Monitoring', 'debug', '[DSM/SRM] Version :: ' . $equipement . ' :: KO');
@@ -1471,7 +1494,7 @@ class Monitoring extends eqLogic {
 						}
 					}
 					else {
-						if (isset($namedistri)) {
+						/* if (isset($namedistri)) {
 							$namedistrifin = str_ireplace('PRETTY_NAME="', '', $namedistri);
 							$namedistrifin = str_ireplace('"', '', $namedistrifin);
 							if (isset($namedistri) && isset($namedistrifin) && isset($bitdistri) && isset($ARMv)) {
@@ -1480,6 +1503,9 @@ class Monitoring extends eqLogic {
 							else {
 								$namedistri = $namedistrifin;
 							}
+						} */
+						if (isset($namedistri) && isset($bitdistri) && isset($ARMv)) {
+							$namedistri = $namedistri . ' ' . $bitdistri . 'bits (' . $ARMv . ')';
 						}
 					}
 					
@@ -1732,7 +1758,7 @@ class Monitoring extends eqLogic {
 							log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau (RX / TX) :: ' . $equipement . ' :: ' .$ethernet0_name.' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
 						}
 						else {
-							log::add('Monitoring', 'error', '[RESEAU] Nom de la carte réseau :: ' . $equipement . ' :: KO');
+							log::add('Monitoring', 'error', '[RESEAU] Carte Réseau NON détectée :: ' . $equipement . ' :: KO');
 						}
 					}
 
