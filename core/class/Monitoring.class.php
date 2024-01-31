@@ -877,7 +877,7 @@ class Monitoring extends eqLogic {
 
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
-							$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+							$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 							$versionsyno = $sshconnection->exec($versionsyno_cmd);
 
 							if ($this->getconfiguration('syno_use_temp_path')) {
@@ -1295,7 +1295,7 @@ class Monitoring extends eqLogic {
 					$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
 					
 					// $versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
-					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 
 					$nbcpu = exec($nbcpuARM_cmd);
 					$cpufreq0 = exec($cpufreq0ARM_cmd);
