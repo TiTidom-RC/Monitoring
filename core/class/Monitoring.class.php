@@ -823,6 +823,9 @@ class Monitoring extends eqLogic {
 
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
+							if (!empty($ARMv)) {
+								$ARMv = trim($ARMv);
+							}
 							log::add('Monitoring', 'debug', '[SSH-CMD] ARMv :: '. $equipement .' :: >' . $ARMv . '<');
 							// log::add('Monitoring', 'debug', '[SSH-CMD] Armv Log :: '. $equipement .' :: ' . $sshconnection->getLog());
 						} catch (Exception $e) {
@@ -906,7 +909,7 @@ class Monitoring extends eqLogic {
 								$hddesata = $sshconnection->exec($hddesatacmd);
 							}
 						}	
-						elseif ($ARMv == 'armv6l') {
+						elseif (trim($ARMv) == 'armv6l') {
 							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
@@ -1142,7 +1145,10 @@ class Monitoring extends eqLogic {
 								$namedistri = $sshconnection->exec($namedistri_cmd);
 
 								$ARMv_cmd = "sysctl hw.machine | awk '{ print $2}'";
-								$ARMv = trim($sshconnection->exec($ARMv_cmd));
+								$ARMv = $sshconnection->exec($ARMv_cmd);
+								if (!empty($ARMv)) {
+									$ARMv = trim($ARMv);
+								}
 
 								$loadavg_cmd = "uptime | awk '{print $8,$9,$10}'";
 								$loadav = $sshconnection->exec($loadavg_cmd);
@@ -1255,6 +1261,9 @@ class Monitoring extends eqLogic {
 					$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 					
 					$ARMv = exec($ARMv_cmd);
+					if (!empty($ARMv)) {
+						$ARMv = trim($ARMv);
+					}
 					$bitdistri = exec($bitdistri_cmd);
 				}
 
