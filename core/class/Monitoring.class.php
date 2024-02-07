@@ -909,7 +909,7 @@ class Monitoring extends eqLogic {
 								$hddesata = $sshconnection->exec($hddesatacmd);
 							}
 						}	
-						elseif (trim($ARMv) == 'armv6l') {
+						elseif ($ARMv == 'armv6l') {
 							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
 							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
