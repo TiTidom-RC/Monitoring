@@ -51,7 +51,7 @@
 			<span id="uptime#id#"></span>
 		</div>
 		<script>
-			item_uptime = document.querySelector('#uptime#id#');
+			const item_uptime = document.querySelector('#uptime#id#');
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				item_uptime.innerHTML = '<span>#uptime#</span>';
 				// $('#uptime#id#').append('<span>#uptime#</span>');
