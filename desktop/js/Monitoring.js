@@ -15,15 +15,7 @@
  */
 
 /* Permet la réorganisation des commandes dans l'équipement */
-const item_table_cmd = document.querySelector('#table_cmd');
-item_table_cmd.sortable({
-	axis: "y",
-	cursor: "move",
-	items: ".cmd",
-	placeholder: "ui-state-highlight",
-	tolerance: "intersect",
-	forcePlaceholderSize: true
-});
+
 /* $("#table_cmd").sortable({
 	axis: "y",
 	cursor: "move",
