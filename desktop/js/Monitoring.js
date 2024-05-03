@@ -92,9 +92,15 @@ function addCmdToTable(_cmd) {
 	tr += '</td>';
 	
 	tr += '</tr>';
-	$('#table_cmd tbody').append(tr);
-	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
-	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
+
+	document.querySelector('#table_objectSummary tbody').insertAdjacentHTML('beforeend', tr);
+	// $('#table_cmd tbody').append(tr);
+
+	document.querySelectorAll('#table_cmd tbody tr').last().setJeeValues(_cmd, '.cmdAttr')
+	// $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
+
+	jeedom.cmd.changeType(document.querySelectorAll('#table_cmd tbody tr').last(), init(_cmd.subType));
+	// jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
 /* $('.pluginAction[data-action=openLocation]').on('click', function () {
