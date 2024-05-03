@@ -115,12 +115,9 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(plu
 			myElement = myElement.parentElement;
 		}
 		window.open(myElement.getAttribute('data-location'), "_blank", null);
+		return;
 	}, false);
 });
-/* $('.pluginAction[data-action=openLocation]').on('click', function () {
-	window.open($(this).attr("data-location"), "_blank", null);
-}); */
-
 
 /*
 $(".eqLogicAttr[data-l2key='synology']").on('change', function () {
