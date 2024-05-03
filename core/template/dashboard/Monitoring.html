@@ -189,18 +189,25 @@
 		<div id="synovol2#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				const item_synovol2 = document.querySelector('#synovol2#id#');
 				if ('#synovolume2_display#' == 'OK') {
+					item_synovol2.innerHTML = '<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>';
 					// $('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>');
 				}
 				if ('#hddpourcusedv2#' === '') {
+					item_synovol2.innerHTML = '<span></span>';
 					// $('#hddpourcusedv2#id#').append('<span></span>');
 				} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2_colorlow#')) {
+					item_synovol2.innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedv2#%</span>)';
 					// $('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedv2#%</span>)');
 				} else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2_colorlow#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2_colorhigh#'))) {
+					item_synovol2.innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#%</span>)';
 					// $('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#%</span>)');
 				} else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2_colorhigh#')) && '#hddpourcusedv2_colorhigh#' !== '') {
+					item_synovol2.innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#%</span>)';
 					// $('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#%</span>)');
 				} else {
+					item_synovol2.innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor">#hddpourcusedv2#%</span>)';
 					// $('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor">#hddpourcusedv2#%</span>)');
 				}
 			}
@@ -208,18 +215,25 @@
 		<div id="synovolusb#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				const item_synovolusb = document.querySelector('#synovolusb#id#');
 				if ('#synovolumeusb_display#' == 'OK') {
+					item_synovolusb.innerHTML = '<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>';
 					// $('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
 				}
 				if ('#hddpourcusedusb#' === '') {
+					item_synovolusb.innerHTML = '<span></span>';
 					// $('#hddpourcusedusb#id#').append('<span></span>');
 				} else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusb_colorlow#')) {
+					item_synovolusb.innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)';
 					// $('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)');
 				} else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusb_colorlow#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusb_colorhigh#'))) {
+					item_synovolusb.innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)';
 					// $('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)');
 				} else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusb_colorhigh#')) && '#hddpourcusedusb_colorhigh#' !== '') {
+					item_synovolusb.innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)';
 					// $('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)');
 				} else {
+					item_synovolusb.innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor">#hddpourcusedusb#%</span>)';
 					// $('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor">#hddpourcusedusb#%</span>)');
 				}
 			}
@@ -227,18 +241,25 @@
 		<div id="synovolesata#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				const item_synovolsata = document.querySelector('#synovolesata#id#');
 				if ('#synovolumeesata_display#' == 'OK') {
+					item_synovolsata.innerHTML = '<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>';
 					// $('#synovolesata#id#').append('<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>');
 				}
 				if ('#hddpourcusedesata#' === '') {
+					item_synovolsata.innerHTML = '<span></span>';
 					// $('#hddpourcusedesata#id#').append('<span></span>');
 				} else if (parseInt('#hddpourcusedesata#') < parseInt('#hddpourcusedesata_colorlow#')) {
+					item_synovolsata.innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedesata#%</span>)';
 					// $('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedesata#%</span>)');
 				} else if ((parseInt('#hddpourcusedesata#') >= parseInt('#hddpourcusedesata_colorlow#')) && (parseInt('#hddpourcusedesata#') <= parseInt('#hddpourcusedesata_colorhigh#'))) {
+					item_synovolsata.innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedesata#%</span>)';
 					// $('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedesata#%</span>)');
 				} else if ((parseInt('#hddpourcusedesata#') > parseInt('#hddpourcusedesata_colorhigh#')) && '#hddpourcusedesata_colorhigh#' !== '') {
+					item_synovolsata.innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedesata#%</span>)';
 					// $('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedesata#%</span>)');
 				} else {
+					item_synovolsata.innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor">#hddpourcusedesata#%</span>)';
 					// $('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor">#hddpourcusedesata#%</span>)');
 				}
 			}
@@ -249,21 +270,32 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				const item_cpu = document.querySelector('#cpu#id#');
+				const item_cputemp = document.querySelector('#cpu_temp#id#');
 				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' == 'OK') {
 					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
+						item_cpu.innerHTML = '<span>#cpu# </span>';
+						item_cputemp.innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)';
 						// $('#cpu#id#').append('<span>#cpu# </span>');
 						// $('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)');
 					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temp_colorlow#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temp_colorhigh#'))) {
+						item_cpu.innerHTML = '<span>#cpu# </span>';
+						item_cputemp.innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#cpu_temp#°C</span>)';
 						// $('#cpu#id#').append('<span>#cpu# </span>');
 						// $('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#cpu_temp#°C</span>)');
 					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temp_colorhigh#')) && '#cpu_temp_colorhigh#' !== '') {
+						item_cpu.innerHTML = '<span>#cpu# </span>';
+						item_cputemp.innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#cpu_temp#°C</span>)';
 						// $('#cpu#id#').append('<span>#cpu# </span>');
 						// $('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#cpu_temp#°C</span>)');
 					} else {
+						item_cpu.innerHTML = '<span>#cpu# </span>';
+						item_cputemp.innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor">#cpu_temp#°C</span>)';
 						// $('#cpu#id#').append('<span>#cpu# </span>');
 						// $('#cpu_temp#id#').append('(<span data-cmd_id="#cpu_tempid#" class="history cursor">#cpu_temp#°C</span>)');
 					}
 				} else {
+					item_cpu.innerHTML = '<span>#cpu#</span>';
 					// $('#cpu#id#').append('<span>#cpu#</span>');
 				}
 			}
@@ -274,17 +306,23 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				const item_perso1 = document.querySelector('#uniteperso1#id#');
 				if ('#perso1#' !== '') {
 					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
+						item_perso1.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 						// $('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
 					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
+						item_perso1.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 						// $('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
 					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
+						item_perso1.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 						// $('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
 					} else {
+						item_perso1.innerHTML = '<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>';
 						// $('#uniteperso1#id#').append('<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>');
 					}
 				} else {
+					item_perso1.innerHTML = '<span></span>';
 					// $('#uniteperso1#id#').append('<span></span>');
 				}
 			}
@@ -295,17 +333,23 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				const item_perso2 = document.querySelector('#uniteperso2#id#');
 				if ('#perso2#' !== '') {
 					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
+						item_perso2.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 						// $('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
 					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
+						item_perso2.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 						// $('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
 					} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
+						item_perso2.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 						// $('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
 					} else {
+						item_perso2.innerHTML = '<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>';
 						// $('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>');
 					}
 				} else {
+					item_perso2.innerHTML = '<span></span>';
 					// $('#uniteperso2#id#').append('<span></span>');
 				}
 			}
