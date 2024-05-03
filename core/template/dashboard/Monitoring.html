@@ -51,7 +51,7 @@
 			<span id="uptime#id#"></span>
 		</div>
 		<script>
-			const item_uptime = document.querySelector('#uptime#id#');
+			const item_uptime = document.document.querySelector('#uptime#id#');
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				item_uptime.innerHTML = '<span>#uptime#</span>';
 				// $('#uptime#id#').append('<span>#uptime#</span>');
@@ -63,7 +63,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_loadavg1mn = document.querySelector('#loadavg1mn#');
+				const item_loadavg1mn = document.document.querySelector('#loadavg1mn#id#');
 				if ('#loadavg1mn#' === '') {
 					item_loadavg1mn.innerHTML = '<span></span>';
 					// $('#loadavg1mn#id#').append('<span></span>');
@@ -81,7 +81,7 @@
 					// $('#loadavg1mn#id#').append('1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor">#loadavg1mn#</span>');
 				}
 
-				const item_loadavg5mn = document.querySelector('#loadavg5mn#');
+				const item_loadavg5mn = document.document.querySelector('#loadavg5mn#id#');
 				if ('#loadavg5mn#' === '') {
 					item_loadavg5mn.innerHTML = '<span></span>';
 					// $('#loadavg5mn#id#').append('<span></span>');
@@ -99,7 +99,7 @@
 					// $('#loadavg5mn#id#').append(' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor">#loadavg5mn#</span>');
 				}
 
-				const item_loadavg15mn = document.querySelector('#loadavg15mn#');
+				const item_loadavg15mn = document.document.querySelector('#loadavg15mn#id#');
 				if ('#loadavg15mn#' === '') {
 					item_loadavg15mn.innerHTML = '<span></span>';
 					// $('#loadavg15mn#id#').append('<span></span>');
