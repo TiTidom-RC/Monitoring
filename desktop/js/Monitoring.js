@@ -120,24 +120,23 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(plu
 
 document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('change', function(event) {
 	if (event.target.checked) {
-		console.log("Syno : Checked !");
+		// console.log("Syno : Checked !");
 		document.querySelector('.syno_conf').style.display = 'block';
 	}
 	else {
-		console.log("Syno : UnChecked !");
+		// console.log("Syno : UnChecked !");
 		document.querySelector('.syno_conf').style.display = 'none';
 	}
 });
 
-
-/*
-$(".eqLogicAttr[data-l2key='synology']").on('change', function () {
-	if(this.checked){
-	  $(".syno_conf").show();
-	} else {
-	  $(".syno_conf").hide();
+document.querySelector(".eqLogicAttr[data-l2key='syno_use_temp_path']").addEventListener('change', function(event) {
+	if (event.target.checked) {
+		document.querySelector('.syno_conf_temppath').style.display = 'block';
 	}
-}); */
+	else {
+		document.querySelector('.syno_conf_temppath').style.display = 'none';
+	}
+});
 
 /*
 $(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
