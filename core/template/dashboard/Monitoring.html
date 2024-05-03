@@ -74,9 +74,11 @@
 		</div>
 		<script>
 			const item_uptime = document.querySelector('#uptime#id#');
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				item_uptime.innerHTML = '<span>#uptime#</span>';
-				// $('#uptime#id#').append('<span>#uptime#</span>');
+			if (item_uptime !== null) {
+				if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+					item_uptime.innerHTML = '<span>#uptime#</span>';
+					// $('#uptime#id#').append('<span>#uptime#</span>');
+				}
 			}
 		</script>
 		<div class="tooltips" style="margin-left:5px;display: #loadavg_display#">
