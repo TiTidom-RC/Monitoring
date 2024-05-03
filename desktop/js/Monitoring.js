@@ -105,7 +105,7 @@ function addCmdToTable(_cmd) {
 
 
 document.querySelector('.pluginAction[data-action=openLocation]').addEventListener('click', function(e) {
-	window.open(e.target.getAttribute("data-location"), "_blank", null);
+	window.open(e.target.dataset.location, "_blank", null);
 }, false);
 /* $('.pluginAction[data-action=openLocation]').on('click', function () {
 	window.open($(this).attr("data-location"), "_blank", null);
