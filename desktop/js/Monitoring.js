@@ -104,7 +104,7 @@ function addCmdToTable(_cmd) {
 }
 
 
-document.querySelector('.pluginAction[data-action=openLocation]').addEventListener('click', function(event) {
+document.querySelectorAll('.pluginAction[data-action=openLocation]').addEventListener('click', function(event) {
 	event.preventDefault();
 	let myElement = event.target;
 	while (myElement.tagName !== 'DIV') {
