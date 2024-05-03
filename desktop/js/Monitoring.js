@@ -112,7 +112,7 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(plu
 		console.log(myElement.tagName);
 		while (myElement.tagName !== 'DIV') {
 			console.log(myElement.tagName);
-			myElement = event.parentElement;
+			myElement = myElement.parentElement;
 		}
 		window.open(myElement.getAttribute('data-location'), "_blank", null);
 	}, false);
