@@ -93,7 +93,7 @@ function addCmdToTable(_cmd) {
 	
 	tr += '</tr>';
 
-	document.querySelector('#table_objectSummary tbody').insertAdjacentHTML('beforeend', tr);
+	document.querySelector('#table_cmd tbody').insertAdjacentHTML('beforeend', tr);
 	// $('#table_cmd tbody').append(tr);
 
 	document.querySelectorAll('#table_cmd tbody tr').last().setJeeValues(_cmd, '.cmdAttr')
@@ -103,34 +103,43 @@ function addCmdToTable(_cmd) {
 	// jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
+
+document.querySelector('.pluginAction[data-action=openLocation]').addEventListener('click', function() {
+
+}, false);
 /* $('.pluginAction[data-action=openLocation]').on('click', function () {
 	window.open($(this).attr("data-location"), "_blank", null);
-});
+}); */
 
+
+/*
 $(".eqLogicAttr[data-l2key='synology']").on('change', function () {
 	if(this.checked){
 	  $(".syno_conf").show();
 	} else {
 	  $(".syno_conf").hide();
 	}
-});
+}); */
 
+/*
 $(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
 	if(this.checked){
 	  $(".syno_conf_temppath").show();
 	} else {
 	  $(".syno_conf_temppath").hide();
 	}
-});
+}); */
 
+/*
 $(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").on('change', function () {
 	if(this.checked){
 	  $(".linux_class_temp_cmd").show();
 	} else {
 	  $(".linux_class_temp_cmd").hide();
 	}
-});
+}); */
 
+/*
 $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 	if (this.selectedIndex == 1) {
 	  $(".distant").show();
