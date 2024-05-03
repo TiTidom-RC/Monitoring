@@ -111,8 +111,8 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(plu
 		let myElement = event.target;
 		console.log(myElement.tagName);
 		while (myElement.tagName !== 'DIV') {
-			console.log(myElement.tagName);
 			myElement = myElement.parentElement;
+			console.log(myElement.tagName);
 		}
 		window.open(myElement.getAttribute('data-location'), "_blank", null);
 		return;
