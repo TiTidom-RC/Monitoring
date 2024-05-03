@@ -5,7 +5,7 @@
 		<span class="cmd refresh pull-right cursor">
 			<span id="iconSSH#id#"></span>
 			<script>
-				const item_cnx_ssh = document.querySelector('#cnx_ssh#');
+				const item_cnx_ssh = document.querySelector('#iconSSH#id#');
 				if (item_cnx_ssh !== null) {
 					if ('#cnx_ssh#' == 'OK') {
 						item_cnx_ssh.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check tooltips" style="font-size : 1.1em;color: var(--al-success-color) !important;" ></i>';
@@ -17,7 +17,7 @@
 					}
 				}
 			</script>
-			<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#;">
+			<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
 				<script>
 					const button_poweroff = document.querySelector('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action');
@@ -39,7 +39,7 @@
 					}); */ 
 				</script>
 			</span>
-			<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#;">
+			<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
 				<script>
 					const button_reboot = document.querySelector('.reboot[data-cmd_id=#cmd_reboot_id#] .action');
