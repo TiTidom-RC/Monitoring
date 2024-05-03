@@ -5,7 +5,7 @@
 		<span class="cmd refresh pull-right cursor">
 			<span id="iconSSH#id#"></span>
 			<script>
-				const item_cnx_ssh = document.querySelector('#iconSSH#id#');
+				let item_cnx_ssh = document.querySelector('#iconSSH#id#');
 				if (item_cnx_ssh !== null) {
 					if ('#cnx_ssh#' == 'OK') {
 						item_cnx_ssh.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check tooltips" style="font-size : 1.1em;color: var(--al-success-color) !important;" ></i>';
@@ -20,11 +20,11 @@
 			<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#">
 				<a class="action" id="iconPower#id#" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
 				<script>
-					const button_poweroff = document.querySelector('#iconPower#id#');
+					let button_poweroff = document.querySelector('#iconPower#id#');
 					if (button_poweroff !== null) {
 						button_poweroff.addEventListener('click', function() {
-							const confirmMessage = 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?';
-							const result = confirm(confirmMessage);
+							let confirmMessage = 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?';
+							let result = confirm(confirmMessage);
 							if (result) {
 								jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
 							}
@@ -42,11 +42,11 @@
 			<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#">
 				<a class="action" id="iconReboot#id#" id= style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
 				<script>
-					const button_reboot = document.querySelector('#iconReboot#id#');
+					let button_reboot = document.querySelector('#iconReboot#id#');
 					if (button_reboot !== null) {
 						button_reboot.addEventListener('click', function() {
-							const confirmMessage = 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?';
-							const result = confirm(confirmMessage);
+							let confirmMessage = 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?';
+							let result = confirm(confirmMessage);
 							if (result) {
 								jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
 							}
@@ -73,10 +73,10 @@
 			<span id="uptime#id#"></span>
 		</div>
 		<script>
-			const item_uptime[#id#] = document.querySelector('#uptime#id#');
-			if (item_uptime[#id#] !== null) {
+			let item_uptime = document.querySelector('#uptime#id#');
+			if (item_uptime !== null) {
 				if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-					item_uptime[#id#].innerHTML = '<span>#uptime#</span>';
+					item_uptime.innerHTML = '<span>#uptime#</span>';
 					// $('#uptime#id#').append('<span>#uptime#</span>');
 				}
 			}
@@ -87,7 +87,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_loadavg1mn = document.querySelector('#loadavg1mn#id#');
+				let item_loadavg1mn = document.querySelector('#loadavg1mn#id#');
 				if (item_loadavg1mn !== null) {
 					if ('#loadavg1mn#' === '') {
 						item_loadavg1mn.innerHTML = '<span></span>';
@@ -107,7 +107,7 @@
 					}
 				}
 
-				const item_loadavg5mn = document.querySelector('#loadavg5mn#id#');
+				let item_loadavg5mn = document.querySelector('#loadavg5mn#id#');
 				if (item_loadavg5mn !== null) {
 					if ('#loadavg5mn#' === '') {
 						item_loadavg5mn.innerHTML = '<span></span>';
@@ -127,7 +127,7 @@
 					}	
 				}
 				
-				const item_loadavg15mn = document.querySelector('#loadavg15mn#id#');
+				let item_loadavg15mn = document.querySelector('#loadavg15mn#id#');
 				if (item_loadavg15mn !== null) {
 					if ('#loadavg15mn#' === '') {
 						item_loadavg15mn.innerHTML = '<span></span>';
@@ -154,7 +154,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_mempourcent = document.querySelector('#Mempourcent#id#');
+				let item_mempourcent = document.querySelector('#Mempourcent#id#');
 				if (item_mempourcent !== null) {
 					if ('#Mempourc#' === '') {
 						item_mempourcent.innerHTML = '<span>#Mem#</span>';
@@ -181,7 +181,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_swappourc = document.querySelector('#Swappourc#id#');
+				let item_swappourc = document.querySelector('#Swappourc#id#');
 				if (item_swappourc !== null) {
 					if ('#Swappourc#' === '') {
 						item_swappourc.innerHTML = '<span>#Mem_swap#</span>';
@@ -208,7 +208,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_ethernet = document.querySelector('#ethernet0#id#');
+				let item_ethernet = document.querySelector('#ethernet0#id#');
 				item_ethernet.innerHTML = '<span>#ethernet0#</span>';
 				// $('#ethernet0#id#').append('<span>#ethernet0#</span>');
 			}
@@ -219,7 +219,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_hddpourcused = document.querySelector('#hddpourcused#id#');
+				let item_hddpourcused = document.querySelector('#hddpourcused#id#');
 				if (item_hddpourcused !== null) {
 					if ('#hddpourcused#' === '') {
 						item_hddpourcused.innerHTML = '<span></span>';
@@ -243,8 +243,8 @@
 		<div id="synovol2#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_synovol2 = document.querySelector('#synovol2#id#');
-				const item_hddpourcusedv2 = document.querySelector('#hddpourcusedv2#id#');
+				let item_synovol2 = document.querySelector('#synovol2#id#');
+				let item_hddpourcusedv2 = document.querySelector('#hddpourcusedv2#id#');
 				if ('#synovolume2_display#' == 'OK' && item_synovol2 !== null && item_hddpourcusedv2 !== null) {
 					item_synovol2.innerHTML = '<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>';
 					// $('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>');
@@ -271,8 +271,8 @@
 		<div id="synovolusb#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_synovolusb = document.querySelector('#synovolusb#id#');
-				const item_hddpourcusedusb = document.querySelector('#hddpourcusedusb#id#');
+				let item_synovolusb = document.querySelector('#synovolusb#id#');
+				let item_hddpourcusedusb = document.querySelector('#hddpourcusedusb#id#');
 				if ('#synovolumeusb_display#' == 'OK' && item_synovolusb !== null && item_hddpourcusedusb !== null) {
 					item_synovolusb.innerHTML = '<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>';
 					// $('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
@@ -299,8 +299,8 @@
 		<div id="synovolesata#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_synovolsata = document.querySelector('#synovolesata#id#');
-				const item_hddpourcusedesata = document.querySelector('#hddpourcusedesata#id#');
+				let item_synovolsata = document.querySelector('#synovolesata#id#');
+				let item_hddpourcusedesata = document.querySelector('#hddpourcusedesata#id#');
 				if ('#synovolumeesata_display#' == 'OK' && item_synovolsata !== null && item_hddpourcusedesata !== null) {
 					item_synovolsata.innerHTML = '<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>';
 					// $('#synovolesata#id#').append('<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>');
@@ -330,10 +330,10 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_cpu = document.querySelector('#cpu#id#');
+				let item_cpu = document.querySelector('#cpu#id#');
 				if (item_cpu !== null) {
 					if ('#cpu_temp#' !== '' && '#cpu_temp_display#' == 'OK') {
-						const item_cputemp = document.querySelector('#cpu_temp#id#');
+						let item_cputemp = document.querySelector('#cpu_temp#id#');
 						if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
 							item_cpu.innerHTML = '<span>#cpu# </span>';
 							item_cputemp.innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)';
@@ -368,7 +368,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_perso1 = document.querySelector('#uniteperso1#id#');
+				let item_perso1 = document.querySelector('#uniteperso1#id#');
 				if (item_perso1 !== null) {
 					if ('#perso1#' !== '') {
 						if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
@@ -397,7 +397,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				const item_perso2 = document.querySelector('#uniteperso2#id#');
+				let item_perso2 = document.querySelector('#uniteperso2#id#');
 				if (item_perso2 !== null) {
 					if ('#perso2#' !== '') {
 						if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
