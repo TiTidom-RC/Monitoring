@@ -17,43 +17,9 @@
 			</script>
 			<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#;">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
-				<script>
-					const button_poweroff = document.querySelector('poweroff[data-cmd_id=#cmd_poweroff_id#] .action');
-					button_poweroff.addEventListener('click', function() {
-						const confirmMessage = 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?';
-						const result = confirm(confirmMessage);
-						if (result) {
-							jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
-						}
-					}, false);
-					/* $('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action').on('click', function () {
-						bootbox.confirm('Etes-vous sûr de vouloir éteindre l\'équipement #name# ?', function (result) {
-							if (result) {
-								jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
-							}
-						});
-					}); */ 
-				</script>
 			</span>
 			<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#;">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
-				<script>
-					const button_reboot = document.querySelector('reboot[data-cmd_id=#cmd_reboot_id#] .action');
-					button_reboot.addEventListener('click', function() {
-						const confirmMessage = 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?';
-						const result = confirm(confirmMessage);
-						if (result) {
-							jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
-						}
-					}, false);
-					/* $('.reboot[data-cmd_id=#cmd_reboot_id#] .action').on('click', function () {
-						bootbox.confirm('Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?', function (result) {
-							if (result) {
-								jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
-							}
-						});
-					}); */ 
-				</script>
 			</span>
 		</span>
 	</div>
@@ -329,6 +295,39 @@
 					$('#uniteperso2#id#').append('<span></span>');
 				}
 			}
+		</script>
+		<script>
+			const button_poweroff = document.querySelector('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action');
+			button_poweroff.addEventListener('click', function() {
+				const confirmMessage = 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?';
+				const result = confirm(confirmMessage);
+				if (result) {
+					jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
+				}
+			}, false);
+			/* $('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action').on('click', function () {
+				bootbox.confirm('Etes-vous sûr de vouloir éteindre l\'équipement #name# ?', function (result) {
+					if (result) {
+						jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
+					}
+				});
+			}); */ 
+
+			const button_reboot = document.querySelector('.reboot[data-cmd_id=#cmd_reboot_id#] .action');
+			button_reboot.addEventListener('click', function() {
+				const confirmMessage = 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?';
+				const result = confirm(confirmMessage);
+				if (result) {
+					jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
+				}
+			}, false);
+			/* $('.reboot[data-cmd_id=#cmd_reboot_id#] .action').on('click', function () {
+				bootbox.confirm('Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?', function (result) {
+					if (result) {
+						jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
+					}
+				});
+			}); */
 		</script>
 	</div>
 	#divGraphInfo#
