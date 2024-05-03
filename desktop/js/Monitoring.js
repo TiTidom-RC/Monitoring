@@ -131,21 +131,25 @@ document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('
 
 document.querySelector(".eqLogicAttr[data-l2key='syno_use_temp_path']").addEventListener('change', function(event) {
 	if (event.target.checked) {
+		// console.log("Syno Temp Path : Checked !");
 		document.querySelector('.syno_conf_temppath').style.display = 'block';
 	}
 	else {
+		// console.log("Syno Temp Path : UnChecked !");
 		document.querySelector('.syno_conf_temppath').style.display = 'none';
 	}
 });
 
-/*
-$(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
-	if(this.checked){
-	  $(".syno_conf_temppath").show();
-	} else {
-	  $(".syno_conf_temppath").hide();
+document.querySelector(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").addEventListener('change', function(event) {
+	if (event.target.checked) {
+		// console.log("Linux Temp Cmd : Checked !");
+		document.querySelector('.linux_class_temp_cmd').style.display = 'block';
 	}
-}); */
+	else {
+		// console.log("Linux Temp Cmd : UnChecked !");
+		document.querySelector('.linux_class_temp_cmd').style.display = 'none';
+	}
+});
 
 /*
 $(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").on('change', function () {
