@@ -119,11 +119,13 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(plu
 });
 
 document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('change', function(event) {
-	if (event.currentTarget.checked) {
-		document.querySelector('.syno_conf').computedStyleMap.display = 'block';
+	if (event.target.checked) {
+		console.log("Syno : Checked !");
+		document.querySelector('.syno_conf').style.display = 'block';
 	}
 	else {
-		document.querySelector('.syno_conf').computedStyleMap.display = 'none';
+		console.log("Syno : UnChecked !");
+		document.querySelector('.syno_conf').style.display = 'none';
 	}
 });
 
