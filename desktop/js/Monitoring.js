@@ -109,6 +109,7 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(plu
 
 		event.preventDefault();
 		let myElement = event.target;
+		console.log(myElement.tagName);
 		while (myElement.tagName !== 'DIV') {
 			console.log(myElement.tagName);
 			myElement = event.parentElement;
