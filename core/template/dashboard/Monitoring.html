@@ -20,7 +20,7 @@
 			<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
 				<script>
-					const button_poweroff = document.querySelector('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action');
+					const button_poweroff = document.querySelectorAll('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action');
 					if (button_poweroff !== null) {
 						button_poweroff.addEventListener('click', function() {
 							const confirmMessage = 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?';
@@ -42,7 +42,7 @@
 			<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
 				<script>
-					const button_reboot = document.querySelector('.reboot[data-cmd_id=#cmd_reboot_id#] .action');
+					const button_reboot = document.querySelectorAll('.reboot[data-cmd_id=#cmd_reboot_id#] .action');
 					if (button_reboot !== null) {
 						button_reboot.addEventListener('click', function() {
 							const confirmMessage = 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?';
