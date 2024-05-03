@@ -107,7 +107,7 @@ function addCmdToTable(_cmd) {
 document.querySelector('.pluginAction[data-action=openLocation]').addEventListener('click', function(event) {
 	event.preventDefault();
 	let myElement = event.target;
-	if (myElement.tagName !== 'DIV') {
+	while (myElement.tagName !== 'DIV') {
 		myElement = event.parentElement;
 	}
 	window.open(myElement.getAttribute('data-location'), "_blank", null);
