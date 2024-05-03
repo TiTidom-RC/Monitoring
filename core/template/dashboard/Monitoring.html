@@ -61,20 +61,20 @@
 </div>
 <script>
 	{
-		let item_cnx_ssh = document.querySelector('#iconSSH#id#');
-		if (item_cnx_ssh !== null) {
+		let item_iconssh_#id# = document.querySelector('#iconSSH#id#');
+		if (item_iconssh_#id# !== null) {
 			if ('#cnx_ssh#' == 'OK') {
-				item_cnx_ssh.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check tooltips" style="font-size : 1.1em;color: var(--al-success-color) !important;" ></i>';
+				item_iconssh_#id#.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check tooltips" style="font-size : 1.1em;color: var(--al-success-color) !important;" ></i>';
 			}
 			if ('#cnx_ssh#' == 'KO') {
-				item_cnx_ssh.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times tooltips" style="font-size : 1.1em;color: var(--al-danger-color) !important;"></i>';
+				item_iconssh_#id#.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times tooltips" style="font-size : 1.1em;color: var(--al-danger-color) !important;"></i>';
 			}
 		}
 	}
 
-	let button_poweroff = document.querySelector('#iconPower#id#');
-	if (button_poweroff !== null) {
-		button_poweroff.addEventListener('click', function() {
+	let button_poweroff_#id# = document.querySelector('#iconPower#id#');
+	if (button_poweroff_#id# !== null) {
+		button_poweroff_#id#.addEventListener('click', function() {
 			let confirmMessage = 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?';
 			let result = confirm(confirmMessage);
 			if (result) {
@@ -83,9 +83,9 @@
 		}, false);
 	}
 
-	let button_reboot = document.querySelector('#iconReboot#id#');
-	if (button_reboot !== null) {
-		button_reboot.addEventListener('click', function() {
+	let button_reboot_#id# = document.querySelector('#iconReboot#id#');
+	if (button_reboot_#id# !== null) {
+		button_reboot_#id#.addEventListener('click', function() {
 			let confirmMessage = 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?';
 			let result = confirm(confirmMessage);
 			if (result) {
@@ -94,63 +94,63 @@
 		}, false);
 	}
 
-	let item_uptime = document.querySelector('#uptime#id#');
-	if (item_uptime !== null) {
+	let item_uptime_#id# = document.querySelector('#uptime#id#');
+	if (item_uptime_#id# !== null) {
 		if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-			item_uptime.innerHTML = '<span>#uptime#</span>';
+			item_uptime_#id#.innerHTML = '<span>#uptime#</span>';
 			// $('#uptime#id#').append('<span>#uptime#</span>');
 		}
 	}
 
 	if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-		let item_ethernet = document.querySelector('#ethernet0#id#');
-		item_ethernet.innerHTML = '<span>#ethernet0#</span>';
+		let item_ethernet_#id# = document.querySelector('#ethernet0#id#');
+		item_ethernet_#id#.innerHTML = '<span>#ethernet0#</span>';
 		// $('#ethernet0#id#').append('<span>#ethernet0#</span>');
 	}
 
 	if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-		let item_perso1 = document.querySelector('#uniteperso1#id#');
-		if (item_perso1 !== null) {
+		let item_perso1_#id# = document.querySelector('#uniteperso1#id#');
+		if (item_perso1_#id# !== null) {
 			if ('#perso1#' !== '') {
 				if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-					item_perso1.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
+					item_perso1_#id#.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 					// $('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
 				} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-					item_perso1.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
+					item_perso1_#id#.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 					// $('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
 				} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
-					item_perso1.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
+					item_perso1_#id#.innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 					// $('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>');
 				} else {
-					item_perso1.innerHTML = '<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>';
+					item_perso1_#id#.innerHTML = '<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>';
 					// $('#uniteperso1#id#').append('<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>');
 				}
 			} else {
-				item_perso1.innerHTML = '<span></span>';
+				item_perso1_#id#.innerHTML = '<span></span>';
 				// $('#uniteperso1#id#').append('<span></span>');
 			}
 		}
 	}
 
 	if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-		let item_perso2 = document.querySelector('#uniteperso2#id#');
-		if (item_perso2 !== null) {
+		let item_perso2_#id# = document.querySelector('#uniteperso2#id#');
+		if (item_perso2_#id# !== null) {
 			if ('#perso2#' !== '') {
 				if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-					item_perso2.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
+					item_perso2_#id#.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 					// $('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
 				} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-					item_perso2.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
+					item_perso2_#id#.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 					// $('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
 				} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
-					item_perso2.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
+					item_perso2_#id#.innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 					// $('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
 				} else {
-					item_perso2.innerHTML = '<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>';
+					item_perso2_#id#.innerHTML = '<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>';
 					// $('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>');
 				}
 			} else {
-				item_perso2.innerHTML = '<span></span>';
+				item_perso2_#id#.innerHTML = '<span></span>';
 				// $('#uniteperso2#id#').append('<span></span>');
 			}
 		}
