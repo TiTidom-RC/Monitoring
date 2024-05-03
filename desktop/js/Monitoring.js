@@ -97,7 +97,7 @@ function addCmdToTable(_cmd) {
 	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
-$('.pluginAction[data-action=openLocation]').on('click', function () {
+/* $('.pluginAction[data-action=openLocation]').on('click', function () {
 	window.open($(this).attr("data-location"), "_blank", null);
 });
 
@@ -137,4 +137,4 @@ $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 	} else { 
 		$(".distant").hide();
 	}
-});
+}); */
