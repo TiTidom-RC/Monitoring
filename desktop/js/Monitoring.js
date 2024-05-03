@@ -106,13 +106,12 @@ function addCmdToTable(_cmd) {
 
 document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(pluginaction => {
 	pluginaction.addEventListener('click', function(event) {
-
 		event.preventDefault();
 		let myElement = event.target;
-		console.log(myElement.tagName);
+		// console.log(myElement.tagName);
 		while (myElement.tagName !== 'DIV') {
 			myElement = myElement.parentElement;
-			console.log(myElement.tagName);
+			// console.log(myElement.tagName);
 		}
 		window.open(myElement.getAttribute('data-location'), "_blank", null);
 		return;
