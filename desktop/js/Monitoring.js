@@ -110,7 +110,7 @@ document.querySelector('.pluginAction[data-action=openLocation]').addEventListen
 	if (myElement.tagName !== 'DIV') {
 		myElement = event.parentElement;
 	}
-	window.open(myElement.dataset.location, "_blank", null);
+	window.open(myElement.getAttribute('data-location'), "_blank", null);
 }, false);
 /* $('.pluginAction[data-action=openLocation]').on('click', function () {
 	window.open($(this).attr("data-location"), "_blank", null);
