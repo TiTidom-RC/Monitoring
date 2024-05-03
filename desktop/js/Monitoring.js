@@ -118,6 +118,16 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(plu
 	}, false);
 });
 
+document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('change', function(event) {
+	if (event.currentTarget.checked) {
+		document.querySelector('.syno_conf').computedStyleMap.display = 'block';
+	}
+	else {
+		document.querySelector('.syno_conf').computedStyleMap.display = 'none';
+	}
+});
+
+
 /*
 $(".eqLogicAttr[data-l2key='synology']").on('change', function () {
 	if(this.checked){
