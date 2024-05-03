@@ -151,14 +151,21 @@ document.querySelector(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").addEvent
 	}
 });
 
-/*
-$(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").on('change', function () {
-	if(this.checked){
-	  $(".linux_class_temp_cmd").show();
-	} else {
-	  $(".linux_class_temp_cmd").hide();
+document.querySelector(".eqLogicAttr[data-l2key='maitreesclave']").addEventListener('change', function(event) {
+	if (event.target.selectedIndex == 1) {
+		document.querySelector('.distant').style.display = 'block';
+		document.querySelector('.distant-password').style.display = 'block';
+		document.querySelector('.distant-key').style.display = 'none';
+	} 
+	else if (event.target.selectedIndex == 2) {
+		document.querySelector('.distant').style.display = 'block';
+		document.querySelector('.distant-password').style.display = 'none';
+		document.querySelector('.distant-key').style.display = 'block';
 	}
-}); */
+	else {
+		document.querySelector('.distant').style.display = 'none';
+	}
+});
 
 /*
 $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
