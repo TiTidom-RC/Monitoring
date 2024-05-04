@@ -13,46 +13,46 @@
 		</span>
 	</div>
 	<div class="cmds text-left" style="display:block">
-		<div class="cmd tooltips" data-cmd_id="#namedistriid#" style="margin-left:5px;display: #namedistri_display#">
+		<div class="tooltips" data-cmd_id="#namedistriid#" style="margin-left:5px;display: #namedistri_display#">
 			<span title="Distribution Linux || Date valeur : #namedistri_value# || Date collecte : #namedistri_collect#" class="fab fa-linux" style="min-width:15px"></span>
 			<span>#namedistri#</span>
 		</div>
-		<div class="cmd tooltips" data-cmd_id="#uptimeid#" style="margin-left:5px;display: #uptime_display#">
+		<div class="tooltips" data-cmd_id="#uptimeid#" style="margin-left:5px;display: #uptime_display#">
 			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#" class="fas fa-tachometer-alt" style="min-width:15px"></span>
 			<span id="uptime#id#"></span>
 		</div>
-		<div class="cmd tooltips" data-cmd_id="#loadavgid#" style="margin-left:5px;display: #loadavg_display#;">
+		<div class="tooltips" data-cmd_id="#loadavgid#" style="margin-left:5px;display: #loadavg_display#;">
 			<span title="Charge système (load average) || Date valeur : #loadavg_value# || Date collecte : #loadavg_collect#" class="fa techno-courbes3" style="width:15px"></span>
 			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
 		</div>
-		<div class="cmd tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#">
+		<div class="tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#">
 			<span title="Mémoire vive (% libre) || Date valeur : #Mem_value# || Date collecte : #Mem_collect#" class="fa techno-memory" style="width:15px"></span>
 			<span id="Mempourcent#id#"></span>
 		</div>
-		<div class="cmd tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#">
+		<div class="tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#">
 			<span title="Mémoire Swap (% libre) || Date valeur : #Mem_swap_value# || Date collecte : #Mem_swap_collect#" class="fas fa-list" style="width:15px"></span>
 			<span id="Swappourc#id#"></span>
 		</div>
-		<div class="cmd tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#">
+		<div class="tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#">
 			<span title="Trafic réseau (#ethernet0_name#) || Date valeur : #ethernet0_value# || Date collecte : #ethernet0_collect#" class="fa techno-fleches" style="width:15px"></span>
 			<span id="ethernet0#id#"></span>
 		</div>
-		<div class="cmd tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#">
+		<div class="tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#">
 			<span title="Espace disque (% utilisé) || Date valeur : #hddtotal_value# || Date collecte : #hddtotal_collect#" class="fas fa-hdd" style="width:15px"></span>
 			<span id="hddpourcused#id#"></span>
 		</div>
 		<div id="synovol2#id#"></div>
 		<div id="synovolusb#id#"></div>
 		<div id="synovolesata#id#"></div>
-		<div class="cmd tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#">
+		<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#">
 			<span title="Nombre CPU, fréquence (température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" class="fa techno-pc" style="width:15px"></span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
-		<div class="cmd tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#">
+		<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#">
 			<span title="#nameperso1# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px">#iconeperso1#</span>
 			<span id="uniteperso1#id#"></span>
 		</div>
-		<div class="cmd tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#">
+		<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#">
 			<span title="#nameperso2# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px">#iconeperso2#</span>
 			<span id="uniteperso2#id#"></span>
 		</div>
@@ -254,7 +254,7 @@
 		} */
 
 		if ('#synovolume2_display#' == 'OK' && document.querySelector('#synovol2#id#') !== null && document.querySelector('#hddpourcusedv2#id#') !== null) {
-			document.querySelector('#synovol2#id#').innerHTML = '<div id="synovol2#id#" class="cmd tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>';
+			document.querySelector('#synovol2#id#').innerHTML = '<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>';
 
 			if ('#hddpourcusedv2#' === '') {
 				document.querySelector('#hddpourcusedv2#id#').innerHTML = '<span></span>';
@@ -270,7 +270,7 @@
 		}
 
 		/* if ('#synovolume2_display#' == 'OK') {
-			$('#synovol2#id#').append('<div id="synovol2#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Espace disque Volume 2 Syno (% utilisé) || Date valeur : #hddtotalv2_value# || Date collecte : #hddtotalv2_collect#" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>');
+			$('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Espace disque Volume 2 Syno (% utilisé) || Date valeur : #hddtotalv2_value# || Date collecte : #hddtotalv2_collect#" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedv2#id#"></span></div>');
 		}
 		if ('#hddpourcusedv2#' === '') {
 			$('#hddpourcusedv2#id#').append('<span></span>');
@@ -285,7 +285,7 @@
 		} */
 
 		if ('#synovolumeusb_display#' == 'OK' && document.querySelector('#synovolusb#id#') !== null && document.querySelector('#hddpourcusedusb#id#') !== null) {
-			document.querySelector('#synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="cmd tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>';
+			document.querySelector('#synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>';
 		
 			if ('#hddpourcusedusb#' === '') {
 				document.querySelector('#hddpourcusedusb#id#').innerHTML = '<span></span>';
@@ -301,7 +301,7 @@
 		}
 
 		/* if ('#synovolumeusb_display#' == 'OK') {
-			$('#synovolusb#id#').append('<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé) || Date valeur : #hddtotalusb_value# || Date collecte : #hddtotalusb_collect#" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
+			$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Espace disque Volume USB Syno (% utilisé) || Date valeur : #hddtotalusb_value# || Date collecte : #hddtotalusb_collect#" class="fab fa-usb" style="width:15px"></span> <span id="hddpourcusedusb#id#"></span></div>');
 		}
 		if ('#hddpourcusedusb#' === '') {
 			$('#hddpourcusedusb#id#').append('<span></span>');
@@ -316,7 +316,7 @@
 		} */
 
 		if ('#synovolumeesata_display#' == 'OK' && document.querySelector('#synovolesata#id#') !== null && document.querySelector('#hddpourcusedesata#id#') !== null) {
-			document.querySelector('#synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="cmd tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>';
+			document.querySelector('#synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>';
 		
 			if ('#hddpourcusedesata#' === '') {
 				document.querySelector('#hddpourcusedesata#id#').innerHTML = '<span></span>';				
@@ -332,7 +332,7 @@
 		}
 
 		/* if ('#synovolumeesata_display#' == 'OK') {
-			$('#synovolesata#id#').append('<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Espace disque Volume eSATA Syno (% utilisé) || Date valeur : #hddtotalesata_value# || Date collecte : #hddtotalesata_collect#" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>');
+			$('#synovolesata#id#').append('<div id="synovolesata#id#" class="tooltips" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Espace disque Volume eSATA Syno (% utilisé) || Date valeur : #hddtotalesata_value# || Date collecte : #hddtotalesata_collect#" class="fas fa-hdd" style="width:15px"></span> <span id="hddpourcusedesata#id#"></span></div>');
 		}
 		if ('#hddpourcusedesata#' === '') {
 			$('#hddpourcusedesata#id#').append('<span></span>');
@@ -429,7 +429,7 @@
 				document.querySelector('#uniteperso2#id#').innerHTML = '<span></span>';
 			}
 		}
-		
+
 		/* if ('#perso2#' !== '') {
 			if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
 				$('#uniteperso2#id#').append('<span style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
