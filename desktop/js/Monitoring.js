@@ -14,17 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Permet la réorganisation des commandes dans l'équipement */
-
-/* $("#table_cmd").sortable({
-	axis: "y",
-	cursor: "move",
-	items: ".cmd",
-	placeholder: "ui-state-highlight",
-	tolerance: "intersect",
-	forcePlaceholderSize: true
-  }); */
-
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
@@ -94,15 +83,9 @@ function addCmdToTable(_cmd) {
 	tr += '</tr>';
 
 	document.querySelector('#table_cmd tbody').insertAdjacentHTML('beforeend', tr);
-	// $('#table_cmd tbody').append(tr);
-
 	document.querySelectorAll('#table_cmd tbody tr').last().setJeeValues(_cmd, '.cmdAttr')
-	// $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
-
 	jeedom.cmd.changeType(document.querySelectorAll('#table_cmd tbody tr').last(), init(_cmd.subType));
-	// jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
-
 
 document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(pluginaction => {
 	pluginaction.addEventListener('click', function(event) {
