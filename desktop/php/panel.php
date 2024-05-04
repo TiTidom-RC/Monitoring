@@ -3,7 +3,7 @@ if (!isConnect()) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
 
-sendVarToJs('jeedomBackgroundImg', 'plugins/Monitoring/core/img/panel.jpg');
+sendVarToJs('jeedomBackgroundImg', 'plugins/Monitoring/data/img/panel.jpg');
 
 if (init('object_id') == '') {
 	$object = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));

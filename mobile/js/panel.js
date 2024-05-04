@@ -16,7 +16,7 @@
 
 function initMonitoringPanel(_object_id) {
   if(typeof setBackgroundImage == 'function'){
-    setBackgroundImage('plugins/Monitoring/core/img/panel.jpg');
+    setBackgroundImage('plugins/Monitoring/data/img/panel.jpg');
   }
   jeedom.object.all({
     onlyHasEqLogic : 'Monitoring',
