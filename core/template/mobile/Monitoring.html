@@ -1,18 +1,16 @@
 <div class="eqLogic eqLogic-widget col2" data-eqLogic_id="#id#" data-eqType="#eqType#" data-version="#version#" data-eqLogic_uid="#uid#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="#style#">
-	<div class="widget-name">
-		<center>
-			<span class="widget-name" style="#hideEqLogicName#">#name_display# <span class="object_name" style="font-size: 0.85em;position: relative;top:-2px;display:none;">#object_name#</span></span>
-		</center>
-		<span class="cmd refresh pull-right cursor">
-			<span id="iconSSH#id#"></span>
-			<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
-				<a class="action" id="iconPower#id#" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
-			</span>
-			<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
-				<a class="action" id="iconReboot#id#" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
-			</span>
+	<center>
+		<span class="widget-name" style="#hideEqLogicName#">#name_display# <span class="object_name" style="font-size: 0.85em;position: relative;top:-2px;display:none;">#object_name#</span></span>
+	</center>
+	<span class="cmd refresh pull-right cursor">
+		<span id="iconSSH#id#"></span>
+		<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
+			<a class="action" id="iconPower#id#" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
 		</span>
-	</div>
+		<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+			<a class="action" id="iconReboot#id#" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
+		</span>
+	</span>
 	<div class="cmds text-left" style="padding: 5px; display:block">
 		<div class="tooltips" data-cmd_id="#namedistriid#" style="margin-left:5px;display: #namedistri_display#">
 			<span title="Distribution Linux || Date valeur : #namedistri_value# || Date collecte : #namedistri_collect#" class="fab fa-linux" style="min-width:15px"></span>
@@ -104,13 +102,13 @@
 			if ('#loadavg1mn#' === '') {
 				document.querySelector('#loadavg1mn#id#').innerHTML = '<span></span>';
 			} else if (parseFloat('#loadavg1mn#') < parseFloat('#loadavg1mn_colorlow#')) {
-				document.querySelector('#loadavg1mn#id#').innerHTML = '1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg1mn#</span>';
+				document.querySelector('#loadavg1mn#id#').innerHTML = '1 min : <span data-cmd_id="#loadavg1mnid#" style="color: var(--al-success-color) !important;" >#loadavg1mn#</span>';
 			} else if ((parseFloat('#loadavg1mn#') >= parseFloat('#loadavg1mn_colorlow#')) && (parseFloat('#loadavg1mn#') <= parseFloat('#loadavg1mn_colorhigh#'))) {
-				document.querySelector('#loadavg1mn#id#').innerHTML = '1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg1mn#</span>';
+				document.querySelector('#loadavg1mn#id#').innerHTML = '1 min : <span data-cmd_id="#loadavg1mnid#" style="color: var(--al-warning-color) !important;" >#loadavg1mn#</span>';
 			} else if ((parseFloat('#loadavg1mn#') > parseFloat('#loadavg1mn_colorhigh#')) && '#loadavg1mn_colorhigh#' !== '') {
-				document.querySelector('#loadavg1mn#id#').innerHTML = '1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg1mn#</span>';
+				document.querySelector('#loadavg1mn#id#').innerHTML = '1 min : <span data-cmd_id="#loadavg1mnid#" style="color: var(--al-danger-color) !important;" >#loadavg1mn#</span>';
 			} else {
-				document.querySelector('#loadavg1mn#id#').innerHTML = '1 min : <span data-cmd_id="#loadavg1mnid#" class="history cursor">#loadavg1mn#</span>';
+				document.querySelector('#loadavg1mn#id#').innerHTML = '1 min : <span data-cmd_id="#loadavg1mnid#">#loadavg1mn#</span>';
 			}
 		}
 
@@ -118,13 +116,13 @@
 			if ('#loadavg5mn#' === '') {
 				document.querySelector('#loadavg5mn#id#').innerHTML = '<span></span>';
 			} else if (parseFloat('#loadavg5mn#') < parseFloat('#loadavg5mn_colorlow#')) {
-				document.querySelector('#loadavg5mn#id#').innerHTML = ' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg5mn#</span>';
+				document.querySelector('#loadavg5mn#id#').innerHTML = ' - 5 min : <span data-cmd_id="#loadavg5mnid#" style="color: var(--al-success-color) !important;" >#loadavg5mn#</span>';
 			} else if ((parseFloat('#loadavg5mn#') >= parseFloat('#loadavg5mn_colorlow#')) && (parseFloat('#loadavg5mn#') <= parseFloat('#loadavg5mn_colorhigh#'))) {
-				document.querySelector('#loadavg5mn#id#').innerHTML = ' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg5mn#</span>';
+				document.querySelector('#loadavg5mn#id#').innerHTML = ' - 5 min : <span data-cmd_id="#loadavg5mnid#" style="color: var(--al-warning-color) !important;" >#loadavg5mn#</span>';
 			} else if ((parseFloat('#loadavg5mn#') > parseFloat('#loadavg5mn_colorhigh#')) && '#loadavg5mn_colorhigh#' !== '') {
-				document.querySelector('#loadavg5mn#id#').innerHTML = ' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg5mn#</span>';
+				document.querySelector('#loadavg5mn#id#').innerHTML = ' - 5 min : <span data-cmd_id="#loadavg5mnid#" style="color: var(--al-danger-color) !important;" >#loadavg5mn#</span>';
 			} else {
-				document.querySelector('#loadavg5mn#id#').innerHTML = ' - 5 min : <span data-cmd_id="#loadavg5mnid#" class="history cursor">#loadavg5mn#</span>';
+				document.querySelector('#loadavg5mn#id#').innerHTML = ' - 5 min : <span data-cmd_id="#loadavg5mnid#">#loadavg5mn#</span>';
 			}	
 		}
 		
@@ -132,13 +130,13 @@
 			if ('#loadavg15mn#' === '') {
 				document.querySelector('#loadavg15mn#id#').innerHTML = '<span></span>';
 			} else if (parseFloat('#loadavg15mn#') < parseFloat('#loadavg15mn_colorlow#')) {
-				document.querySelector('#loadavg15mn#id#').innerHTML = ' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-success-color) !important;" >#loadavg15mn#</span>';
+				document.querySelector('#loadavg15mn#id#').innerHTML = ' - 15 min : <span data-cmd_id="#loadavg15mnid#" style="color: var(--al-success-color) !important;" >#loadavg15mn#</span>';
 			} else if ((parseFloat('#loadavg15mn#') >= parseFloat('#loadavg15mn_colorlow#')) && (parseFloat('#loadavg15mn#') <= parseFloat('#loadavg15mn_colorhigh#'))) {
-				document.querySelector('#loadavg15mn#id#').innerHTML = ' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#loadavg15mn#</span>';
+				document.querySelector('#loadavg15mn#id#').innerHTML = ' - 15 min : <span data-cmd_id="#loadavg15mnid#" style="color: var(--al-warning-color) !important;" >#loadavg15mn#</span>';
 			} else if ((parseFloat('#loadavg15mn#') > parseFloat('#loadavg15mn_colorhigh#')) && '#loadavg15mn_colorhigh#' !== '') {
-				document.querySelector('#loadavg15mn#id#').innerHTML = ' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#loadavg15mn#</span>';
+				document.querySelector('#loadavg15mn#id#').innerHTML = ' - 15 min : <span data-cmd_id="#loadavg15mnid#" style="color: var(--al-danger-color) !important;" >#loadavg15mn#</span>';
 			} else {
-				document.querySelector('#loadavg15mn#id#').innerHTML = ' - 15 min : <span data-cmd_id="#loadavg15mnid#" class="history cursor">#loadavg15mn#</span>';
+				document.querySelector('#loadavg15mn#id#').innerHTML = ' - 15 min : <span data-cmd_id="#loadavg15mnid#">#loadavg15mn#</span>';
 			}
 		}
 				
@@ -180,13 +178,13 @@
 			if ('#hddpourcused#' === '') {
 				document.querySelector('#hddpourcused#id#').innerHTML = '<span></span>';
 			} else if (parseInt('#hddpourcused#') < parseInt('#hddpourcused_colorlow#')) {
-				document.querySelector('#hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcused#%</span>)';
+				document.querySelector('#hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" style="color: var(--al-success-color) !important;">#hddpourcused#%</span>)';
 			} else if ((parseInt('#hddpourcused#') >= parseInt('#hddpourcused_colorlow#')) && (parseInt('#hddpourcused#') <= parseInt('#hddpourcused_colorhigh#'))) {
-				document.querySelector('#hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcused#%</span>)';
+				document.querySelector('#hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" style="color: var(--al-warning-color) !important;">#hddpourcused#%</span>)';
 			} else if ((parseInt('#hddpourcused#') > parseInt('#hddpourcused_colorhigh#')) && '#hddpourcused_colorhigh#' !== '') {
-				document.querySelector('#hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcused#%</span>)';
+				document.querySelector('#hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" style="color: var(--al-danger-color) !important;">#hddpourcused#%</span>)';
 			} else {
-				document.querySelector('#hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#" class="history cursor">#hddpourcused#%</span>)';
+				document.querySelector('#hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span data-cmd_id="#hddpourcusedid#">#hddpourcused#%</span>)';
 			}
 		}
 
@@ -206,13 +204,13 @@
 			if ('#Mempourc#' === '') {
 				document.querySelector('#Mempourcent#id#').innerHTML = '<span>#Mem#</span>';
 			} else if ((parseInt('#Mempourc#') > parseInt('#Mempourc_colorhigh#')) && '#Mempourc_colorhigh#' !== '') {
-				document.querySelector('#Mempourcent#id#').innerHTML = '#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-success-color) !important;" >#Mempourc#%</span>)';
+				document.querySelector('#Mempourcent#id#').innerHTML = '#Mem# (<span data-cmd_id="#Mempourcid#" style="color: var(--al-success-color) !important;" >#Mempourc#%</span>)';
 			} else if ((parseInt('#Mempourc#') >= parseInt('#Mempourc_colorlow#')) && (parseInt('#Mempourc#') <= parseInt('#Mempourc_colorhigh#'))) {
-				document.querySelector('#Mempourcent#id#').innerHTML = '#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#Mempourc#%</span>)';
+				document.querySelector('#Mempourcent#id#').innerHTML = '#Mem# (<span data-cmd_id="#Mempourcid#" style="color: var(--al-warning-color) !important;" >#Mempourc#%</span>)';
 			} else if (parseInt('#Mempourc#') < parseInt('#Mempourc_colorlow#')) {
-				document.querySelector('#Mempourcent#id#').innerHTML = '#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#Mempourc#%</span>)';
+				document.querySelector('#Mempourcent#id#').innerHTML = '#Mem# (<span data-cmd_id="#Mempourcid#" style="color: var(--al-danger-color) !important;" >#Mempourc#%</span>)';
 			} else {
-				document.querySelector('#Mempourcent#id#').innerHTML = '#Mem# (<span data-cmd_id="#Mempourcid#" class="history cursor" >#Mempourc#%</span>)';
+				document.querySelector('#Mempourcent#id#').innerHTML = '#Mem# (<span data-cmd_id="#Mempourcid#" >#Mempourc#%</span>)';
 			}
 		}
 
@@ -232,13 +230,13 @@
 			if ('#Swappourc#' === '') {
 				document.querySelector('#Swappourc#id#').innerHTML = '<span>#Mem_swap#</span>';
 			} else if ((parseInt('#Swappourc#') > parseInt('#Swappourc_colorhigh#')) && '#Swappourc_colorhigh#' !== '') {
-				document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-success-color) !important;" >#Swappourc#%</span>)';
+				document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" style="color: var(--al-success-color) !important;" >#Swappourc#%</span>)';
 			} else if ((parseInt('#Swappourc#') >= parseInt('#Swappourc_colorlow#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourc_colorhigh#'))) {
-				document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#Swappourc#%</span>)';
+				document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" style="color: var(--al-warning-color) !important;" >#Swappourc#%</span>)';
 			} else if (parseInt('#Swappourc#') < parseInt('#Swappourc_colorlow#')) {
-				document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#Swappourc#%</span>)';
+				document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" style="color: var(--al-danger-color) !important;" >#Swappourc#%</span>)';
 			} else {
-				document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="history cursor" >#Swappourc#%</span>)';
+				document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" >#Swappourc#%</span>)';
 			}
 		}
 
@@ -260,13 +258,13 @@
 			if ('#hddpourcusedv2#' === '') {
 				document.querySelector('#hddpourcusedv2#id#').innerHTML = '<span></span>';
 			} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2_colorlow#')) {
-				document.querySelector('#hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedv2#%</span>)';
+				document.querySelector('#hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" style="color: var(--al-success-color) !important;">#hddpourcusedv2#%</span>)';
 			} else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2_colorlow#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2_colorhigh#'))) {
-				document.querySelector('#hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#%</span>)';
+				document.querySelector('#hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#%</span>)';
 			} else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2_colorhigh#')) && '#hddpourcusedv2_colorhigh#' !== '') {
-				document.querySelector('#hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#%</span>)';
+				document.querySelector('#hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#%</span>)';
 			} else {
-				document.querySelector('#hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#" class="history cursor">#hddpourcusedv2#%</span>)';
+				document.querySelector('#hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span data-cmd_id="#hddpourcusedv2id#">#hddpourcusedv2#%</span>)';
 			}
 		}
 
@@ -291,13 +289,13 @@
 			if ('#hddpourcusedusb#' === '') {
 				document.querySelector('#hddpourcusedusb#id#').innerHTML = '<span></span>';
 			} else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusb_colorlow#')) {
-				document.querySelector('#hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)';
+				document.querySelector('#hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" style="color: var(--al-success-color) !important;">#hddpourcusedusb#%</span>)';
 			} else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusb_colorlow#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusb_colorhigh#'))) {
-				document.querySelector('#hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)';
+				document.querySelector('#hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#%</span>)';
 			} else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusb_colorhigh#')) && '#hddpourcusedusb_colorhigh#' !== '') {
-				document.querySelector('#hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)';
+				document.querySelector('#hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#%</span>)';
 			} else {
-				document.querySelector('#hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#" class="history cursor">#hddpourcusedusb#%</span>)';
+				document.querySelector('#hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span data-cmd_id="#hddpourcusedusbid#">#hddpourcusedusb#%</span>)';
 			}
 		}
 
@@ -322,13 +320,13 @@
 			if ('#hddpourcusedesata#' === '') {
 				document.querySelector('#hddpourcusedesata#id#').innerHTML = '<span></span>';				
 			} else if (parseInt('#hddpourcusedesata#') < parseInt('#hddpourcusedesata_colorlow#')) {
-				document.querySelector('#hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-success-color) !important;">#hddpourcusedesata#%</span>)';
+				document.querySelector('#hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" style="color: var(--al-success-color) !important;">#hddpourcusedesata#%</span>)';
 			} else if ((parseInt('#hddpourcusedesata#') >= parseInt('#hddpourcusedesata_colorlow#')) && (parseInt('#hddpourcusedesata#') <= parseInt('#hddpourcusedesata_colorhigh#'))) {
-				document.querySelector('#hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-warning-color) !important;">#hddpourcusedesata#%</span>)';
+				document.querySelector('#hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" style="color: var(--al-warning-color) !important;">#hddpourcusedesata#%</span>)';
 			} else if ((parseInt('#hddpourcusedesata#') > parseInt('#hddpourcusedesata_colorhigh#')) && '#hddpourcusedesata_colorhigh#' !== '') {
-				document.querySelector('#hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor" style="color: var(--al-danger-color) !important;">#hddpourcusedesata#%</span>)';
+				document.querySelector('#hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" style="color: var(--al-danger-color) !important;">#hddpourcusedesata#%</span>)';
 			} else {
-				document.querySelector('#hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#" class="history cursor">#hddpourcusedesata#%</span>)';
+				document.querySelector('#hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span data-cmd_id="#hddpourcusedesataid#">#hddpourcusedesata#%</span>)';
 			}
 		}
 
@@ -351,16 +349,16 @@
 			if ('#cpu_temp#' !== '' && '#cpu_temp_display#' == 'OK') {
 				if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
 					document.querySelector('#cpu#id#').innerHTML = '<span>#cpu# </span>';
-					document.querySelector('#cpu_temp#id#').innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)';
+					document.querySelector('#cpu_temp#id#').innerHTML = '(<span data-cmd_id="#cpu_tempid#" style="color: var(--al-success-color) !important;" >#cpu_temp#°C</span>)';
 				} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temp_colorlow#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temp_colorhigh#'))) {
 					document.querySelector('#cpu#id#').innerHTML = '<span>#cpu# </span>';
-					document.querySelector('#cpu_temp#id#').innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-warning-color) !important;" >#cpu_temp#°C</span>)';
+					document.querySelector('#cpu_temp#id#').innerHTML = '(<span data-cmd_id="#cpu_tempid#" style="color: var(--al-warning-color) !important;" >#cpu_temp#°C</span>)';
 				} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temp_colorhigh#')) && '#cpu_temp_colorhigh#' !== '') {
 					document.querySelector('#cpu#id#').innerHTML = '<span>#cpu# </span>';
-					document.querySelector('#cpu_temp#id#').innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor" style="color: var(--al-danger-color) !important;" >#cpu_temp#°C</span>)';
+					document.querySelector('#cpu_temp#id#').innerHTML = '(<span data-cmd_id="#cpu_tempid#" style="color: var(--al-danger-color) !important;" >#cpu_temp#°C</span>)';
 				} else {
 					document.querySelector('#cpu#id#').innerHTML = '<span>#cpu# </span>';
-					document.querySelector('#cpu_temp#id#').innerHTML = '(<span data-cmd_id="#cpu_tempid#" class="history cursor">#cpu_temp#°C</span>)';
+					document.querySelector('#cpu_temp#id#').innerHTML = '(<span data-cmd_id="#cpu_tempid#">#cpu_temp#°C</span>)';
 				}
 			} else {
 				document.querySelector('#cpu_temp#id#').innerHTML = '<span>#cpu#</span>';
@@ -388,13 +386,13 @@
 		if (document.querySelector('#uniteperso1#id#') !== null) {
 			if ('#perso1#' !== '') {
 				if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-					document.querySelector('#uniteperso1#id#').innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
+					document.querySelector('#uniteperso1#id#').innerHTML = '<span data-cmd_id="#uniteperso1#id# style="color: var(--al-success-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 				} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-					document.querySelector('#uniteperso1#id#').innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
+					document.querySelector('#uniteperso1#id#').innerHTML = '<span data-cmd_id="#uniteperso1#id# style="color: var(--al-warning-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 				} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
-					document.querySelector('#uniteperso1#id#').innerHTML = '<span data-cmd_id="#uniteperso1#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
+					document.querySelector('#uniteperso1#id#').innerHTML = '<span data-cmd_id="#uniteperso1#id# style="color: var(--al-danger-color) !important;" >#perso1#</span><span>#uniteperso1#</span>';
 				} else {
-					document.querySelector('#uniteperso1#id#').innerHTML = '<span data-cmd_id="#perso1id#" class="history cursor">#perso1##uniteperso1#</span>';
+					document.querySelector('#uniteperso1#id#').innerHTML = '<span data-cmd_id="#perso1id#">#perso1##uniteperso1#</span>';
 				}
 			} else {
 				document.querySelector('#uniteperso1#id#').innerHTML = '<span></span>';
@@ -418,13 +416,13 @@
 		if (document.querySelector('#uniteperso2#id#') !== null) {
 			if ('#perso2#' !== '') {
 				if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-					document.querySelector('#uniteperso2#id#').innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
+					document.querySelector('#uniteperso2#id#').innerHTML = '<span data-cmd_id="#uniteperso2#id# style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 				} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-					document.querySelector('#uniteperso2#id#').innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
+					document.querySelector('#uniteperso2#id#').innerHTML = '<span data-cmd_id="#uniteperso2#id# style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 				} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
-					document.querySelector('#uniteperso2#id#').innerHTML = '<span data-cmd_id="#uniteperso2#id# class="history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
+					document.querySelector('#uniteperso2#id#').innerHTML = '<span data-cmd_id="#uniteperso2#id# style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>';
 				} else {
-					document.querySelector('#uniteperso2#id#').innerHTML = '<span data-cmd_id="#perso2id#" class="history cursor">#perso2##uniteperso2#</span>';
+					document.querySelector('#uniteperso2#id#').innerHTML = '<span data-cmd_id="#perso2id#">#perso2##uniteperso2#</span>';
 				}
 			} else {
 				document.querySelector('#uniteperso2#id#').innerHTML = '<span></span>';
