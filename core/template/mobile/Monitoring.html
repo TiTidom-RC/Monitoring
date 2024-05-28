@@ -43,12 +43,12 @@
 		<div class="cmd tooltips" style="margin-left:5px;display: #namedistri_display#;">
 			<span title="Distribution Linux || Date valeur : #namedistri_value# || Date collecte : #namedistri_collect#"
 				class="fab fa-linux" style="min-width:15px"></span>
-			<span>#namedistri#</span>
+			<span class="state">#namedistri#</span>
 		</div>
 		<div class="cmd tooltips" style="margin-left:5px;display: #uptime_display#;">
 			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#"
 				class="fas fa-tachometer-alt" style="min-width:15px"></span>
-			<span id="uptime#id#"></span>
+			<span class="state" id="uptime#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -59,7 +59,7 @@
 			<span
 				title="Charge système (load average) || Date valeur : #loadavg_value# || Date collecte : #loadavg_collect#"
 				class="fa techno-courbes3" style="width:15px"></span>
-			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
+			<span class="state" id="loadavg1mn#id#"></span><span class="state" id="loadavg5mn#id#"></span><span class="state" id="loadavg15mn#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -101,7 +101,7 @@
 		<div class="cmd tooltips" style="margin-left:5px;display: #Mem_display#;">
 			<span title="Mémoire vive (% libre) || Date valeur : #Mem_value# || Date collecte : #Mem_collect#"
 				class="fa techno-memory" style="width:15px"></span>
-			<span id="Mempourcent#id#"></span>
+			<span class="state" id="Mempourcent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -121,7 +121,7 @@
 		<div class="cmd tooltips" style="margin-left:5px;display: #Mem_swap_display#;">
 			<span title="Mémoire Swap (% libre) || Date valeur : #Mem_swap_value# || Date collecte : #Mem_swap_collect#"
 				class="fas fa-list" style="width:15px"></span>
-			<span id="Swappourc#id#"></span>
+			<span class="state" id="Swappourc#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -142,7 +142,7 @@
 			<span
 				title="Trafic réseau (#ethernet0_name#) || Date valeur : #ethernet0_value# || Date collecte : #ethernet0_collect#"
 				class="fa techno-fleches" style="width:15px"></span>
-			<span id="ethernet0#id#"></span>
+			<span class="state" id="ethernet0#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -153,7 +153,7 @@
 			<span
 				title="Espace disque (% utilisé) || Date valeur : #hddtotal_value# || Date collecte : #hddtotal_collect#"
 				class="fas fa-hdd" style="width:15px"></span>
-			<span id="hddpourcused#id#"></span>
+			<span class="state" id="hddpourcused#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -231,7 +231,7 @@
 			<span
 				title="Nombre CPU, fréquence (température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#"
 				class="fa techno-pc" style="width:15px"></span>
-			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
+			<span class="state" id="cpu#id#"></span><span class="state" id="cpu_temp#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -257,7 +257,7 @@
 		<div class="cmd tooltips" style="margin-left:5px;display: #perso1_display#;">
 			<span title="#nameperso1# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#"
 				style="width:15px">#iconeperso1#</span>
-			<span id="uniteperso1#id#"></span>
+			<span class="state" id="uniteperso1#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -279,7 +279,7 @@
 		<div class="cmd tooltips" style="margin-left:5px;display: #perso2_display#;">
 			<span title="#nameperso2# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#"
 				style="width:15px">#iconeperso2#</span>
-			<span id="uniteperso2#id#"></span>
+			<span class="state" id="uniteperso2#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
