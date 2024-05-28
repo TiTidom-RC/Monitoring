@@ -41,11 +41,11 @@
 	<div class="cmds text-left" style="display:block">
 		<div class="tooltips" data-cmd_id="#namedistriid#" style="margin-left:5px;display: #namedistri_display#;">
 			<span title="Distribution Linux</br><i>Date de valeur : #namedistri_value#</br>Date de collecte : #namedistri_collect#</i>" class="fab fa-linux" style="min-width:15px"></span>
-			<span>#namedistri#</span>
+			<span class="value">#namedistri#</span>
 		</div>
 		<div class="tooltips" data-cmd_id="#uptimeid#" style="margin-left:5px;display: #uptime_display#;">
 			<span title="Temps d'Activité (UpTime)</br><i>Date de valeur : #uptime_value#</br>Date de collecte : #uptime_collect#</i>" class="fas fa-tachometer-alt" style="min-width:15px;"></span>
-			<span id="uptime#id#"></span>
+			<span class="value" id="uptime#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -54,7 +54,7 @@
 		</script>
 		<div class="tooltips" style="margin-left:5px;display: #loadavg_display#;">
 			<span title="Charge Système (Load Average)</br><i>Date de valeur : #loadavg_value#</br>Date de collecte : #loadavg_collect#</i>" class="fa techno-courbes3" style="width:15px;"></span>
-			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
+			<span class="value" id="loadavg1mn#id#"></span><span class="value" id="loadavg5mn#id#"></span><span class="value" id="loadavg15mn#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -96,7 +96,7 @@
 		</script>
 		<div class="tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#;">
 			<span title="Mémoire Vive (% Libre)</br><i>Date de valeur : #Mem_value#</br>Date de collecte : #Mem_collect#</i>" class="fa techno-memory" style="width:15px;"></span>
-			<span id="Mempourcent#id#"></span>
+			<span class="value" id="Mempourcent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -115,7 +115,7 @@
 		</script>
 		<div class="tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#;">
 			<span title="Mémoire Swap (% Libre)</br><i>Date de valeur : #Mem_swap_value#</br>Date de collecte : #Mem_swap_collect#</i>" class="fas fa-list" style="width:15px;"></span>
-			<span id="Swappourc#id#"></span>
+			<span class="value" id="Swappourc#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -134,7 +134,7 @@
 		</script>
 		<div class="tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#;">
 			<span title="Trafic Réseau (#ethernet0_name#)</br><i>Date de valeur : #ethernet0_value#</br>Date de collecte : #ethernet0_collect#</i>" class="fa techno-fleches" style="width:15px;"></span>
-			<span id="ethernet0#id#"></span>
+			<span class="value" id="ethernet0#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -143,7 +143,7 @@
 		</script>
 		<div class="tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#;">
 			<span title="Espace Disque (% Utilisé)</br><i>Date de valeur : #hddtotal_value#</br>Date de collecte : #hddtotal_collect#</i>" class="fas fa-hdd" style="width:15px;"></span>
-			<span id="hddpourcused#id#"></span>
+			<span class="value" id="hddpourcused#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -219,7 +219,7 @@
 		</script>
 		<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#;">
 			<span title="Nombre CPU - Fréquence (Température)</br><i>Date de valeur : #cpu_value#</br>Date de collecte : #cpu_collect#</i>" class="fa techno-pc" style="width:15px;"></span>
-			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
+			<span class="value" id="cpu#id#"></span><span class="value" id="cpu_temp#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -244,7 +244,7 @@
 		</script>
 		<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#;">
 			<span class="fa" title="#nameperso1#</br><i>Date de valeur : #perso1_value#</br>Date de collecte : #perso1_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso1#</span>
-			<span id="uniteperso1#id#"></span>
+			<span class="value" id="uniteperso1#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
@@ -265,7 +265,7 @@
 		</script>
 		<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#;">
 			<span class="fa" title="#nameperso2#</br><i>Date de valeur : #perso2_value#</br>Date de collecte : #perso2_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso2#</span>
-			<span id="uniteperso2#id#"></span>
+			<span class="value" id="uniteperso2#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
