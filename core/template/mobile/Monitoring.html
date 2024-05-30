@@ -100,7 +100,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#Mempourc#' === '') {
-					$('#Mempourcent#id#').append('<span class="state">#Mem#</span>');
+					$('#Mempourcent#id#').append('<span>#Mem#</span>');
 				} else if ((parseInt('#Mempourc#') > parseInt('#Mempourc_colorhigh#')) && '#Mempourc_colorhigh#' !== '') {
 					$('#Mempourcent#id#').append('#Mem# (<span class="state" style="color: var(--al-success-color) !important;" >#Mempourc#</span><span>%</span>)');
 				} else if ((parseInt('#Mempourc#') >= parseInt('#Mempourc_colorlow#')) && (parseInt('#Mempourc#') <= parseInt('#Mempourc_colorhigh#'))) {
@@ -120,7 +120,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#Swappourc#' === '') {
-					$('#Swappourc#id#').append('<span class="state">#Mem_swap#</span>');
+					$('#Swappourc#id#').append('<span>#Mem_swap#</span>');
 				} else if ((parseInt('#Swappourc#') > parseInt('#Swappourc_colorhigh#')) && '#Swappourc_colorhigh#' !== '') {
 					$('#Swappourc#id#').append('#Mem_swap# (<span class="state" style="color: var(--al-success-color) !important;" >#Swappourc#</span><span>%</span>)');
 				} else if ((parseInt('#Swappourc#') >= parseInt('#Swappourc_colorlow#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourcc_colorhigh#'))) {
@@ -154,13 +154,13 @@
 				if ('#hddpourcused#' === '') {
 					$('#hddpourcused#id#').append('<span></span>');
 				} else if (parseInt('#hddpourcused#') < parseInt('#hddpourcused_colorlow#')) {
-					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcused#</span><span>%</span>)');
+					$('#hddpourcused#id#').append('Total : <span class="state">#hddtotal#</span> - Utilisé : <span class="state">#hddused#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcused#</span><span>%</span>)');
 				} else if ((parseInt('#hddpourcused#') >= parseInt('#hddpourcused_colorlow#')) && (parseInt('#hddpourcused#') <= parseInt('#hddpourcused_colorhigh#'))) {
-					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcused#</span><span>%</span>)');
+					$('#hddpourcused#id#').append('Total : <span class="state">#hddtotal#</span> - Utilisé : <span class="state">#hddused#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcused#</span><span>%</span>)');
 				} else if ((parseInt('#hddpourcused#') > parseInt('#hddpourcused_colorhigh#')) && '#hddpourcused_colorhigh#' !== '') {
-					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcused#</span><span>%</span>)');
+					$('#hddpourcused#id#').append('Total : <span class="state">#hddtotal#</span> - Utilisé : <span class="state">#hddused#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcused#</span><span>%</span>)');
 				} else {
-					$('#hddpourcused#id#').append('Total : #hddtotal# - Utilisé : #hddused# (<span class="state">#hddpourcused#%</span>)');
+					$('#hddpourcused#id#').append('Total : <span class="state">#hddtotal#</span> - Utilisé : <span class="state">#hddused#</span> (<span class="state">#hddpourcused#</span><span>%</span>)');
 				}
 			}
 		</script>
@@ -173,13 +173,13 @@
 				if ('#hddpourcusedv2#' === '') {
 					$('#hddpourcusedv2#id#').append('<span></span>');
 				} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2_colorlow#')) {
-					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedv2#</span><span>%</span>)');
+					$('#hddpourcusedv2#id#').append('Total : <span class="state">#hddtotalv2#</span> - Utilisé : <span class="state">#hddusedv2#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedv2#</span><span>%</span>)');
 				} else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2_colorlow#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2_colorhigh#'))) {
-					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#</span><span>%</span>)');
+					$('#hddpourcusedv2#id#').append('Total : <span class="state">#hddtotalv2#</span> - Utilisé : <span class="state">#hddusedv2#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#</span><span>%</span>)');
 				} else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2_colorhigh#')) && '#hddpourcusedv2_colorhigh#' !== '') {
-					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#</span><span>%</span>)');
+					$('#hddpourcusedv2#id#').append('Total : <span class="state">#hddtotalv2#</span> - Utilisé : <span class="state">#hddusedv2#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#</span><span>%</span>)');
 				} else {
-					$('#hddpourcusedv2#id#').append('Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span class="state">#hddpourcusedv2#</span><span>%</span>)');
+					$('#hddpourcusedv2#id#').append('Total : <span class="state">#hddtotalv2#</span> - Utilisé : <span class="state">#hddusedv2#</span> (<span class="state">#hddpourcusedv2#</span><span>%</span>)');
 				}
 			}
 		</script>
@@ -192,13 +192,13 @@
 				if ('#hddpourcusedusb#' === '') {
 					$('#hddpourcusedusb#id#').append('<span></span>');
 				} else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusb_colorlow#')) {
-					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedusb#</span><span>%</span>)');
+					$('#hddpourcusedusb#id#').append('Total : <span class="state">#hddtotalusb#</span> - Utilisé : <span class="state">#hddusedusb#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedusb#</span><span>%</span>)');
 				} else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusb_colorlow#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusb_colorhigh#'))) {
-					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#</span><span>%</span>)');
+					$('#hddpourcusedusb#id#').append('Total : <span class="state">#hddtotalusb#</span> - Utilisé : <span class="state">#hddusedusb#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#</span><span>%</span>)');
 				} else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusb_colorhigh#')) && '#hddpourcusedusb_colorhigh#' !== '') {
-					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#</span><span>%</span>)');
+					$('#hddpourcusedusb#id#').append('Total : <span class="state">#hddtotalusb#</span> - Utilisé : <span class="state">#hddusedusb#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#</span><span>%</span>)');
 				} else {
-					$('#hddpourcusedusb#id#').append('Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span class="state">#hddpourcusedusb#</span><span>%</span>)');
+					$('#hddpourcusedusb#id#').append('Total : <span class="state">#hddtotalusb#</span> - Utilisé : <span class="state">#hddusedusb#</span> (<span class="state">#hddpourcusedusb#</span><span>%</span>)');
 				}
 			}
 		</script>
@@ -211,13 +211,13 @@
 				if ('#hddpourcusedesata#' === '') {
 					$('#hddpourcusedesata#id#').append('<span></span>');
 				} else if (parseInt('#hddpourcusedesata#') < parseInt('#hddpourcusedesata_colorlow#')) {
-					$('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedesata#</span><span>%</span>)');
+					$('#hddpourcusedesata#id#').append('Total : <span class="state">#hddtotalesata#</span> - Utilisé : <span class="state">#hddusedesata#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedesata#</span><span>%</span>)');
 				} else if ((parseInt('#hddpourcusedesata#') >= parseInt('#hddpourcusedesata_colorlow#')) && (parseInt('#hddpourcusedesata#') <= parseInt('#hddpourcusedesata_colorhigh#'))) {
-					$('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedesata#</span><span>%</span>)');
+					$('#hddpourcusedesata#id#').append('Total : <span class="state">#hddtotalesata#</span> - Utilisé : <span class="state">#hddusedesata#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedesata#</span><span>%</span>)');
 				} else if ((parseInt('#hddpourcusedesata#') > parseInt('#hddpourcusedesata_colorhigh#')) && '#hddpourcusedesata_colorhigh#' !== '') {
-					$('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedesata#</span><span>%</span>)');
+					$('#hddpourcusedesata#id#').append('Total : <span class="state">#hddtotalesata#</span> - Utilisé : <span class="state">#hddusedesata#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedesata#</span><span>%</span>)');
 				} else {
-					$('#hddpourcusedesata#id#').append('Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span class="state">#hddpourcusedesata#</span><span>%</span>)');
+					$('#hddpourcusedesata#id#').append('Total : <span class="state">#hddtotalesata#</span> - Utilisé : <span class="state">#hddusedesata#</span> (<span class="state">#hddpourcusedesata#</span><span>%</span>)');
 				}
 			}
 		</script>
@@ -231,13 +231,13 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' == 'OK') {
 					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
-						$('#cpu#id#').append('<span class="state">#cpu# </span>');
+						$('#cpu#id#').append('<span>#cpu# </span>');
 						$('#cpu_temp#id#').append('(<span class="state" style="color: var(--al-success-color) !important;" >#cpu_temp#</span><span>°C</span>)');
 					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temp_colorlow#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temp_colorhigh#'))) {
-						$('#cpu#id#').append('<span class="state">#cpu# </span>');
+						$('#cpu#id#').append('<span>#cpu# </span>');
 						$('#cpu_temp#id#').append('(<span class="state" style="color: var(--al-warning-color) !important;" >#cpu_temp#</span><span>°C</span>)');
 					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temp_colorhigh#')) && '#cpu_temp_colorhigh#' !== '') {
-						$('#cpu#id#').append('<span class="state">#cpu# </span>');
+						$('#cpu#id#').append('<span>#cpu# </span>');
 						$('#cpu_temp#id#').append('(<span class="state" style="color: var(--al-danger-color) !important;" >#cpu_temp#</span><span>°C</span>)');
 					} else {
 						$('#cpu#id#').append('<span>#cpu# </span>');
