@@ -754,7 +754,7 @@ class Monitoring extends eqLogic {
 				$cnx_ssh = '';
 
 				try {
-					$sshconnection = new SSH2($ip,$port);
+					$sshconnection = new SSH2($ip,$port, 30);
 					log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: OK');
 				} catch (Exception $e) {
 					log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
@@ -2093,7 +2093,7 @@ class Monitoring extends eqLogic {
 			$cnx_ssh = '';
 
 			try {
-				$sshconnection = new SSH2($ip,$port);
+				$sshconnection = new SSH2($ip,$port, 30);
 				log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: OK');
 			} catch (Exception $e) {
 				log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
