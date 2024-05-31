@@ -747,6 +747,8 @@ class Monitoring extends eqLogic {
 			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 				$ip = $this->getConfiguration('addressip');
 				$port = $this->getConfiguration('portssh');
+				$timeout = 10;
+				# $timeout = $this->getConfiguration('timeout');
 				$user = $this->getConfiguration('user');
 				$pass = $this->getConfiguration('password');
 				$sshkey = $this->getConfiguration('ssh-key');
@@ -754,7 +756,7 @@ class Monitoring extends eqLogic {
 				$cnx_ssh = '';
 
 				try {
-					$sshconnection = new SSH2($ip,$port, 30);
+					$sshconnection = new SSH2($ip,$port, $timeout);
 					log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: OK');
 				} catch (Exception $e) {
 					log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
@@ -2085,6 +2087,8 @@ class Monitoring extends eqLogic {
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
 			$port = $this->getConfiguration('portssh');
+			$timeout = 10;
+			# $timeout = $this->getConfiguration('timeout');
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
 			$sshkey = $this->getConfiguration('ssh-key');
@@ -2093,7 +2097,7 @@ class Monitoring extends eqLogic {
 			$cnx_ssh = '';
 
 			try {
-				$sshconnection = new SSH2($ip,$port, 30);
+				$sshconnection = new SSH2($ip,$port, $timeout);
 				log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: OK');
 			} catch (Exception $e) {
 				log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
