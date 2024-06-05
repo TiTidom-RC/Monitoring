@@ -185,6 +185,12 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-md-4 control-label">{{Timeout SSH}}</label>
+                                        <div class="col-md-6">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="timeoutssh" type="text" placeholder="{{Saisir le timeout SSH}}" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-md-4 control-label">{{Identifiant}}</label>
                                         <div class="col-md-6">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />

@@ -746,9 +746,8 @@ class Monitoring extends eqLogic {
 			$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 				$ip = $this->getConfiguration('addressip');
-				$port = $this->getConfiguration('portssh');
-				$timeout = 10;
-				# $timeout = $this->getConfiguration('timeout');
+				$port = $this->getConfiguration('portssh', 22);
+				$timeout = $this->getConfiguration('timeout', 30);
 				$user = $this->getConfiguration('user');
 				$pass = $this->getConfiguration('password');
 				$sshkey = $this->getConfiguration('ssh-key');
@@ -2086,9 +2085,8 @@ class Monitoring extends eqLogic {
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
-			$port = $this->getConfiguration('portssh');
-			$timeout = 10;
-			# $timeout = $this->getConfiguration('timeout');
+			$port = $this->getConfiguration('portssh', 22);
+			$timeout = $this->getConfiguration('timeoutssh', 30);
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
 			$sshkey = $this->getConfiguration('ssh-key');
