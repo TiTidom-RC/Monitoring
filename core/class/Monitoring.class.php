@@ -747,7 +747,7 @@ class Monitoring extends eqLogic {
 			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 				$ip = $this->getConfiguration('addressip');
 				$port = $this->getConfiguration('portssh', 22);
-				$timeout = $this->getConfiguration('timeout', 30);
+				$timeout = $this->getConfiguration('timeoutssh', 30);
 				$user = $this->getConfiguration('user');
 				$pass = $this->getConfiguration('password');
 				$sshkey = $this->getConfiguration('ssh-key');
