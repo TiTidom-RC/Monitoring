@@ -746,7 +746,8 @@ class Monitoring extends eqLogic {
 			$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 				$ip = $this->getConfiguration('addressip');
-				$port = $this->getConfiguration('portssh');
+				$port = $this->getConfiguration('portssh', 22);
+				$timeout = $this->getConfiguration('timeoutssh', 30);
 				$user = $this->getConfiguration('user');
 				$pass = $this->getConfiguration('password');
 				$sshkey = $this->getConfiguration('ssh-key');
@@ -754,8 +755,8 @@ class Monitoring extends eqLogic {
 				$cnx_ssh = '';
 
 				try {
-					$sshconnection = new SSH2($ip,$port);
-					log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: OK');
+					$sshconnection = new SSH2($ip,$port, $timeout);
+					log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' (IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout . ') :: OK');
 				} catch (Exception $e) {
 					log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
@@ -2084,7 +2085,8 @@ class Monitoring extends eqLogic {
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
-			$port = $this->getConfiguration('portssh');
+			$port = $this->getConfiguration('portssh', 22);
+			$timeout = $this->getConfiguration('timeoutssh', 30);
 			$user = $this->getConfiguration('user');
 			$pass = $this->getConfiguration('password');
 			$sshkey = $this->getConfiguration('ssh-key');
@@ -2093,8 +2095,8 @@ class Monitoring extends eqLogic {
 			$cnx_ssh = '';
 
 			try {
-				$sshconnection = new SSH2($ip,$port);
-				log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: OK');
+				$sshconnection = new SSH2($ip,$port, $timeout);
+				log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' (IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout . ') :: OK');
 			} catch (Exception $e) {
 				log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
 				$cnx_ssh = 'KO';

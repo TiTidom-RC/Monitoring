@@ -179,9 +179,19 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Port SSH}}</label>
+                                        <label class="col-md-4 control-label">{{Port SSH}}
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Port SSH (par défaut : 22)}}"></i></sup>
+                                        </label>
                                         <div class="col-md-6">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="portssh" type="text" placeholder="{{Saisir le port SSH}}" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">{{Timeout SSH}}
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration de la connexion SSH (par défaut : 30s)}}"></i></sup>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="timeoutssh" type="text" placeholder="{{Saisir le timeout SSH}}" />
                                         </div>
                                     </div>
                                     <div class="form-group">

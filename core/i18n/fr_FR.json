@@ -25,6 +25,8 @@
         "Saisir l'adresse IP": "Saisir l'adresse IP",
         "Port SSH": "Port SSH",
         "Saisir le port SSH": "Saisir le port SSH",
+        "Timeout SSH": "Timeout SSH",
+        "Saisir le timeout SSH": "Saisir le timeout SSH",
         "Identifiant": "Identifiant",
         "Saisir le login": "Saisir le login",
         "Mot de passe": "Mot de passe",
