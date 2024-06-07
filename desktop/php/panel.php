@@ -28,7 +28,7 @@ if (!is_object($object)) {
 }
 
 //Get all object in right order, coming from Dashboard or Synthesis, showing childs or not, or by summaries:
-$objectTree = jeeObject::buildTree($object, true);
+$objectTree = jeeObject::buildTree(null, true);
 sendVarToJs('jeephp2js.rootObjectId', $object->getId());
 if (init('childs', 1) == 1) {
 	$allObject = $objectTree;
