@@ -3,81 +3,171 @@ if (!isConnect()) {
 	throw new Exception('{{401 - Accès non autorisé}}');
 }
 
-sendVarToJs('jeedomBackgroundImg', 'plugins/Monitoring/core/img/panel.jpg');
-
+//Get higher object to show:
 if (init('object_id') == '') {
 	$object = jeeObject::byId($_SESSION['user']->getOptions('defaultDashboardObject'));
 } else {
 	$object = jeeObject::byId(init('object_id'));
 }
+
+//Check for object found:
+$mbState = config::byKey('mbState');
 if (!is_object($object)) {
 	$object = jeeObject::rootObject();
-}
-if (!is_object($object)) {
-	throw new Exception('{{Aucun objet racine trouvé. Pour en créer un, allez dans Générale -> Objet.<br/> Si vous ne savez pas quoi faire ou que c\'est la premiere fois que vous utilisez Jeedom n\'hésitez pas a consulter cette <a href="http://jeedom.fr/premier_pas.php" target="_blank">page</a>}}');
-}
-$child_object = jeeObject::buildTree($object);
-$parentNumber = array();
-?>
-
-<div>
-    <?php
-if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1 && init('report') != 1) {
-	echo '<div class="col-lg-2 col-md-3 col-sm-4" id="div_displayObjectList">';
-} else {
-	echo '<div class="col-lg-2 col-md-3 col-sm-4" style="display:none;" id="div_displayObjectList">';
-}
-?>
-	<div class="bs-sidebar">
-		<ul id="ul_object" class="nav nav-list bs-sidenav">
-			<li class="filter" style="margin-bottom: 5px;"><input class="filter form-control input-sm" placeholder="{{Rechercher}}" style="width: 100%"/></li>
-			<?php
-				$allObject = jeeObject::buildTree(null, true);
-				foreach ($allObject as $object_li) {
-					$margin = 5 * $object_li->getConfiguration('parentNumber');
-					if ($object_li->getId() == $object->getId()) {
-						echo '<li class="cursor li_object active" ><a data-object_id="' . $object_li->getId() . '" href="index.php?v=d&p=panel&m=Monitoring&object_id=' . $object_li->getId() . '" style="padding: 2px 0px;"><span style="position:relative;left:' . $margin . 'px;">' . $object_li->getHumanName(true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $object_li->getHtmlSummary() . '</span></a></li>';
-					} else {
-						echo '<li class="cursor li_object" ><a data-object_id="' . $object_li->getId() . '" href="index.php?v=d&p=panel&m=Monitoring&object_id=' . $object_li->getId() . '" style="padding: 2px 0px;"><span style="position:relative;left:' . $margin . 'px;">' . $object_li->getHumanName(true) . '</span><span style="font-size : 0.65em;float:right;position:relative;top:7px;">' . $object_li->getHtmlSummary() . '</span></a></li>';
-					}
-				}
-			?>
-		</ul>
-	</div>
-</div>
-<?php
-if ($_SESSION['user']->getOptions('displayObjetByDefault') == 1 && init('report') != 1) {
-	echo '<div class="col-lg-10 col-md-9 col-sm-8" id="div_displayObject">';
-} else {
-	echo '<div class="col-lg-12 col-md-12 col-sm-12" id="div_displayObject">';
-}
-?>
-<i id='bt_displayObject' data-display='<?php echo $_SESSION['user']->getOptions('displayObjetByDefault') ?>' title="Afficher/Masquer les objets"></i>
-<i id="bt_editDashboardWidgetOrder" data-mode="0""></i>
-<br/>
-<?php
-echo '<div class="div_displayEquipement" style="width: 100%;">';
-if (init('object_id') == '') {
-	foreach ($allObject as $object) {
-		foreach ($object->getEqLogic(true, false, 'Monitoring') as $Monitoring) {
-			echo $Monitoring->toHtml('dview');
-		}
-	}
-} else {
-	foreach ($object->getEqLogic(true, false, 'Monitoring') as $Monitoring) {
-		echo $Monitoring->toHtml('dview');
-	}
-	foreach ($child_object as $child) {
-		$Monitoring = $child->getEqLogic(true, false, 'Monitoring');
-		if (count($Monitoring) > 0) {
-			foreach ($Monitoring as $Monitoring) {
-				echo $Monitoring->toHtml('dview');
+	if (!is_object($object)) {
+		$alert = '{{Aucun objet racine trouvé. Pour en créer un, allez dans Outils -> Objets}}.<br/>';
+		if ($mbState == 0) {
+			if (config::byKey('doc::base_url', 'core') != '') {
+				$alert .= '{{Documentation}} : <a href="' . config::byKey('doc::base_url', 'core') . '/fr_FR/concept/" class="cursor label alert-info" target="_blank">{{Concepts}}</a>';
+				$alert .= ' | <a href="' . config::byKey('doc::base_url', 'core') . '/fr_FR/premiers-pas/" class="cursor label alert-info" target="_blank">{{Premiers pas}}</a>';
 			}
 		}
+		echo '<div class="alert alert-warning">' . $alert . '</div>';
+		return;
 	}
 }
-echo '</div>';
+
+//Get all object in right order, coming from Dashboard or Synthesis, showing childs or not, or by summaries:
+$panelObject = jeeObject::buildTree($object, true);
+sendVarToJs('jeephp2js.rootObjectId', $object->getId());
+if (init('childs', 1) == 1) {
+	$allObject = $panelObject;
+} else {
+	$allObject = array();
+}
+
+if (!$object->hasRight('r') && count($allObject) > 0) {
+	$object = $allObject[0];
+}
+
+global $columns;
+$columns = config::byKey('dahsboard::column::size');
 ?>
+
+<div class="row row-overflow">
 </div>
+<div id="div_displayObject">
+	<div id="dashTopBar" class="input-group">
+		<div class="input-group-btn">
+			<?php
+			if (init('btover', 0) == 0) { ?>
+				<a id="bt_overview" class="btn" data-state="0"><i class="icon jeedomapp-fleche-bas-line"></i></a>
+			<?php } else { ?>
+				<a id="bt_backOverview" href="index.php?v=d&p=overview" class="btn roundedLeft" title="{{Retour à la Synthèse}}"><i class="fas fa-arrow-circle-left"></i>
+				</a><a id="bt_overview" class="btn clickable" data-state="0"><i class="icon jeedomapp-fleche-bas-line"></i></a>
+			<?php } ?>
+		</div>
+		<input class="form-control" id="in_searchDashboard" placeholder="{{Rechercher | nom | :not(nom}}" autocomplete="off">
+		<div class="input-group-btn">
+			<a id="bt_resetDashboardSearch" class="btn" title="{{Vider le champ de recherche}}"><i class="fas fa-times"></i>
+			</a><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="{{Filtre par catégorie}}">
+				<i class="fas fa-filter"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+			</button>
+			<ul id="categoryfilter" class="dropdown-menu" role="menu" style="top:28px;left:-110px;">
+				<li>
+					<a id="catFilterAll"> {{Toutes}}</a>
+					<a id="catFilterNone"> {{Aucune}}</a>
+				</li>
+				<li class="divider"></li>
+				<?php
+				foreach ((jeedom::getConfiguration('eqLogic:category')) as $key => $value) {
+					if ($key == 'default') $key = '';
+					echo '<li><a><input checked type="checkbox" class="catFilterKey" data-key="' . $value['name'] . '"/>&nbsp;<i class="' . $value['icon'] . '"></i> ' . $value['name'] . '</a></li>';
+				}
+				?>
+				<li><a><input checked type="checkbox" class="catFilterKey" data-key="scenario" />&nbsp;<i class="fas fa-cogs"></i> {{Scénario}}</a></li>
+			</ul>
+		</div>
+		<?php
+		if (init('category', 'all') == 'all') { ?>
+			<div class="input-group-btn">
+				<a id="bt_editDashboardWidgetOrder" data-mode="0" class="btn enabled roundedRight" title="{{Édition du Dashboard}}"><i class="fas fa-pencil-alt"></i></a>
+			</div>
+		<?php } ?>
+	</div>
+
+	<?php
+	$div = '<div id="dashOverviewPrev" class="dashboard" style="display:none;">';
+	foreach ($objectTree as $_object) {
+		$margin = 8 * $_object->getConfiguration('parentNumber');
+		$dataHref = 'index.php?v=d&p=dashboard&object_id=' . $_object->getId();
+		$div .= '<div class="cursor li_object"><a data-object_id="' . $_object->getId() . '" data-href="' . $dataHref . '">';
+		$div .= '<span style="position:relative;left:' . $margin . 'px;">' . $_object->getHumanName(true, true) . '</span></a>';
+
+		$div .= $summaryCache[$_object->getId()];
+		$div .= '</div>';
+	}
+	$div .= '</div>';
+	echo $div;
+	
+	function formatJeedomObjectDiv($object, $toSummary = false)
+	{
+		global $columns;
+		global $summaryCache;
+		$objectId =  $object->getId();
+		$divClass = 'div_object';
+		if ($toSummary) $divClass .= ' hidden';
+		$div =  '<div class="' . $columns . '" >';
+		$div .= '<div data-object_id="' . $objectId . '" data-father_id="' . $object->getFather_id() . '" class="' . $divClass . '">';
+		$div .= '<legend><span class="objectDashLegend fullCorner">';
+		if (init('childs', 1) == 0) {
+			$div .= '<a href="index.php?v=d&p=dashboard&object_id=' . $objectId . '&childs=0&btover=1"><i class="icon jeedomapp-fleche-haut-line"></i></a>';
+		} else {
+			$div .= '<a href="index.php?v=d&p=dashboard&object_id=' . $objectId . '&childs=0"><i class="icon jeedomapp-fleche-haut-line"></i></a>';
+		}
+		$div .= '<a href="index.php?v=d&p=object&id=' . $objectId . '">' . $object->getDisplay('icon') . ' ' . ucfirst($object->getName()) . '</a>';
+		if (isset($summaryCache[$objectId])) {
+			$div .= '<span>' . $summaryCache[$objectId] . '</span>';
+		}
+		$div .= '<i class="fas fa-compress pull-right cursor bt_editDashboardTilesAutoResizeDown" title="{{Régler toutes les tuiles à la hauteur de la moins haute.}}" data-obecjtId="' . $objectId . '" style="display: none;"></i>
+		<i class="fas fa-expand pull-right cursor bt_editDashboardTilesAutoResizeUp" title="{{Régler toutes les tuiles à la hauteur de la plus haute.}}" data-obecjtId="' . $objectId . '" style="display: none;"></i>
+		</span>
+		</legend>';
+		$div .= '<div class="div_displayEquipement posEqWidthRef" id="div_ob' . $objectId . '">';
+		$div .= '</div></div></div>';
+		echo $div;
+	}
+	?>
+	<div class="row">
+		<?php
+		if ($DisplayByObject) {
+			//show root object and all its childs:
+			$childs = array();
+			if (count($allObject) == 1) {
+				$columns = 'col-xs-12';
+			}
+			foreach ($allObject as $thisObject) {
+				if ($thisObject->getId() != $object->getId()) {
+					continue;
+				}
+				foreach (($thisObject->getChilds()) as $child) {
+					if ($child->getConfiguration('hideOnDashboard', 0) == 1 || !$child->hasRight('r')) {
+						continue;
+					}
+					$childs[] = $child;
+				}
+			}
+			if (count($childs) == 0) {
+				$columns = 'col-xs-12';
+			}
+			if ($object->hasRight('r')) {
+				formatJeedomObjectDiv($object);
+			}
+			foreach ($childs as $child) {
+				formatJeedomObjectDiv($child);
+			}
+		} else {
+			//show object(s) for summaries:
+			foreach ($allObject as $object) {
+				formatJeedomObjectDiv($object, true);
+			}
+		}
+
+		?>
+	</div>
 </div>
-<?php include_file('desktop', 'panel', 'js', 'Monitoring');?>
+
+<?php
+include_file('desktop/common', 'ui', 'js');
+include_file('desktop', 'panel', 'js', 'Monitoring');
+?>
