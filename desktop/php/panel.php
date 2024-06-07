@@ -55,46 +55,33 @@ $columns = config::byKey('dahsboard::column::size');
 </div>
 <div id="div_displayObject">
 	<?php
-	$div = '<div id="dashOverviewPrev" class="dashboard" style="display:none;">';
-	foreach ($objectTree as $_object) {
-		$margin = 8 * $_object->getConfiguration('parentNumber');
-		$dataHref = 'index.php?v=d&p=dashboard&object_id=' . $_object->getId();
-		$div .= '<div class="cursor li_object"><a data-object_id="' . $_object->getId() . '" data-href="' . $dataHref . '">';
-		$div .= '<span style="position:relative;left:' . $margin . 'px;">' . $_object->getHumanName(true, true) . '</span></a>';
-
-		$div .= $summaryCache[$_object->getId()];
-		$div .= '</div>';
-	}
-	$div .= '</div>';
-	echo $div;
-
-	function formatJeedomObjectDiv($object, $toSummary = false)
-	{
-		global $columns;
-		global $summaryCache;
-		$objectId =  $object->getId();
-		$divClass = 'div_object';
-		if ($toSummary) $divClass .= ' hidden';
-		$div =  '<div class="' . $columns . '" >';
-		$div .= '<div data-object_id="' . $objectId . '" data-father_id="' . $object->getFather_id() . '" class="' . $divClass . '">';
-		$div .= '<legend><span class="objectDashLegend fullCorner">';
-		if (init('childs', 1) == 0) {
-			$div .= '<a href="index.php?v=d&p=dashboard&object_id=' . $objectId . '&childs=0&btover=1"><i class="icon jeedomapp-fleche-haut-line"></i></a>';
-		} else {
-			$div .= '<a href="index.php?v=d&p=dashboard&object_id=' . $objectId . '&childs=0"><i class="icon jeedomapp-fleche-haut-line"></i></a>';
+		function formatJeedomObjectDiv($object, $toSummary = false)
+		{
+			global $columns;
+			global $summaryCache;
+			$objectId =  $object->getId();
+			$divClass = 'div_object';
+			if ($toSummary) $divClass .= ' hidden';
+			$div =  '<div class="' . $columns . '" >';
+			$div .= '<div data-object_id="' . $objectId . '" data-father_id="' . $object->getFather_id() . '" class="' . $divClass . '">';
+			$div .= '<legend><span class="objectDashLegend fullCorner">';
+			if (init('childs', 1) == 0) {
+				$div .= '<a href="index.php?v=d&p=panel&object_id=' . $objectId . '&childs=0&btover=1"><i class="icon jeedomapp-fleche-haut-line"></i></a>';
+			} else {
+				$div .= '<a href="index.php?v=d&p=panel&object_id=' . $objectId . '&childs=0"><i class="icon jeedomapp-fleche-haut-line"></i></a>';
+			}
+			$div .= '<a href="index.php?v=d&p=object&id=' . $objectId . '">' . $object->getDisplay('icon') . ' ' . ucfirst($object->getName()) . '</a>';
+			if (isset($summaryCache[$objectId])) {
+				$div .= '<span>' . $summaryCache[$objectId] . '</span>';
+			}
+			$div .= '<i class="fas fa-compress pull-right cursor bt_editDashboardTilesAutoResizeDown" title="{{Régler toutes les tuiles à la hauteur de la moins haute.}}" data-obecjtId="' . $objectId . '" style="display: none;"></i>
+			<i class="fas fa-expand pull-right cursor bt_editDashboardTilesAutoResizeUp" title="{{Régler toutes les tuiles à la hauteur de la plus haute.}}" data-obecjtId="' . $objectId . '" style="display: none;"></i>
+			</span>
+			</legend>';
+			$div .= '<div class="div_displayEquipement posEqWidthRef" id="div_ob' . $objectId . '">';
+			$div .= '</div></div></div>';
+			echo $div;
 		}
-		$div .= '<a href="index.php?v=d&p=object&id=' . $objectId . '">' . $object->getDisplay('icon') . ' ' . ucfirst($object->getName()) . '</a>';
-		if (isset($summaryCache[$objectId])) {
-			$div .= '<span>' . $summaryCache[$objectId] . '</span>';
-		}
-		$div .= '<i class="fas fa-compress pull-right cursor bt_editDashboardTilesAutoResizeDown" title="{{Régler toutes les tuiles à la hauteur de la moins haute.}}" data-obecjtId="' . $objectId . '" style="display: none;"></i>
-		<i class="fas fa-expand pull-right cursor bt_editDashboardTilesAutoResizeUp" title="{{Régler toutes les tuiles à la hauteur de la plus haute.}}" data-obecjtId="' . $objectId . '" style="display: none;"></i>
-		</span>
-		</legend>';
-		$div .= '<div class="div_displayEquipement posEqWidthRef" id="div_ob' . $objectId . '">';
-		$div .= '</div></div></div>';
-		echo $div;
-	}
 	?>
 	<div class="row">
 		<?php
@@ -133,7 +120,6 @@ $columns = config::byKey('dahsboard::column::size');
 
 		?>
 	</div>
-</div>
 </div>
 <?php
 include_file('desktop/common', 'ui', 'js');
