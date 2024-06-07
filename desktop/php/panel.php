@@ -90,9 +90,6 @@ $columns = config::byKey('dahsboard::column::size');
 				$columns = 'col-xs-12';
 			}
 			foreach ($allObject as $thisObject) {
-				if ($thisObject->getId() != $object->getId()) {
-					continue;
-				}
 				foreach (($thisObject->getChilds()) as $child) {
 					if ($child->getConfiguration('hideOnDashboard', 0) == 1 || !$child->hasRight('r')) {
 						continue;
