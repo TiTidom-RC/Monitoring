@@ -28,10 +28,10 @@ if (!is_object($object)) {
 }
 
 //Get all object in right order, coming from Dashboard or Synthesis, showing childs or not, or by summaries:
-$panelObject = jeeObject::buildTree($object, true);
+$objectTree = jeeObject::buildTree($object, true);
 sendVarToJs('jeephp2js.rootObjectId', $object->getId());
 if (init('childs', 1) == 1) {
-	$allObject = $panelObject;
+	$allObject = $objectTree;
 } else {
 	$allObject = array();
 }
@@ -54,45 +54,6 @@ $columns = config::byKey('dahsboard::column::size');
 <div class="row row-overflow">
 </div>
 <div id="div_displayObject">
-	<div id="dashTopBar" class="input-group">
-		<div class="input-group-btn">
-			<?php
-			if (init('btover', 0) == 0) { ?>
-				<a id="bt_overview" class="btn" data-state="0"><i class="icon jeedomapp-fleche-bas-line"></i></a>
-			<?php } else { ?>
-				<a id="bt_backOverview" href="index.php?v=d&p=overview" class="btn roundedLeft" title="{{Retour à la Synthèse}}"><i class="fas fa-arrow-circle-left"></i>
-				</a><a id="bt_overview" class="btn clickable" data-state="0"><i class="icon jeedomapp-fleche-bas-line"></i></a>
-			<?php } ?>
-		</div>
-		<input class="form-control" id="in_searchDashboard" placeholder="{{Rechercher | nom | :not(nom}}" autocomplete="off">
-		<div class="input-group-btn">
-			<a id="bt_resetDashboardSearch" class="btn" title="{{Vider le champ de recherche}}"><i class="fas fa-times"></i>
-			</a><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="{{Filtre par catégorie}}">
-				<i class="fas fa-filter"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
-			</button>
-			<ul id="categoryfilter" class="dropdown-menu" role="menu" style="top:28px;left:-110px;">
-				<li>
-					<a id="catFilterAll"> {{Toutes}}</a>
-					<a id="catFilterNone"> {{Aucune}}</a>
-				</li>
-				<li class="divider"></li>
-				<?php
-				foreach ((jeedom::getConfiguration('eqLogic:category')) as $key => $value) {
-					if ($key == 'default') $key = '';
-					echo '<li><a><input checked type="checkbox" class="catFilterKey" data-key="' . $value['name'] . '"/>&nbsp;<i class="' . $value['icon'] . '"></i> ' . $value['name'] . '</a></li>';
-				}
-				?>
-				<li><a><input checked type="checkbox" class="catFilterKey" data-key="scenario" />&nbsp;<i class="fas fa-cogs"></i> {{Scénario}}</a></li>
-			</ul>
-		</div>
-		<?php
-		if (init('category', 'all') == 'all') { ?>
-			<div class="input-group-btn">
-				<a id="bt_editDashboardWidgetOrder" data-mode="0" class="btn enabled roundedRight" title="{{Édition du Dashboard}}"><i class="fas fa-pencil-alt"></i></a>
-			</div>
-		<?php } ?>
-	</div>
-
 	<?php
 	$div = '<div id="dashOverviewPrev" class="dashboard" style="display:none;">';
 	foreach ($objectTree as $_object) {
