@@ -40,6 +40,13 @@ if (!$object->hasRight('r') && count($allObject) > 0) {
 	$object = $allObject[0];
 }
 
+//cache object summaries to not duplicate calls:
+global $summaryCache;
+$summaryCache = [];
+foreach ($objectTree as $_object) {
+	$summaryCache[$_object->getId()] = $_object->getHtmlSummary();
+}
+
 global $columns;
 $columns = config::byKey('dahsboard::column::size');
 ?>
