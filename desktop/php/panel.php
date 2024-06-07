@@ -99,7 +99,7 @@ $columns = config::byKey('dahsboard::column::size');
 	}
 	$div .= '</div>';
 	echo $div;
-	
+
 	function formatJeedomObjectDiv($object, $toSummary = false)
 	{
 		global $columns;
@@ -166,7 +166,7 @@ $columns = config::byKey('dahsboard::column::size');
 		?>
 	</div>
 </div>
-
+</div>
 <?php
 include_file('desktop/common', 'ui', 'js');
 include_file('desktop', 'panel', 'js', 'Monitoring');
