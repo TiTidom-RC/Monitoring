@@ -91,9 +91,6 @@ $columns = config::byKey('dahsboard::column::size');
 			}
 			foreach ($allObject as $thisObject) {
 				foreach (($thisObject->getChilds()) as $child) {
-					if ($child->getConfiguration('hideOnDashboard', 0) == 1 || !$child->hasRight('r')) {
-						continue;
-					}
 					$childs[] = $child;
 				}
 			}
