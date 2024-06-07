@@ -55,37 +55,10 @@ $columns = config::byKey('dahsboard::column::size');
 </div>
 <div id="div_displayObject">
 	<?php
-		function formatJeedomObjectDiv($object, $toSummary = false)
-		{
-			global $columns;
-			global $summaryCache;
-			$objectId =  $object->getId();
-			$divClass = 'div_object';
-			if ($toSummary) $divClass .= ' hidden';
-			$div =  '<div class="' . $columns . '" >';
-			$div .= '<div data-object_id="' . $objectId . '" data-father_id="' . $object->getFather_id() . '" class="' . $divClass . '">';
-			$div .= '<legend><span class="objectDashLegend fullCorner">';
-			if (init('childs', 1) == 0) {
-				$div .= '<a href="index.php?v=d&p=panel&object_id=' . $objectId . '&childs=0&btover=1"><i class="icon jeedomapp-fleche-haut-line"></i></a>';
-			} else {
-				$div .= '<a href="index.php?v=d&p=panel&object_id=' . $objectId . '&childs=0"><i class="icon jeedomapp-fleche-haut-line"></i></a>';
-			}
-			$div .= '<a href="index.php?v=d&p=object&id=' . $objectId . '">' . $object->getDisplay('icon') . ' ' . ucfirst($object->getName()) . '</a>';
-			if (isset($summaryCache[$objectId])) {
-				$div .= '<span>' . $summaryCache[$objectId] . '</span>';
-			}
-			$div .= '<i class="fas fa-compress pull-right cursor bt_editDashboardTilesAutoResizeDown" title="{{Régler toutes les tuiles à la hauteur de la moins haute.}}" data-obecjtId="' . $objectId . '" style="display: none;"></i>
-			<i class="fas fa-expand pull-right cursor bt_editDashboardTilesAutoResizeUp" title="{{Régler toutes les tuiles à la hauteur de la plus haute.}}" data-obecjtId="' . $objectId . '" style="display: none;"></i>
-			</span>
-			</legend>';
-			$div .= '<div class="div_displayEquipement posEqWidthRef" id="div_ob' . $objectId . '">';
-			$div .= '</div></div></div>';
-			echo $div;
-		}
+		
 	?>
 	<div class="row">
 		<?php
-		if ($DisplayByObject) {
 			//show root object and all its childs:
 			$childs = array();
 			if (count($allObject) == 1) {
@@ -111,13 +84,6 @@ $columns = config::byKey('dahsboard::column::size');
 			foreach ($childs as $child) {
 				formatJeedomObjectDiv($child);
 			}
-		} else {
-			//show object(s) for summaries:
-			foreach ($allObject as $object) {
-				formatJeedomObjectDiv($object, true);
-			}
-		}
-
 		?>
 	</div>
 </div>
