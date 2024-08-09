@@ -497,12 +497,6 @@ class Monitoring extends eqLogic {
 		$replace ['#hddpourcusedesata_colorlow#'] = $this->getConfiguration('hddpourcusedesata_colorlow');
 		$replace ['#hddpourcusedesata_colorhigh#'] = $this->getConfiguration('hddpourcusedesata_colorhigh');
 
-		$replace ['#perso1_colorlow#'] = $this->getConfiguration('perso1_colorlow');
-		$replace ['#perso1_colorhigh#'] = $this->getConfiguration('perso1_colorhigh');
-
-		$replace ['#perso2_colorlow#'] = $this->getConfiguration('perso2_colorlow');
-		$replace ['#perso2_colorhigh#'] = $this->getConfiguration('perso2_colorhigh');
-
 		$namedistri = $this->getCmd(null,'namedistri');
 		$replace['#namedistri#'] = (is_object($namedistri)) ? $namedistri->execCmd() : '';
 		$replace['#namedistriid#'] = is_object($namedistri) ? $namedistri->getId() : '';
@@ -675,7 +669,17 @@ class Monitoring extends eqLogic {
 
 			$perso_unite = $this->getConfiguration($_persoNumber . '_unite');
 			$replace['#unite' . $_persoNumber . '#'] = (is_object($perso)) ? $perso_unite : '';
+
+			$replace['#' . $_persoNumber . '_colorlow#'] = $this->getConfiguration('#' . $_persoNumber . '_colorlow#');
+			$replace['#' . $_persoNumber . '_colorhigh#'] = $this->getConfiguration('#' . $_persoNumber . '_colorhigh#');
+
 		}
+
+		/* $replace ['#perso1_colorlow#'] = $this->getConfiguration('perso1_colorlow');
+		$replace ['#perso1_colorhigh#'] = $this->getConfiguration('perso1_colorhigh');
+
+		$replace ['#perso2_colorlow#'] = $this->getConfiguration('perso2_colorlow');
+		$replace ['#perso2_colorhigh#'] = $this->getConfiguration('perso2_colorhigh'); */
 
 		/* $perso1 = $this->getCmd(null,'perso1');
 		$replace['#perso1#'] = (is_object($perso1)) ? $perso1->execCmd() : '';

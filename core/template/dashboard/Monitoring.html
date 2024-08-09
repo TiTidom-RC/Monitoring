@@ -254,18 +254,18 @@
 					var unitePersoId = '#uniteperso' + i + '#id#';
 					var unitePerso = '#uniteperso' + i + '#';
 
-					if (eval(persoValue) !== '') {
-						if (parseFloat(eval(persoValue)) < parseFloat(eval(persoColorLow))) {
-							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-success-color) !important;">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
-						} else if ((parseFloat(eval(persoValue)) >= parseFloat(eval(persoColorLow))) && (parseFloat(eval(persoValue)) <= parseFloat(eval(persoColorHigh)))) {
-							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-warning-color) !important;">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
-						} else if ((parseFloat(eval(persoValue)) > parseFloat(eval(persoColorHigh))) && parseFloat(eval(persoColorHigh)) !== '') {
-							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-danger-color) !important;">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
+					if (eval(#persoValue) !== '') {
+						if (parseFloat(eval(#persoValue)) < parseFloat(eval(#persoColorLow))) {
+							$(#unitePersoId).append('<span data-cmd_id="' + #unitePersoId + ' class="value history cursor" style="color: var(--al-success-color) !important;">' + eval(#persoValue) + '</span><span>' + eval(#unitePerso) + '</span>');
+						} else if ((parseFloat(eval(#persoValue)) >= parseFloat(eval(#persoColorLow))) && (parseFloat(eval(#persoValue)) <= parseFloat(eval(#persoColorHigh)))) {
+							$(#unitePersoId).append('<span data-cmd_id="' + #unitePersoId + ' class="value history cursor" style="color: var(--al-warning-color) !important;">' + eval(#persoValue) + '</span><span>' + eval(#unitePerso) + '</span>');
+						} else if ((parseFloat(eval(#persoValue)) > parseFloat(eval(#persoColorHigh))) && parseFloat(eval(#persoColorHigh)) !== '') {
+							$(#unitePersoId).append('<span data-cmd_id="' + #unitePersoId + ' class="value history cursor" style="color: var(--al-danger-color) !important;">' + eval(#persoValue) + '</span><span>' + eval(#unitePerso) + '</span>');
 						} else {
-							$(unitePersoId).append('<span data-cmd_id="' + persoId + '" class="value history cursor">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
+							$(#unitePersoId).append('<span data-cmd_id="' + #persoId + '" class="value history cursor">' + eval(#persoValue) + '</span><span>' + eval(#unitePerso) + '</span>');
 						}
 					} else {
-						$(unitePersoId).append('<span></span>');
+						$(#unitePersoId).append('<span></span>');
 					}
 				}
 			}
