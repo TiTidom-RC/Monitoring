@@ -413,28 +413,19 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		$MonitoringCmd = $this->getCmd(null, 'perso1');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('perso1', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('perso1');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setIsVisible(0);
-			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'perso2');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('perso2', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('perso2');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setIsVisible(0);
-			$MonitoringCmd->save();
+		$nbCmdPerso = $this->getConfiguration('nbCmdPerso', 2);
+		for ($i = 1; $i <= $nbCmdPerso; $i++) {
+			$MonitoringCmd = $this->getCmd(null, 'perso' . $i);
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('perso' . $i, __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('perso' . $i);
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('string');
+				$MonitoringCmd->setIsVisible(0);
+				$MonitoringCmd->save();
+			}
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'reboot');
