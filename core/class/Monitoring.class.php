@@ -428,6 +428,9 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd->setIsVisible(0);
 				$MonitoringCmd->save();
 			}
+			else {
+				log::add('Monitoring', 'debug', '[Config-PostSave] Config perso' . $i . ' :: '. $MonitoringCmd->getName());
+			}
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'reboot');
