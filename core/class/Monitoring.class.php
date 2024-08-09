@@ -416,10 +416,12 @@ class Monitoring extends eqLogic {
 		$_nbCmdPerso = $this->getConfiguration('nbCmdPerso', 2);
 		log::add('Monitoring', 'debug', '[Config-PostSave] Config nbCmdPerso :: '. $_nbCmdPerso);
 		for ($i = 1; $i <= $_nbCmdPerso; $i++) {
-			log::add('Monitoring', 'debug', '[Config-PostSave] Config perso' . $i . ' !!');
-			$MonitoringCmd = $this->getCmd(null, 'perso' . $i);
-			log::add('Monitoring', 'debug', '[Config-PostSave] Config perso' . $i . ' :: '. $MonitoringCmd);
+			$_persoName = 'perso' . $i;
+			log::add('Monitoring', 'debug', '[Config-PostSave] Config ' . $_persoName . ' !!');
+			$MonitoringCmd = $this->getCmd(null, $_persoName);
+			log::add('Monitoring', 'debug', '[Config-PostSave] Config ' . $_persoName . ' !!!!');
 			if (!is_object($MonitoringCmd)) {
+				log::add('Monitoring', 'debug', '[Config-PostSave] Create Command ' . $_persoName);
 				$MonitoringCmd = new MonitoringCmd();
 				$MonitoringCmd->setName(__('perso' . $i, __FILE__));
 				$MonitoringCmd->setEqLogic_id($this->getId());
