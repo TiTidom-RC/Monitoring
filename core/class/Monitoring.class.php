@@ -84,20 +84,24 @@ class Monitoring extends eqLogic {
 		$nbCmdPerso = $this->getConfiguration('nbCmdPerso');
 		if ($nbCmdPerso < 2) {
 			$nbCmdPerso = 2;
+			$this->setConfiguration('nbCmdPerso', $nbCmdPerso);
+			log::add('Monitoring', 'debug', '[Config-PRESAVE] Config nbCmdPerso (Min) :: '. $nbCmdPerso);
 		} elseif ($nbCmdPerso > 50) {
 			$nbCmdPerso = 50;
+			$this->setConfiguration('nbCmdPerso', $nbCmdPerso);
+			log::add('Monitoring', 'debug', '[Config-PRESAVE] Config nbCmdPerso (Max) :: '. $nbCmdPerso);
 		}
-		$this->setConfiguration('nbCmdPerso', $nbCmdPerso);
-
-	    log::add('Monitoring', 'debug', '[EQLogic-PRESAVE] Configuration Nb Cmd Perso :: '. $this->getConfiguration('nbCmdPerso'));
+		else {
+			log::add('Monitoring', 'debug', '[Config-PRESAVE] Config nbCmdPerso :: '. $nbCmdPerso);
+		}
   	}
 
   	public static function postConfig_configPullLocal($value) {
-	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
+	    log::add('Monitoring', 'debug', '[Config-SAVE] Configuration PullLocal :: '. $value);
   	}
   	
 	public static function postConfig_configPull($value) {
-	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: '. $value);
+	    log::add('Monitoring', 'debug', '[Config-SAVE] Configuration Pull :: '. $value);
   	}
 
 	public function postUpdate() {
