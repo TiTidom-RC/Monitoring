@@ -236,7 +236,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <sup><i class="fas fa-question-circle tooltips" title="{{Nombre de commandes perso pour cet équipement (valeur par défaut : 2)}}"></i></sup>
                                     </label>
                                     <div class="col-md-1">
-                                        <input class="configKey form-control" type="number" data-l1key="configuration" data-l2key="nbcmd-perso"  min="2" max="50" placeholder="{{2}}" />
+                                        <input class="eqLogicAttr form-control" type="number" data-l1key="configuration" data-l2key="nbcmd-perso"  min="2" max="50" placeholder="{{2}}" />
                                     </div>
                                 </div>
                             </fieldset>
