@@ -254,7 +254,7 @@
 					const unitePersoId = '#uniteperso' + i + '#id#';
 					const unitePerso = '#uniteperso' + i + '#';
 
-					if ('persoValue' !== '') {
+					if (eval(persoValue) !== '') {
 						if (parseFloat(eval(persoValue)) < parseFloat(eval(persoColorLow))) {
 							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-success-color) !important;">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
 						} else if ((parseFloat(eval(persoValue)) >= parseFloat(eval(persoColorLow))) && (parseFloat(eval(persoValue)) <= parseFloat(eval(persoColorHigh)))) {
