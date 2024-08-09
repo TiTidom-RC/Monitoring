@@ -242,48 +242,53 @@
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#;">
-			<span class="fa" title="#nameperso1#</br><i>Date de valeur : #perso1_value#</br>Date de collecte : #perso1_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso1#</span>
-			<span id="uniteperso1#id#"></span>
-		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso1#' !== '') {
-					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-success-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
-					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
-					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+				// Loop through the different perso values
+				for (let i = 1; i <= 2; i++) {
+					const persoId = '#perso' + i + 'id#';
+					const persoDisplay = '#perso' + i + '_display#';
+					const persoValue = '#perso' + i + '#';
+					const persoColorLow = '#perso' + i + '_colorlow#';
+					const persoColorHigh = '#perso' + i + '_colorhigh#';
+					const unitePersoId = '#uniteperso' + i + '#id#';
+					const unitePerso = '#uniteperso' + i + '#';
+
+					if (persoValue !== '') {
+						if (parseFloat(persoValue) < parseFloat(persoColorLow)) {
+							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-success-color) !important;">' + persoValue + '</span><span>' + unitePerso + '</span>');
+						} else if ((parseFloat(persoValue) >= parseFloat(persoColorLow)) && (parseFloat(persoValue) <= parseFloat(persoColorHigh))) {
+							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-warning-color) !important;">' + persoValue + '</span><span>' + unitePerso + '</span>');
+						} else if ((parseFloat(persoValue) > parseFloat(persoColorHigh)) && parseFloat(persoColorHigh) !== '') {
+							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-danger-color) !important;">' + persoValue + '</span><span>' + unitePerso + '</span>');
+						} else {
+							$(unitePersoId).append('<span data-cmd_id="' + persoId + '" class="value history cursor">' + persoValue + '</span><span>' + unitePerso + '</span>');
+						}
 					} else {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#perso1id#" class="value history cursor">#perso1#</span><span>#uniteperso1#</span>');
+						$(unitePersoId).append('<span></span>');
 					}
-				} else {
-					$('#uniteperso1#id#').append('<span></span>');
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#;">
-			<span class="fa" title="#nameperso2#</br><i>Date de valeur : #perso2_value#</br>Date de collecte : #perso2_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso2#</span>
-			<span id="uniteperso2#id#"></span>
-		</div>
-		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso2#' !== '') {
-					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-					} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-					} else {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor">#perso2#</span><span>#uniteperso2#</span>');
+		<!--
+				<script>
+					if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+						if ('#perso2#' !== '') {
+							if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
+								$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+							} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
+								$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+							} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
+								$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+							} else {
+								$('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor">#perso2#</span><span>#uniteperso2#</span>');
+							}
+						} else {
+							$('#uniteperso2#id#').append('<span></span>');
+						}
 					}
-				} else {
-					$('#uniteperso2#id#').append('<span></span>');
-				}
-			}
-		</script>
+				</script>
+		-->
 	</div>
 	#divGraphInfo#
 </div>
