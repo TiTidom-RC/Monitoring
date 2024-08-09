@@ -242,27 +242,31 @@
 				}
 			}
 		</script>
+		<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#;">
+			<span class="fa" title="#nameperso1#</br><i>Date de valeur : #perso1_value#</br>Date de collecte : #perso1_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso1#</span>
+			<span id="uniteperso1#id#"></span>
+		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				// Loop through the different perso values
 				for (let i = 1; i <= 4; i++) {
-					var persoId = '#' + 'perso' + i + 'id#';
-					var persoDisplay = '#' + 'perso' + i + '_display#';
-					var persoValue = '#' + 'perso' + i + '#';
-					var persoColorLow = '#' + 'perso' + i + '_colorlow#';
-					var persoColorHigh = '#' + 'perso' + i + '_colorhigh#';
-					var unitePersoId = '#' + 'uniteperso' + i + '#id#';
-					var unitePerso = '#' + 'uniteperso' + i + '#';
+					const persoId = '#' + 'perso' + i + 'id#';
+					const persoDisplay = '#' + 'perso' + i + '_display#';
+					const persoValue = '#' + 'perso' + i + '#';
+					const persoColorLow = '#' + 'perso' + i + '_colorlow#';
+					const persoColorHigh = '#' + 'perso' + i + '_colorhigh#';
+					const unitePersoId = '#' + 'uniteperso' + i + '#id#';
+					const unitePerso = '#' + 'uniteperso' + i + '#';
 
-					if (eval(persoValue) !== '') {
-						if (parseFloat(eval(persoValue)) < parseFloat(eval(persoColorLow))) {
-							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-success-color) !important;">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
-						} else if ((parseFloat(eval(persoValue)) >= parseFloat(eval(persoColorLow))) && (parseFloat(eval(persoValue)) <= parseFloat(eval(persoColorHigh)))) {
-							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-warning-color) !important;">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
-						} else if ((parseFloat(eval(persoValue)) > parseFloat(eval(persoColorHigh))) && parseFloat(eval(persoColorHigh)) !== '') {
-							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-danger-color) !important;">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
+					if (persoValue !== '') {
+						if (parseFloat(persoValue) < parseFloat(persoColorLow)) {
+							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-success-color) !important;">' + persoValue + '</span><span>' + unitePerso + '</span>');
+						} else if ((parseFloat(persoValue) >= parseFloat(persoColorLow)) && (parseFloat(persoValue) <= parseFloat(persoColorHigh))) {
+							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-warning-color) !important;">' + persoValue + '</span><span>' + unitePerso + '</span>');
+						} else if ((parseFloat(persoValue) > parseFloat(persoColorHigh)) && parseFloat(persoColorHigh) !== '') {
+							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-danger-color) !important;">' + persoValue + '</span><span>' + unitePerso + '</span>');
 						} else {
-							$(unitePersoId).append('<span data-cmd_id="' + persoId + '" class="value history cursor">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
+							$(unitePersoId).append('<span data-cmd_id="' + persoId + '" class="value history cursor">' + persoValue + '</span><span>' + unitePerso + '</span>');
 						}
 					} else {
 						$(unitePersoId).append('<span></span>');
