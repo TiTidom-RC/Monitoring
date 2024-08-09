@@ -246,13 +246,13 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				// Loop through the different perso values
 				for (let i = 1; i <= 4; i++) {
-					var persoId = '#perso' + i + 'id#';
-					var persoDisplay = '#perso' + i + '_display#';
-					var persoValue = '#perso' + i + '#';
-					var persoColorLow = '#perso' + i + '_colorlow#';
-					var persoColorHigh = '#perso' + i + '_colorhigh#';
-					var unitePersoId = '#uniteperso' + i + '#id#';
-					var unitePerso = '#uniteperso' + i + '#';
+					var persoId = '#' + 'perso' + i + 'id#';
+					var persoDisplay = '#' + 'perso' + i + '_display#';
+					var persoValue = '#' + 'perso' + i + '#';
+					var persoColorLow = '#' + 'perso' + i + '_colorlow#';
+					var persoColorHigh = '#' + 'perso' + i + '_colorhigh#';
+					var unitePersoId = '#' + 'uniteperso' + i + '#id#';
+					var unitePerso = '#' + 'uniteperso' + i + '#';
 
 					if (eval(persoValue) !== '') {
 						if (parseFloat(eval(persoValue)) < parseFloat(eval(persoColorLow))) {
