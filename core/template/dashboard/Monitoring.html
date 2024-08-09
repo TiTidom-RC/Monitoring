@@ -275,23 +275,27 @@
 			}
 		</script>
 		<!--
-				<script>
-					if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-						if ('#perso2#' !== '') {
-							if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-								$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-							} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-								$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-							} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
-								$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
-							} else {
-								$('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor">#perso2#</span><span>#uniteperso2#</span>');
-							}
+			<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#;">
+				<span class="fa" title="#nameperso2#</br><i>Date de valeur : #perso2_value#</br>Date de collecte : #perso2_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso2#</span>
+				<span id="uniteperso2#id#"></span>
+			</div>
+			<script>
+				if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+					if ('#perso2#' !== '') {
+						if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
+							$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+						} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
+							$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+						} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
+							$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
 						} else {
-							$('#uniteperso2#id#').append('<span></span>');
+							$('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor">#perso2#</span><span>#uniteperso2#</span>');
 						}
+					} else {
+						$('#uniteperso2#id#').append('<span></span>');
 					}
-				</script>
+				}
+			</script>
 		-->
 	</div>
 	#divGraphInfo#
