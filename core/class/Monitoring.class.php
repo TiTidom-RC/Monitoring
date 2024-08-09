@@ -80,6 +80,10 @@ class Monitoring extends eqLogic {
 		}
 	}
 
+	public static function preSave_nbCmdPerso($value) {
+	    log::add('Monitoring', 'debug', '[EQLogic-PRESAVE] Configuration Nb Cmd Perso :: '. $value);
+  	}
+
   	public static function postConfig_configPullLocal($value) {
 	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
   	}
