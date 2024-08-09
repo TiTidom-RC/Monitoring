@@ -414,14 +414,11 @@ class Monitoring extends eqLogic {
 		}
 
 		$_nbCmdPerso = $this->getConfiguration('nbCmdPerso', 2);
-		log::add('Monitoring', 'debug', '[Config-PostSave] Config nbCmdPerso :: '. $_nbCmdPerso);
 		for ($i = 1; $i <= $_nbCmdPerso; $i++) {
-			$_persoName = 'perso' . $i;
-			log::add('Monitoring', 'debug', '[Config-PostSave] Config ' . $_persoName . ' !!');
-			$MonitoringCmd = $this->getCmd(null, $_persoName);
-			log::add('Monitoring', 'debug', '[Config-PostSave] Config ' . $_persoName . ' !!!!');
+			$_persoNumber = 'perso' . $i;
+			$MonitoringCmd = $this->getCmd(null, $_persoNumber);
 			if (!is_object($MonitoringCmd)) {
-				log::add('Monitoring', 'debug', '[Config-PostSave] Create Command ' . $_persoName);
+				log::add('Monitoring', 'debug', '[Config-PostSave] Create Command ' . $_persoNumber);
 				$MonitoringCmd = new MonitoringCmd();
 				$MonitoringCmd->setName(__('perso' . $i, __FILE__));
 				$MonitoringCmd->setEqLogic_id($this->getId());
@@ -432,7 +429,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd->save();
 			}
 			else {
-				log::add('Monitoring', 'debug', '[Config-PostSave] Config perso' . $i . ' :: '. $MonitoringCmd->getName());
+				log::add('Monitoring', 'debug', '[Config-PostSave] Config ' . $_persoNumber . ' :: '. $MonitoringCmd->getName());
 			}
 		}
 
