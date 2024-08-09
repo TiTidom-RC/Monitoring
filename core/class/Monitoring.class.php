@@ -420,9 +420,9 @@ class Monitoring extends eqLogic {
 			if (!is_object($MonitoringCmd)) {
 				log::add('Monitoring', 'debug', '[Config-PostSave] Create Command ' . $_persoNumber);
 				$MonitoringCmd = new MonitoringCmd();
-				$MonitoringCmd->setName(__('perso' . $i, __FILE__));
+				$MonitoringCmd->setName(__($_persoNumber, __FILE__));
 				$MonitoringCmd->setEqLogic_id($this->getId());
-				$MonitoringCmd->setLogicalId('perso' . $i);
+				$MonitoringCmd->setLogicalId($_persoNumber);
 				$MonitoringCmd->setType('info');
 				$MonitoringCmd->setSubType('string');
 				$MonitoringCmd->setIsVisible(0);
