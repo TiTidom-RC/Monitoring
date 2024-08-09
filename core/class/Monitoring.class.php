@@ -659,7 +659,25 @@ class Monitoring extends eqLogic {
 		$replace['#cpu_tempid#'] = is_object($cpu_temp) ? $cpu_temp->getId() : '';
 		$replace['#cpu_temp_display#'] = (is_object($cpu_temp) && $cpu_temp->getIsVisible()) ? 'OK' : '';
 
-		$perso1 = $this->getCmd(null,'perso1');
+		for ($i = 1; $i <= $this->getConfiguration('nbCmdPerso', 2); $i++) {
+			$_persoNumber = 'perso' . $i;
+			$perso = $this->getCmd(null, $_persoNumber);
+			$replace['#' . $_persoNumber . '#'] = (is_object($perso)) ? $perso->execCmd() : '';
+			$replace['#' . $_persoNumber . 'id#'] = is_object($perso) ? $perso->getId() : '';
+			$replace['#' . $_persoNumber . '_display#'] = (is_object($perso) && $perso->getIsVisible()) ? "#" . $_persoNumber . "_display#" : "none";
+			$replace['#' . $_persoNumber . '_collect#'] = (is_object($perso) && $perso->getIsVisible()) ? $perso->getCollectDate() : "-";
+			$replace['#' . $_persoNumber . '_value#'] = (is_object($perso) && $perso->getIsVisible()) ? $perso->getValueDate() : "-";
+
+			$nameperso = (is_object($perso)) ? $this->getCmd(null,$_persoNumber)->getName() : '';
+			$iconeperso = (is_object($perso)) ? $this->getCmd(null,$_persoNumber)->getdisplay('icon') : '';
+			$replace['#name' . $_persoNumber . '#'] = (is_object($perso)) ? $nameperso : '';
+			$replace['#icone' . $_persoNumber . '#'] = (is_object($perso)) ? $iconeperso : '';
+
+			$perso_unite = $this->getConfiguration($_persoNumber . '_unite');
+			$replace['#unite' . $_persoNumber . '#'] = (is_object($perso)) ? $perso_unite : '';
+		}
+
+		/* $perso1 = $this->getCmd(null,'perso1');
 		$replace['#perso1#'] = (is_object($perso1)) ? $perso1->execCmd() : '';
 		$replace['#perso1id#'] = is_object($perso1) ? $perso1->getId() : '';
 		$replace['#perso1_display#'] = (is_object($perso1) && $perso1->getIsVisible()) ? "#perso1_display#" : "none";
@@ -687,7 +705,7 @@ class Monitoring extends eqLogic {
 		$replace['#iconeperso2#'] = (is_object($perso2)) ? $iconeperso_2 : '';
 		
 		$perso_2unite = $this->getConfiguration('perso2_unite');
-		$replace['#uniteperso2#'] = (is_object($perso2)) ? $perso_2unite : '';
+		$replace['#uniteperso2#'] = (is_object($perso2)) ? $perso_2unite : ''; */
 
 		foreach ($this->getCmd('action') as $cmd) {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
@@ -743,16 +761,6 @@ class Monitoring extends eqLogic {
 			} else {
 				$cartereseau = $this->getConfiguration('cartereseau');
 			}
-
-			/* $SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
-			log::add('Monitoring', 'debug', '[GetInfo][SynoV2Visible] SynoV2 :: '. $SynoV2Visible);
-			$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
-			log::add('Monitoring', 'debug', '[GetInfo][SynoUSBVisible] SynoUSB :: '. $SynoUSBVisible);
-
-			$Perso1Visible = ((is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible())) ? 'OK' : '';
-			log::add('Monitoring', 'debug', '[GetInfo][Perso1Visible] Perso1 :: '. $Perso1Visible);
-			$Perso2Visible = ((is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible())) ? 'OK' : '';
-			log::add('Monitoring', 'debug', '[GetInfo][Perso2Visible] Perso2 :: '. $Perso2Visible); */
 
 			$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
@@ -864,17 +872,29 @@ class Monitoring extends eqLogic {
 						$memory = $sshconnection->exec($memory_cmd);
 						$swap = $sshconnection->exec($swap_cmd);
 
-						$perso_1cmd = $this->getConfiguration('perso1');
+						$persoCmd = array();
+						$persoExecCmd = array();
+
+						for ($i = 1; $i <= $this->getConfiguration('nbCmdPerso', 2); $i++) {
+							$persoCmd[$i] = $this->getConfiguration('perso' . $i);
+							log::add('Monitoring', 'debug', '[SSH-CMD] Perso' . $i . ' :: ' . $equipement . " :: " . $persoCmd[$i]);
+							if ($persoCmd[$i] != '') {
+								$persoExecCmd[$i] = $sshconnection->exec($persoCmd[$i]);
+								log::add('Monitoring', 'debug', '[SSH-CMD] Perso' . $i . ' :: ' . $equipement . " :: " . $persoExecCmd[$i]);
+							}
+						}
+
+						/* $perso_1cmd = $this->getConfiguration('perso1');
 						$perso_2cmd = $this->getConfiguration('perso2');
 
-						if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
+						if ($perso_1cmd != '') {
 							$perso_1 = $sshconnection->exec($perso_1cmd);
 							log::add('Monitoring', 'debug', '[SSH-CMD] Perso1 :: ' . $equipement . ' :: ' . $perso_1);
 						}
-						if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
+						if ($perso_2cmd != '') {
 							$perso_2 = $sshconnection->exec($perso_2cmd);
 							log::add('Monitoring', 'debug', '[SSH-CMD] Perso2 :: ' . $equipement . ' :: ' . $perso_2);
-						}
+						} */
 						
 						if($this->getConfiguration('synology') == '1') {
 							// $platform_cmd = "get_key_value /etc/synoinfo.conf unique | cut -d'_' -f2";
@@ -1299,17 +1319,29 @@ class Monitoring extends eqLogic {
 				$memory = exec($memory_cmd);
 				$swap = exec($swap_cmd);
 				
-				$perso_1cmd = $this->getConfiguration('perso1');
+				$persoCmd = array();
+				$persoExecCmd = array();
+
+				for ($i = 1; $i <= $this->getConfiguration('nbCmdPerso', 2); $i++) {
+					$persoCmd[$i] = $this->getConfiguration('perso' . $i);
+					log::add('Monitoring', 'debug', '[LOCAL] Perso' . $i . ' :: ' . $equipement . " :: " . $persoCmd[$i]);
+					if ($persoCmd[$i] != '') {
+						$persoExecCmd[$i] = exec($persoCmd[$i]);
+						log::add('Monitoring', 'debug', '[LOCAL] Perso' . $i . ' :: ' . $equipement . " :: " . $persoExecCmd[$i]);
+					}
+				}
+
+				/* $perso_1cmd = $this->getConfiguration('perso1');
 				$perso_2cmd = $this->getConfiguration('perso2');
 
-				if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
+				if ($perso_1cmd != '') {
 					$perso_1 = exec($perso_1cmd);
 					log::add('Monitoring', 'debug', '[LOCAL] Perso1 :: ' . $equipement . " :: " . $perso_1);
 				}
-				if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
+				if ($perso_2cmd != '') {
 					$perso_2 = exec($perso_2cmd);
 					log::add('Monitoring', 'debug', '[LOCAL] Perso2 :: ' . $equipement . " :: " . $perso_2);
-				}
+				} */
 
 				if ($this->getConfiguration('synology') == '1'){
 					$uname = '.';
@@ -1872,8 +1904,13 @@ class Monitoring extends eqLogic {
 						$cpu = $nbcpu.' - '.$cpufreq0;
 					}
 					if (empty($cputemp0)) {$cputemp0 = '';}
-					if (empty($perso_1)) {$perso_1 = '';}
-					if (empty($perso_2)) {$perso_2 = '';}
+					
+					/* if (empty($perso_1)) {$perso_1 = '';}
+					if (empty($perso_2)) {$perso_2 = '';} */
+					for ($i = 1; $i <= $this->getConfiguration('nbCmdPerso', 2); $i++) {
+						if (empty($persoExecCmd[$i])) { $persoExecCmd[$i] = ''; }
+					}
+
 					if (empty($cnx_ssh)) {$cnx_ssh = '';}
 					if (empty($uname)) {$uname = 'Inconnu';}
 					if (empty($Mem)) {$Mem = '';}
@@ -1900,9 +1937,13 @@ class Monitoring extends eqLogic {
 						'Mem_swap' => $Memswap,
 						'Mempourc' => $memorylibre_pourc,
 						'Swappourc' => $swaplibre_pourc,
-						'perso1' => $perso_1,
-						'perso2' => $perso_2,
+						/* 'perso1' => $perso_1,
+						'perso2' => $perso_2, */
+						'persoX' => $persoExecCmd,
 					);
+
+					
+
 					if($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1'){
 						$dataresultv2 = array(
 							'hddtotalv2' => $hddtotalv2,
@@ -2059,7 +2100,7 @@ class Monitoring extends eqLogic {
 						$Swappourc->event($dataresult['Swappourc']);
 					}
 
-					$perso1 = $this->getCmd(null,'perso1');
+					/* $perso1 = $this->getCmd(null,'perso1');
 					if(is_object($perso1)){
 						$perso1->event($dataresult['perso1']);
 					}
@@ -2067,6 +2108,15 @@ class Monitoring extends eqLogic {
 					$perso2 = $this->getCmd(null,'perso2');
 					if(is_object($perso2)){
 						$perso2->event($dataresult['perso2']);
+					} */
+
+					for ($i = 1; $i <= $this->getConfiguration('nbCmdPerso', 2); $i++) {
+						$persoXname = 'perso' . $i;
+						$persoX = $this->getCmd(null, $persoXname);
+						if(is_object($persoX)){
+							$persoX->event($dataresult['persoX'][$i]);
+							log::add('Monitoring', 'debug', '[EVENT] Perso'. $i . ' :: ' . $dataresult['persoX'][$i]);
+						}
 					}
 				}
 			}
