@@ -245,7 +245,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				// Loop through the different perso values
-				for (let i = 1; i <= 2; i++) {
+				for (let i = 1; i <= 4; i++) {
 					const persoId = '#perso' + i + 'id#';
 					const persoDisplay = '#perso' + i + '_display#';
 					const persoValue = '#perso' + i + '#';
@@ -254,7 +254,7 @@
 					const unitePersoId = '#uniteperso' + i + '#id#';
 					const unitePerso = '#uniteperso' + i + '#';
 
-					if (eval(persoValue) !== '') {
+					if ('persoValue' !== '') {
 						if (parseFloat(eval(persoValue)) < parseFloat(eval(persoColorLow))) {
 							$(unitePersoId).append('<span data-cmd_id="' + unitePersoId + ' class="value history cursor" style="color: var(--al-success-color) !important;">' + eval(persoValue) + '</span><span>' + eval(unitePerso) + '</span>');
 						} else if ((parseFloat(eval(persoValue)) >= parseFloat(eval(persoColorLow))) && (parseFloat(eval(persoValue)) <= parseFloat(eval(persoColorHigh)))) {
