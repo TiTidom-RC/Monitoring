@@ -82,7 +82,14 @@ class Monitoring extends eqLogic {
 
 	public function preSave() {
 		$nbCmdPerso = $this->getConfiguration('nbCmdPerso');
-	    log::add('Monitoring', 'debug', '[EQLogic-PRESAVE] Configuration Nb Cmd Perso :: '. $nbCmdPerso);
+		if ($nbCmdPerso < 2) {
+			$nbCmdPerso = 2;
+		} elseif ($nbCmdPerso > 50) {
+			$nbCmdPerso = 50;
+		}
+		$this->setConfiguration('nbCmdPerso', $nbCmdPerso);
+
+	    log::add('Monitoring', 'debug', '[EQLogic-PRESAVE] Configuration Nb Cmd Perso :: '. $this->getConfiguration('nbCmdPerso'));
   	}
 
   	public static function postConfig_configPullLocal($value) {
