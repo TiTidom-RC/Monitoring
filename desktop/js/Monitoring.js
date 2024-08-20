@@ -154,11 +154,11 @@ function toggleSSHPassphrase() {
 	var sshPassphraseIcon = document.getElementById("btnToggleSSHPassphraseIcon");
 	var sshPassphraseField = document.getElementById("ssh-passphrase");
 	if (sshPassphraseField.type === "password") {
-		sshPassphraseIcon.classList.toggle("fas fa-eye-slash");
+		sshPassphraseIcon.className = "fas fa-eye-slash";
 		sshPassphraseField.type = "text";
 
 	} else {
-		sshPassphraseIcon.classList.toggle("fas fa-eye");
+		sshPassphraseIcon.className = "fas fa-eye";
 		sshPassphraseField.type = "password";
 	}
 }
