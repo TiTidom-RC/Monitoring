@@ -206,7 +206,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                             <div class="col-md-6 input-group">
                                                 <input type="password" id="ssh-password" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
                                                 <span class="input-group-btn">
-											        <a class="btn btn-default form-control roundedRight" id="btnShowSSHPassword" onclick="toggleSSHPassword()"><i class="fas fa-eye"></i></a>
+											        <a class="btn btn-default form-control roundedRight" id="btnToggleSSHPassword" onclick="toggleSSHPassword()"><i class="fas fa-eye"></i></a>
 										        </span>
                                             </div>
                                         </div>
@@ -217,9 +217,9 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                                 <sup><i class="fas fa-question-circle tooltips" title="{{Optionnel : Phrase secrète pour la clé SSH}}"></i></sup>
                                             </label>
                                             <div class="col-md-6 input-group">
-                                                <input type="text" autocomplete="ssh-passphrase" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="ssh-passphrase" placeholder="{{Saisir la passphrase SSH}}" />
+                                                <input type="password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="ssh-passphrase" placeholder="{{Saisir la passphrase SSH}}" />
                                                 <span class="input-group-btn">
-											        <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+											        <a class="btn btn-default form-control roundedRight" id="btnToggleSSHPassphrase" onclick="toggleSSHPassphrase()"><i class="fas fa-eye"></i></a>
 										        </span>
                                             </div>
                                         </div>    

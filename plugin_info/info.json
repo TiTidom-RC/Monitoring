@@ -1,7 +1,7 @@
 {
     "id": "Monitoring",
     "name": "Monitoring",
-    "pluginVersion": "2.4.9",
+    "pluginVersion": "2.5.0",
     "description": {
         "fr_FR": "Plugin permettant le monitoring des équipements locaux et distants (via SSH). Le plugin affichera les informations systèmes d'équipements sous Linux ou Synology (Distribution, CPU, Mémoire, Disques, Swap).",
         "en_US": "Plugin to monitor local and remote equipments (through SSH). The plugin will display system informations from Linux or Synology (Distribution, CPU, Memory, Disks, Swap).",

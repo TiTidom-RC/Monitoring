@@ -146,3 +146,12 @@ function toggleSSHPassword() {
 		sshPasswordField.type = "password";
 	}
 }
+
+function toggleSSHPassphrase() {
+	var sshPassphraseField = document.getElementById("ssh-passphrase");
+	if (sshPassphraseField.type === "password") {
+		sshPassphraseField.type = "text";
+	} else {
+		sshPassphraseField.type = "password";
+	}
+}
