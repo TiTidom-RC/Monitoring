@@ -139,19 +139,26 @@ $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 });
 
 function toggleSSHPassword() {
+	var sshPasswordIcon = document.getElementById("btnToggleSSHPasswordIcon");
 	var sshPasswordField = document.getElementById("ssh-password");
 	if (sshPasswordField.type === "password") {
+		sshPasswordIcon.classList.toggle("fas fa-eye-slash");
 		sshPasswordField.type = "text";
 	} else {
+		sshPasswordIcon.classList.toggle("fas fa-eye");
 		sshPasswordField.type = "password";
 	}
 }
 
 function toggleSSHPassphrase() {
+	var sshPassphraseIcon = document.getElementById("btnToggleSSHPassphraseIcon");
 	var sshPassphraseField = document.getElementById("ssh-passphrase");
 	if (sshPassphraseField.type === "password") {
+		sshPassphraseIcon.classList.toggle("fas fa-eye-slash");
 		sshPassphraseField.type = "text";
+
 	} else {
+		sshPassphraseIcon.classList.toggle("fas fa-eye");
 		sshPassphraseField.type = "password";
 	}
 }
