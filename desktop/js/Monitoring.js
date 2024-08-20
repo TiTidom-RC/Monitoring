@@ -142,10 +142,10 @@ function toggleSSHPassword() {
 	var sshPasswordIcon = document.getElementById("btnToggleSSHPasswordIcon");
 	var sshPasswordField = document.getElementById("ssh-password");
 	if (sshPasswordField.type === "password") {
-		sshPasswordIcon.classList.toggle("fas fa-eye-slash");
+		sshPasswordIcon.className = "fas fa-eye-slash";
 		sshPasswordField.type = "text";
 	} else {
-		sshPasswordIcon.classList.toggle("fas fa-eye");
+		sshPasswordIcon.className = "fas fa-eye";
 		sshPasswordField.type = "password";
 	}
 }
