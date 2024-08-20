@@ -141,24 +141,14 @@ $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 function toggleSSHPassword() {
 	var sshPasswordIcon = document.getElementById("btnToggleSSHPasswordIcon");
 	var sshPasswordField = document.getElementById("ssh-password");
-	if (sshPasswordField.type === "password") {
-		sshPasswordIcon.className = "fas fa-eye-slash";
-		sshPasswordField.type = "text";
-	} else {
-		sshPasswordIcon.className = "fas fa-eye";
-		sshPasswordField.type = "password";
-	}
+	sshPasswordIcon.className = sshPasswordField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
+	sshPasswordField.type = sshPasswordField.type === "password" ? "text" : "password";
+	
 }
 
 function toggleSSHPassphrase() {
 	var sshPassphraseIcon = document.getElementById("btnToggleSSHPassphraseIcon");
 	var sshPassphraseField = document.getElementById("ssh-passphrase");
-	if (sshPassphraseField.type === "password") {
-		sshPassphraseIcon.className = "fas fa-eye-slash";
-		sshPassphraseField.type = "text";
-
-	} else {
-		sshPassphraseIcon.className = "fas fa-eye";
-		sshPassphraseField.type = "password";
-	}
+	sshPassphraseIcon.className = sshPassphraseField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
+	sshPassphraseField.type = sshPassphraseField.type === "password" ? "text" : "password";
 }
