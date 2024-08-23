@@ -103,6 +103,14 @@ class Monitoring extends eqLogic {
 	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: '. $value);
   	}
 
+	// Fonction exécutée automatiquement avant la suppression de l'équipement
+	public function preRemove() {
+		$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
+		if (is_object($cron)) {
+			$cron->remove();
+		}
+	}
+
 	public function postUpdate() {
 		/* log::add('Monitoring', 'debug', '[PostUpdate] Fonction PostUpdate :: DEBUT');
 		$Perso1Visible = (is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible() == '1') ? 'OK' : '';
