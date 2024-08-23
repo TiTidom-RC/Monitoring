@@ -309,7 +309,9 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <fieldset>
                                 <legend>{{Auto-Actualisation (Cron)}} :</legend>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label" >{{Activer}}</label>
+                                    <label class="col-md-2 control-label" >{{Activer}}
+                                        <sup><i class="fas fa-question-circle tooltips" title="{{Si cette option n'est pas cochée, le cron par défaut du plugin sera utilisé}}"></i></sup>
+                                    </label>
                                     <div class="col-md-8">
                                         <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="pull_use_custom" />
                                         <span style="font-size: 85%;">({{A cocher pour spécifier une auto-actualisation des commandes personnalisée}})</span>
