@@ -220,6 +220,17 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
+		$MonitoringCmd = $this->getCmd(null, 'ethernet0_ip');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Adresse IP', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('ethernet0_ip');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->save();
+		}
+
 		$MonitoringCmd = $this->getCmd(null, 'hddtotal');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -545,6 +556,10 @@ class Monitoring extends eqLogic {
 		$replace['#ethernet0_name#'] = (is_object($ethernet0_name)) ? $ethernet0_name->execCmd() : '';
 		$replace['#ethernet0_nameid#'] = is_object($ethernet0_name) ? $ethernet0_name->getId() : '';
 
+		$ethernet0_ip = $this->getCmd(null,'ethernet0_ip');
+		$replace['#ethernet0_ip#'] = (is_object($ethernet0_ip)) ? $ethernet0_ip->execCmd() : '';
+		$replace['#ethernet0_ipid#'] = is_object($ethernet0_ip) ? $ethernet0_ip->getId() : '';
+
 		$hddused = $this->getCmd(null,'hddused');
 		$replace['#hddused#'] = (is_object($hddused)) ? $hddused->execCmd() : '';
 		$replace['#hddusedid#'] = is_object($hddused) ? $hddused->getId() : '';
@@ -720,6 +735,7 @@ class Monitoring extends eqLogic {
 			$memorylibre_pourc = '';
 			$ethernet0 = '';
 			$ethernet0_name = '';
+			$ethernet0_ip = '';
 			$equipement = $this->getName();
 
 			if ($this->getConfiguration('cartereseau') == 'netautre'){
@@ -727,22 +743,15 @@ class Monitoring extends eqLogic {
 			}
 			elseif ($this->getConfiguration('cartereseau') == 'netauto') {
 				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1)";
-				$cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1 | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1 | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+				$cartereseau = "$(ip -br -f inet a | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $1 }' | awk -v ORS=\"\" '{ print }')";
 			} else {
 				$cartereseau = $this->getConfiguration('cartereseau');
 			}
 
-			/* $SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
-			log::add('Monitoring', 'debug', '[GetInfo][SynoV2Visible] SynoV2 :: '. $SynoV2Visible);
-			$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
-			log::add('Monitoring', 'debug', '[GetInfo][SynoUSBVisible] SynoUSB :: '. $SynoUSBVisible);
-
-			$Perso1Visible = ((is_object($this->getCmd(null,'perso1')) && $this->getCmd(null,'perso1')->getIsVisible())) ? 'OK' : '';
-			log::add('Monitoring', 'debug', '[GetInfo][Perso1Visible] Perso1 :: '. $Perso1Visible);
-			$Perso2Visible = ((is_object($this->getCmd(null,'perso2')) && $this->getCmd(null,'perso2')->getIsVisible())) ? 'OK' : '';
-			log::add('Monitoring', 'debug', '[GetInfo][Perso2Visible] Perso2 :: '. $Perso2Visible); */
-
 			$confLocalOrRemote = $this->getConfiguration('maitreesclave');
+
+			// Configuration distante
 			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 				$ip = $this->getConfiguration('addressip');
 				$port = $this->getConfiguration('portssh', 22);
@@ -754,7 +763,7 @@ class Monitoring extends eqLogic {
 				$cnx_ssh = '';
 
 				try {
-					$sshconnection = new SSH2($ip,$port, $timeout);
+					$sshconnection = new SSH2($ip, $port, $timeout);
 					log::add('Monitoring', 'debug', '[SSH-CMD] Connexion SSH :: '. $equipement .' (IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout . ') :: OK');
 				} catch (Exception $e) {
 					log::add('Monitoring', 'error', '[SSH-CMD] Connexion SSH :: '. $equipement .' :: '. $e->getMessage());
@@ -820,6 +829,7 @@ class Monitoring extends eqLogic {
 						$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
 						// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
 						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
+						$ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'"; 
 
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
@@ -848,6 +858,7 @@ class Monitoring extends eqLogic {
 						$bitdistri = $sshconnection->exec($bitdistri_cmd);
 						$loadav = $sshconnection->exec($loadavg_cmd);
 						$ReseauRXTX = $sshconnection->exec($ReseauRXTX_cmd);
+						$ReseauIP = $sshconnection->exec($ReseauIP_cmd);
 
 						$memory = $sshconnection->exec($memory_cmd);
 						$swap = $sshconnection->exec($swap_cmd);
@@ -1277,12 +1288,14 @@ class Monitoring extends eqLogic {
 				
 				// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
 				$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
+				$ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 				
 				$uptime = exec($uptime_cmd);
 				$namedistri = exec($namedistri_cmd);
 				$VersionID = trim(exec($VersionID_cmd));
 				$loadav = exec($loadavg_cmd);
 				$ReseauRXTX = exec($ReseauRXTX_cmd);
+				$ReseauIP = exec($ReseauIP_cmd);
 				$hdd = exec($hdd_cmd);
 				$memory = exec($memory_cmd);
 				$swap = exec($swap_cmd);
@@ -1765,7 +1778,14 @@ class Monitoring extends eqLogic {
 							}
 							$ethernet0 = 'TX : '.$ReseauTX.' - RX : '.$ReseauRX;
 							$ethernet0_name = $ReseauRXTX[0];
-							log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau (RX / TX) :: ' . $equipement . ' :: ' .$ethernet0_name.' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
+							
+							if (isset($ReseauIP)) {
+								$ethernet0_ip = $ReseauIP;
+							} else {
+								$ethernet0_ip = '';
+							}
+							
+							log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau / IP (RX / TX) :: ' . $equipement . ' :: ' .$ethernet0_name.' / IP= ' . $ethernet0_ip . ' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
 						}
 						else {
 							log::add('Monitoring', 'error', '[RESEAU] Carte Réseau NON détectée :: ' . $equipement . ' :: KO');
@@ -1879,6 +1899,7 @@ class Monitoring extends eqLogic {
 						'Mem' => $Mem,
 						'ethernet0' => $ethernet0,
 						'ethernet0_name' => $ethernet0_name,
+						'ethernet0_ip' => $ethernet0_ip,
 						'hddtotal' => $hddtotal,
 						'hddused' => $hddused,
 						'hddpourcused' => $hddused_pourc,
@@ -1960,6 +1981,11 @@ class Monitoring extends eqLogic {
 					$ethernet0_name = $this->getCmd(null,'ethernet0_name');
 					if(is_object($ethernet0_name)){
 						$ethernet0_name->event($dataresult['ethernet0_name']);
+					}
+
+					$ethernet0_ip = $this->getCmd(null,'ethernet0_ip');
+					if(is_object($ethernet0_ip)){
+						$ethernet0_ip->event($dataresult['ethernet0_ip']);
 					}
 
 					$hddtotal = $this->getCmd(null,'hddtotal');
