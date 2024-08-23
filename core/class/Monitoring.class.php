@@ -735,7 +735,7 @@ class Monitoring extends eqLogic {
 			$memorylibre_pourc = '';
 			$ethernet0 = '';
 			$ethernet0_name = '';
-			$ethernet0_ip = 'N/A';
+			$ethernet0_ip = '';
 			$equipement = $this->getName();
 
 			if ($this->getConfiguration('cartereseau') == 'netautre'){
@@ -1782,7 +1782,7 @@ class Monitoring extends eqLogic {
 							if (isset($ReseauIP)) {
 								$ethernet0_ip = $ReseauIP;
 							} else {
-								$ethernet0_ip = 'N/A';
+								$ethernet0_ip = '';
 							}
 							
 							log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau / IP (RX / TX) :: ' . $equipement . ' :: ' .$ethernet0_name.' / IP= ' . $ethernet0_ip . ' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
