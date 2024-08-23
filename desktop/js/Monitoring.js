@@ -124,6 +124,15 @@ $(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").on('change', function () {
 	}
 });
 
+$(".eqLogicAttr[data-l2key='pull_use_custom']").on('change', function () {
+	if(this.checked){
+	  $(".pull_class").show();
+	} else {
+	  $(".pull_class").hide();
+	}
+});
+
+
 $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 	if (this.selectedIndex == 1) {
 	  $(".distant").show();
