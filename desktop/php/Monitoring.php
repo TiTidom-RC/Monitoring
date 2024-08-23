@@ -307,7 +307,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <legend>{{Custom Pull (Cron)}}</legend>
+                                <legend>{{Auto-Actualisation (Cron)}}</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
