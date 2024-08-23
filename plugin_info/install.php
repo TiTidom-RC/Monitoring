@@ -89,6 +89,13 @@ function Monitoring_update() {
         config::save('configPullLocal', '0', 'Monitoring');
     }
 
+    foreach (eqLogic::byType('Monitoring', false) as $Monitoring) {
+        if ($Monitoring->getConfiguration('pull_use_custom') == '') {
+            $Monitoring->setConfiguration('pull_use_custom', '0');
+            $Monitoring->save();
+        }
+    }
+
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
     try {
         $dirToDelete = array(__DIR__ . '/../ressources', __DIR__ . '/../desktop/modal');
