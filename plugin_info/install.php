@@ -119,7 +119,7 @@ function Monitoring_update() {
 
 function Monitoring_remove() {
     foreach (eqLogic::byType('Monitoring', false) as $Monitoring) {
-        $cron = cron::byClassAndFunction('Monitoring', 'pullCustom' . $Monitoring->getId());
+        $cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($Monitoring->getId())));
         if (is_object($cron)) {
             $cron->remove();
         }

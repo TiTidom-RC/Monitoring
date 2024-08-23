@@ -46,7 +46,7 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
-				if ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0') {
+				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' || $Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0') {
 					log::add('Monitoring', 'info', '[PULL] Lancement (15min) :: '. $Monitoring->getName());
 					$Monitoring->getInformations();
 					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
@@ -65,7 +65,7 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '[PULLLOCAL] Config PullLocal :: '. config::byKey('configPullLocal', 'Monitoring'));
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
-				if ($Monitoring->getConfiguration('maitreesclave') == 'local') {
+				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('maitreesclave') == 'local') {
 					log::add('Monitoring', 'info', '[PULLLOCAL] Lancement (1min) :: '. $Monitoring->getName());
 					$Monitoring->getInformations();
 					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
@@ -467,6 +467,26 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
 			$MonitoringCmd->save();
+		}
+
+		if ($this->getConfiguration('pull_use_custom', '0') == '1') {
+			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
+			if (!is_object($cron)) {
+				$cron = new cron();
+				$cron->setClass('Monitoring');
+				$cron->setFunction('pullCustom');
+				$cron->setOption(array('Monitoring_Id' => intval($this->getId())));
+				$cron->setEnable(1);
+				$cron->setDeamon(0);
+				$cron->setTimeout(1);
+			}
+			$cron->setSchedule($this->getConfiguration('pull_cron', '*/15 * * * *'));
+			$cron->save();
+		} else {
+			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
+        	if (is_object($cron)) {
+            	$cron->remove();
+        	}
 		}
 
 		$this->getInformations();
