@@ -238,7 +238,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     <div class="col-xs-6">
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend>{{NAS Synology}}</legend>
+                                <legend>{{NAS Synology}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
@@ -291,7 +291,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
 					        </fieldset>
                             <fieldset>
-                                <legend>{{Linux / Proxmox}}</legend>
+                                <legend>{{Linux / Proxmox}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Temp (Alt)}}</label>
                                     <div class="col-md-8">
@@ -307,7 +307,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <legend>{{Auto-Actualisation (Cron)}}</legend>
+                                <legend>{{Auto-Actualisation (Cron)}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
