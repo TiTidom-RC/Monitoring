@@ -80,6 +80,21 @@ class Monitoring extends eqLogic {
 		}
 	}
 
+	public static function pullCustom($_options) {
+		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
+		if (is_object($Monitoring)) {
+			log::add('Monitoring', 'debug', '[PULLCUSTOM] Lancement (Custom) :: '. $Monitoring->getName());
+			$Monitoring->getInformations();
+			$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+			$mc->remove();
+			$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
+			$mc->remove();
+			$Monitoring->toHtml('mobile');
+			$Monitoring->toHtml('dashboard');
+			$Monitoring->refreshWidget();
+		}
+	}
+
   	public static function postConfig_configPullLocal($value) {
 	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
   	}
