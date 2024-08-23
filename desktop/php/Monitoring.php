@@ -238,7 +238,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     <div class="col-xs-6">
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend>{{NAS Synology}}</legend>
+                                <legend>{{NAS Synology}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
@@ -291,7 +291,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
 					        </fieldset>
                             <fieldset>
-                                <legend>{{Linux / Proxmox}}</legend>
+                                <legend>{{Linux / Proxmox}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Temp (Alt)}}</label>
                                     <div class="col-md-8">
@@ -303,6 +303,33 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                     <div class="col-md-6">
                                         <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="linux_temp_cmd" type="text" placeholder="{{timeout 3 cat /sys/devices/virtual/thermal/thermal_zone1/temp}}" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>{{Auto-Actualisation (Cron)}} :</legend>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" >{{Activer}}
+                                        <sup><i class="fas fa-question-circle tooltips" title="{{Si cette option n'est pas cochée, le cron par défaut du plugin sera utilisé}}"></i></sup>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="pull_use_custom" />
+                                        <span style="font-size: 85%;">({{A cocher pour spécifier une auto-actualisation des commandes personnalisée}})</span>
+                                    </div>
+                                </div>
+                                <div class="form-group pull_class" style="display:none;">
+                                    <label class="col-md-2 control-label" >{{Cron Personnalisé}}
+                                        <sup><i class="fas fa-question-circle tooltips" title="{{Fréquence de rafraîchissement des commandes de l'équipement}}"></i></sup>
+                                    </label>
+                                    <div class="col-sm-6">
+		                                <div class="input-group">
+                                            <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="pull_cron" placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}">
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">
+                                                    <i class="fas fa-question-circle"></i>
+                                                </a>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </fieldset>
