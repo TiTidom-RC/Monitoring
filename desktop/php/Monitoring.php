@@ -307,16 +307,16 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </fieldset>
                             <fieldset>
-                                <legend>{{Actualisation Personnalisée (Cron)}}</legend>
+                                <legend>{{Custom Pull (Cron)}}</legend>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label" >{{Custom Pull}}</label>
+                                    <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
                                         <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="pull_use_custom" />
                                         <span style="font-size: 85%;">({{A cocher pour spécifier une auto-actualisation des commandes personnalisée}})</span>
                                     </div>
                                 </div>
                                 <div class="form-group pull_class" style="display:none;">
-                                    <label class="col-md-2 control-label" >{{Cron}}
+                                    <label class="col-md-2 control-label" >{{Cron Personnalisé}}
                                         <sup><i class="fas fa-question-circle tooltips" title="{{Fréquence de rafraîchissement des commandes de l'équipement}}"></i></sup>
                                     </label>
                                     <div class="col-sm-6">
