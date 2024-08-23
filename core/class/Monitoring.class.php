@@ -735,7 +735,7 @@ class Monitoring extends eqLogic {
 			$memorylibre_pourc = '';
 			$ethernet0 = '';
 			$ethernet0_name = '';
-			$ethernet0_ip = '';
+			$ethernet0_ip = 'N/A';
 			$equipement = $this->getName();
 
 			if ($this->getConfiguration('cartereseau') == 'netautre'){
