@@ -1782,7 +1782,7 @@ class Monitoring extends eqLogic {
 							if (isset($ReseauIP)) {
 								$ethernet0_ip = $ReseauIP;
 							} else {
-								$ethernet0_ip = '';
+								$ethernet0_ip = 'N/A';
 							}
 							
 							log::add('Monitoring', 'debug', '[RESEAU] Nom de la carte réseau / IP (RX / TX) :: ' . $equipement . ' :: ' .$ethernet0_name.' / IP= ' . $ethernet0_ip . ' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
