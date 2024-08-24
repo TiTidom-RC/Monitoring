@@ -46,16 +46,21 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
-				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' || $Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0') {
-					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
-					$Monitoring->getInformations();
-					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-					$mc->remove();
-					$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-					$mc->remove();
-					$Monitoring->toHtml('mobile');
-					$Monitoring->toHtml('dashboard');
-					$Monitoring->refreshWidget();
+				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
+					$isPaused = $Monitoring->getCmd(null, 'cron_paused');
+					if (is_object($isPaused) && $isPaused->execCmd() == '1') {
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: En Pause');
+					} else {
+						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
+						$Monitoring->getInformations();
+						$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+						$mc->remove();
+						$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
+						$mc->remove();
+						$Monitoring->toHtml('mobile');
+						$Monitoring->toHtml('dashboard');
+						$Monitoring->refreshWidget();
+					}
 				}
 			}
 		}
@@ -66,15 +71,20 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('maitreesclave') == 'local') {
-					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Lancement (1min)');
-					$Monitoring->getInformations();
-					$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-					$mc->remove();
-					$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-					$mc->remove();
-					$Monitoring->toHtml('mobile');
-					$Monitoring->toHtml('dashboard');
-					$Monitoring->refreshWidget();
+					$isPaused = $Monitoring->getCmd(null, 'cron_paused');
+					if (is_object($isPaused) && $isPaused->execCmd() == '1') {
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: En Pause');
+					} else {
+						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Lancement (1min)');
+						$Monitoring->getInformations();
+						$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+						$mc->remove();
+						$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
+						$mc->remove();
+						$Monitoring->toHtml('mobile');
+						$Monitoring->toHtml('dashboard');
+						$Monitoring->refreshWidget();
+					}
 				}
 			}
 		}
@@ -83,15 +93,20 @@ class Monitoring extends eqLogic {
 	public static function pullCustom($_options) {
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
-			log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
-			$Monitoring->getInformations();
-			$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-			$mc->remove();
-			$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-			$mc->remove();
-			$Monitoring->toHtml('mobile');
-			$Monitoring->toHtml('dashboard');
-			$Monitoring->refreshWidget();
+			$isPaused = $Monitoring->getCmd(null, 'cron_paused');
+			if (is_object($isPaused) && $isPaused->execCmd() == '1') {
+				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: En Pause');
+			} else {
+				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
+				$Monitoring->getInformations();
+				$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+				$mc->remove();
+				$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
+				$mc->remove();
+				$Monitoring->toHtml('mobile');
+				$Monitoring->toHtml('dashboard');
+				$Monitoring->refreshWidget();
+			}
 		}
 	}
 
@@ -431,6 +446,18 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
+		/*$MonitoringCmd = $this->getCmd(null, 'cron_paused');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('En Pause', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('cron_paused');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('binary');
+			$MonitoringCmd->setValue(false);
+			$MonitoringCmd->save();
+		}*/
+
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -485,9 +512,13 @@ class Monitoring extends eqLogic {
 				$cron->setClass('Monitoring');
 				$cron->setFunction('pullCustom');
 				$cron->setOption(array('Monitoring_Id' => intval($this->getId())));
-				$cron->setEnable(1);
 				$cron->setDeamon(0);
 				$cron->setTimeout(1);
+			}
+			if ($this->getIsEnable()) {
+				$cron->setEnable(1);
+			} else {
+				$cron->setEnable(0);
 			}
 			$cron->setSchedule($this->getConfiguration('pull_cron', '*/15 * * * *'));
 			$cron->save();
