@@ -454,8 +454,8 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cron_paused');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->event('0');
 			$MonitoringCmd->save();
+			$MonitoringCmd->setValue('0');
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
