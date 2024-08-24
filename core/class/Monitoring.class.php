@@ -446,7 +446,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		$MonitoringCmd = $this->getCmd(null, 'cron_paused');
+		/*$MonitoringCmd = $this->getCmd(null, 'cron_paused');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
 			$MonitoringCmd->setName(__('En Pause', __FILE__));
@@ -456,7 +456,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setSubType('binary');
 			$MonitoringCmd->setValue(false);
 			$MonitoringCmd->save();
-		}
+		}*/
 
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
 		if (!is_object($MonitoringCmd)) {
