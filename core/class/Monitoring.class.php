@@ -485,9 +485,13 @@ class Monitoring extends eqLogic {
 				$cron->setClass('Monitoring');
 				$cron->setFunction('pullCustom');
 				$cron->setOption(array('Monitoring_Id' => intval($this->getId())));
-				$cron->setEnable(1);
 				$cron->setDeamon(0);
 				$cron->setTimeout(1);
+			}
+			if ($this->getIsEnable()) {
+				$cron->setEnable(1);
+			} else {
+				$cron->setEnable(0);
 			}
 			$cron->setSchedule($this->getConfiguration('pull_cron', '*/15 * * * *'));
 			$cron->save();
