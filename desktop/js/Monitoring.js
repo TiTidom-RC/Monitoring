@@ -77,7 +77,7 @@ function addCmdToTable(_cmd) {
 	tr += '</td>';
 
 	tr += '<td>';
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_state') {
 		tr += '<span class="type" type="info"></span>';
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	}
