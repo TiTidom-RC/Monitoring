@@ -2366,10 +2366,17 @@ class MonitoringCmd extends cmd {
 					break;
 				case "cron_on":
 					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
-
+					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
+					if (is_object($cron_state_cmd)) {
+						$cron_state_cmd->event(1);
+					}
 					break;
 				case "cron_off":
 					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
+					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
+					if (is_object($cron_state_cmd)) {
+						$cron_state_cmd->event(0);
+					}
 					break;
 				default:
 					throw new Exception(__('Commande non implémentée actuellement', __FILE__));
