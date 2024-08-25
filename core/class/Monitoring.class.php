@@ -47,7 +47,7 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
-					$cronState = $Monitoring->getCmd(null, 'cron_state');
+					$cronState = $Monitoring->getCmd(null, 'cron_status');
 					/* if (is_object($cronState)) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) - Cron State :: '. $cronState->execCmd());
 					} */
@@ -74,7 +74,7 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('maitreesclave') == 'local') {
-					$cronState = $Monitoring->getCmd(null, 'cron_state');
+					$cronState = $Monitoring->getCmd(null, 'cron_status');
 					/* if (is_object($cronState)) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) - Cron State :: '. $cronState->execCmd());
 					} */
@@ -99,7 +99,7 @@ class Monitoring extends eqLogic {
 	public static function pullCustom($_options) {
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
-			$cronState = $Monitoring->getCmd(null, 'cron_state');
+			$cronState = $Monitoring->getCmd(null, 'cron_status');
 			/* if (is_object($cronState)) {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) - Cron State :: '. $cronState->execCmd());
 			} */
@@ -447,7 +447,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'cnx_ssh');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Statut Cnx SSH', __FILE__));
+			$MonitoringCmd->setName(__('SSH Status', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('cnx_ssh');
 			$MonitoringCmd->setType('info');
@@ -455,19 +455,19 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		$MonitoringCmd = $this->getCmd(null, 'cron_state');
+		$MonitoringCmd = $this->getCmd(null, 'cron_status');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Cron State', __FILE__));
+			$MonitoringCmd->setName(__('Cron Status', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('cron_state');
+			$MonitoringCmd->setLogicalId('cron_status');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('binary');
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setIsHistorized(1);
 			$MonitoringCmd->save();
 		}
-		$cron_state_cmd = $MonitoringCmd->getId();
+		$cron_status_cmd = $MonitoringCmd->getId();
 
 		$MonitoringCmd = $this->getCmd(null, 'cron_on');
 		if (!is_object($MonitoringCmd)) {
@@ -478,7 +478,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play-circle"></i>');
-			$MonitoringCmd->setValue($cron_state_cmd);
+			$MonitoringCmd->setValue($cron_status_cmd);
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
             $MonitoringCmd->setTemplate('mobile', 'core::toggle');
@@ -494,7 +494,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
 			$MonitoringCmd->setDisplay('icon', '<i class="icon fas fa-pause-circle"></i>');
-			$MonitoringCmd->setValue($cron_state_cmd);
+			$MonitoringCmd->setValue($cron_status_cmd);
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
 			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
@@ -764,10 +764,10 @@ class Monitoring extends eqLogic {
         	$replace['#hddtotalesata_value#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? $hddtotalesata->getValueDate() : "-";
 		}
 
-		$cron_state = $this->getCmd(null,'cron_state');
-		$replace['#cron_state#'] = (is_object($cron_state)) ? $cron_state->execCmd() : '';
-		$replace['#cron_state_id#'] = is_object($cron_state) ? $cron_state->getId() : '';
-		$replace['#cron_state_display#'] = (is_object($cron_state) && $cron_state->getIsVisible()) ? "#cron_state_display#" : "none";
+		$cron_status = $this->getCmd(null,'cron_status');
+		$replace['#cron_status#'] = (is_object($cron_status)) ? $cron_status->execCmd() : '';
+		$replace['#cron_status_id#'] = is_object($cron_status) ? $cron_status->getId() : '';
+		$replace['#cron_status_display#'] = (is_object($cron_status) && $cron_status->getIsVisible()) ? "#cron_status_display#" : "none";
 
 		$cnx_ssh = $this->getCmd(null,'cnx_ssh');
 		$replace['#cnx_ssh#'] = (is_object($cnx_ssh)) ? $cnx_ssh->execCmd() : '';
@@ -2381,17 +2381,17 @@ class MonitoringCmd extends cmd {
 					break;
 				case "cron_on":
 					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
-					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
-					if (is_object($cron_state_cmd)) {
-						$cron_state_cmd->event(1);
+					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
+					if (is_object($cron_status_cmd)) {
+						$cron_status_cmd->event(1);
 						$eqLogic->refreshWidget();
 					}
 					break;
 				case "cron_off":
 					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
-					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
-					if (is_object($cron_state_cmd)) {
-						$cron_state_cmd->event(0);
+					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
+					if (is_object($cron_status_cmd)) {
+						$cron_status_cmd->event(0);
 						$eqLogic->refreshWidget();
 					}
 					break;
