@@ -459,12 +459,12 @@ class Monitoring extends eqLogic {
 		}
 		$cron_state_cmd = $MonitoringCmd->getId();
 
-		$MonitoringCmd = $this->getCmd(null, 'on');
+		$MonitoringCmd = $this->getCmd(null, 'cron_on');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
 			$MonitoringCmd->setName(__('Cron On', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('on');
+			$MonitoringCmd->setLogicalId('cron_on');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play"></i>');
@@ -475,12 +475,12 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		$MonitoringCmd = $this->getCmd(null, 'off');
+		$MonitoringCmd = $this->getCmd(null, 'cron_off');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
 			$MonitoringCmd->setName(__('Cron Off', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('off');
+			$MonitoringCmd->setLogicalId('cron_off');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-pause"></i>');
