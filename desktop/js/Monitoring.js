@@ -34,7 +34,7 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_state') {
+	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_state' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
 		tr += '<div class="input-group">'
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
