@@ -48,6 +48,9 @@ class Monitoring extends eqLogic {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
 					$isPaused = $Monitoring->getCmd(null, 'cron_state');
+					if (is_object($isPaused)) {
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: '. $isPaused->execCmd());
+					}
 					if (is_object($isPaused) && $isPaused->execCmd() == true) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: En Pause');
 					} else {
@@ -72,6 +75,9 @@ class Monitoring extends eqLogic {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('maitreesclave') == 'local') {
 					$isPaused = $Monitoring->getCmd(null, 'cron_state');
+					if (is_object($isPaused)) {
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: '. $isPaused->execCmd());
+					}
 					if (is_object($isPaused) && $isPaused->execCmd() == true) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: En Pause');
 					} else {
@@ -94,6 +100,9 @@ class Monitoring extends eqLogic {
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
 			$isPaused = $Monitoring->getCmd(null, 'cron_state');
+			if (is_object($isPaused)) {
+				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: '. $isPaused->execCmd());
+			}
 			if (is_object($isPaused) && $isPaused->execCmd() == true) {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: En Pause');
 			} else {
