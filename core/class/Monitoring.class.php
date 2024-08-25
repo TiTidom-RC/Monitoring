@@ -2358,7 +2358,7 @@ class MonitoringCmd extends cmd {
 		$paramaction = $this->getLogicalId();
 
 		if ($this->getType() == "action") {
-			// $eqLogic->getCmd();
+			$eqLogic->getCmd();
 			switch ($paramaction) {
 				case "reboot":
 				case "poweroff":
