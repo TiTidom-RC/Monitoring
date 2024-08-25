@@ -446,17 +446,50 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		/*$MonitoringCmd = $this->getCmd(null, 'cron_paused');
+		$MonitoringCmd = $this->getCmd(null, 'cron_paused');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('En Pause', __FILE__));
+			$MonitoringCmd->setName(__('Cron Paused', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('cron_paused');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('binary');
-			$MonitoringCmd->setValue(false);
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->save();
-		}*/
+		}
+		$cron_paused_cmd = $MonitoringCmd->getId();
+
+		$MonitoringCmd = $this->getCmd(null, 'cron_on');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Cron On', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('cron_on');
+			$MonitoringCmd->setType('action');
+			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play"></i>');
+			$MonitoringCmd->setValue($cron_paused_cmd);
+			$MonitoringCmd->setIsVisible(1);
+			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
+            $MonitoringCmd->setTemplate('mobile', 'core::toggle');
+			$MonitoringCmd->save();
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'cron_off');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Cron Off', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('cron_off');
+			$MonitoringCmd->setType('action');
+			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-pause"></i>');
+			$MonitoringCmd->setValue($cron_paused_cmd);
+			$MonitoringCmd->setIsVisible(1);
+			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
+			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
+			$MonitoringCmd->save();
+		}
 
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
 		if (!is_object($MonitoringCmd)) {
