@@ -34,7 +34,7 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_state') {
 		tr += '<div class="input-group">'
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
@@ -92,13 +92,27 @@ function addCmdToTable(_cmd) {
 		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
 	}
-	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
+	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i>';
 	tr += '</td>';
 	
 	tr += '</tr>';
 	$('#table_cmd tbody').append(tr);
-	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
-	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
+  	var tr = $('#table_cmd tbody tr').last();
+  	jeedom.eqLogic.buildSelectCmd({
+    	id: $('.eqLogicAttr[data-l1key=id]').value(),
+    	filter: { type: 'info' },
+    	error: function (error) {
+      		$('#div_alert').showAlert({ message: error.message, level: 'danger' })
+    	},
+    	success: function (result) {
+      		tr.find('.cmdAttr[data-l1key=value]').append(result)
+      		tr.setValues(_cmd, '.cmdAttr')
+      		jeedom.cmd.changeType(tr, init(_cmd.subType))
+    	}
+  	});
+	// $('#table_cmd tbody').append(tr);
+	// $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
+	// jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
 $('.pluginAction[data-action=openLocation]').on('click', function () {
@@ -136,7 +150,6 @@ $(".eqLogicAttr[data-l2key='pull_use_custom']").on('change', function () {
 	  $(".pull_class").hide();
 	}
 });
-
 
 $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 	if (this.selectedIndex == 1) {
