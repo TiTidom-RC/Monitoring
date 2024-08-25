@@ -48,9 +48,9 @@ class Monitoring extends eqLogic {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
 					$cronState = $Monitoring->getCmd(null, 'cron_state');
-					if (is_object($cronState)) {
-						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: '. $cronState->execCmd());
-					}
+					/* if (is_object($cronState)) {
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) - Cron State :: '. $cronState->execCmd());
+					} */
 					if (is_object($cronState) && $cronState->execCmd() === 0) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: En Pause');
 					} else {
@@ -75,9 +75,9 @@ class Monitoring extends eqLogic {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('maitreesclave') == 'local') {
 					$cronState = $Monitoring->getCmd(null, 'cron_state');
-					if (is_object($cronState)) {
-						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: '. $cronState->execCmd());
-					}
+					/* if (is_object($cronState)) {
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) - Cron State :: '. $cronState->execCmd());
+					} */
 					if (is_object($cronState) && $cronState->execCmd() === 0) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: En Pause');
 					} else {
@@ -100,9 +100,9 @@ class Monitoring extends eqLogic {
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
 			$cronState = $Monitoring->getCmd(null, 'cron_state');
-			if (is_object($cronState)) {
-				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: '. $cronState->execCmd());
-			}
+			/* if (is_object($cronState)) {
+				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) - Cron State :: '. $cronState->execCmd());
+			} */
 			if (is_object($cronState) && $cronState->execCmd() === 0) {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: En Pause');
 			} else {
