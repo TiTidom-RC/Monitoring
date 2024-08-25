@@ -48,7 +48,7 @@ function addCmdToTable(_cmd) {
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom de la commande}}" style="margin: 1px auto;">';
 	}
 	if (_cmd.logicalId == 'cron_state' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
-		tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:inline-block;margin-top:5px;" title="{{Commande info liée}}">';
+		tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">';
   		tr += '<option value="">{{Aucune}}</option>';
 		tr += '</select>';
 	}
