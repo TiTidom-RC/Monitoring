@@ -2383,12 +2383,6 @@ class MonitoringCmd extends cmd {
 					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
 					if (is_object($cron_state_cmd)) {
 						$cron_state_cmd->event(1);
-						// $mc = cache::byKey('MonitoringWidgetmobile' . $eqLogic->getId());
-						// $mc->remove();
-						// $mc = cache::byKey('MonitoringWidgetdashboard' . $eqLogic->getId());
-						// $mc->remove();
-						// $eqLogic->toHtml('mobile');
-						// $eqLogic->toHtml('dashboard');
 						$eqLogic->refreshWidget();
 					}
 					break;
@@ -2397,12 +2391,6 @@ class MonitoringCmd extends cmd {
 					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
 					if (is_object($cron_state_cmd)) {
 						$cron_state_cmd->event(0);
-						// $mc = cache::byKey('MonitoringWidgetmobile' . $eqLogic->getId());
-						// $mc->remove();
-						// $mc = cache::byKey('MonitoringWidgetdashboard' . $eqLogic->getId());
-						// $mc->remove();
-						// $eqLogic->toHtml('mobile');
-						// $eqLogic->toHtml('dashboard');
 						$eqLogic->refreshWidget();
 					}
 					break;
