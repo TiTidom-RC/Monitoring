@@ -446,18 +446,18 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		$MonitoringCmd = $this->getCmd(null, 'cron_paused');
+		$MonitoringCmd = $this->getCmd(null, 'cron_state');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Cron Paused', __FILE__));
+			$MonitoringCmd->setName(__('Cron State', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('cron_paused');
+			$MonitoringCmd->setLogicalId('cron_state');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('binary');
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->save();
 		}
-		$cron_paused_cmd = $MonitoringCmd->getId();
+		$cron_state_cmd = $MonitoringCmd->getId();
 
 		$MonitoringCmd = $this->getCmd(null, 'cron_on');
 		if (!is_object($MonitoringCmd)) {
@@ -468,23 +468,23 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play"></i>');
-			$MonitoringCmd->setValue($cron_paused_cmd);
+			$MonitoringCmd->setValue($cron_state_cmd);
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
             $MonitoringCmd->setTemplate('mobile', 'core::toggle');
 			$MonitoringCmd->save();
 		}
 
-		$MonitoringCmd = $this->getCmd(null, 'cron_off');
+		$MonitoringCmd = $this->getCmd(null, 'cron_paused');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Cron Off', __FILE__));
+			$MonitoringCmd->setName(__('Cron Paused', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('cron_off');
+			$MonitoringCmd->setLogicalId('cron_paused');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-pause"></i>');
-			$MonitoringCmd->setValue($cron_paused_cmd);
+			$MonitoringCmd->setValue($cron_state_cmd);
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
 			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
