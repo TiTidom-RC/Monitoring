@@ -4,7 +4,7 @@
 		<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
 		<span class="cmd refresh pull-right cursor">
 			<span class="cron tooltips" data-type="action" data-subtype="other" data-cmd_id="#cron_state_id#">
-				<a class="action" style="cursor: pointer;" id="iconCron#id#"></a>
+				<a class="action" style="cursor: pointer;">iconCron#id#</a>
 				<script>
 					$('.cron[data-cmd_id=#cron_state_id#] .action').on('click', function () {
 						jeedom.cmd.execute({ id: '#cron_state_id#' });
