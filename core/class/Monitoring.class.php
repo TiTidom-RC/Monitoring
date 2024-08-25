@@ -51,7 +51,7 @@ class Monitoring extends eqLogic {
 					if (is_object($cronState)) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: '. $cronState->execCmd());
 					}
-					if (is_object($cronState) && $cronState->execCmd() == false) {
+					if (is_object($cronState) && $cronState->execCmd() === false) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: En Pause');
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
@@ -78,7 +78,7 @@ class Monitoring extends eqLogic {
 					if (is_object($cronState)) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: '. $cronState->execCmd());
 					}
-					if (is_object($cronState) && $cronState->execCmd() == false) {
+					if (is_object($cronState) && $cronState->execCmd() === false) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: En Pause');
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Lancement (1min)');
@@ -103,7 +103,7 @@ class Monitoring extends eqLogic {
 			if (is_object($cronState)) {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: '. $cronState->execCmd());
 			}
-			if (is_object($cronState) && $cronState->execCmd() == false) {
+			if (is_object($cronState) && $cronState->execCmd() === false) {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: En Pause');
 			} else {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
