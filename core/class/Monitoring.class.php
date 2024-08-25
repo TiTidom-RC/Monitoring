@@ -2358,8 +2358,18 @@ class MonitoringCmd extends cmd {
 		$paramaction = $this->getLogicalId();
 
 		if ($this->getType() == "action") {
-			$eqLogic->getCmd();
-			$eqLogic->getCaseAction($paramaction);
+			// $eqLogic->getCmd();
+			switch ($paramaction) {
+				case "reboot":
+				case "poweroff":
+					$eqLogic->getCaseAction($paramaction);
+					break;
+				case "cron_on":	
+				case "cron_off":
+					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
+				default:
+					throw new Exception(__('Commande non implémentée actuellement', __FILE__));
+			}
 		} else {
 			throw new Exception(__('Commande non implémentée actuellement', __FILE__));
 		}
