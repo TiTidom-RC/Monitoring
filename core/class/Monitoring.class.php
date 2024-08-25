@@ -47,8 +47,11 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
-					$isPaused = $Monitoring->getCmd(null, 'cron_paused');
-					if (is_object($isPaused) && $isPaused->execCmd() == '1') {
+					$cronState = $Monitoring->getCmd(null, 'cron_state');
+					/* if (is_object($cronState)) {
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) - Cron State :: '. $cronState->execCmd());
+					} */
+					if (is_object($cronState) && $cronState->execCmd() === 0) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: En Pause');
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
@@ -71,8 +74,11 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('maitreesclave') == 'local') {
-					$isPaused = $Monitoring->getCmd(null, 'cron_paused');
-					if (is_object($isPaused) && $isPaused->execCmd() == '1') {
+					$cronState = $Monitoring->getCmd(null, 'cron_state');
+					/* if (is_object($cronState)) {
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) - Cron State :: '. $cronState->execCmd());
+					} */
+					if (is_object($cronState) && $cronState->execCmd() === 0) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: En Pause');
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Lancement (1min)');
@@ -93,8 +99,11 @@ class Monitoring extends eqLogic {
 	public static function pullCustom($_options) {
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
-			$isPaused = $Monitoring->getCmd(null, 'cron_paused');
-			if (is_object($isPaused) && $isPaused->execCmd() == '1') {
+			$cronState = $Monitoring->getCmd(null, 'cron_state');
+			/* if (is_object($cronState)) {
+				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) - Cron State :: '. $cronState->execCmd());
+			} */
+			if (is_object($cronState) && $cronState->execCmd() === 0) {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: En Pause');
 			} else {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
@@ -446,17 +455,50 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		/*$MonitoringCmd = $this->getCmd(null, 'cron_paused');
+		$MonitoringCmd = $this->getCmd(null, 'cron_state');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('En Pause', __FILE__));
+			$MonitoringCmd->setName(__('Cron State', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('cron_paused');
+			$MonitoringCmd->setLogicalId('cron_state');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('binary');
-			$MonitoringCmd->setValue(false);
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->save();
-		}*/
+		}
+		$cron_state_cmd = $MonitoringCmd->getId();
+
+		$MonitoringCmd = $this->getCmd(null, 'cron_on');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Cron On', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('cron_on');
+			$MonitoringCmd->setType('action');
+			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play-circle"></i>');
+			$MonitoringCmd->setValue($cron_state_cmd);
+			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
+            $MonitoringCmd->setTemplate('mobile', 'core::toggle');
+			$MonitoringCmd->save();
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'cron_off');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Cron Off', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('cron_off');
+			$MonitoringCmd->setType('action');
+			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setDisplay('icon', '<i class="icon fas fa-pause-circle"></i>');
+			$MonitoringCmd->setValue($cron_state_cmd);
+			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
+			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
+			$MonitoringCmd->save();
+		}
 
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
 		if (!is_object($MonitoringCmd)) {
@@ -721,9 +763,14 @@ class Monitoring extends eqLogic {
         	$replace['#hddtotalesata_value#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? $hddtotalesata->getValueDate() : "-";
 		}
 
+		$cron_state = $this->getCmd(null,'cron_state');
+		$replace['#cron_state#'] = (is_object($cron_state)) ? $cron_state->execCmd() : '';
+		$replace['#cron_state_id#'] = is_object($cron_state) ? $cron_state->getId() : '';
+		$replace['#cron_state_display#'] = (is_object($cron_state) && $cron_state->getIsVisible()) ? "#cron_state_display#" : "none";
+
 		$cnx_ssh = $this->getCmd(null,'cnx_ssh');
 		$replace['#cnx_ssh#'] = (is_object($cnx_ssh)) ? $cnx_ssh->execCmd() : '';
-		$replace['#cnx_sshid#'] = is_object($cnx_ssh) ? $cnx_ssh->getId() : '';
+		$replace['#cnx_ssh_id#'] = is_object($cnx_ssh) ? $cnx_ssh->getId() : '';
 
 		$Mempourc = $this->getCmd(null,'Mempourc');
 		$replace['#Mempourc#'] = (is_object($Mempourc)) ? $Mempourc->execCmd() : '';
@@ -2325,8 +2372,31 @@ class MonitoringCmd extends cmd {
 		$paramaction = $this->getLogicalId();
 
 		if ($this->getType() == "action") {
-			$eqLogic->getCmd();
-			$eqLogic->getCaseAction($paramaction);
+			// $eqLogic->getCmd();
+			switch ($paramaction) {
+				case "reboot":
+				case "poweroff":
+					$eqLogic->getCaseAction($paramaction);
+					break;
+				case "cron_on":
+					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
+					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
+					if (is_object($cron_state_cmd)) {
+						$cron_state_cmd->event(1);
+						$eqLogic->refreshWidget();
+					}
+					break;
+				case "cron_off":
+					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
+					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
+					if (is_object($cron_state_cmd)) {
+						$cron_state_cmd->event(0);
+						$eqLogic->refreshWidget();
+					}
+					break;
+				default:
+					throw new Exception(__('Commande non implémentée actuellement', __FILE__));
+			}
 		} else {
 			throw new Exception(__('Commande non implémentée actuellement', __FILE__));
 		}
