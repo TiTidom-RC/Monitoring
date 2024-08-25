@@ -766,6 +766,7 @@ class Monitoring extends eqLogic {
 		$cron_state = $this->getCmd(null,'cron_state');
 		$replace['#cron_state#'] = (is_object($cron_state)) ? $cron_state->execCmd() : '';
 		$replace['#cron_stateid#'] = is_object($cron_state) ? $cron_state->getId() : '';
+		$replace['#cron_state_display#'] = (is_object($cron_state) && $cron_state->getIsVisible()) ? "#cron_state_display#" : "none";
 
 		$cnx_ssh = $this->getCmd(null,'cnx_ssh');
 		$replace['#cnx_ssh#'] = (is_object($cnx_ssh)) ? $cnx_ssh->execCmd() : '';
