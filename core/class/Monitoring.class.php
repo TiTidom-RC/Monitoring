@@ -763,6 +763,10 @@ class Monitoring extends eqLogic {
         	$replace['#hddtotalesata_value#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? $hddtotalesata->getValueDate() : "-";
 		}
 
+		$cron_state = $this->getCmd(null,'cron_state');
+		$replace['#cron_state#'] = (is_object($cron_state)) ? $cron_state->execCmd() : '';
+		$replace['#cron_stateid#'] = is_object($cron_state) ? $cron_state->getId() : '';
+
 		$cnx_ssh = $this->getCmd(null,'cnx_ssh');
 		$replace['#cnx_ssh#'] = (is_object($cnx_ssh)) ? $cnx_ssh->execCmd() : '';
 		$replace['#cnx_sshid#'] = is_object($cnx_ssh) ? $cnx_ssh->getId() : '';

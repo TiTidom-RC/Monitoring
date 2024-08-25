@@ -3,6 +3,15 @@
 		<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
 		<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
 		<span class="cmd refresh pull-right cursor">
+			<span id="iconCron#id#"></span>
+			<script>
+				if ('#cron_state#' == '1') {
+					$('#iconCron#id#').append('<i title="Cron ON" class="far fa-play-circle tooltips" style="font-size : 1.1em;color: var(--al-success-color) !important;"></i>');
+				}
+				if ('#cron_state#' == '0') {
+					$('#iconCron#id#').append('<i title="Cron PAUSE" class="far fa-pause-circle tooltips" style="font-size : 1.1em;color: var(--al-danger-color) !important;"></i>');
+				}
+			</script>
 			<span id="iconSSH#id#"></span>
 			<script>
 				if ('#cnx_ssh#' == 'OK') {
@@ -12,7 +21,7 @@
 					$('#iconSSH#id#').append('<i title="Connexion SSH KO" class="fas fa-times tooltips" style="font-size : 1.1em;color: var(--al-danger-color) !important;"></i>');
 				}
 			</script>
-			<span title="Eteindre l'Equipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#;">
+			<span title="Eteindre l'équipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#;">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
 				<script>
 					$('.poweroff[data-cmd_id=#cmd_poweroff_id#] .action').on('click', function () {
@@ -24,7 +33,7 @@
 					});
 				</script>
 			</span>
-			<span title="Redémarrer l'Equipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#;">
+			<span title="Redémarrer l'équipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#;">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
 				<script>
 					$('.reboot[data-cmd_id=#cmd_reboot_id#] .action').on('click', function () {
