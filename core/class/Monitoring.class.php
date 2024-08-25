@@ -2383,6 +2383,7 @@ class MonitoringCmd extends cmd {
 					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
 					if (is_object($cron_state_cmd)) {
 						$cron_state_cmd->event(1);
+						$cron_state_cmd->_needRefreshWidget = true;
 					}
 					break;
 				case "cron_off":
@@ -2390,6 +2391,7 @@ class MonitoringCmd extends cmd {
 					$cron_state_cmd = $eqLogic->getCmd(null, 'cron_state');
 					if (is_object($cron_state_cmd)) {
 						$cron_state_cmd->event(0);
+						$cron_state_cmd->_needRefreshWidget = true;
 					}
 					break;
 				default:
