@@ -3,18 +3,20 @@
 		<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
 		<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
 		<span class="cmd refresh pull-right cursor">
-			<span id="iconCron#id#" class="cron" data-type="action" data-subtype="other" data-cmd_id="#cron_state_id#"></span>
-			<script>
-				if ('#cron_state#' == '1') {
-					$('#iconCron#id#').append('<i title="Cron ON" class="fas fa-play-circle tooltips" style="display: #cron_state_display#;font-size : 1.1em;color: var(--al-success-color) !important;"></i>');
-				}
-				if ('#cron_state#' == '0') {
-					$('#iconCron#id#').append('<i title="Cron PAUSE" class="fas fa-pause-circle tooltips" style="display: #cron_state_display#;font-size : 1.1em;color: var(--al-danger-color) !important;"></i>');
-				}
-				$('.cron[data-cmd_id=#cron_state_id#] .action').on('click', function () {
-					jeedom.cmd.execute({ id: '#cron_state_id#' });
-				});
-			</script>
+			<span class="cron" data-type="action" data-subtype="other" data-cmd_id="#cron_state_id#">
+				<a class="action" style="cursor: pointer;" id="iconCron#id#"></a>
+				<script>
+					if ('#cron_state#' == '1') {
+						$('#iconCron#id#').append('<i title="Cron ON" class="fas fa-play-circle tooltips" style="display: #cron_state_display#;font-size : 1.1em;color: var(--al-success-color) !important;"></i>');
+					}
+					if ('#cron_state#' == '0') {
+						$('#iconCron#id#').append('<i title="Cron PAUSE" class="fas fa-pause-circle tooltips" style="display: #cron_state_display#;font-size : 1.1em;color: var(--al-danger-color) !important;"></i>');
+					}
+					$('.cron[data-cmd_id=#cron_state_id#] .action').on('click', function () {
+						jeedom.cmd.execute({ id: '#cron_state_id#' });
+					});
+				</script>
+			</span>
 			<span id="iconSSH#id#"></span>
 			<script>
 				if ('#cnx_ssh#' == 'OK') {
