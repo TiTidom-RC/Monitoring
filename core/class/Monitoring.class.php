@@ -463,7 +463,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cron_state');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('binary');
-			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->save();
 		}
 		$cron_state_cmd = $MonitoringCmd->getId();
@@ -476,9 +476,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cron_on');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
-			$MonitoringCmd->setDisplay('icon', '<i class="far fa-play-circle"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play-circle"></i>');
 			$MonitoringCmd->setValue($cron_state_cmd);
-			$MonitoringCmd->setIsVisible(1);
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
             $MonitoringCmd->setTemplate('mobile', 'core::toggle');
 			$MonitoringCmd->save();
@@ -492,9 +492,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cron_off');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
-			$MonitoringCmd->setDisplay('icon', '<i class="icon far fa-pause-circle"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="icon fas fa-pause-circle"></i>');
 			$MonitoringCmd->setValue($cron_state_cmd);
-			$MonitoringCmd->setIsVisible(1);
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
 			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
 			$MonitoringCmd->save();
