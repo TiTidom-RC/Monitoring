@@ -21,112 +21,122 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 function Monitoring_install() {
     $pluginVersion = Monitoring::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
-  
+
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
     if (!is_object($cron)) {
-      $cron = new cron();
-      $cron->setClass('Monitoring');
-      $cron->setFunction('pull');
-      $cron->setEnable(1);
-      $cron->setDeamon(0);
-      $cron->setSchedule('*/15 * * * *');
-      $cron->setTimeout(15);
-      $cron->save();
+        $cron = new cron();
+        $cron->setClass('Monitoring');
+        $cron->setFunction('pull');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setSchedule('*/15 * * * *');
+        $cron->setTimeout(15);
+        $cron->save();
     }
 
     $cronLocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
     if (!is_object($cronLocal)) {
-      $cronLocal = new cron();
-      $cronLocal->setClass('Monitoring');
-      $cronLocal->setFunction('pullLocal');
-      $cronLocal->setEnable(1);
-      $cronLocal->setDeamon(0);
-      $cronLocal->setSchedule('* * * * *');
-      $cronLocal->setTimeout(1);
-      $cronLocal->save();
+        $cronLocal = new cron();
+        $cronLocal->setClass('Monitoring');
+        $cronLocal->setFunction('pullLocal');
+        $cronLocal->setEnable(1);
+        $cronLocal->setDeamon(0);
+        $cronLocal->setSchedule('* * * * *');
+        $cronLocal->setTimeout(1);
+        $cronLocal->save();
     }
 
     if (config::byKey('configPull', 'Monitoring') == '') {
-      config::save('configPull', '1', 'Monitoring');
+        config::save('configPull', '1', 'Monitoring');
     }
     if (config::byKey('configPullLocal', 'Monitoring') == '') {
-      config::save('configPullLocal', '0', 'Monitoring');
+        config::save('configPullLocal', '0', 'Monitoring');
     }
 }
 
 function Monitoring_update() {
     $pluginVersion = Monitoring::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
-  
+
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
     if (!is_object($cron)) {
-      $cron = new cron();
-      $cron->setClass('Monitoring');
-      $cron->setFunction('pull');
-      $cron->setEnable(1);
-      $cron->setDeamon(0);
-      $cron->setSchedule('*/15 * * * *');
-      $cron->setTimeout(15);
-      $cron->save();
+        $cron = new cron();
+        $cron->setClass('Monitoring');
+        $cron->setFunction('pull');
+        $cron->setEnable(1);
+        $cron->setDeamon(0);
+        $cron->setSchedule('*/15 * * * *');
+        $cron->setTimeout(15);
+        $cron->save();
     }
 
     $cronLocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
     if (!is_object($cronLocal)) {
-      $cronLocal = new cron();
-      $cronLocal->setClass('Monitoring');
-      $cronLocal->setFunction('pullLocal');
-      $cronLocal->setEnable(1);
-      $cronLocal->setDeamon(0);
-      $cronLocal->setSchedule('* * * * *');
-      $cronLocal->setTimeout(1);
-      $cronLocal->save();
+        $cronLocal = new cron();
+        $cronLocal->setClass('Monitoring');
+        $cronLocal->setFunction('pullLocal');
+        $cronLocal->setEnable(1);
+        $cronLocal->setDeamon(0);
+        $cronLocal->setSchedule('* * * * *');
+        $cronLocal->setTimeout(1);
+        $cronLocal->save();
     }
 
     if (config::byKey('configPull', 'Monitoring') == '') {
-      config::save('configPull', '1', 'Monitoring');
+        config::save('configPull', '1', 'Monitoring');
     }
     if (config::byKey('configPullLocal', 'Monitoring') == '') {
-      config::save('configPullLocal', '0', 'Monitoring');
+        config::save('configPullLocal', '0', 'Monitoring');
+    }
+
+    foreach (eqLogic::byType('Monitoring', false) as $Monitoring) {
+        if ($Monitoring->getConfiguration('pull_use_custom') == '') {
+            $Monitoring->setConfiguration('pull_use_custom', '0');
+            $Monitoring->save();
+        }
     }
 
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
     try {
-      $dirToDelete = array (__DIR__ . '/../ressources',__DIR__ . '/../desktop/modal');
-      $filesToDelete = array(__DIR__ . '/../plugin_info/packages.json',__DIR__ . '/../resources/install.sh');
-      
-      foreach ($dirToDelete as $dir) {
-        log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du répertoire ' . $dir);
-        if (file_exists($dir)) {
-          shell_exec('sudo rm -rf ' . $dir);
-          log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le répertoire ' . $dir . ' a bien été effacé.');
+        $dirToDelete = array(__DIR__ . '/../ressources', __DIR__ . '/../desktop/modal');
+        $filesToDelete = array(__DIR__ . '/../plugin_info/packages.json', __DIR__ . '/../resources/install.sh');
+
+        foreach ($dirToDelete as $dir) {
+            log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du répertoire ' . $dir);
+            if (file_exists($dir)) {
+                shell_exec('sudo rm -rf ' . $dir);
+                log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le répertoire ' . $dir . ' a bien été effacé.');
+            } else {
+                log::add('Monitoring', 'debug', '[CLEAN_CHECK_NA] Répertoire ' . $dir . ' non trouvé. Aucune action requise.');
+            }
         }
-        else {
-          log::add('Monitoring', 'debug', '[CLEAN_CHECK_NA] Répertoire ' . $dir . ' non trouvé. Aucune action requise.');
+        foreach ($filesToDelete as $file) {
+            log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du fichier : ' . $file);
+            if (file_exists($file)) {
+                shell_exec('sudo rm -f ' . $file);
+                log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le fichier  ' . $file . ' a bien été effacé.');
+            } else {
+                log::add('Monitoring', 'debug', '[CLEAN_CHECK_NA] Fichier ' . $file . ' non trouvé. Aucune action requise.');
+            }
         }
-      }
-      foreach ($filesToDelete as $file) {
-        log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du fichier : '. $file);
-        if (file_exists($file)) {
-          shell_exec('sudo rm -f ' . $file);
-          log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le fichier  ' . $file . ' a bien été effacé.');
-        }
-        else {
-          log::add('Monitoring', 'debug', '[CLEAN_CHECK_NA] Fichier ' . $file . ' non trouvé. Aucune action requise.');
-        }
-      }
     } catch (Exception $e) {
-      log::add('Monitoring', 'debug', '[CLEAN_CHECK_KO] WARNING :: Exception levée :: '. $e->getMessage());
+        log::add('Monitoring', 'debug', '[CLEAN_CHECK_KO] WARNING :: Exception levée :: ' . $e->getMessage());
     }
 }
 
 function Monitoring_remove() {
+    foreach (eqLogic::byType('Monitoring', false) as $Monitoring) {
+        $cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($Monitoring->getId())));
+        if (is_object($cron)) {
+            $cron->remove();
+        }
+    }
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
     $cronLocal = cron::byClassAndFunction('Monitoring', 'pullLocal');
     if (is_object($cron)) {
         $cron->remove();
     }
     if (is_object($cronLocal)) {
-      $cronLocal->remove();
-  }
+        $cronLocal->remove();
+    }
 }
-?>
