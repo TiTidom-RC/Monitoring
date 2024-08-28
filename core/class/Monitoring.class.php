@@ -869,7 +869,7 @@ class Monitoring extends eqLogic {
 			elseif ($this->getConfiguration('cartereseau') == 'netauto') {
 				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1)";
 				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1 | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-				$cartereseau = "$(ip -br -f inet a | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $1 }' | awk -v ORS=\"\" '{ print }')";
+				$cartereseau = "$(ip -br -f inet a | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $1 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
 			} else {
 				$cartereseau = $this->getConfiguration('cartereseau');
 			}
