@@ -548,9 +548,9 @@ class Monitoring extends eqLogic {
 		}
 
 		if ($this->getConfiguration('pull_use_custom', '0') == '1') {
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Add CustomPull');
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
 			if (!is_object($cron)) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Add CustomPull');
 				$cron = new cron();
 				$cron->setClass('Monitoring');
 				$cron->setFunction('pullCustom');
@@ -566,9 +566,9 @@ class Monitoring extends eqLogic {
 			$cron->setSchedule($this->getConfiguration('pull_cron', '*/15 * * * *'));
 			$cron->save();
 		} else {
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Remove CustomPull');
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
         	if (is_object($cron)) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Remove CustomPull');
             	$cron->remove();
         	}
 		}
@@ -867,9 +867,9 @@ class Monitoring extends eqLogic {
 				$cartereseau = $this->getConfiguration('cartereseauautre');
 			}
 			elseif ($this->getConfiguration('cartereseau') == 'netauto') {
-				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1)";
 				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1 | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-				$cartereseau = "$(ip -br -f inet a | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $1 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+				// $cartereseau = "$(ip -br -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $1 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+				$cartereseau = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
 			} else {
 				$cartereseau = $this->getConfiguration('cartereseau');
 			}
@@ -952,10 +952,13 @@ class Monitoring extends eqLogic {
 						$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
 						$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 						$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
+						
 						// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
 						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
-						$ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'"; 
-
+						
+						$ReseauIP_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+						// $ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+						
 						try {
 							$ARMv = $sshconnection->exec($ARMv_cmd);
 							if (!empty($ARMv)) {
@@ -1413,7 +1416,9 @@ class Monitoring extends eqLogic {
 				
 				// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
 				$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
-				$ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+				
+				$ReseauIP_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+				// $ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 				
 				$uptime = exec($uptime_cmd);
 				$namedistri = exec($namedistri_cmd);
