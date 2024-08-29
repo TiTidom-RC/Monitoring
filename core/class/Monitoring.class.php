@@ -548,9 +548,9 @@ class Monitoring extends eqLogic {
 		}
 
 		if ($this->getConfiguration('pull_use_custom', '0') == '1') {
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Add CustomPull');
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
 			if (!is_object($cron)) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Add CustomPull');
 				$cron = new cron();
 				$cron->setClass('Monitoring');
 				$cron->setFunction('pullCustom');
@@ -566,9 +566,9 @@ class Monitoring extends eqLogic {
 			$cron->setSchedule($this->getConfiguration('pull_cron', '*/15 * * * *'));
 			$cron->save();
 		} else {
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Remove CustomPull');
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
         	if (is_object($cron)) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Remove CustomPull');
             	$cron->remove();
         	}
 		}
