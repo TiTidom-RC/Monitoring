@@ -62,7 +62,7 @@
 			}
 		</script>
 		<div class="tooltips" style="margin-left:5px;display: #loadavg_display#;">
-			<span title="Charge Système (Load Average)</br><i>Date de valeur : #loadavg_value#</br>Date de collecte : #loadavg_collect#</i>" class="fa techno-courbes3" style="width:15px;"></span>
+			<span title="Charge Système (Load Average)</br><i>Date de valeur : #loadavg_value#</br>Date de collecte : #loadavg_collect#</i>" class="fa techno-courbes3" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
 		</div>
 		<script>
@@ -104,7 +104,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#;">
-			<span title="Mémoire Vive (% Libre)</br><i>Date de valeur : #Mem_value#</br>Date de collecte : #Mem_collect#</i>" class="fa techno-memory" style="width:15px;"></span>
+			<span title="Mémoire Vive (% Libre)</br><i>Date de valeur : #Mem_value#</br>Date de collecte : #Mem_collect#</i>" class="fa techno-memory" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="Mempourcent#id#"></span>
 		</div>
 		<script>
@@ -123,7 +123,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#;">
-			<span title="Mémoire Swap (% Libre)</br><i>Date de valeur : #Mem_swap_value#</br>Date de collecte : #Mem_swap_collect#</i>" class="fas fa-list" style="width:15px;"></span>
+			<span title="Mémoire Swap (% Libre)</br><i>Date de valeur : #Mem_swap_value#</br>Date de collecte : #Mem_swap_collect#</i>" class="fas fa-list" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="Swappourc#id#"></span>
 		</div>
 		<script>
@@ -142,16 +142,16 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#;">
-			<span title="Trafic Réseau (#ethernet0_name# / #ethernet0_ip#)</br><i>Date de valeur : #ethernet0_value#</br>Date de collecte : #ethernet0_collect#</i>" class="fa techno-fleches" style="width:15px;"></span>
+			<span title="Trafic Réseau (#ethernet0_name# / #ethernet0_ip#)</br><i>Date de valeur : #ethernet0_value#</br>Date de collecte : #ethernet0_collect#</i>" class="fa techno-fleches" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="ethernet0#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				$('#ethernet0#id#').append('<span">#ethernet0#</span>');
+				$('#ethernet0#id#').append('<span>#ethernet0#</span>');
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#;">
-			<span title="Espace Disque (% Utilisé)</br><i>Date de valeur : #hddtotal_value#</br>Date de collecte : #hddtotal_collect#</i>" class="fas fa-hdd" style="width:15px;"></span>
+			<span title="Espace Disque (% Utilisé)</br><i>Date de valeur : #hddtotal_value#</br>Date de collecte : #hddtotal_collect#</i>" class="fas fa-hdd" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="hddpourcused#id#"></span>
 		</div>
 		<script>
@@ -173,7 +173,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolume2_display#' == 'OK') {
-					$('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px;"></span> <span id="hddpourcusedv2#id#"></span></div>');
+					$('#synovol2#id#').append('<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" class="fas fa-hdd" style="width:15px;max-width:15px;max-height:15px;"></span> <span id="hddpourcusedv2#id#"></span></div>');
 				}
 				if ('#hddpourcusedv2#' === '') {
 					$('#hddpourcusedv2#id#').append('<span></span>');
@@ -192,7 +192,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px;"></span> <span id="hddpourcusedusb#id#"></span></div>');
+					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" class="fab fa-usb" style="width:15px;max-width:15px;max-height:15px;"></span> <span id="hddpourcusedusb#id#"></span></div>');
 				}
 				if ('#hddpourcusedusb#' === '') {
 					$('#hddpourcusedusb#id#').append('<span></span>');
@@ -211,7 +211,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeesata_display#' == 'OK') {
-					$('#synovolesata#id#').append('<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" class="fas fa-hdd" style="width:15px;"></span> <span id="hddpourcusedesata#id#"></span></div>');
+					$('#synovolesata#id#').append('<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" class="fas fa-hdd" style="width:15px;max-width:15px;max-height:15px;"></span> <span id="hddpourcusedesata#id#"></span></div>');
 				}
 				if ('#hddpourcusedesata#' === '') {
 					$('#hddpourcusedesata#id#').append('<span></span>');
@@ -227,7 +227,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#;">
-			<span title="Nombre CPU - Fréquence (Température)</br><i>Date de valeur : #cpu_value#</br>Date de collecte : #cpu_collect#</i>" class="fa techno-pc" style="width:15px;"></span>
+			<span title="Nombre CPU - Fréquence (Température)</br><i>Date de valeur : #cpu_value#</br>Date de collecte : #cpu_collect#</i>" class="fa techno-pc" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
 		<script>
@@ -252,44 +252,44 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#;">
-			<span class="fa" title="#nameperso1#</br><i>Date de valeur : #perso1_value#</br>Date de collecte : #perso1_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso1#</span>
-			<span id="uniteperso1#id#"></span>
+			<span class="fa" title="#perso1_name#</br><i>Date de valeur : #perso1_value#</br>Date de collecte : #perso1_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
+			<span id="perso1_unite#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso1#' !== '') {
 					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-success-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span data-cmd_id="#perso1id#" class="value history cursor" style="color: var(--al-success-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span data-cmd_id="#perso1id#" class="value history cursor" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span data-cmd_id="#perso1id#" class="value history cursor" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#perso1id#" class="value history cursor">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span data-cmd_id="#perso1id#" class="value history cursor">#perso1#</span><span>#perso1_unite#</span>');
 					}
 				} else {
-					$('#uniteperso1#id#').append('<span></span>');
+					$('#perso1_unite#id#').append('<span></span>');
 				}
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#;">
-			<span class="fa" title="#nameperso2#</br><i>Date de valeur : #perso2_value#</br>Date de collecte : #perso2_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso2#</span>
-			<span id="uniteperso2#id#"></span>
+			<span class="fa" title="#perso2_name#</br><i>Date de valeur : #perso2_value#</br>Date de collecte : #perso2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
+			<span id="perso2_unite#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso2#' !== '') {
 					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#perso2_unite#</span>');
 					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#perso2_unite#</span>');
 					} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#perso2_unite#</span>');
 					} else {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor">#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor">#perso2#</span><span>#perso2_unite#</span>');
 					}
 				} else {
-					$('#uniteperso2#id#').append('<span></span>');
+					$('#perso2_unite#id#').append('<span></span>');
 				}
 			}
 		</script>

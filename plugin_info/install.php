@@ -98,8 +98,19 @@ function Monitoring_update() {
 
     /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
     try {
-        $dirToDelete = array(__DIR__ . '/../ressources', __DIR__ . '/../desktop/modal');
-        $filesToDelete = array(__DIR__ . '/../plugin_info/packages.json', __DIR__ . '/../resources/install.sh');
+        $dirToDelete = array(
+            __DIR__ . '/../ressources',
+            __DIR__ . '/../desktop/modal',
+            __DIR__ . '/../mobile',
+            __DIR__ . '/../core/img',
+            __DIR__ . '/../resources'
+        );
+        
+        $filesToDelete = array(
+            __DIR__ . '/../plugin_info/packages.json',
+            __DIR__ . '/../desktop/js/panel.js',
+            __DIR__ . '/../desktop/php/panel.php',
+        );
 
         foreach ($dirToDelete as $dir) {
             log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du répertoire ' . $dir);
