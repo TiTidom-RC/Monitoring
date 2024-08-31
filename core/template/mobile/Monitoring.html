@@ -256,46 +256,46 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #perso1_display#;">
-			<span title="#nameperso1# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#"
-				style="width:15px;">#iconeperso1#</span>
-			<span id="uniteperso1#id#"></span>
+			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#"
+				style="width:15px;">#perso1_icon#</span>
+			<span id="perso1_unite#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso1#' !== '') {
 					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-						$('#uniteperso1#id#').append('<span class="state" style="color: var(--al-success-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span class="state" style="color: var(--al-success-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-						$('#uniteperso1#id#').append('<span class="state" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span class="state" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && '#perso1_colorhigh#' !== '') {
-						$('#uniteperso1#id#').append('<span class="state" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span class="state" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else {
-						$('#uniteperso1#id#').append('<span class="state">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span class="state">#perso1#</span><span>#perso1_unite#</span>');
 					}
 				} else {
-					$('#uniteperso1#id#').append('<span></span>');
+					$('#perso1_unite#id#').append('<span></span>');
 				}
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #perso2_display#;">
-			<span title="#nameperso2# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#"
-				style="width:15px;">#iconeperso2#</span>
-			<span id="uniteperso2#id#"></span>
+			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#"
+				style="width:15px;">#perso2_icon#</span>
+			<span id="perso2_unite#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso2#' !== '') {
 					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-						$('#uniteperso2#id#').append('<span class="state" style="color: var(--al-success-color) !important;">#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span class="state" style="color: var(--al-success-color) !important;">#perso2#</span><span>#perso2_unite#</span>');
 					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-						$('#uniteperso2#id#').append('<span class="state" style="color: var(--al-warning-color) !important;">#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span class="state" style="color: var(--al-warning-color) !important;">#perso2#</span><span>#perso2_unite#</span>');
 					} else if (parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#') && '#perso2_colorhigh#' !== '') {
-						$('#uniteperso2#id#').append('<span class="state" style="color: var(--al-danger-color) !important;">#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span class="state" style="color: var(--al-danger-color) !important;">#perso2#</span><span>#perso2_unite#</span>');
 					} else {
-						$('#uniteperso2#id#').append('<span class="state">#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span class="state">#perso2#</span><span>#perso2_unite#</span>');
 					}
 				} else {
-					$('#uniteperso2#id#').append('<span></span>');
+					$('#perso2_unite#id#').append('<span></span>');
 				}
 			}
 		</script>

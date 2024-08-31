@@ -252,44 +252,44 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#;">
-			<span class="fa" title="#nameperso1#</br><i>Date de valeur : #perso1_value#</br>Date de collecte : #perso1_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso1#</span>
-			<span id="uniteperso1#id#"></span>
+			<span class="fa" title="#perso1_name#</br><i>Date de valeur : #perso1_value#</br>Date de collecte : #perso1_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#perso1_icon#</span>
+			<span id="perso1_unite#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso1#' !== '') {
 					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-success-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span data-cmd_id="#perso1_unite#id# class="value history cursor" style="color: var(--al-success-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span data-cmd_id="#perso1_unite#id# class="value history cursor" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#uniteperso1#id# class="value history cursor" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span data-cmd_id="#perso1_unite#id# class="value history cursor" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#perso1_unite#</span>');
 					} else {
-						$('#uniteperso1#id#').append('<span data-cmd_id="#perso1id#" class="value history cursor">#perso1#</span><span>#uniteperso1#</span>');
+						$('#perso1_unite#id#').append('<span data-cmd_id="#perso1id#" class="value history cursor">#perso1#</span><span>#perso1_unite#</span>');
 					}
 				} else {
-					$('#uniteperso1#id#').append('<span></span>');
+					$('#perso1_unite#id#').append('<span></span>');
 				}
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#;">
-			<span class="fa" title="#nameperso2#</br><i>Date de valeur : #perso2_value#</br>Date de collecte : #perso2_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#iconeperso2#</span>
-			<span id="uniteperso2#id#"></span>
+			<span class="fa" title="#perso2_name#</br><i>Date de valeur : #perso2_value#</br>Date de collecte : #perso2_collect#</i>" style="width: 15px;max-width: 15px;max-height: 15px;">#perso2_icon#</span>
+			<span id="perso2_unite#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso2#' !== '') {
 					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span data-cmd_id="#perso2_unite#id# class="value history cursor" style="color: var(--al-success-color) !important;" >#perso2#</span><span>#perso2_unite#</span>');
 					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span data-cmd_id="#perso2_unite#id# class="value history cursor" style="color: var(--al-warning-color) !important;" >#perso2#</span><span>#perso2_unite#</span>');
 					} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#uniteperso2#id# class="value history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span data-cmd_id="#perso2_unite#id# class="value history cursor" style="color: var(--al-danger-color) !important;" >#perso2#</span><span>#perso2_unite#</span>');
 					} else {
-						$('#uniteperso2#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor">#perso2#</span><span>#uniteperso2#</span>');
+						$('#perso2_unite#id#').append('<span data-cmd_id="#perso2id#" class="value history cursor">#perso2#</span><span>#perso2_unite#</span>');
 					}
 				} else {
-					$('#uniteperso2#id#').append('<span></span>');
+					$('#perso2_unite#id#').append('<span></span>');
 				}
 			}
 		</script>

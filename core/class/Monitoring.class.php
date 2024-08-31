@@ -594,22 +594,22 @@ class Monitoring extends eqLogic {
 		$replace['#loadavg_collect#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getCollectDate() : "-";
         $replace['#loadavg_value#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getValueDate() : "-";	
 
-		$replace ['#loadavg1mn_colorlow#'] = $this->getConfiguration('loadavg1mn_colorlow');
-		$replace ['#loadavg1mn_colorhigh#'] = $this->getConfiguration('loadavg1mn_colorhigh');
+		$replace['#loadavg1mn_colorlow#'] = $this->getConfiguration('loadavg1mn_colorlow');
+		$replace['#loadavg1mn_colorhigh#'] = $this->getConfiguration('loadavg1mn_colorhigh');
 
 		$loadavg5mn = $this->getCmd(null,'loadavg5mn');
 		$replace['#loadavg5mn#'] = (is_object($loadavg5mn)) ? $loadavg5mn->execCmd() : '';
 		$replace['#loadavg5mnid#'] = is_object($loadavg5mn) ? $loadavg5mn->getId() : '';
 
-		$replace ['#loadavg5mn_colorlow#'] = $this->getConfiguration('loadavg5mn_colorlow');
-		$replace ['#loadavg5mn_colorhigh#'] = $this->getConfiguration('loadavg5mn_colorhigh');
+		$replace['#loadavg5mn_colorlow#'] = $this->getConfiguration('loadavg5mn_colorlow');
+		$replace['#loadavg5mn_colorhigh#'] = $this->getConfiguration('loadavg5mn_colorhigh');
 
 		$loadavg15mn = $this->getCmd(null,'loadavg15mn');
 		$replace['#loadavg15mn#'] = (is_object($loadavg15mn)) ? $loadavg15mn->execCmd() : '';
 		$replace['#loadavg15mnid#'] = is_object($loadavg15mn) ? $loadavg15mn->getId() : '';
 
-		$replace ['#loadavg15mn_colorlow#'] = $this->getConfiguration('loadavg15mn_colorlow');
-		$replace ['#loadavg15mn_colorhigh#'] = $this->getConfiguration('loadavg15mn_colorhigh');
+		$replace['#loadavg15mn_colorlow#'] = $this->getConfiguration('loadavg15mn_colorlow');
+		$replace['#loadavg15mn_colorhigh#'] = $this->getConfiguration('loadavg15mn_colorhigh');
 		
 		$uptime = $this->getCmd(null,'uptime');
 		$replace['#uptime#'] = (is_object($uptime)) ? $uptime->execCmd() : '';
@@ -633,8 +633,8 @@ class Monitoring extends eqLogic {
 		$replace['#hddpourcused#'] = (is_object($hddused_pourc)) ? $hddused_pourc->execCmd() : '';
 		$replace['#hddpourcusedid#'] = is_object($hddused_pourc) ? $hddused_pourc->getId() : '';
 
-		$replace ['#hddpourcused_colorlow#'] = $this->getConfiguration('hddpourcused_colorlow');
-		$replace ['#hddpourcused_colorhigh#'] = $this->getConfiguration('hddpourcused_colorhigh');
+		$replace['#hddpourcused_colorlow#'] = $this->getConfiguration('hddpourcused_colorlow');
+		$replace['#hddpourcused_colorhigh#'] = $this->getConfiguration('hddpourcused_colorhigh');
 				
 		$Mem = $this->getCmd(null,'Mem');
 		$replace['#Mem#'] = (is_object($Mem)) ? $Mem->execCmd() : '';
@@ -647,8 +647,8 @@ class Monitoring extends eqLogic {
 		$replace['#Mempourc#'] = (is_object($Mempourc)) ? $Mempourc->execCmd() : '';
 		$replace['#Mempourcid#'] = is_object($Mempourc) ? $Mempourc->getId() : '';
 
-		$replace ['#Mempourc_colorhigh#'] = $this->getConfiguration('Mempourc_colorhigh');
-		$replace ['#Mempourc_colorlow#'] = $this->getConfiguration('Mempourc_colorlow');
+		$replace['#Mempourc_colorhigh#'] = $this->getConfiguration('Mempourc_colorhigh');
+		$replace['#Mempourc_colorlow#'] = $this->getConfiguration('Mempourc_colorlow');
 
 		$Mem_swap = $this->getCmd(null,'Mem_swap');
 		$replace['#Mem_swap#'] = (is_object($Mem_swap)) ? $Mem_swap->execCmd() : '';
@@ -661,8 +661,8 @@ class Monitoring extends eqLogic {
 		$replace['#Swappourc#'] = (is_object($Swappourc)) ? $Swappourc->execCmd() : '';
 		$replace['#Swappourcid#'] = is_object($Swappourc) ? $Swappourc->getId() : '';
 
-		$replace ['#Swappourc_colorhigh#'] = $this->getConfiguration('Swappourc_colorhigh');
-		$replace ['#Swappourc_colorlow#'] = $this->getConfiguration('Swappourc_colorlow');
+		$replace['#Swappourc_colorhigh#'] = $this->getConfiguration('Swappourc_colorhigh');
+		$replace['#Swappourc_colorlow#'] = $this->getConfiguration('Swappourc_colorlow');
 
 		$ethernet0 = $this->getCmd(null,'ethernet0');
 		$replace['#ethernet0#'] = (is_object($ethernet0)) ? $ethernet0->execCmd() : '';
@@ -691,8 +691,8 @@ class Monitoring extends eqLogic {
 		$replace['#cpu_tempid#'] = is_object($cpu_temp) ? $cpu_temp->getId() : '';
 		$replace['#cpu_temp_display#'] = (is_object($cpu_temp) && $cpu_temp->getIsVisible()) ? 'OK' : '';
 
-		$replace ['#cpu_temp_colorlow#'] = $this->getConfiguration('cpu_temp_colorlow');
-		$replace ['#cpu_temp_colorhigh#'] = $this->getConfiguration('cpu_temp_colorhigh');
+		$replace['#cpu_temp_colorlow#'] = $this->getConfiguration('cpu_temp_colorlow');
+		$replace['#cpu_temp_colorhigh#'] = $this->getConfiguration('cpu_temp_colorhigh');
 
 		// Syno Volume 2
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
@@ -705,15 +705,14 @@ class Monitoring extends eqLogic {
 			$hddusedv2_pourc = $this->getCmd(null,'hddpourcusedv2');
 			$replace['#hddpourcusedv2#'] = (is_object($hddusedv2_pourc)) ? $hddusedv2_pourc->execCmd() : '';
 			$replace['#hddpourcusedv2id#'] = is_object($hddusedv2_pourc) ? $hddusedv2_pourc->getId() : '';
-
-			$replace ['#hddpourcusedv2_colorlow#'] = $this->getConfiguration('hddpourcusedv2_colorlow');
-			$replace ['#hddpourcusedv2_colorhigh#'] = $this->getConfiguration('hddpourcusedv2_colorhigh');
+			$replace['#hddpourcusedv2_colorlow#'] = $this->getConfiguration('hddpourcusedv2_colorlow');
+			$replace['#hddpourcusedv2_colorhigh#'] = $this->getConfiguration('hddpourcusedv2_colorhigh');
 
 			$hddtotalv2 = $this->getCmd(null,'hddtotalv2');
+			$replace['#synovolume2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? 'OK' : '';
+			$replace['#hddusedv2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalv2#'] = (is_object($hddtotalv2)) ? $hddtotalv2->execCmd() : '';
 			$replace['#hddtotalv2id#'] = is_object($hddtotalv2) ? $hddtotalv2->getId() : '';
-			$replace['#hddusedv2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? "block" : "none";
-			$replace['#synovolume2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? 'OK' : '';
 			$replace['#hddtotalv2_collect#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? $hddtotalv2->getCollectDate() : "-";
         	$replace['#hddtotalv2_value#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? $hddtotalv2->getValueDate() : "-";
 		}
@@ -730,14 +729,14 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedusb#'] = (is_object($hddusedusb_pourc)) ? $hddusedusb_pourc->execCmd() : '';
 			$replace['#hddpourcusedusbid#'] = is_object($hddusedusb_pourc) ? $hddusedusb_pourc->getId() : '';
 
-			$replace ['#hddpourcusedusb_colorlow#'] = $this->getConfiguration('hddpourcusedusb_colorlow');
-			$replace ['#hddpourcusedusb_colorhigh#'] = $this->getConfiguration('hddpourcusedusb_colorhigh');
+			$replace['#hddpourcusedusb_colorlow#'] = $this->getConfiguration('hddpourcusedusb_colorlow');
+			$replace['#hddpourcusedusb_colorhigh#'] = $this->getConfiguration('hddpourcusedusb_colorhigh');
 
 			$hddtotalusb = $this->getCmd(null,'hddtotalusb');
+			$replace['#synovolumeusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? 'OK' : '';
+			$replace['#hddusedusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalusb#'] = (is_object($hddtotalusb)) ? $hddtotalusb->execCmd() : '';
 			$replace['#hddtotalusbid#'] = is_object($hddtotalusb) ? $hddtotalusb->getId() : '';
-			$replace['#hddusedusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? "block" : "none";
-			$replace['#synovolumeusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? 'OK' : '';
 			$replace['#hddtotalusb_collect#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? $hddtotalusb->getCollectDate() : "-";
         	$replace['#hddtotalusb_value#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? $hddtotalusb->getValueDate() : "-";
 		}
@@ -754,14 +753,14 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedesata#'] = (is_object($hddusedesata_pourc)) ? $hddusedesata_pourc->execCmd() : '';
 			$replace['#hddpourcusedesataid#'] = is_object($hddusedesata_pourc) ? $hddusedesata_pourc->getId() : '';
 
-			$replace ['#hddpourcusedesata_colorlow#'] = $this->getConfiguration('hddpourcusedesata_colorlow');
-			$replace ['#hddpourcusedesata_colorhigh#'] = $this->getConfiguration('hddpourcusedesata_colorhigh');
+			$replace['#hddpourcusedesata_colorlow#'] = $this->getConfiguration('hddpourcusedesata_colorlow');
+			$replace['#hddpourcusedesata_colorhigh#'] = $this->getConfiguration('hddpourcusedesata_colorhigh');
 
 			$hddtotalesata = $this->getCmd(null,'hddtotalesata');
+			$replace['#synovolumeesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? 'OK' : '';
+			$replace['#hddusedesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalesata#'] = (is_object($hddtotalesata)) ? $hddtotalesata->execCmd() : '';
 			$replace['#hddtotalesataid#'] = is_object($hddtotalesata) ? $hddtotalesata->getId() : '';
-			$replace['#hddusedesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? "block" : "none";
-			$replace['#synovolumeesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? 'OK' : '';
 			$replace['#hddtotalesata_collect#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? $hddtotalesata->getCollectDate() : "-";
         	$replace['#hddtotalesata_value#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? $hddtotalesata->getValueDate() : "-";
 		}
@@ -773,13 +772,13 @@ class Monitoring extends eqLogic {
 		$replace['#perso1_collect#'] = (is_object($perso1) && $perso1->getIsVisible()) ? $perso1->getCollectDate() : "-";
         $replace['#perso1_value#'] = (is_object($perso1) && $perso1->getIsVisible()) ? $perso1->getValueDate() : "-";
 		
-		$nameperso_1 = (is_object($perso1)) ? $this->getCmd(null,'perso1')->getName() : '';
-		$iconeperso_1 = (is_object($perso1)) ? $this->getCmd(null,'perso1')->getdisplay('icon') : '';
-		$replace['#nameperso1#'] = (is_object($perso1)) ? $nameperso_1 : '';
-		$replace['#iconeperso1#'] = (is_object($perso1)) ? $iconeperso_1 : '';
+		$perso1_name = (is_object($perso1)) ? $this->getCmd(null,'perso1')->getName() : '';
+		$perso1_icon = (is_object($perso1)) ? $this->getCmd(null,'perso1')->getdisplay('icon') : '';
+		$replace['#perso1_name#'] = (is_object($perso1)) ? $perso1_name : '';
+		$replace['#perso1_icon#'] = (is_object($perso1)) ? $perso1_icon : '';
 
-		$perso_1unite = $this->getConfiguration('perso1_unite');
-		$replace['#uniteperso1#'] = (is_object($perso1)) ? $perso_1unite : '';
+		$perso1_unite = $this->getConfiguration('perso1_unite');
+		$replace['#perso1_unite#'] = (is_object($perso1)) ? $perso1_unite : '';
 
 		$replace ['#perso1_colorlow#'] = $this->getConfiguration('perso1_colorlow');
 		$replace ['#perso1_colorhigh#'] = $this->getConfiguration('perso1_colorhigh');
@@ -791,13 +790,13 @@ class Monitoring extends eqLogic {
 		$replace['#perso2_collect#'] = (is_object($perso2) && $perso2->getIsVisible()) ? $perso2->getCollectDate() : "-";
         $replace['#perso2_value#'] = (is_object($perso2) && $perso2->getIsVisible()) ? $perso2->getValueDate() : "-";
 		
-		$nameperso_2 = (is_object($perso2)) ? $this->getCmd(null,'perso2')->getName() : '';
-		$iconeperso_2 = (is_object($perso2)) ? $this->getCmd(null,'perso2')->getdisplay('icon') : '';
-		$replace['#nameperso2#'] = (is_object($perso2)) ? $nameperso_2 : '';
-		$replace['#iconeperso2#'] = (is_object($perso2)) ? $iconeperso_2 : '';
+		$perso2_name = (is_object($perso2)) ? $this->getCmd(null,'perso2')->getName() : '';
+		$perso2_icon = (is_object($perso2)) ? $this->getCmd(null,'perso2')->getdisplay('icon') : '';
+		$replace['#perso2_name#'] = (is_object($perso2)) ? $perso2_name : '';
+		$replace['#perso2_icon#'] = (is_object($perso2)) ? $perso2_icon : '';
 		
-		$perso_2unite = $this->getConfiguration('perso2_unite');
-		$replace['#uniteperso2#'] = (is_object($perso2)) ? $perso_2unite : '';
+		$perso2_unite = $this->getConfiguration('perso2_unite');
+		$replace['#perso2_unite#'] = (is_object($perso2)) ? $perso2_unite : '';
 
 		$replace ['#perso2_colorlow#'] = $this->getConfiguration('perso2_colorlow');
 		$replace ['#perso2_colorhigh#'] = $this->getConfiguration('perso2_colorhigh');
@@ -862,7 +861,7 @@ class Monitoring extends eqLogic {
 			$ethernet0_name = '';
 			$ethernet0_ip = '';
 
-			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
+			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));			
 
 			/* if ($this->getConfiguration('cartereseau') == 'netautre') {
 				$cartereseau = $this->getConfiguration('cartereseauautre');
@@ -887,6 +886,8 @@ class Monitoring extends eqLogic {
 				$sshpassphrase = $this->getConfiguration('ssh-passphrase');
 				$cnx_ssh = '';
 
+
+				// Début de la connexion SSH
 				try {
 					$sshconnection = new SSH2($ip, $port, $timeout);
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout . ') :: OK');
@@ -894,6 +895,7 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
 				}
+
 				if ($cnx_ssh != 'KO') {
 					if ($confLocalOrRemote == 'deporte-key') {
 						try {
@@ -918,17 +920,11 @@ class Monitoring extends eqLogic {
 						log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Authentification SSH :: '. $e->getMessage());
 						$cnx_ssh = 'KO';
 					}
+
+					// Fin de la connexion SSH
 					if ($cnx_ssh != 'KO') {
 						$cnx_ssh = 'OK';
 						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Authentification SSH :: OK');
-
-						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-						// $ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
-						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-
-						// $uptime_cmd = "uptime";
-						// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
-						$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 
 						if ($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
@@ -937,12 +933,9 @@ class Monitoring extends eqLogic {
 							else {
 								$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 							}
-							// $VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 							$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 						}
 						else {
-							// $namedistri_cmd = "cat /etc/*-release 2>/dev/null | grep ^PRETTY_NAME=";
-							// $namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | tr -d '\"'";
 							$namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 
 							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
@@ -959,7 +952,11 @@ class Monitoring extends eqLogic {
 						$ReseauIP_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 						// $ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 						
+						// ARMv Command
 						try {
+							// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+							// $ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
+							$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 							$ARMv = $sshconnection->exec($ARMv_cmd);
 							if (!empty($ARMv)) {
 								$ARMv = trim($ARMv);
@@ -970,7 +967,12 @@ class Monitoring extends eqLogic {
 							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ARMv Exception :: ' . $e->getMessage());
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception Log :: ' . $sshconnection->getLog());
 						}
+
+						// Uptime Command
 						try {
+							// $uptime_cmd = "uptime";
+							// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+							$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 							$uptime = $sshconnection->exec($uptime_cmd);
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime :: >' . $uptime . '<');
 						} catch (Exception $e) {
@@ -979,9 +981,10 @@ class Monitoring extends eqLogic {
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception Log :: ' . $sshconnection->getLog());
 						}
 						
-						$VersionID = trim($sshconnection->exec($VersionID_cmd));
 						$namedistri = $sshconnection->exec($namedistri_cmd);
 						$bitdistri = $sshconnection->exec($bitdistri_cmd);
+						$VersionID = trim($sshconnection->exec($VersionID_cmd));
+						
 						$loadav = $sshconnection->exec($loadavg_cmd);
 						$ReseauRXTX = $sshconnection->exec($ReseauRXTX_cmd);
 						$ReseauIP = $sshconnection->exec($ReseauIP_cmd);
@@ -989,27 +992,27 @@ class Monitoring extends eqLogic {
 						$memory = $sshconnection->exec($memory_cmd);
 						$swap = $sshconnection->exec($swap_cmd);
 
-						$perso_1cmd = $this->getConfiguration('perso1');
-						$perso_2cmd = $this->getConfiguration('perso2');
+						$perso1_cmd = $this->getConfiguration('perso1');
+						$perso2_cmd = $this->getConfiguration('perso2');
 
-						if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
+						if ($perso1_cmd != '' /* && $Perso1Visible == 'OK' */) {
 							try {
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Cmd :: ' . $perso_1cmd);
-								$perso_1 = $sshconnection->exec($perso_1cmd);
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exec :: ' . $perso_1);
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Cmd :: ' . $perso1_cmd);
+								$perso1 = $sshconnection->exec($perso1_cmd);
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exec :: ' . $perso1);
 							} catch (Exception $e) {
-								$perso_1 = '';
+								$perso1 = '';
 								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso1 Exception :: ' . $e->getMessage());
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exception Log :: ' . $sshconnection->getLog());
 							}
 						}
-						if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
+						if ($perso2_cmd != '' /* && $Perso2Visible == 'OK' */) {
 							try {
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Cmd :: ' . $perso_2cmd);
-								$perso_2 = $sshconnection->exec($perso_2cmd);
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exec :: ' . $perso_2);
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Cmd :: ' . $perso2_cmd);
+								$perso2 = $sshconnection->exec($perso2_cmd);
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exec :: ' . $perso2);
 							} catch (Exception $e) {
-								$perso_2 = '';
+								$perso2 = '';
 								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso2 Exception :: ' . $e->getMessage());
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exception Log :: ' . $sshconnection->getLog());
 							}
@@ -1421,18 +1424,18 @@ class Monitoring extends eqLogic {
 				$memory = exec($memory_cmd);
 				$swap = exec($swap_cmd);
 				
-				$perso_1cmd = $this->getConfiguration('perso1');
-				$perso_2cmd = $this->getConfiguration('perso2');
+				$perso1_cmd = $this->getConfiguration('perso1');
+				$perso2_cmd = $this->getConfiguration('perso2');
 
-				if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . $perso_1cmd);
-					$perso_1 = exec($perso_1cmd);
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Exec :: ' . $perso_1);
+				if ($perso1_cmd != '' /* && $Perso1Visible == 'OK' */) {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . $perso1_cmd);
+					$perso1 = exec($perso1_cmd);
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Exec :: ' . $perso1);
 				}
-				if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Cmd :: ' . $perso_2cmd);
-					$perso_2 = exec($perso_2cmd);
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Exec :: ' . $perso_2);
+				if ($perso2_cmd != '' /* && $Perso2Visible == 'OK' */) {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Cmd :: ' . $perso2_cmd);
+					$perso2 = exec($perso2_cmd);
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Exec :: ' . $perso2);
 				}
 
 				if ($this->getConfiguration('synology') == '1') {
@@ -1942,8 +1945,8 @@ class Monitoring extends eqLogic {
 						$cpu = $nbcpu.' - '.$cpufreq0;
 					}
 					if (empty($cputemp0)) {$cputemp0 = '';}
-					if (empty($perso_1)) {$perso_1 = '';}
-					if (empty($perso_2)) {$perso_2 = '';}
+					if (empty($perso1)) {$perso1 = '';}
+					if (empty($perso2)) {$perso2 = '';}
 					if (empty($cnx_ssh)) {$cnx_ssh = '';}
 					if (empty($uname)) {$uname = 'Inconnu';}
 					if (empty($Mem)) {$Mem = '';}
@@ -1971,8 +1974,8 @@ class Monitoring extends eqLogic {
 						'Mem_swap' => $Memswap,
 						'Mempourc' => $memorylibre_pourc,
 						'Swappourc' => $swaplibre_pourc,
-						'perso1' => $perso_1,
-						'perso2' => $perso_2,
+						'perso1' => $perso1,
+						'perso2' => $perso2,
 					);
 					if ($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
 						$dataresultv2 = array(
