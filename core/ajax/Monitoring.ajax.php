@@ -24,15 +24,6 @@ try {
         throw new Exception(__('401 - Accès non autorisé', __FILE__));
     }
 
-    if (init('action') == 'getMonitoring') {
-			foreach (jeeObject::all() as $object) {
-				foreach ($object->getEqLogic(true, false, 'Monitoring') as $Monitoring) {
-					$return['eqLogics'][] = $Monitoring->toHtml(init('version'));
-				}
-			}
-		ajax::success($return);
-    }
-
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
