@@ -839,6 +839,18 @@ class Monitoring extends eqLogic {
         return $pluginVersion;
     }
 
+	public function getNetworkCard($_networkCard = '') {
+		$networkCard = '';
+		if ($_networkCard == 'netautre') {
+			$networkCard = $this->getConfiguration('cartereseauautre');
+		} elseif ($_networkCard == 'netauto') {
+			$networkCard = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+		} else {
+			$networkCard = $_networkCard;
+		}
+		return $networkCard;
+	}
+
 	public function getInformations() {
 		$equipement = $this->getName();
 		try {
@@ -850,16 +862,17 @@ class Monitoring extends eqLogic {
 			$ethernet0_name = '';
 			$ethernet0_ip = '';
 
-			if ($this->getConfiguration('cartereseau') == 'netautre') {
+			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
+
+			/* if ($this->getConfiguration('cartereseau') == 'netautre') {
 				$cartereseau = $this->getConfiguration('cartereseauautre');
-			}
-			elseif ($this->getConfiguration('cartereseau') == 'netauto') {
+			} elseif ($this->getConfiguration('cartereseau') == 'netauto') {
 				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1 | awk -F'@' -v ORS=\"\" '{ print $1 }')";
 				// $cartereseau = "$(ip -br -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $1 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
 				$cartereseau = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
 			} else {
 				$cartereseau = $this->getConfiguration('cartereseau');
-			}
+			} */
 
 			$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 
