@@ -704,7 +704,7 @@ class Monitoring extends eqLogic {
 		// Syno Volume 2
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 
-		if($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1'){
+		if ($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
 			$hddusedv2 = $this->getCmd(null,'hddusedv2');
 			$replace['#hddusedv2#'] = (is_object($hddusedv2)) ? $hddusedv2->execCmd() : '';
 			$replace['#hddusedv2id#'] = is_object($hddusedv2) ? $hddusedv2->getId() : '';
@@ -725,7 +725,7 @@ class Monitoring extends eqLogic {
 		// Syno Volume USB
 		$SynoUSBVisible = (is_object($this->getCmd(null,'hddtotalusb')) && $this->getCmd(null,'hddtotalusb')->getIsVisible()) ? 'OK' : '';
 
-		if($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1'){
+		if ($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1') {
 			$hddusedusb = $this->getCmd(null,'hddusedusb');
 			$replace['#hddusedusb#'] = (is_object($hddusedusb)) ? $hddusedusb->execCmd() : '';
 			$replace['#hddusedusbid#'] = is_object($hddusedusb) ? $hddusedusb->getId() : '';
@@ -746,7 +746,7 @@ class Monitoring extends eqLogic {
 		// Syno Volume eSATA
 		$SynoeSATAVisible = (is_object($this->getCmd(null,'hddtotalesata')) && $this->getCmd(null,'hddtotalesata')->getIsVisible()) ? 'OK' : '';
 
-		if($this->getConfiguration('synology') == '1' && $SynoeSATAVisible == 'OK' && $this->getConfiguration('synologyesata') == '1'){
+		if ($this->getConfiguration('synology') == '1' && $SynoeSATAVisible == 'OK' && $this->getConfiguration('synologyesata') == '1') {
 			$hddusedesata = $this->getCmd(null,'hddusedesata');
 			$replace['#hddusedesata#'] = (is_object($hddusedesata)) ? $hddusedesata->execCmd() : '';
 			$replace['#hddusedesataid#'] = is_object($hddusedesata) ? $hddusedesata->getId() : '';
@@ -863,7 +863,7 @@ class Monitoring extends eqLogic {
 			$ethernet0_name = '';
 			$ethernet0_ip = '';
 
-			if ($this->getConfiguration('cartereseau') == 'netautre'){
+			if ($this->getConfiguration('cartereseau') == 'netautre') {
 				$cartereseau = $this->getConfiguration('cartereseauautre');
 			}
 			elseif ($this->getConfiguration('cartereseau') == 'netauto') {
@@ -930,7 +930,7 @@ class Monitoring extends eqLogic {
 						// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
 						$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 
-						if($this->getConfiguration('synology') == '1') {
+						if ($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
 								$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
 							}
@@ -1184,11 +1184,11 @@ class Monitoring extends eqLogic {
 										$cputemp0 = $sshconnection->exec($cputemp0AMD_cmd);
 									}
 									if ($cputemp0 == '') {
-										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")){printf(\"%f\",$4);} }'"; // OK by sensors
+										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"; // OK by sensors
 										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 									}
 									if ($cputemp0 == '') {
-										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors
+										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"; // OK by sensors
 										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
 									}
 									log::add('Monitoring','debug', '['. $equipement .'][X86-TEMP] Commande Température :: ' . $cputemp0_cmd);
@@ -1435,7 +1435,7 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Exec :: ' . $perso_2);
 				}
 
-				if ($this->getConfiguration('synology') == '1'){
+				if ($this->getConfiguration('synology') == '1') {
 					$uname = '.';
 					$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
 					$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
@@ -1551,7 +1551,7 @@ class Monitoring extends eqLogic {
 					$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
 					$nbcpu = exec($nbcpuVM_cmd);
 
-					if ($nbcpu == ''){
+					if ($nbcpu == '') {
 						$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $NF }'"; // OK pour LXC Linux/Ubuntu
 						$nbcpu = exec($nbcpuVMbis_cmd);
 					}
@@ -1560,15 +1560,15 @@ class Monitoring extends eqLogic {
 					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
 					$cpufreq = exec($cpufreqVM_cmd);
 					
-					if ($cpufreq == ''){
+					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
 						$cpufreq = exec($cpufreqVMbis_cmd);
 					}
-					if ($cpufreq == ''){
+					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
 						$cpufreq = exec($cpufreqVMbis_cmd);
 					}
-					if ($cpufreq == ''){
+					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
 						$cpufreq = exec($cpufreqVMbis_cmd);
 					}
@@ -1596,11 +1596,11 @@ class Monitoring extends eqLogic {
 								$cputemp0 = exec($cputemp0_cmd); 
 							}
 							if ($cputemp0 == '') {
-								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")){printf(\"%f\",$4);} }'"; // OK by sensors
+								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"; // OK by sensors
 								$cputemp0 = exec($cputemp0_cmd);
 							}
 							if ($cputemp0 == '') {
-								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")){printf(\"%f\",$3);} }'"; // OK by sensors MB
+								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"; // OK by sensors MB
 								$cputemp0 = exec($cputemp0_cmd);
 							}
 							log::add('Monitoring','debug', '['. $equipement .'][X86-TEMP] Commande Température :: ' . $cputemp0_cmd);
@@ -1611,7 +1611,7 @@ class Monitoring extends eqLogic {
 
 			if (isset($cnx_ssh)) {
 				if ($this->getConfiguration('maitreesclave') == 'local' || $cnx_ssh == 'OK') {
-					if ($this->getConfiguration('synology') == '1'){
+					if ($this->getConfiguration('synology') == '1') {
 						if (isset($versionsyno)) {
 							parse_str($versionsyno, $versionsyno_DSM);
 							log::add('Monitoring', 'debug', '['. $equipement .'][DSM] Parse version :: OK');
@@ -1649,7 +1649,7 @@ class Monitoring extends eqLogic {
 					}
 					
 					// Syno Volume 2
-					if (/* $SynoV2Visible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1'){
+					if (/* $SynoV2Visible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
 						if (isset($hddv2)) {
 							$hdddatav2 = explode(' ', $hddv2);
 							if (isset($hdddatav2[0]) && isset($hdddatav2[1]) && isset($hdddatav2[2])) {
@@ -1666,7 +1666,7 @@ class Monitoring extends eqLogic {
 					}
 
 					// Syno Volume USB 
-					if (/* $SynoUSBVisible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1'){
+					if (/* $SynoUSBVisible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
 						if (isset($hddusb)) {
 							$hdddatausb = explode(' ', $hddusb);
 							if (isset($hdddatausb[0]) && isset($hdddatausb[1]) && isset($hdddatausb[2])) {
@@ -1683,7 +1683,7 @@ class Monitoring extends eqLogic {
 					}
 
 					// Syno Volume eSATA 
-					if (/* $SynoeSATAVisible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1'){
+					if (/* $SynoeSATAVisible == 'OK' && */ $this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1') {
 						if (isset($hddesata)) {
 							$hdddataesata = explode(' ', $hddesata);
 							if (isset($hdddataesata[0]) && isset($hdddataesata[1]) && isset($hdddataesata[2])) {
@@ -1721,7 +1721,7 @@ class Monitoring extends eqLogic {
 							$datauptime = str_replace("days", "jour(s)", $datauptime);
 							$datauptime = str_replace("day", "jour(s)", $datauptime);
 							$datauptime = str_replace(":", "h", $datauptime);
-							if (strpos($datauptime[0], 'jour(s)') === false){
+							if (strpos($datauptime[0], 'jour(s)') === false) {
 								$uptime = $datauptime[0];
 							}
 							else {
@@ -1744,7 +1744,7 @@ class Monitoring extends eqLogic {
 					if (isset($memory)) {
 						if (!preg_match("#FreeBSD#", $uname)) {
 							$memory = explode(' ', $memory);
-							if($this->getConfiguration('synology') == '1'){
+							if ($this->getConfiguration('synology') == '1') {
 								if (isset($memory[3])) {
 									$memorylibre = intval($memory[3]);
 									log::add('Monitoring', 'debug', '['. $equipement .'][Memory] Version Syno :: ' . $VersionID . ' / Mémoire Libre :: '.$memorylibre);
@@ -1820,7 +1820,7 @@ class Monitoring extends eqLogic {
 							}
 						}
 
-						if (isset($swap[0])){
+						if (isset($swap[0])) {
 							if ((intval($swap[0]) / 1024) >= 1024) {
 								$swap[0] = round(intval($swap[0]) / 1048576, 1) . " Go";
 							} else {
@@ -1834,7 +1834,7 @@ class Monitoring extends eqLogic {
 								$swap[1] = round(intval($swap[1]) / 1024, 1) . " Mo";
 							}
 						}
-						if (isset($swap[2])){
+						if (isset($swap[2])) {
 							if ((intval($swap[2]) / 1024) >= 1024) {
 								$swap[2] = round(intval($swap[2]) / 1048576, 1) . " Go";
 							} else {
@@ -1842,7 +1842,7 @@ class Monitoring extends eqLogic {
 							}
 						}
 
-						if (isset($swap[0]) && isset($swap[1]) && isset($swap[2])){
+						if (isset($swap[0]) && isset($swap[1]) && isset($swap[2])) {
 							$swap[0] = str_replace("B"," o", $swap[0]);
 							$swap[1] = str_replace("B"," o", $swap[1]);
 							$swap[2] = str_replace("B"," o", $swap[2]);
@@ -1854,7 +1854,7 @@ class Monitoring extends eqLogic {
 
 					if (isset($ReseauRXTX)) {
 						$ReseauRXTX = explode(' ', $ReseauRXTX);
-						if (isset($ReseauRXTX[0]) && isset($ReseauRXTX[1]) && isset($ReseauRXTX[2])){
+						if (isset($ReseauRXTX[0]) && isset($ReseauRXTX[1]) && isset($ReseauRXTX[2])) {
 							if ((intval($ReseauRXTX[2]) / 1024) >= 1073741824) {
 								$ReseauTX = round(intval($ReseauRXTX[2]) / 1099511627776, 2) . " To";
 							} elseif ((intval($ReseauRXTX[2]) / 1024) >= 1048576) {
@@ -1894,7 +1894,7 @@ class Monitoring extends eqLogic {
 					$hddused_pourc = '';
 					if (isset($hdd)) {
 						$hdddata = explode(' ', $hdd);
-						if (isset($hdddata[0]) && isset($hdddata[1]) && isset($hdddata[2])){
+						if (isset($hdddata[0]) && isset($hdddata[1]) && isset($hdddata[2])) {
 							$hddtotal = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddata[0]);
 							$hddused = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddata[1]);
 							$hddused_pourc = preg_replace("/[^0-9.]/","",$hdddata[2]);
@@ -1903,7 +1903,7 @@ class Monitoring extends eqLogic {
 					}
 
 					if (isset($ARMv)) {
-						if ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386'){
+						if ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
 							if ((floatval($cpufreq) / 1000) > 1) {
 								$cpufreq = round(floatval($cpufreq) / 1000, 1, PHP_ROUND_HALF_UP) . " GHz";
 							} else {
@@ -1912,14 +1912,14 @@ class Monitoring extends eqLogic {
 							
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
-								if (floatval($cputemp0) > 200){
+								if (floatval($cputemp0) > 200) {
 									$cputemp0 = floatval($cputemp0) / 1000;
 									$cputemp0 = round(floatval($cputemp0), 1);
 								}
 							}
 							$cpu = $nbcpu.' - '.$cpufreq;
 						}
-						elseif ($ARMv == 'armv6l' || $ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64'){
+						elseif ($ARMv == 'armv6l' || $ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
 							if ((floatval($cpufreq0) / 1000) > 1000) {
 								$cpufreq0 = round(floatval($cpufreq0) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
 							} else {
@@ -1928,7 +1928,7 @@ class Monitoring extends eqLogic {
 							
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
-								if (floatval($cputemp0) > 200){
+								if (floatval($cputemp0) > 200) {
 									$cputemp0 = floatval($cputemp0) / 1000;
 									$cputemp0 = round(floatval($cputemp0), 1);
 								}
@@ -1949,7 +1949,7 @@ class Monitoring extends eqLogic {
 								}
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
-									if (floatval($cputemp0) > 200){
+									if (floatval($cputemp0) > 200) {
 										$cputemp0 = floatval($cputemp0) / 1000;
 										$cputemp0 = round(floatval($cputemp0), 1);
 									}
@@ -1959,13 +1959,13 @@ class Monitoring extends eqLogic {
 						}
 					}
 
-					if ($this->getConfiguration('synology') == '1'){
+					if ($this->getConfiguration('synology') == '1') {
 						if ((floatval($cpufreq0) / 1000) > 1) {
 							$cpufreq0 = round(floatval($cpufreq0) / 1000, 1, PHP_ROUND_HALF_UP) . " GHz";
 						} else {
 							$cpufreq0 = $cpufreq0 . " MHz";
 						}
-						if (floatval($cputemp0) > 200){
+						if (floatval($cputemp0) > 200) {
 							$cputemp0 = floatval($cputemp0) / 1000;
 							$cputemp0 = round(floatval($cputemp0), 1);
 						}
@@ -2004,7 +2004,7 @@ class Monitoring extends eqLogic {
 						'perso1' => $perso_1,
 						'perso2' => $perso_2,
 					);
-					if ($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1'){
+					if ($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
 						$dataresultv2 = array(
 							'hddtotalv2' => $hddtotalv2,
 							'hddusedv2' => $hddusedv2,
@@ -2177,7 +2177,7 @@ class Monitoring extends eqLogic {
 				}
 			}
 			if (isset($cnx_ssh)) {
-				if($cnx_ssh == 'KO'){
+				if ($cnx_ssh == 'KO') {
 					$dataresult = array(
 						'namedistri' => 'Connexion SSH KO',
 						'cnx_ssh' => $cnx_ssh
@@ -2243,7 +2243,7 @@ class Monitoring extends eqLogic {
 				}		
 				if ($cnx_ssh != 'KO') {
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Authentification SSH :: OK');
-					if($this->getConfiguration('synology') == '1'){
+					if ($this->getConfiguration('synology') == '1') {
 						switch ($paramaction) {
 							case "reboot":
 								try {
