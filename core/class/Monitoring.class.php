@@ -1977,7 +1977,7 @@ class Monitoring extends eqLogic {
 						'perso1' => $perso1,
 						'perso2' => $perso2,
 					);
-					if ($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
+					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
 						$dataresultv2 = array(
 							'hddtotalv2' => $hddtotalv2,
 							'hddusedv2' => $hddusedv2,
@@ -1986,7 +1986,7 @@ class Monitoring extends eqLogic {
 					}
 
 					// Syno Volume USB
-					if ($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
+					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
 						$dataresultusb = array(
 							'hddtotalusb' => $hddtotalusb,
 							'hddusedusb' => $hddusedusb,
@@ -1995,12 +1995,18 @@ class Monitoring extends eqLogic {
 					}
 
 					// Syno Volume eSATA
-					if ($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1') {
+					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1') {
 						$dataresultesata = array(
 							'hddtotalesata' => $hddtotalesata,
 							'hddusedesata' => $hddusedesata,
 							'hddpourcusedesata' => $hddusedesata_pourc,
 						);
+					}
+
+					// Event sur les commandes après récupération des données
+					$cnx_ssh = $this->getCmd(null,'cnx_ssh');
+					if (is_object($cnx_ssh)) {
+						$cnx_ssh->event($dataresult['cnx_ssh']);
 					}
 
 					$namedistri = $this->getCmd(null,'namedistri');
@@ -2033,9 +2039,19 @@ class Monitoring extends eqLogic {
 						$Mem->event($dataresult['Mem']);
 					}
 
+					$Mempourc = $this->getCmd(null,'Mempourc');
+					if (is_object($Mempourc)) {
+						$Mempourc->event($dataresult['Mempourc']);
+					}
+
 					$Mem_swap = $this->getCmd(null,'Mem_swap');
 					if (is_object($Mem_swap)) {
 						$Mem_swap->event($dataresult['Mem_swap']);
+					}
+
+					$Swappourc = $this->getCmd(null,'Swappourc');
+					if (is_object($Swappourc)) {
+						$Swappourc->event($dataresult['Swappourc']);
 					}
 
 					$ethernet0 = $this->getCmd(null,'ethernet0');
@@ -2068,7 +2084,7 @@ class Monitoring extends eqLogic {
 						$hddused_pourc->event($dataresult['hddpourcused']);
 					}
 
-					if ($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
+					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
 						$hddtotalv2 = $this->getCmd(null,'hddtotalv2');
 						if (is_object($hddtotalv2)) {
 							$hddtotalv2->event($dataresultv2['hddtotalv2']);
@@ -2083,7 +2099,7 @@ class Monitoring extends eqLogic {
 						}
 					}
 
-					if ($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
+					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
 						$hddtotalusb = $this->getCmd(null,'hddtotalusb');
 						if (is_object($hddtotalusb)) {
 							$hddtotalusb->event($dataresultusb['hddtotalusb']);
@@ -2098,7 +2114,7 @@ class Monitoring extends eqLogic {
 						}
 					}
 
-					if ($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1') {
+					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1') {
 						$hddtotalesata = $this->getCmd(null,'hddtotalesata');
 						if (is_object($hddtotalesata)) {
 							$hddtotalesata->event($dataresultesata['hddtotalesata']);
@@ -2123,21 +2139,6 @@ class Monitoring extends eqLogic {
 						$cpu_temp->event($dataresult['cpu_temp']);
 					}
 
-					$cnx_ssh = $this->getCmd(null,'cnx_ssh');
-					if (is_object($cnx_ssh)) {
-						$cnx_ssh->event($dataresult['cnx_ssh']);
-					}
-
-					$Mempourc = $this->getCmd(null,'Mempourc');
-					if (is_object($Mempourc)) {
-						$Mempourc->event($dataresult['Mempourc']);
-					}
-
-					$Swappourc = $this->getCmd(null,'Swappourc');
-					if (is_object($Swappourc)) {
-						$Swappourc->event($dataresult['Swappourc']);
-					}
-
 					$perso1 = $this->getCmd(null,'perso1');
 					if (is_object($perso1)) {
 						$perso1->event($dataresult['perso1']);
@@ -2147,10 +2148,7 @@ class Monitoring extends eqLogic {
 					if (is_object($perso2)) {
 						$perso2->event($dataresult['perso2']);
 					}
-				}
-			}
-			if (isset($cnx_ssh)) {
-				if ($cnx_ssh == 'KO') {
+				} elseif ($cnx_ssh == 'KO') {
 					$dataresult = array(
 						'namedistri' => 'Connexion SSH KO',
 						'cnx_ssh' => $cnx_ssh
@@ -2173,6 +2171,7 @@ class Monitoring extends eqLogic {
 
 	function getCaseAction($paramaction) {
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
+		
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
 			$port = $this->getConfiguration('portssh', 22);
@@ -2184,6 +2183,7 @@ class Monitoring extends eqLogic {
 			$equipement = $this->getName();
 			$cnx_ssh = '';
 
+			// Debut de la connexion SSH
 			try {
 				$sshconnection = new SSH2($ip,$port, $timeout);
 				log::add('Monitoring', 'debug', '['. $equipement .'][SSH] Connexion SSH (IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout . ') :: OK');
@@ -2191,6 +2191,7 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'error', '['. $equipement .'][SSH] Connexion SSH :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			}
+
 			if ($cnx_ssh != 'KO') {
 				if ($confLocalOrRemote == 'deporte-key') {
 					try {
@@ -2213,7 +2214,9 @@ class Monitoring extends eqLogic {
 				} catch (Exception $e) {
 					log::add('Monitoring', 'error', '['. $equipement .'][SSH] Authentification SSH :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
-				}		
+				}
+
+				// Fin de la connexion SSH
 				if ($cnx_ssh != 'KO') {
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH] Authentification SSH :: OK');
 					if ($this->getConfiguration('synology') == '1') {
