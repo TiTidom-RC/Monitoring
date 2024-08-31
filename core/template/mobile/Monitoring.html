@@ -57,7 +57,7 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #loadavg_display#;">
-			<span title="Charge système (load average) || Date valeur : #loadavg_value# || Date collecte : #loadavg_collect#" class="fa techno-courbes3" style="width:15px;"></span>
+			<span title="Charge système (load average) || Date valeur : #loadavg_value# || Date collecte : #loadavg_collect#" class="fa techno-courbes3" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
 		</div>
 		<script>
@@ -98,7 +98,7 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #Mem_display#;">
-			<span title="Mémoire Vive (% Libre) || Date valeur : #Mem_value# || Date collecte : #Mem_collect#" class="fa techno-memory" style="width:15px;"></span>
+			<span title="Mémoire Vive (% Libre) || Date valeur : #Mem_value# || Date collecte : #Mem_collect#" class="fa techno-memory" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="Mempourcent#id#"></span>
 		</div>
 		<script>
@@ -117,7 +117,7 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #Mem_swap_display#;">
-			<span title="Mémoire Swap (% Libre) || Date valeur : #Mem_swap_value# || Date collecte : #Mem_swap_collect#" class="fas fa-list" style="width:15px;"></span>
+			<span title="Mémoire Swap (% Libre) || Date valeur : #Mem_swap_value# || Date collecte : #Mem_swap_collect#" class="fas fa-list" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="Swappourc#id#"></span>
 		</div>
 		<script>
@@ -136,7 +136,7 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #ethernet0_display#;">
-			<span title="Trafic Réseau (#ethernet0_name# / #ethernet0_ip#) || Date valeur : #ethernet0_value# || Date collecte : #ethernet0_collect#" class="fa techno-fleches" style="width:15px;"></span>
+			<span title="Trafic Réseau (#ethernet0_name# / #ethernet0_ip#) || Date valeur : #ethernet0_value# || Date collecte : #ethernet0_collect#" class="fa techno-fleches" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="ethernet0#id#"></span>
 		</div>
 		<script>
@@ -145,7 +145,7 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #hddused_display#;">
-			<span title="Espace disque (% utilisé) || Date valeur : #hddtotal_value# || Date collecte : #hddtotal_collect#" class="fas fa-hdd" style="width:15px;"></span>
+			<span title="Espace disque (% utilisé) || Date valeur : #hddtotal_value# || Date collecte : #hddtotal_collect#" class="fas fa-hdd" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="hddpourcused#id#"></span>
 		</div>
 		<script>
@@ -167,7 +167,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolume2_display#' == 'OK') {
-					$('#synovol2#id#').append('<div id="synovol2#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% utilisé) || Date valeur : #hddtotalv2_value# || Date collecte : #hddtotalv2_collect#" class="fas fa-hdd" style="width:15px;"></span> <span id="hddpourcusedv2#id#"></span></div>');
+					$('#synovol2#id#').append('<div id="synovol2#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% utilisé) || Date valeur : #hddtotalv2_value# || Date collecte : #hddtotalv2_collect#" class="fas fa-hdd" style="width:15px;max-width:15px;max-height:15px;"></span> <span id="hddpourcusedv2#id#"></span></div>');
 				}
 				if ('#hddpourcusedv2#' === '') {
 					$('#hddpourcusedv2#id#').append('<span></span>');
@@ -186,7 +186,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% utilisé) || Date valeur : #hddtotalusb_value# || Date collecte : #hddtotalusb_collect#" class="fab fa-usb" style="width:15px;"></span> <span id="hddpourcusedusb#id#"></span></div>');
+					$('#synovolusb#id#').append('<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% utilisé) || Date valeur : #hddtotalusb_value# || Date collecte : #hddtotalusb_collect#" class="fab fa-usb" style="width:15px;max-width:15px;max-height:15px;"></span> <span id="hddpourcusedusb#id#"></span></div>');
 				}
 				if ('#hddpourcusedusb#' === '') {
 					$('#hddpourcusedusb#id#').append('<span></span>');
@@ -205,7 +205,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeesata_display#' == 'OK') {
-					$('#synovolesata#id#').append('<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% utilisé) || Date valeur : #hddtotalesata_value# || Date collecte : #hddtotalesata_collect#" class="fas fa-hdd" style="width:15px;"></span> <span id="hddpourcusedesata#id#"></span></div>');
+					$('#synovolesata#id#').append('<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% utilisé) || Date valeur : #hddtotalesata_value# || Date collecte : #hddtotalesata_collect#" class="fas fa-hdd" style="width:15px;max-width:15px;max-height:15px;"></span> <span id="hddpourcusedesata#id#"></span></div>');
 				}
 				if ('#hddpourcusedesata#' === '') {
 					$('#hddpourcusedesata#id#').append('<span></span>');
@@ -221,7 +221,7 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #cpu_display#;">
-			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" class="fa techno-pc" style="width:15px;"></span>
+			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" class="fa techno-pc" style="width:15px;max-width:15px;max-height:15px;"></span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
 		<script>
@@ -246,7 +246,7 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #perso1_display#;">
-			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;">#perso1_icon#</span>
+			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
 		<script>
@@ -267,7 +267,7 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #perso2_display#;">
-			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;">#perso2_icon#</span>
+			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
 		<script>
