@@ -995,12 +995,26 @@ class Monitoring extends eqLogic {
 						$perso_2cmd = $this->getConfiguration('perso2');
 
 						if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
-							$perso_1 = $sshconnection->exec($perso_1cmd);
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 :: ' . $perso_1);
+							try {
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Cmd :: ' . $perso_1cmd);
+								$perso_1 = $sshconnection->exec($perso_1cmd);
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exec :: ' . $perso_1);
+							} catch (Exception $e) {
+								$perso_1 = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso1 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exception Log :: ' . $sshconnection->getLog());
+							}
 						}
 						if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
-							$perso_2 = $sshconnection->exec($perso_2cmd);
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 :: ' . $perso_2);
+							try {
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Cmd :: ' . $perso_2cmd);
+								$perso_2 = $sshconnection->exec($perso_2cmd);
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exec :: ' . $perso_2);
+							} catch (Exception $e) {
+								$perso_2 = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso2 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exception Log :: ' . $sshconnection->getLog());
+							}
 						}
 						
 						if($this->getConfiguration('synology') == '1') {
@@ -1434,12 +1448,14 @@ class Monitoring extends eqLogic {
 				$perso_2cmd = $this->getConfiguration('perso2');
 
 				if ($perso_1cmd != '' /* && $Perso1Visible == 'OK' */) {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . $perso_1cmd);
 					$perso_1 = exec($perso_1cmd);
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 :: ' . $perso_1);
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Exec :: ' . $perso_1);
 				}
 				if ($perso_2cmd != '' /* && $Perso2Visible == 'OK' */) {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Cmd :: ' . $perso_2cmd);
 					$perso_2 = exec($perso_2cmd);
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 :: ' . $perso_2);
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Exec :: ' . $perso_2);
 				}
 
 				if ($this->getConfiguration('synology') == '1'){
