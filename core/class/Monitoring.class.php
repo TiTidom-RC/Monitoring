@@ -853,6 +853,7 @@ class Monitoring extends eqLogic {
     }
 
 	public function getInformations() {
+		$equipement = $this->getName();
 		try {
 			$bitdistri_cmd = '';
 			$uname = "Inconnu";
@@ -861,7 +862,6 @@ class Monitoring extends eqLogic {
 			$ethernet0 = '';
 			$ethernet0_name = '';
 			$ethernet0_ip = '';
-			$equipement = $this->getName();
 
 			if ($this->getConfiguration('cartereseau') == 'netautre'){
 				$cartereseau = $this->getConfiguration('cartereseauautre');
@@ -2231,8 +2231,8 @@ class Monitoring extends eqLogic {
 				}
 			}
 		} catch (Exception $e) {
-			log::add('Monitoring', 'error', '[GetInfos] Exception (Line ' . $e->getLine() . ') :: '. $e->getMessage());
-			log::add('Monitoring', 'debug', '[GetInfos] Exception Trace :: '. json_encode($e->getTrace()));
+			log::add('Monitoring', 'error', '[' . $equipement . '][getInformations] Exception (Line ' . $e->getLine() . ') :: '. $e->getMessage());
+			log::add('Monitoring', 'debug', '[' . $equipement . '][getInformations] Exception Trace :: '. json_encode($e->getTrace()));
 		}
 	}
 
