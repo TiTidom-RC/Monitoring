@@ -557,7 +557,7 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] CustomPull :: Timeout 1min');
 			} else {
 				$_ExpMatch = array();
-				$_ExpResult = preg_match('/^([0-9]|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
+				$_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
 				if ($_ExpResult === 1) {
 					$cron->setTimeout(intval($_ExpMatch[2]));
 					log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] CustomPull :: Timeout '. $_ExpMatch[2] .'min');
