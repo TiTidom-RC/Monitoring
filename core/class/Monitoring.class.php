@@ -542,14 +542,30 @@ class Monitoring extends eqLogic {
 				$cron->setFunction('pullCustom');
 				$cron->setOption(array('Monitoring_Id' => intval($this->getId())));
 				$cron->setDeamon(0);
-				$cron->setTimeout(1);
 			}
 			if ($this->getIsEnable()) {
 				$cron->setEnable(1);
 			} else {
 				$cron->setEnable(0);
 			}
-			$cron->setSchedule($this->getConfiguration('pull_cron', '*/15 * * * *'));
+
+			$_cronPattern = $this->getConfiguration('pull_cron', '*/15 * * * *');
+			$cron->setSchedule($_cronPattern);
+
+			if ($_cronPattern === '* * * * *') {
+				$cron->setTimeout(1);
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] CustomPull :: Timeout 1min');
+			} else {
+				$_ExpMatch = array();
+				$_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
+				if ($_ExpResult === 1) {
+					$cron->setTimeout(intval($_ExpMatch[2]));
+					log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] CustomPull :: Timeout '. $_ExpMatch[2] .'min');
+				} else {
+					$cron->setTimeout(15);
+					log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] CustomPull :: Timeout 15min');
+				}
+			}
 			$cron->save();
 		} else {
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
@@ -579,6 +595,7 @@ class Monitoring extends eqLogic {
 		$replace['#cron_status#'] = (is_object($cron_status)) ? $cron_status->execCmd() : '';
 		$replace['#cron_status_id#'] = is_object($cron_status) ? $cron_status->getId() : '';
 		$replace['#cron_status_display#'] = (is_object($cron_status) && $cron_status->getIsVisible()) ? "inline-block" : "none";
+		$replace['#cron_status_custom#'] = $this->getConfiguration('pull_use_custom', '0');
 
 		$namedistri = $this->getCmd(null,'namedistri');
 		$replace['#namedistri#'] = (is_object($namedistri)) ? $namedistri->execCmd() : '';

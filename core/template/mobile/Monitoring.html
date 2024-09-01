@@ -3,10 +3,18 @@
 		<span id="iconCron#id#"></span>
 		<script>
 			if ('#cron_status#' == '1') {
-				$('#iconCron#id#').append('<i title="Cron ON" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>');
+				if ('#cron_status_custom#' == '1') {
+					$('#iconCron#id#').append('<i title="Cron ON (Custom)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>');
+				} else {
+					$('#iconCron#id#').append('<i title="Cron ON (Default)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>');
+				}
 			}
 			if ('#cron_status#' == '0') {
-				$('#iconCron#id#').append('<i title="Cron PAUSE" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>');
+				if ('#cron_status_custom#' == '1') {
+					$('#iconCron#id#').append('<i title="Cron OFF (Custom)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>');
+				} else {
+					$('#iconCron#id#').append('<i title="Cron OFF (Default)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>');
+				}
 			}
 		</script>
 		<span id="iconSSH#id#"></span>
