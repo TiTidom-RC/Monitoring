@@ -595,6 +595,7 @@ class Monitoring extends eqLogic {
 		$replace['#cron_status#'] = (is_object($cron_status)) ? $cron_status->execCmd() : '';
 		$replace['#cron_status_id#'] = is_object($cron_status) ? $cron_status->getId() : '';
 		$replace['#cron_status_display#'] = (is_object($cron_status) && $cron_status->getIsVisible()) ? "inline-block" : "none";
+		$replace['#cron_status_custom#'] = $this->getConfiguration('pull_use_custom', '0');
 
 		$namedistri = $this->getCmd(null,'namedistri');
 		$replace['#namedistri#'] = (is_object($namedistri)) ? $namedistri->execCmd() : '';
