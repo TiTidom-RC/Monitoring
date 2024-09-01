@@ -452,26 +452,8 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setIsHistorized(1);
 			$MonitoringCmd->save();
-
-			$MonitoringCmd->event(1);
 		}
 		$cron_status_cmd = $MonitoringCmd->getId();
-
-		$MonitoringCmd = $this->getCmd(null, 'cron_off');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Cron Off', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('cron_off');
-			$MonitoringCmd->setType('action');
-			$MonitoringCmd->setSubType('other');
-			$MonitoringCmd->setDisplay('icon', '<i class="icon fas fa-pause-circle"></i>');
-			$MonitoringCmd->setValue($cron_status_cmd);
-			$MonitoringCmd->setIsVisible(0);
-			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
-			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
-			$MonitoringCmd->save();
-		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cron_on');
 		if (!is_object($MonitoringCmd)) {
@@ -486,6 +468,22 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
             $MonitoringCmd->setTemplate('mobile', 'core::toggle');
+			$MonitoringCmd->save();
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'cron_off');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Cron Off', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('cron_off');
+			$MonitoringCmd->setType('action');
+			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setDisplay('icon', '<i class="icon fas fa-pause-circle"></i>');
+			$MonitoringCmd->setValue($cron_status_cmd);
+			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
+			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
 			$MonitoringCmd->save();
 		}
 
