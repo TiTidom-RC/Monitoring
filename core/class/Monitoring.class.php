@@ -455,22 +455,6 @@ class Monitoring extends eqLogic {
 		}
 		$cron_status_cmd = $MonitoringCmd->getId();
 
-		$MonitoringCmd = $this->getCmd(null, 'cron_on');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Cron On', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('cron_on');
-			$MonitoringCmd->setType('action');
-			$MonitoringCmd->setSubType('other');
-			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play-circle"></i>');
-			$MonitoringCmd->setValue($cron_status_cmd);
-			$MonitoringCmd->setIsVisible(0);
-			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
-            $MonitoringCmd->setTemplate('mobile', 'core::toggle');
-			$MonitoringCmd->save();
-		}
-
 		$MonitoringCmd = $this->getCmd(null, 'cron_off');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -485,6 +469,24 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
 			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
 			$MonitoringCmd->save();
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'cron_on');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Cron On', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('cron_on');
+			$MonitoringCmd->setType('action');
+			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play-circle"></i>');
+			$MonitoringCmd->setValue($cron_status_cmd);
+			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
+            $MonitoringCmd->setTemplate('mobile', 'core::toggle');
+			$MonitoringCmd->save();
+
+			$MonitoringCmd->execCmd();
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
@@ -2338,7 +2340,7 @@ class MonitoringCmd extends cmd {
 					$eqLogic->getCaseAction($paramaction);
 					break;
 				case "cron_on":
-					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
+					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Execution Commande :: ' . $paramaction);
 					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
 					if (is_object($cron_status_cmd)) {
 						$cron_status_cmd->event(1);
@@ -2346,7 +2348,7 @@ class MonitoringCmd extends cmd {
 					}
 					break;
 				case "cron_off":
-					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Lancement commande CRON :: ' . $paramaction);
+					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Execution Commande :: ' . $paramaction);
 					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
 					if (is_object($cron_status_cmd)) {
 						$cron_status_cmd->event(0);
