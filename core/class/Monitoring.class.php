@@ -452,6 +452,8 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setIsHistorized(1);
 			$MonitoringCmd->save();
+
+			$MonitoringCmd->event(1);
 		}
 		$cron_status_cmd = $MonitoringCmd->getId();
 
@@ -485,8 +487,6 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
             $MonitoringCmd->setTemplate('mobile', 'core::toggle');
 			$MonitoringCmd->save();
-
-			$MonitoringCmd->execCmd();
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
