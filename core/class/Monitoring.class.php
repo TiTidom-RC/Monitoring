@@ -1004,6 +1004,7 @@ class Monitoring extends eqLogic {
 						} catch (Exception $e) {
 							$ARMv = '';
 							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ARMv Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception LastError :: ' . $sshconnection->getLastError());
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception Log :: ' . $sshconnection->getLog());
 						}
 
@@ -1017,6 +1018,7 @@ class Monitoring extends eqLogic {
 						} catch (Exception $e) {
 							$uptime = '';
 							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Uptime Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception LastError :: ' . $sshconnection->getLastError());
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception Log :: ' . $sshconnection->getLog());
 						}
 						
@@ -1042,6 +1044,7 @@ class Monitoring extends eqLogic {
 							} catch (Exception $e) {
 								$perso1 = '';
 								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso1 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exception LastError :: ' . $sshconnection->getLastError());
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exception Log :: ' . $sshconnection->getLog());
 							}
 						}
@@ -1053,6 +1056,7 @@ class Monitoring extends eqLogic {
 							} catch (Exception $e) {
 								$perso2 = '';
 								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso2 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exception LastError :: ' . $sshconnection->getLastError());
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exception Log :: ' . $sshconnection->getLog());
 							}
 						}
