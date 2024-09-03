@@ -938,6 +938,28 @@ class Monitoring extends eqLogic {
 						$cnx_ssh = 'KO';
 					}
 
+					try {
+						if ($sshconnection->isConnected()) {
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (isConnected) :: OK');
+							if ($sshconnection->isAuthenticated()) {
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (isAuthenticated) :: OK');
+							}
+							else {
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH (isAuthenticated) :: KO');
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH LastError :: ' . $sshconnection->getLastError());
+								$cnx_ssh = 'KO';
+							}
+						} else {
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH (isConnected) :: KO');
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH LastError :: ' . $sshconnection->getLastError());
+							$cnx_ssh = 'KO';
+						}
+					} catch (Exception $e) {
+						log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH :: '. $e->getMessage());
+						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH Log :: ' . $sshconnection->getLog());
+						$cnx_ssh = 'KO';
+					}
+
 					// Fin de la connexion SSH
 					if ($cnx_ssh != 'KO') {
 						$cnx_ssh = 'OK';
