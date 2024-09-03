@@ -907,7 +907,7 @@ class Monitoring extends eqLogic {
 				// Début de la connexion SSH
 				try {
 					$sshconnection = new SSH2($ip, $port, $timeout);
-					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout . ') :: OK');
+					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
 				} catch (Exception $e) {
 					log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
