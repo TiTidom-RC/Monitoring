@@ -963,7 +963,7 @@ class Monitoring extends eqLogic {
 					// Fin de la connexion SSH
 					if ($cnx_ssh != 'KO') {
 						$cnx_ssh = 'OK';
-						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Authentification SSH :: OK');
+						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (cnx_ssh) :: OK');
 
 						if ($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
