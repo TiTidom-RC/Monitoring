@@ -63,7 +63,7 @@ function Monitoring_update() {
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
 
     // Check Version of the plugin
-    log::add('Monitoring', 'debug', '[UPDATE_CHECK] Vérification des versions :: ' . jeedom::version() . ' vs ' . '4.5');
+    log::add('Monitoring', 'debug', '[UPDATE_CHECK] Vérification des versions :: ' . jeedom::version() . ' vs ' . '4.5' . ' :: ' . version_compare(jeedom::version(), '4.5', '<'));
     if (version_compare(jeedom::version(), '4.5', '<')) {
         $updateConf = update::byLogicalId('Monitoring');
         if (is_object($updateConf)) {
