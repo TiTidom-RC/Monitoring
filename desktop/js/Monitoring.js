@@ -14,16 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Permet la réorganisation des commandes dans l'équipement */
-$("#table_cmd").sortable({
-	axis: "y",
-	cursor: "move",
-	items: ".cmd",
-	placeholder: "ui-state-highlight",
-	tolerance: "intersect",
-	forcePlaceholderSize: true
-  });
-
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
@@ -96,83 +86,73 @@ function addCmdToTable(_cmd) {
 	tr += '</td>';
 	
 	tr += '</tr>';
-	$('#table_cmd tbody').append(tr);
-  	var tr = $('#table_cmd tbody tr').last();
-  	jeedom.eqLogic.buildSelectCmd({
-    	id: $('.eqLogicAttr[data-l1key=id]').value(),
-    	filter: { type: 'info' },
-    	error: function (error) {
-      		$('#div_alert').showAlert({ message: error.message, level: 'danger' })
-    	},
-    	success: function (result) {
-      		tr.find('.cmdAttr[data-l1key=value]').append(result)
-      		tr.setValues(_cmd, '.cmdAttr')
-      		jeedom.cmd.changeType(tr, init(_cmd.subType))
-    	}
-  	});
-	// $('#table_cmd tbody').append(tr);
-	// $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
-	// jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
+	
+	let newRow = document.createElement('tr')
+	newRow.innerHTML = tr
+	newRow.addClass('cmd')
+	newRow.setAttribute('data-cmd_id', init(_cmd.id))
+	document.getElementById('table_cmd').querySelector('tbody').appendChild(newRow)
+
+	jeedom.eqLogic.buildSelectCmd({
+	  id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
+	  filter: { type: 'info' },
+	  error: function(error) {
+		jeedomUtils.showAlert({ message: error.message, level: 'danger' })
+	  },
+	  success: function(result) {
+		newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result)
+		newRow.setJeeValues(_cmd, '.cmdAttr')
+		jeedom.cmd.changeType(newRow, init(_cmd.subType))
+	  }
+	})
 }
 
-$('.pluginAction[data-action=openLocation]').on('click', function () {
-	window.open($(this).attr("data-location"), "_blank", null);
+document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(function (element) {
+	element.addEventListener('click', function () {
+		window.open(this.getAttribute("data-location"), "_blank", null);
+	});
 });
 
-$(".eqLogicAttr[data-l2key='synology']").on('change', function () {
-	if(this.checked){
-	  $(".syno_conf").show();
+document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('change', function() {
+	if (this.checked) {
+		document.querySelector(".syno_conf").style.display = "block";
 	} else {
-	  $(".syno_conf").hide();
+		document.querySelector(".syno_conf").style.display = "none";
 	}
 });
 
-$(".eqLogicAttr[data-l2key='syno_use_temp_path']").on('change', function () {
+document.querySelector(".eqLogicAttr[data-l2key='syno_use_temp_path']").addEventListener('change', function () {
 	if(this.checked){
-	  $(".syno_conf_temppath").show();
+	  document.querySelector(".syno_conf_temppath").style.display = "block";
 	} else {
-	  $(".syno_conf_temppath").hide();
+	  document.querySelector(".syno_conf_temppath").style.display = "none";
 	}
 });
 
-$(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").on('change', function () {
-	if(this.checked){
-	  $(".linux_class_temp_cmd").show();
+document.querySelector(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").addEventListener('change', function() {
+	if (this.checked) {
+		document.querySelector(".linux_class_temp_cmd").style.display = "block";
 	} else {
-	  $(".linux_class_temp_cmd").hide();
+		document.querySelector(".linux_class_temp_cmd").style.display = "none";
 	}
 });
 
-$(".eqLogicAttr[data-l2key='pull_use_custom']").on('change', function () {
+document.querySelector(".eqLogicAttr[data-l2key='pull_use_custom']").addEventListener('change', function () {
 	if(this.checked){
-	  $(".pull_class").show();
+	  document.querySelector(".pull_class").style.display = "block";
 	} else {
-	  $(".pull_class").hide();
+	  document.querySelector(".pull_class").style.display = "none";
 	}
 });
 
-$(".eqLogicAttr[data-l2key='localoudistant']").on('change', function () {
+document.querySelector(".eqLogicAttr[data-l2key='localoudistant']").addEventListener('change', function () {
 	if (this.selectedIndex == 1) {
-	  $(".distant").show();
+	  document.querySelector(".distant").style.display = "block";
 	} else { 
-		$(".distant").hide();
+		document.querySelector(".distant").style.display = "none";
 	}
 });
 
 function printEqLogic(_eqLogic) {
 	buildSelectHost(_eqLogic.configuration.SSHHostId);
-}
-
-function toggleSSHPassword() {
-	var sshPasswordIcon = document.getElementById("btnToggleSSHPasswordIcon");
-	var sshPasswordField = document.getElementById("ssh-password");
-	sshPasswordIcon.className = sshPasswordField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
-	sshPasswordField.type = sshPasswordField.type === "password" ? "text" : "password";
-}
-
-function toggleSSHPassphrase() {
-	var sshPassphraseIcon = document.getElementById("btnToggleSSHPassphraseIcon");
-	var sshPassphraseField = document.getElementById("ssh-passphrase");
-	sshPassphraseIcon.className = sshPassphraseField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
-	sshPassphraseField.type = sshPassphraseField.type === "password" ? "text" : "password";
 }
