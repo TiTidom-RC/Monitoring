@@ -161,72 +161,28 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         </div>
                                     </div>
                                 </div>
+                                <br />
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">{{Local ou Distant ?}}</label>
                                     <div class="col-md-6">
-                                        <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave">
+                                        <select id="localoudistant" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="localoudistant">
                                             <option value="local">{{Local}}</option>
-                                            <option value="deporte">{{Distant (Mot de Passe)}}</option>
-                                            <option value="deporte-key">{{Distant (Clé SSH)}}</option>
+                                            <option value="distant">{{Distant}}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="distant" style="display:none;">
                                     <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Adresse IP}}</label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="addressip" type="text" placeholder="{{Saisir l'adresse IP}}" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Port SSH}}
-                                            <sup><i class="fas fa-question-circle tooltips" title="{{Port SSH (par défaut : 22)}}"></i></sup>
-                                        </label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="portssh" type="text" placeholder="{{Saisir le port SSH}}" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Timeout SSH}}
-                                            <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration de la connexion SSH (par défaut : 30s)}}"></i></sup>
-                                        </label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="timeoutssh" type="text" placeholder="{{Saisir le timeout SSH}}" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Identifiant}}</label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
-                                        </div>
-                                    </div>
-                                    <div class="distant-password" style="display:none;">
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label">{{Mot de passe}}</label>
-                                            <div class="col-md-6 input-group">
-                                                <input type="password" id="ssh-password" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
+                                        <label class="col-sm-4 control-label help" data-help="{{Choisir un hôte dans la liste ou créez en un nouveau}}">{{Hôte SSH}}</label>
+                                        <div class="col-sm-3">
+                                            <div class="input-group">
+                                                <select class="eqLogicAttr form-control roundedLeft sshmanagerHelper" data-helper="list" data-l1key="configuration" data-l2key="SSHHostId">
+                                                </select>
                                                 <span class="input-group-btn">
-											        <a class="btn btn-default form-control roundedRight" onclick="toggleSSHPassword()"><i id="btnToggleSSHPasswordIcon" class="fas fa-eye"></i></a>
-										        </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="distant-key" style="display:none;">
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label">{{Passphrase}}
-                                                <sup><i class="fas fa-question-circle tooltips" title="{{Optionnel : Phrase secrète pour la clé SSH}}"></i></sup>
-                                            </label>
-                                            <div class="col-md-6 input-group">
-                                                <input type="password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="ssh-passphrase" placeholder="{{Saisir la passphrase SSH}}" />
-                                                <span class="input-group-btn">
-											        <a class="btn btn-default form-control roundedRight" onclick="toggleSSHPassphrase()"><i id="btnToggleSSHPassphraseIcon" class="fas fa-eye"></i></a>
-										        </span>
-                                            </div>
-                                        </div>    
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label">{{Clé SSH}}</label>
-                                            <div class="col-md-8">
-                                                <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ssh-key" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
+                                                    <a class="btn btn-default cursor roundedRight sshmanagerHelper" data-helper="add" title="{{Ajouter un nouvel hôte SSH}}">
+                                                        <i class="fas fa-plus-circle"></i>
+                                                    </a>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
@@ -363,6 +319,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
     </div><!-- /.eqLogic -->
 </div><!-- /.row row-overflow -->
 
+<!-- Inclusion du fichier javascript du plugin SSHManager (Helper) -->
+<?php include_file('desktop', 'sshmanager.helper', 'js', 'sshmanager'); ?>
 <!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 <?php include_file('desktop', 'Monitoring', 'js', 'Monitoring'); ?>
 <!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->

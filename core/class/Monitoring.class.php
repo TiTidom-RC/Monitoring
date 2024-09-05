@@ -46,7 +46,7 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
-				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('maitreesclave') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
+				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('localoudistant') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
 					$cronState = $Monitoring->getCmd(null, 'cron_status');
 					if (is_object($cronState) && $cronState->execCmd() === 0) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: En Pause');
@@ -70,7 +70,7 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '[PULLLOCAL] Config PullLocal :: '. config::byKey('configPullLocal', 'Monitoring'));
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
-				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('maitreesclave') == 'local') {
+				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('localoudistant') == 'local') {
 					$cronState = $Monitoring->getCmd(null, 'cron_status');
 					if (is_object($cronState) && $cronState->execCmd() === 0) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: En Pause');
@@ -890,10 +890,10 @@ class Monitoring extends eqLogic {
 				$cartereseau = $this->getConfiguration('cartereseau');
 			} */
 
-			$confLocalOrRemote = $this->getConfiguration('maitreesclave');
+			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 
 			// Configuration distante
-			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
+			if (($confLocalOrRemote == 'distant') && $this->getIsEnable()) {
 				$ip = $this->getConfiguration('addressip');
 				$port = $this->getConfiguration('portssh', 22);
 				$timeout = $this->getConfiguration('timeoutssh', 30);
@@ -914,7 +914,7 @@ class Monitoring extends eqLogic {
 				}
 
 				if ($cnx_ssh != 'KO') {
-					if ($confLocalOrRemote == 'deporte-key') {
+					if ($confLocalOrRemote == 'distant-key') {
 						try {
 							$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] PublicKeyLoader :: OK');
@@ -1410,7 +1410,7 @@ class Monitoring extends eqLogic {
 					}
 				}
 			}
-			elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
+			elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 				$cnx_ssh = 'No';
 				
 				if ($this->getConfiguration('synology') == '1') {
@@ -1656,7 +1656,7 @@ class Monitoring extends eqLogic {
 			}
 
 			if (isset($cnx_ssh)) {
-				if ($this->getConfiguration('maitreesclave') == 'local' || $cnx_ssh == 'OK') {
+				if ($this->getConfiguration('localoudistant') == 'local' || $cnx_ssh == 'OK') {
 					if ($this->getConfiguration('synology') == '1') {
 						if (isset($versionsyno)) {
 							parse_str($versionsyno, $versionsyno_DSM);
@@ -2213,9 +2213,9 @@ class Monitoring extends eqLogic {
 	}
 
 	function getCaseAction($paramaction) {
-		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
+		$confLocalOrRemote = $this->getConfiguration('localoudistant');
 		
-		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
+		if (($confLocalOrRemote == 'distant') && $this->getIsEnable()) {
 			$ip = $this->getConfiguration('addressip');
 			$port = $this->getConfiguration('portssh', 22);
 			$timeout = $this->getConfiguration('timeoutssh', 30);
@@ -2236,7 +2236,7 @@ class Monitoring extends eqLogic {
 			}
 
 			if ($cnx_ssh != 'KO') {
-				if ($confLocalOrRemote == 'deporte-key') {
+				if ($confLocalOrRemote == 'distant-key') {
 					try {
 						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
 						log::add('Monitoring', 'debug', '['. $equipement .'][SSH] PublicKeyLoader :: OK');
@@ -2312,7 +2312,7 @@ class Monitoring extends eqLogic {
 					}
 				}
 			}
-		} elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
+		} elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 			$equipement = $this->getName();
 			if ($this->getConfiguration('synology') == '1') {
 				switch ($paramaction) {

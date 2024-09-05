@@ -151,26 +151,23 @@ $(".eqLogicAttr[data-l2key='pull_use_custom']").on('change', function () {
 	}
 });
 
-$(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
+$(".eqLogicAttr[data-l2key='localoudistant']").on('change', function () {
 	if (this.selectedIndex == 1) {
 	  $(".distant").show();
-	  $(".distant-password").show();
-	  $(".distant-key").hide();
-	} else if (this.selectedIndex == 2) {
-		$(".distant").show();
-		$(".distant-password").hide();
-		$(".distant-key").show();
 	} else { 
 		$(".distant").hide();
 	}
 });
+
+function printEqLogic(_eqLogic) {
+	buildSelectHost(_eqLogic.configuration.host_id);
+}
 
 function toggleSSHPassword() {
 	var sshPasswordIcon = document.getElementById("btnToggleSSHPasswordIcon");
 	var sshPasswordField = document.getElementById("ssh-password");
 	sshPasswordIcon.className = sshPasswordField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
 	sshPasswordField.type = sshPasswordField.type === "password" ? "text" : "password";
-	
 }
 
 function toggleSSHPassphrase() {
