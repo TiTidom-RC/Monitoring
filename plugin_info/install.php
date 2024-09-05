@@ -71,16 +71,16 @@ function Monitoring_update() {
             $updateConf->save();
         }
 
-        message::removeAll('Monitoring', 'update');
+        message::removeAll('Monitoring');
         message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
-        message::add('Monitoring', 'La version de Jeedom n\'est pas compatible avec le plugin Monitoring. Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.', 'update');
         event::add('jeedom::alert', array(
             'level' => 'danger',
             'message' => __('[WARNING] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br />En attendant, les mises à jour de Monitoring sont désactivées.', __FILE__),
         ));
+        message::add('Monitoring', 'La version de Jeedom n\'est pas compatible avec le plugin Monitoring. Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.', 'update');
     }
     else {
-        message::removeAll('Monitoring', 'update');
+        message::removeAll('Monitoring');
         message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
     }
 
