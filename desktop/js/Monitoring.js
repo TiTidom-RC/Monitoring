@@ -17,7 +17,10 @@
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
-		var _cmd = {configuration: {}};
+		var _cmd = { configuration: {} };
+	}
+	if (!isset(_cmd.configuration)) {
+		_cmd.configuration = {}
 	}
 	let tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 	tr += '<td class="hidden-xs">';
