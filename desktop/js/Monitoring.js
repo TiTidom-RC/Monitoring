@@ -98,15 +98,12 @@ function addCmdToTable(_cmd) {
 
 	jeedom.eqLogic.buildSelectCmd({
 		id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
-		filter: { 
-		  type: 'info',
-		  logicalId: ['cron_status', 'cron_on', 'cron_off']
-		},
+		filter: { type: 'info' },
 		error: function(error) {
 		  jeedomUtils.showAlert({ message: error.message, level: 'danger' })
 		},
 		success: function(result) {
-		  newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result)
+		  newRow.querySelector('.cmdAttr[data-l1key="value"]')?.insertAdjacentHTML('beforeend', result)
 		  newRow.setJeeValues(_cmd, '.cmdAttr')
 		  jeedom.cmd.changeType(newRow, init(_cmd.subType))
 		}
