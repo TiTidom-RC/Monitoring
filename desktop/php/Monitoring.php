@@ -13,7 +13,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
     <div class="col-xs-12 eqLogicThumbnailDisplay">
         <div class="row">
             <div class="col-sm-10">
-                <legend><i class="fas fa-cog"></i>  {{Gestion}}</legend>
+                <legend><i class="fas fa-cog"></i> {{Gestion}}</legend>
                 <!-- Boutons de gestion du plugin -->
                 <div class="eqLogicThumbnailContainer">
                     <div class="cursor eqLogicAction logoPrimary" data-action="add">
