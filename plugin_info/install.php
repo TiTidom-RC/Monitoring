@@ -24,8 +24,8 @@ function Monitoring_install() {
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
 
     message::removeAll('Monitoring', 'update');
-    message::add('Monitoring', 'Mise à jour du plugin Monitoring :: Version :: ' . $pluginVersion, null, 'update');
-    
+    message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, null, 'update');
+
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
     if (!is_object($cron)) {
         $cron = new cron();
@@ -71,9 +71,11 @@ function Monitoring_update() {
         }
 
         message::removeAll('Monitoring', 'update');
-        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: Version :: ' . $pluginVersion, null, 'update');
+        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, null, 'update');
+        message::add('Monitoring', 'La version de Jeedom n\'est pas compatible avec le plugin Monitoring. Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.', null, 'update');
         event::add('jeedom::alert', array(
             'level' => 'danger',
+            'page' => 'index',
             'message' => __('[WARNING] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.5". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.\n En attendant, les mises à jour de Monitoring sont désactivées.', __FILE__),
         ));
         message::add('Monitoring', 'La version de Jeedom n\'est pas compatible avec le plugin Monitoring. Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.', null, 'update');
