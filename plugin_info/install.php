@@ -67,7 +67,7 @@ function Monitoring_update() {
     if (version_compare(jeedom::version(), '4.4') == -1) {
         $updateConf = update::byLogicalId('Monitoring');
         if (is_object($updateConf)) {
-            $updateConf->setConfiguration('doNotUpdate', '1');
+            $updateConf->setConfiguration('doNotUpdate', 1);
             $updateConf->save();
         }
 
