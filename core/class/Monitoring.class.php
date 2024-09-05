@@ -923,7 +923,7 @@ class Monitoring extends eqLogic {
 				// ARMv Command
 				try {
 					$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-					$ARMv = sshmanager::executeCmds($hostId, $ARMv_cmd)[0];
+					$ARMv = sshmanager::executeCmds($hostId, [$ARMv_cmd])[0];
 					if (!empty($ARMv)) {
 						$ARMv = trim($ARMv);
 					}
@@ -938,7 +938,7 @@ class Monitoring extends eqLogic {
 				// Uptime Command
 				try {
 					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-					$uptime = sshmanager::executeCmds($hostId, $uptime_cmd);
+					$uptime = sshmanager::executeCmds($hostId, [$uptime_cmd]);
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime :: >' . $uptime . '<');
 				} catch (Exception $e) {
 					$uptime = '';
@@ -947,16 +947,16 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception Log :: ' . $sshconnection->getLog()); */
 				}
 				
-				$namedistri = sshmanager::executeCmds($hostId, $namedistri_cmd)[0];
-				$bitdistri = sshmanager::executeCmds($hostId, $bitdistri_cmd)[0];
-				$VersionID = trim(sshmanager::executeCmds($hostId, $VersionID_cmd)[0]);
+				$namedistri = sshmanager::executeCmds($hostId, [$namedistri_cmd])[0];
+				$bitdistri = sshmanager::executeCmds($hostId, [$bitdistri_cmd])[0];
+				$VersionID = trim(sshmanager::executeCmds($hostId, [$VersionID_cmd])[0]);
 				
-				$loadav = sshmanager::executeCmds($hostId, $loadavg_cmd)[0];
-				$ReseauRXTX = sshmanager::executeCmds($hostId, $ReseauRXTX_cmd)[0];
-				$ReseauIP = sshmanager::executeCmds($hostId, $ReseauIP_cmd)[0];
+				$loadav = sshmanager::executeCmds($hostId, [$loadavg_cmd])[0];
+				$ReseauRXTX = sshmanager::executeCmds($hostId, [$ReseauRXTX_cmd])[0];
+				$ReseauIP = sshmanager::executeCmds($hostId, [$ReseauIP_cmd])[0];
 
-				$memory = sshmanager::executeCmds($hostId, $memory_cmd)[0];
-				$swap = sshmanager::executeCmds($hostId, $swap_cmd)[0];
+				$memory = sshmanager::executeCmds($hostId, [$memory_cmd])[0];
+				$swap = sshmanager::executeCmds($hostId, [$swap_cmd])[0];
 
 				$perso1_cmd = $this->getConfiguration('perso1');
 				$perso2_cmd = $this->getConfiguration('perso2');
@@ -964,7 +964,7 @@ class Monitoring extends eqLogic {
 				if ($perso1_cmd != '') {
 					try {
 						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Cmd :: ' . $perso1_cmd);
-						$perso1 = sshmanager::executeCmds($hostId, $perso1_cmd)[0];
+						$perso1 = sshmanager::executeCmds($hostId, [$perso1_cmd])[0];
 						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exec :: ' . $perso1);
 					} catch (Exception $e) {
 						$perso1 = '';
@@ -976,7 +976,7 @@ class Monitoring extends eqLogic {
 				if ($perso2_cmd != '' /* && $Perso2Visible == 'OK' */) {
 					try {
 						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Cmd :: ' . $perso2_cmd);
-						$perso2 = sshmanager::executeCmds($hostId, $perso2_cmd)[0];
+						$perso2 = sshmanager::executeCmds($hostId, [$perso2_cmd])[0];
 						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exec :: ' . $perso2);
 					} catch (Exception $e) {
 						$perso2 = '';
@@ -988,18 +988,18 @@ class Monitoring extends eqLogic {
 				
 				if ($this->getConfiguration('synology') == '1') {
 					$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
-					$nbcpu = trim(sshmanager::executeCmds($hostId, $nbcpuARM_cmd)[0]);
+					$nbcpu = trim(sshmanager::executeCmds($hostId, [$nbcpuARM_cmd])[0]);
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
 					$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
-					$cpufreq0 = trim(sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0]);
+					$cpufreq0 = trim(sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0]);
 					
 					$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
-					$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+					$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
-					$versionsyno = sshmanager::executeCmds($hostId, $versionsyno_cmd)[0];
+					$versionsyno = sshmanager::executeCmds($hostId, [$versionsyno_cmd])[0];
 
 					if ($this->getconfiguration('syno_use_temp_path')) {
 						$cputemp0_cmd = $this->getconfiguration('syno_temp_path');
@@ -1008,38 +1008,38 @@ class Monitoring extends eqLogic {
 						$cputemp0_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
 						log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO-TEMP] Commande Température :: ' . $cputemp0_cmd);
 					}
-					$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+					$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 				
 					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
 						$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-						$hddv2 = sshmanager::executeCmds($hostId, $hddv2cmd)[0];
+						$hddv2 = sshmanager::executeCmds($hostId, [$hddv2cmd])[0];
 					}
 
 					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
 						$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-						$hddusb = sshmanager::executeCmds($hostId, $hddusbcmd)[0];
+						$hddusb = sshmanager::executeCmds($hostId, [$hddusbcmd])[0];
 					}
 
 					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1') {
 						$hddesatacmd = "df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-						$hddesata = sshmanager::executeCmds($hostId, $hddesatacmd)[0];
+						$hddesata = sshmanager::executeCmds($hostId, [$hddesatacmd])[0];
 					}
 				} elseif ($ARMv == 'armv6l') {
 					$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
-					$nbcpu = trim(sshmanager::executeCmds($hostId, $nbcpuARM_cmd)[0]);
+					$nbcpu = trim(sshmanager::executeCmds($hostId, [$nbcpuARM_cmd])[0]);
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
 					$uname = '.';
 
 					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-					$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+					$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 					$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-					$cpufreq0 = sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0];						
+					$cpufreq0 = sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0];						
 					if ($cpufreq0 == '') {
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-						$cpufreq0 = sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0];
+						$cpufreq0 = sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0];
 					}
 
 					$cputemp_cmd = $this->getCmd(null,'cpu_temp');
@@ -1051,41 +1051,41 @@ class Monitoring extends eqLogic {
 							$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH-CMD][ARM6L-TEMP] Commande Température :: ' . $cputemp0armv6l_cmd);
 						}
-						$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0armv6l_cmd)[0];
+						$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0armv6l_cmd])[0];
 					}
 
 				} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
 					$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
-					$nbcpu = trim(sshmanager::executeCmds($hostId, $nbcpuARM_cmd)[0]);
+					$nbcpu = trim(sshmanager::executeCmds($hostId, [$nbcpuARM_cmd])[0]);
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
 					$uname = '.';
 
 					$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-					$cpufreq0 = trim(sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0]);
+					$cpufreq0 = trim(sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0]);
 
 					if ($cpufreq0 == '') {
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-						$cpufreq0 = trim(sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0]);
+						$cpufreq0 = trim(sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0]);
 					}
 
 					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-					$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+					$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 					$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 					if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-							$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+							$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);	
 						} else {
 							$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";	// OK RPi2
-							$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+							$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 							
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"; // OK Banana Pi (Cubie surement un jour...)
-								$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+								$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 							}
 							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64-TEMP] Commande Température :: ' . $cputemp0_cmd);
 						}							
@@ -1096,33 +1096,33 @@ class Monitoring extends eqLogic {
 					$uname = '.';
 					
 					$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
-					$nbcpu = sshmanager::executeCmds($hostId, $nbcpuVM_cmd)[0];
+					$nbcpu = sshmanager::executeCmds($hostId, [$nbcpuVM_cmd])[0];
 
 					if ($nbcpu == '') {
 						$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'"; // OK pour LXC Linux/Ubuntu
-						$nbcpu = sshmanager::executeCmds($hostId, $nbcpuVMbis_cmd)[0];
+						$nbcpu = sshmanager::executeCmds($hostId, [$nbcpuVMbis_cmd])[0];
 					}
 					$nbcpu = preg_replace("/[^0-9]/","",$nbcpu);
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
 					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-					$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+					$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
-					$cpufreq = sshmanager::executeCmds($hostId, $cpufreqVM_cmd)[0];
+					$cpufreq = sshmanager::executeCmds($hostId, [$cpufreqVM_cmd])[0];
 
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
-						$cpufreq = sshmanager::executeCmds($hostId, $cpufreqVMbis_cmd)[0];
+						$cpufreq = sshmanager::executeCmds($hostId, [$cpufreqVMbis_cmd])[0];
 					}
 
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
-						$cpufreq = sshmanager::executeCmds($hostId, $cpufreqVMbis_cmd)[0];
+						$cpufreq = sshmanager::executeCmds($hostId, [$cpufreqVMbis_cmd])[0];
 					}
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
-						$cpufreq = sshmanager::executeCmds($hostId, $cpufreqVMbis_cmd)[0];
+						$cpufreq = sshmanager::executeCmds($hostId, [$cpufreqVMbis_cmd])[0];
 					}
 					$cpufreq=preg_replace("/[^0-9.]/","",$cpufreq);
 
@@ -1130,32 +1130,32 @@ class Monitoring extends eqLogic {
 					if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-							$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+							$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);	
 						} else {
 							$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// Default
-							$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+							$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 							
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"; // Default Zone 1
-								$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];		
+								$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];		
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null";	// OK AOpen DE2700
-								$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];		
+								$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];		
 							}
 							if ($cputemp0 == '') {
 								// $cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input 2>/dev/null";	// OK AMD Ryzen
 								$cputemp0AMD_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"; // OK Search temp?_input
-								$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0AMD_cmd)[0];
+								$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0AMD_cmd])[0];
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"; // OK by sensors
-								$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+								$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"; // OK by sensors
-								$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+								$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 							}
 							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86-TEMP] Commande Température :: ' . $cputemp0_cmd);
 						}
@@ -1163,7 +1163,7 @@ class Monitoring extends eqLogic {
 						
 						if ($ARMv == '' & $this->getConfiguration('synology') != '1') {
 							$unamecmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
-							$unamedata = sshmanager::executeCmds($hostId, $unamecmd)[0];
+							$unamedata = sshmanager::executeCmds($hostId, [$unamecmd])[0];
 							$uname = $unamedata;
 
 							if (preg_match("#RasPlex|OpenELEC|LibreELEC#", $namedistri)) {
@@ -1171,14 +1171,14 @@ class Monitoring extends eqLogic {
 								$ARMv = 'arm';
 
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								$nbcpu = trim(sshmanager::executeCmds($hostId, $nbcpuARM_cmd)[0]);
+								$nbcpu = trim(sshmanager::executeCmds($hostId, [$nbcpuARM_cmd])[0]);
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
 								$hdd_cmd = "df -h 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
-								$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+								$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								$cpufreq0 = sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0];
+								$cpufreq0 = sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0];
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1189,20 +1189,20 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+									$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 								}
 							} elseif (preg_match("#osmc#", $namedistri)) {
 								$bitdistri = '32';
 								$ARMv = 'arm';
 
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								$nbcpu = trim(sshmanager::executeCmds($hostId, $nbcpuARM_cmd))[0];
+								$nbcpu = trim(sshmanager::executeCmds($hostId, [$nbcpuARM_cmd])[0]);
 
 								$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-								$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+								$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								$cpufreq0 = sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0];
+								$cpufreq0 = sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0];
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1213,23 +1213,23 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+									$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 								}
 							}
 							elseif (preg_match("#piCorePlayer#", $uname)) {
 								$bitdistri = '32';
 								$ARMv = 'arm';
 								$namedistri_cmd = "uname -a 2>/dev/null | awk '{print $2,$3}'";
-								$namedistri = sshmanager::executeCmds($hostId, $namedistri_cmd)[0];
+								$namedistri = sshmanager::executeCmds($hostId, [$namedistri_cmd])[0];
 
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								$nbcpu = trim(sshmanager::executeCmds($hostId, $nbcpuARM_cmd)[0]);
+								$nbcpu = trim(sshmanager::executeCmds($hostId, [$nbcpuARM_cmd])[0]);
 
 								$hdd_cmd = "df -h 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
-								$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+								$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								$cpufreq0 = sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0];
+								$cpufreq0 = sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0];
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1240,36 +1240,36 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+									$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 								}
 							}
 							elseif (preg_match("#FreeBSD#", $uname)) {
 								$namedistri_cmd = "uname -a 2>/dev/null | awk '{ print $1,$3}'";
-								$namedistri = sshmanager::executeCmds($hostId, $namedistri_cmd)[0];
+								$namedistri = sshmanager::executeCmds($hostId, [$namedistri_cmd])[0];
 
 								$ARMv_cmd = "sysctl hw.machine | awk '{ print $2}'";
-								$ARMv = sshmanager::executeCmds($hostId, $ARMv_cmd)[0];
+								$ARMv = sshmanager::executeCmds($hostId, [$ARMv_cmd])[0];
 								if (!empty($ARMv)) {
 									$ARMv = trim($ARMv);
 								}
 
 								$loadavg_cmd = "uptime | awk '{print $8,$9,$10}'";
-								$loadav = sshmanager::executeCmds($hostId, $loadavg_cmd)[0];
+								$loadav = sshmanager::executeCmds($hostId, [$loadavg_cmd])[0];
 
 								$memory_cmd = "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'";
-								$memory = sshmanager::executeCmds($hostId, $memory_cmd)[0];
+								$memory = sshmanager::executeCmds($hostId, [$memory_cmd])[0];
 
 								$bitdistri_cmd = "sysctl kern.smp.maxcpus | awk '{ print $2}'";
-								$bitdistri = sshmanager::executeCmds($hostId, $bitdistri_cmd)[0];
+								$bitdistri = sshmanager::executeCmds($hostId, [$bitdistri_cmd])[0];
 
 								$nbcpuARM_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
-								$nbcpu = trim(sshmanager::executeCmds($hostId, $nbcpuARM_cmd)[0]);
+								$nbcpu = trim(sshmanager::executeCmds($hostId, [$nbcpuARM_cmd])[0]);
 
 								$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-								$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+								$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 								$cpufreq0ARM_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
-								$cpufreq0 = sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0];
+								$cpufreq0 = sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0];
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1280,7 +1280,7 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][BSD-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+									$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 								}
 							}
 							elseif (preg_match("#medion#", $uname)) {
@@ -1295,10 +1295,10 @@ class Monitoring extends eqLogic {
 								$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 								$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
 								
-								$namedistri = sshmanager::executeCmds($hostId, $namedistri_cmd)[0];
-								$VersionID = trim(sshmanager::executeCmds($hostId, $VersionID_cmd)[0]);
-								$bitdistri = sshmanager::executeCmds($hostId, $bitdistri_cmd)[0];
-								$hdd = sshmanager::executeCmds($hostId, $hdd_cmd)[0];
+								$namedistri = sshmanager::executeCmds($hostId, [$namedistri_cmd])[0];
+								$VersionID = trim(sshmanager::executeCmds($hostId, [$VersionID_cmd])[0]);
+								$bitdistri = sshmanager::executeCmds($hostId, [$bitdistri_cmd])[0];
+								$hdd = sshmanager::executeCmds($hostId, [$hdd_cmd])[0];
 
 								if (isset($namedistri) && isset($VersionID)) {
 									$namedistri = "Medion/Linux " . $VersionID . " (" . $namedistri . ")";
@@ -1306,13 +1306,13 @@ class Monitoring extends eqLogic {
 								}
 
 								$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
-								$nbcpu = trim(sshmanager::executeCmds($hostId, $nbcpuARM_cmd)[0]);
+								$nbcpu = trim(sshmanager::executeCmds($hostId, [$nbcpuARM_cmd])[0]);
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-								$cpufreq0 = sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0];						
+								$cpufreq0 = sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0];						
 								if ($cpufreq0 == '') {
 									$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-									$cpufreq0 = sshmanager::executeCmds($hostId, $cpufreq0ARM_cmd)[0];
+									$cpufreq0 = sshmanager::executeCmds($hostId, [$cpufreq0ARM_cmd])[0];
 								}
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
@@ -1324,7 +1324,7 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = sshmanager::executeCmds($hostId, $cputemp0_cmd)[0];
+									$cputemp0 = sshmanager::executeCmds($hostId, [$cputemp0_cmd])[0];
 								}
 							}
 						}
@@ -2187,7 +2187,7 @@ class Monitoring extends eqLogic {
 							case "reboot":
 								try {
 									$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null & /sbin/shutdown -r now >/dev/null";
-									sshmanager::executeCmds($hostId, $rebootcmd)[0];
+									sshmanager::executeCmds($hostId, [$rebootcmd])[0];
 								} catch (Exception $e) {
 									log::add('Monitoring', 'debug', '['. $equipement .'][SSH][SYNO-REBOOT] Exception [REBOOT] :: '. $e->getMessage());	
 								}
@@ -2197,7 +2197,7 @@ class Monitoring extends eqLogic {
 								try {
 									// $poweroffcmd = 'sudo /sbin/shutdown -P now >/dev/null & /sbin/shutdown -P now >/dev/null';
 									$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
-									sshmanager::executeCmds($hostId, $poweroffcmd)[0];
+									sshmanager::executeCmds($hostId, [$poweroffcmd])[0];
 								} catch (Exception $e) {
 									log::add('Monitoring', 'debug', '['. $equipement .'][SSH][SYNO-OFF] Exception [POWEROFF] :: '. $e->getMessage());
 								}
@@ -2212,7 +2212,7 @@ class Monitoring extends eqLogic {
 								try {
 									// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
 									$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
-									sshmanager::executeCmds($hostId, $rebootcmd)[0];
+									sshmanager::executeCmds($hostId, [$rebootcmd])[0];
 								} catch (Exception $e) {
 									log::add('Monitoring', 'debug', '['. $equipement .'][SSH][REBOOT] Exception [REBOOT] :: '. $e->getMessage());	
 								}
@@ -2222,7 +2222,7 @@ class Monitoring extends eqLogic {
 								try {
 									// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
 									$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
-									sshmanager::executeCmds($hostId, $poweroffcmd)[0];
+									sshmanager::executeCmds($hostId, [$poweroffcmd])[0];
 								} catch (Exception $e) {
 									log::add('Monitoring', 'debug', '['. $equipement .'][SSH][POWEROFF] Exception [POWEROFF] :: '. $e->getMessage());	
 								}
