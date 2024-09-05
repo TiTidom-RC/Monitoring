@@ -19,8 +19,30 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function Monitoring_install() {
+    // Get Plugin Version from plugin_info/info.json
     $pluginVersion = Monitoring::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
+
+    // Check Version of the plugin
+    if (version_compare(jeedom::version(), '4.5', '<')) {
+        $updateConf = update::byLogicalId('Monitoring');
+        if (is_object($updateConf)) {
+            $updateConf->setConfiguration('doNotUpdate', '1');
+            $updateConf->save();
+        }
+
+        message::removeAll('Monitoring', 'update');
+        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: Version :: ' . $pluginVersion, null, 'update');
+        event::add('jeedom::alert', array(
+            'level' => 'danger',
+            'message' => __('[WARNING] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.5". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.\n En attendant, les mises à jour de Monitoring sont désactivées.', __FILE__),
+        ));
+        message::add('Monitoring', 'La version de Jeedom n\'est pas compatible avec le plugin Monitoring. Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.', null, 'update');
+    }
+    else {
+        message::removeAll('Monitoring', 'update');
+        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: Version :: ' . $pluginVersion, null, 'update');
+    }
 
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
     if (!is_object($cron)) {
