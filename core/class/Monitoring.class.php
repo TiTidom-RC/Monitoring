@@ -894,7 +894,7 @@ class Monitoring extends eqLogic {
 
 			// Configuration distante
 			if (($confLocalOrRemote == 'distant') && $this->getIsEnable()) {
-				$cnx_ssh = '';
+				$cnx_ssh = 'OK';
 				$hostId = $this->getConfiguration('SSHHostId');
 
 				if ($this->getConfiguration('synology') == '1') {
