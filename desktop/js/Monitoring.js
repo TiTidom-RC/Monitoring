@@ -160,7 +160,7 @@ $(".eqLogicAttr[data-l2key='localoudistant']").on('change', function () {
 });
 
 function printEqLogic(_eqLogic) {
-	buildSelectHost(_eqLogic.configuration.host_id);
+	buildSelectHost(_eqLogic.configuration.SSHHostId);
 }
 
 function toggleSSHPassword() {
