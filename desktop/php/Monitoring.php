@@ -161,7 +161,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         </div>
                                     </div>
                                 </div>
-                                <br />
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">{{Local ou Distant ?}}</label>
                                     <div class="col-md-6">
