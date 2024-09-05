@@ -69,6 +69,8 @@ function Monitoring_update() {
         if (is_object($updateConf)) {
             $updateConf->setConfiguration('doNotUpdate', 1);
             $updateConf->save();
+        } else {
+            log::add('Monitoring', 'debug', '[UPDATE_CHECK] Aucune configuration de mise à jour trouvée.');
         }
 
         message::removeAll('Monitoring');
