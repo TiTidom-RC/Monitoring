@@ -6,6 +6,22 @@ if (!isConnect('admin')) {
 $plugin = plugin::byId('Monitoring');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
+
+if (version_compare(jeedom::version(), '4.4', '<')) {
+    $updateMon = update::byLogicalId('Monitoring');
+    if (is_object($updateMon)) {
+        $_doNotUpdate = $updateMon->getConfiguration('doNotUpdate', 0);
+        if ($_doNotUpdate == 0) {
+            event::add('jeedom::alert', array(
+                'level' => 'danger',
+                'title' => __('[Plugin :: Monitoring] Attention - Version Jeedom !', __FILE__),
+                'message' => __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__),
+            ));
+            log::add('Monitoring', 'warning', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités. En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__));
+        }
+    }
+}
+
 ?>
 
 <div class="row row-overflow">
@@ -179,9 +195,19 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Port SSH}}</label>
+                                        <label class="col-md-4 control-label">{{Port SSH}}
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Port SSH (par défaut : 22)}}"></i></sup>
+                                        </label>
                                         <div class="col-md-6">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="portssh" type="text" placeholder="{{Saisir le port SSH}}" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">{{Timeout SSH}}
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration de la connexion SSH (par défaut : 30s)}}"></i></sup>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="timeoutssh" type="text" placeholder="{{Saisir le timeout SSH}}" />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -194,9 +220,9 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                         <div class="form-group">
                                             <label class="col-md-4 control-label">{{Mot de passe}}</label>
                                             <div class="col-md-6 input-group">
-                                                <input type="text" autocomplete="ssh-password" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
+                                                <input type="password" id="ssh-password" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
                                                 <span class="input-group-btn">
-											        <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+											        <a class="btn btn-default form-control roundedRight" onclick="toggleSSHPassword()"><i id="btnToggleSSHPasswordIcon" class="fas fa-eye"></i></a>
 										        </span>
                                             </div>
                                         </div>
@@ -207,9 +233,9 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                                 <sup><i class="fas fa-question-circle tooltips" title="{{Optionnel : Phrase secrète pour la clé SSH}}"></i></sup>
                                             </label>
                                             <div class="col-md-6 input-group">
-                                                <input type="text" autocomplete="ssh-passphrase" class="eqLogicAttr form-control inputPassword roundedLeft" data-l1key="configuration" data-l2key="ssh-passphrase" placeholder="{{Saisir la passphrase SSH}}" />
+                                                <input type="password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="ssh-passphrase" placeholder="{{Saisir la passphrase SSH}}" />
                                                 <span class="input-group-btn">
-											        <a class="btn btn-default form-control bt_showPass roundedRight"><i class="fas fa-eye"></i></a>
+											        <a class="btn btn-default form-control roundedRight" onclick="toggleSSHPassphrase()"><i id="btnToggleSSHPassphraseIcon" class="fas fa-eye"></i></a>
 										        </span>
                                             </div>
                                         </div>    
@@ -228,7 +254,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                     <div class="col-xs-6">
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend>{{NAS Synology}}</legend>
+                                <legend>{{NAS Synology}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Activer}}</label>
                                     <div class="col-md-8">
@@ -281,7 +307,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
 					        </fieldset>
                             <fieldset>
-                                <legend>{{Linux / Proxmox}}</legend>
+                                <legend>{{Linux / Proxmox}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Temp (Alt)}}</label>
                                     <div class="col-md-8">
@@ -293,6 +319,33 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                     <div class="col-md-6">
                                         <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="linux_temp_cmd" type="text" placeholder="{{timeout 3 cat /sys/devices/virtual/thermal/thermal_zone1/temp}}" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>{{Auto-Actualisation (Cron)}} :</legend>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" >{{Activer}}
+                                        <sup><i class="fas fa-question-circle tooltips" title="{{Si cette option n'est pas cochée, le cron par défaut du plugin sera utilisé}}"></i></sup>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="pull_use_custom" />
+                                        <span style="font-size: 85%;">({{A cocher pour spécifier une auto-actualisation des commandes personnalisée}})</span>
+                                    </div>
+                                </div>
+                                <div class="form-group pull_class" style="display:none;">
+                                    <label class="col-md-2 control-label" >{{Cron Personnalisé}}
+                                        <sup><i class="fas fa-question-circle tooltips" title="{{Fréquence de rafraîchissement des commandes de l'équipement}}"></i></sup>
+                                    </label>
+                                    <div class="col-sm-6">
+		                                <div class="input-group">
+                                            <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="pull_cron" placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}">
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">
+                                                    <i class="fas fa-question-circle"></i>
+                                                </a>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </fieldset>

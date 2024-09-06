@@ -34,7 +34,7 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
 		tr += '<div class="input-group">'
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
@@ -45,7 +45,12 @@ function addCmdToTable(_cmd) {
 	else
 	{
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="margin: 1px auto;">';
+		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom de la commande}}" style="margin: 1px auto;">';
+	}
+	if (_cmd.logicalId == 'cron_status' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
+		tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">';
+  		tr += '<option value="">{{Aucune}}</option>';
+		tr += '</select>';
 	}
 	tr += '</td>';
 	tr += '<td>';
@@ -63,16 +68,16 @@ function addCmdToTable(_cmd) {
 	tr += '</td>';
 	
 	tr += '<td>';
-	if (_cmd.logicalId == 'reboot' || _cmd.logicalId == 'poweroff' || _cmd.logicalId == 'namedistri' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'Mem' || _cmd.logicalId == 'Mem_swap' || _cmd.logicalId == 'ethernet0' || _cmd.logicalId == 'hddtotal' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddtotalv2' || _cmd.logicalId == 'hddtotalusb' || _cmd.logicalId == 'hddtotalesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (_cmd.logicalId == 'reboot' || _cmd.logicalId == 'poweroff' || _cmd.logicalId == 'namedistri' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'Mem' || _cmd.logicalId == 'Mem_swap' || _cmd.logicalId == 'ethernet0' || _cmd.logicalId == 'hddtotal' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddtotalv2' || _cmd.logicalId == 'hddtotalusb' || _cmd.logicalId == 'hddtotalesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_status' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
 		tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked/> {{Afficher}}<br/></span>';
 	}
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'loadavg5mn' || _cmd.logicalId == 'loadavg15mn' || _cmd.logicalId == 'Mempourc' || _cmd.logicalId == 'Swappourc' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddpourcused' || _cmd.logicalId == 'hddpourcusedv2' || _cmd.logicalId == 'hddpourcusedusb' || _cmd.logicalId == 'hddpourcusedesata') {
+	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'loadavg5mn' || _cmd.logicalId == 'loadavg15mn' || _cmd.logicalId == 'Mempourc' || _cmd.logicalId == 'Swappourc' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddpourcused' || _cmd.logicalId == 'hddpourcusedv2' || _cmd.logicalId == 'hddpourcusedusb' || _cmd.logicalId == 'hddpourcusedesata' || _cmd.logicalId == 'cron_status') {
 		tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isHistorized"/> {{Historiser}}</span>';
 	}
 	tr += '</td>';
 
 	tr += '<td>';
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_status') {
 		tr += '<span class="type" type="info"></span>';
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	}
@@ -87,13 +92,27 @@ function addCmdToTable(_cmd) {
 		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
 	}
-	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
+	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i>';
 	tr += '</td>';
 	
 	tr += '</tr>';
 	$('#table_cmd tbody').append(tr);
-	$('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
-	jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
+  	var tr = $('#table_cmd tbody tr').last();
+  	jeedom.eqLogic.buildSelectCmd({
+    	id: $('.eqLogicAttr[data-l1key=id]').value(),
+    	filter: { type: 'info' },
+    	error: function (error) {
+      		$('#div_alert').showAlert({ message: error.message, level: 'danger' })
+    	},
+    	success: function (result) {
+      		tr.find('.cmdAttr[data-l1key=value]').append(result)
+      		tr.setValues(_cmd, '.cmdAttr')
+      		jeedom.cmd.changeType(tr, init(_cmd.subType))
+    	}
+  	});
+	// $('#table_cmd tbody').append(tr);
+	// $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
+	// jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
 
 $('.pluginAction[data-action=openLocation]').on('click', function () {
@@ -124,6 +143,14 @@ $(".eqLogicAttr[data-l2key='linux_use_temp_cmd']").on('change', function () {
 	}
 });
 
+$(".eqLogicAttr[data-l2key='pull_use_custom']").on('change', function () {
+	if(this.checked){
+	  $(".pull_class").show();
+	} else {
+	  $(".pull_class").hide();
+	}
+});
+
 $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 	if (this.selectedIndex == 1) {
 	  $(".distant").show();
@@ -137,3 +164,18 @@ $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 		$(".distant").hide();
 	}
 });
+
+function toggleSSHPassword() {
+	var sshPasswordIcon = document.getElementById("btnToggleSSHPasswordIcon");
+	var sshPasswordField = document.getElementById("ssh-password");
+	sshPasswordIcon.className = sshPasswordField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
+	sshPasswordField.type = sshPasswordField.type === "password" ? "text" : "password";
+	
+}
+
+function toggleSSHPassphrase() {
+	var sshPassphraseIcon = document.getElementById("btnToggleSSHPassphraseIcon");
+	var sshPassphraseField = document.getElementById("ssh-passphrase");
+	sshPassphraseIcon.className = sshPassphraseField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
+	sshPassphraseField.type = sshPassphraseField.type === "password" ? "text" : "password";
+}
