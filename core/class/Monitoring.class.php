@@ -942,7 +942,7 @@ class Monitoring extends eqLogic {
 				// Uptime Command
 				try {
 					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-					$uptime = sshmanager::executeCmds($hostId, [$uptime_cmd]);
+					$uptime = sshmanager::executeCmds($hostId, [$uptime_cmd])[0][0];
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime :: >' . $uptime . '<');
 				} catch (Exception $e) {
 					$uptime = '';
