@@ -35,4 +35,4 @@ try {
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }
-?>
+
