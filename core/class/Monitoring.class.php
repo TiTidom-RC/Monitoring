@@ -18,7 +18,7 @@
 
 /* * *************************** Requires ********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
-require_once __DIR__ . '/../../vendor/autoload.php';
+// require_once __DIR__ . '/../../vendor/autoload.php';
 
 /* use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
