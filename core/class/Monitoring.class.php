@@ -907,7 +907,7 @@ class Monitoring extends eqLogic {
 				// Début de la connexion SSH
 				try {
 					$sshconnection = new SSH2($ip, $port, $timeout);
-					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout . ') :: OK');
+					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
 				} catch (Exception $e) {
 					log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH :: '. $e->getMessage());
 					$cnx_ssh = 'KO';
@@ -938,10 +938,32 @@ class Monitoring extends eqLogic {
 						$cnx_ssh = 'KO';
 					}
 
+					try {
+						if ($sshconnection->isConnected()) {
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (isConnected) :: OK');
+							if ($sshconnection->isAuthenticated()) {
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (isAuthenticated) :: OK');
+							}
+							else {
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH (isAuthenticated) :: KO');
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH LastError :: ' . $sshconnection->getLastError());
+								$cnx_ssh = 'KO';
+							}
+						} else {
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH (isConnected) :: KO');
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH LastError :: ' . $sshconnection->getLastError());
+							$cnx_ssh = 'KO';
+						}
+					} catch (Exception $e) {
+						log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH :: '. $e->getMessage());
+						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH Log :: ' . $sshconnection->getLog());
+						$cnx_ssh = 'KO';
+					}
+
 					// Fin de la connexion SSH
 					if ($cnx_ssh != 'KO') {
 						$cnx_ssh = 'OK';
-						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Authentification SSH :: OK');
+						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (cnx_ssh) :: OK');
 
 						if ($this->getConfiguration('synology') == '1') {
 							if ($this->getConfiguration('syno_alt_name') == '1') {
@@ -982,6 +1004,7 @@ class Monitoring extends eqLogic {
 						} catch (Exception $e) {
 							$ARMv = '';
 							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ARMv Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception LastError :: ' . $sshconnection->getLastError());
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception Log :: ' . $sshconnection->getLog());
 						}
 
@@ -995,6 +1018,7 @@ class Monitoring extends eqLogic {
 						} catch (Exception $e) {
 							$uptime = '';
 							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Uptime Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception LastError :: ' . $sshconnection->getLastError());
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception Log :: ' . $sshconnection->getLog());
 						}
 						
@@ -1020,6 +1044,7 @@ class Monitoring extends eqLogic {
 							} catch (Exception $e) {
 								$perso1 = '';
 								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso1 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exception LastError :: ' . $sshconnection->getLastError());
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exception Log :: ' . $sshconnection->getLog());
 							}
 						}
@@ -1031,6 +1056,7 @@ class Monitoring extends eqLogic {
 							} catch (Exception $e) {
 								$perso2 = '';
 								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso2 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exception LastError :: ' . $sshconnection->getLastError());
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exception Log :: ' . $sshconnection->getLog());
 							}
 						}
