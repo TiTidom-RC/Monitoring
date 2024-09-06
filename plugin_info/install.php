@@ -132,13 +132,16 @@ function Monitoring_update() {
             __DIR__ . '/../desktop/modal',
             __DIR__ . '/../mobile',
             __DIR__ . '/../core/img',
-            __DIR__ . '/../resources'
+            __DIR__ . '/../resources',
+            __DIR__ . '/../vendor',
         );
         
         $filesToDelete = array(
             __DIR__ . '/../plugin_info/packages.json',
             __DIR__ . '/../desktop/js/panel.js',
             __DIR__ . '/../desktop/php/panel.php',
+            __DIR__ . '/../composer.json',
+            __DIR__ . '/../composer.lock',
         );
 
         foreach ($dirToDelete as $dir) {
