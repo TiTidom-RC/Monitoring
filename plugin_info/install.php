@@ -64,10 +64,11 @@ function Monitoring_update() {
 
     // Check Version of the plugin
     log::add('Monitoring', 'debug', '[UPDATE_CHECK] Vérification des versions :: ' . jeedom::version() . ' vs ' . '4.4' . ' :: ' . version_compare(jeedom::version(), '4.4'));
-    if (version_compare(jeedom::version(), '4.4') == -1) {
+    if (version_compare(jeedom::version(), '4.5', '<')) {
         $updateConf = update::byLogicalId('Monitoring');
         if (is_object($updateConf)) {
-            $updateConf->setConfiguration('doNotUpdate', "1");
+            log::add('Monitoring', 'debug', '[UPDATE_CHECK] Configuration de mise à jour trouvée :: ' . $updateConf->getConfiguration('doNotUpdate'));
+            $updateConf->setConfiguration('doNotUpdate', true);
             $updateConf->save();
             $updateConf->doUpdate();
         } else {
