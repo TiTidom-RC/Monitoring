@@ -18,40 +18,56 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 include_file('core', 'authentification', 'php');
 if (!isConnect()) {
-  include_file('desktop', '404', 'php');
-  die();
+    include_file('desktop', '404', 'php');
+    die();
+}
+
+if (version_compare(jeedom::version(), '4.5', '<')) {
+    $updateMon = update::byLogicalId('Monitoring');
+    if (is_object($updateMon)) {
+        $_doNotUpdate = $updateMon->getConfiguration('doNotUpdate', 0);
+        if ($_doNotUpdate == 0) {
+            event::add('jeedom::alert', array(
+                'level' => 'danger',
+                'page' => 'configuration',
+                'title' => __('[Plugin :: Monitoring] Attention - Version Jeedom !', __FILE__),
+                'message' => __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__),
+            ));
+            log::add('Monitoring', 'warning', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités. En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__));
+        }
+    }
 }
 ?>
 
 <form class="form-horizontal">
-  <fieldset>
-    <div>
-      <legend><i class="fas fa-info"></i> {{Plugin}}</legend>
-      <div class="form-group">
-        <label class="col-md-4 control-label">{{Version}}
-          <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin à indiquer sur Community}}"></i></sup>
-        </label>
-        <div class="col-md-1">
-          <input class="configKey form-control" data-l1key="pluginVersion" readonly />
+    <fieldset>
+        <div>
+            <legend><i class="fas fa-info"></i> {{Plugin}}</legend>
+            <div class="form-group">
+                <label class="col-md-4 control-label">{{Version}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin à indiquer sur Community}}"></i></sup>
+                </label>
+                <div class="col-md-1">
+                    <input class="configKey form-control" data-l1key="pluginVersion" readonly />
+                </div>
+            </div>
+            <legend><i class="fas fa-tasks"></i> {{Mises à jour Automatiques}} :</legend>
+            <div class="form-group">
+                <label class="col-md-4 control-label">{{Equipement Local (1 min)}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local}}"></i></sup>
+                </label>
+                <div class="col-md-4">
+                    <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label">{{Equipements Distants (15 min)}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les 15 minutes) des équipements distants}}"></i></sup>
+                </label>
+                <div class="col-md-4">
+                    <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />
+                </div>
+            </div>
         </div>
-      </div>
-      <legend><i class="fas fa-tasks"></i> {{Mises à jour Automatiques}} :</legend>
-      <div class="form-group">
-        <label class="col-md-4 control-label">{{Equipement Local (1 min)}}
-          <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local}}"></i></sup>
-        </label>
-        <div class="col-md-4">
-          <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" />
-        </div>
-      </div>  
-      <div class="form-group">
-        <label class="col-md-4 control-label">{{Equipements Distants (15 min)}}
-          <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les 15 minutes) des équipements distants}}"></i></sup>
-        </label>
-        <div class="col-md-4">
-          <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />
-        </div>
-      </div>
-    </div>
-  </fieldset>
+    </fieldset>
 </form>
