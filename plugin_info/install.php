@@ -65,18 +65,19 @@ function Monitoring_update() {
     // Check Version of the plugin
     log::add('Monitoring', 'debug', '[UPDATE_CHECK] Vérification des versions :: ' . jeedom::version() . ' vs ' . '4.4' . ' :: ' . version_compare(jeedom::version(), '4.4'));
     if (version_compare(jeedom::version(), '4.5', '<')) {
-        message::removeAll('Monitoring');
-        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
+        message::removeAll('Monitoring', 'update');
+        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update', 'update');
         event::add('jeedom::alert', array(
             'level' => 'danger',
-            'title' => __('[Monitoring] Attention !', __FILE__),
+            'title' => __('[Plugin :: Monitoring] Attention - Version Jeedom !', __FILE__),
             'message' => __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br /><br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__),
         ));
-        message::add('Monitoring', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br /><br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__));
+        message::add('Monitoring', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br /><br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__), 'update', 'update');
     }
     else {
-        message::removeAll('Monitoring');
-        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
+        // message::removeAll('Monitoring');
+        message::removeAll('Monitoring', 'update');
+        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update', 'update');
     }
 
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
