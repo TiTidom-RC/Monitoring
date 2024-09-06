@@ -64,7 +64,7 @@ function Monitoring_update() {
 
     // Check Version of the plugin
     log::add('Monitoring', 'debug', '[UPDATE_CHECK] Vérification des versions :: ' . jeedom::version() . ' vs ' . '4.4' . ' :: ' . version_compare(jeedom::version(), '4.4'));
-    if (version_compare(jeedom::version(), '4.4', '<')) {
+    if (version_compare(jeedom::version(), '4.5', '<')) {
         message::removeAll('Monitoring');
         message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
         event::add('jeedom::alert', array(

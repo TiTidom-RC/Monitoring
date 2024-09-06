@@ -22,7 +22,7 @@ if (!isConnect()) {
   die();
 }
 
-if (version_compare(jeedom::version(), '4.4', '<')) {
+if (version_compare(jeedom::version(), '4.5', '<')) {
   $updateMon = update::byLogicalId('Monitoring');
   if (is_object($updateMon)) {
       $_doNotUpdate = $updateMon->getConfiguration('doNotUpdate', 0);
