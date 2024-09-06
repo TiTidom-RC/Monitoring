@@ -29,7 +29,6 @@ if (version_compare(jeedom::version(), '4.5', '<')) {
         if ($_doNotUpdate == 0) {
             event::add('jeedom::alert', array(
                 'level' => 'danger',
-                'page' => 'configuration',
                 'title' => __('[Plugin :: Monitoring] Attention - Version Jeedom !', __FILE__),
                 'message' => __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__),
             ));
