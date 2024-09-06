@@ -70,7 +70,7 @@ function Monitoring_update() {
             log::add('Monitoring', 'debug', '[UPDATE_CHECK] Configuration de mise à jour trouvée :: ' . $updateConf->getConfiguration('doNotUpdate'));
             $updateConf->setConfiguration('doNotUpdate', true);
             $updateConf->save();
-            $updateConf->doUpdate();
+            header("Refresh:0; url=index.php?v=d&p=update&saveSuccessFull=1");
         } else {
             log::add('Monitoring', 'debug', '[UPDATE_CHECK] Aucune configuration de mise à jour trouvée.');
         }
