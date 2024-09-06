@@ -18,14 +18,6 @@
 
 /* * *************************** Requires ********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
-// require_once __DIR__ . '/../../vendor/autoload.php';
-
-/* use phpseclib3\Net\SSH2;
-use phpseclib3\Crypt\PublicKeyLoader;
-
-if (!defined('NET_SSH2_LOGGING')) {
-	define('NET_SSH2_LOGGING', 2);
-} */
 
 class Monitoring extends eqLogic {
 	public function decrypt() {
@@ -831,8 +823,7 @@ class Monitoring extends eqLogic {
 	}
 
 
-	public static function getPluginVersion()
-    {
+	public static function getPluginVersion() {
         $pluginVersion = '0.0.0';
 		try {
 			if (!file_exists(dirname(__FILE__) . '/../../plugin_info/info.json')) {
@@ -879,16 +870,6 @@ class Monitoring extends eqLogic {
 			$ethernet0_ip = '';
 
 			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));			
-
-			/* if ($this->getConfiguration('cartereseau') == 'netautre') {
-				$cartereseau = $this->getConfiguration('cartereseauautre');
-			} elseif ($this->getConfiguration('cartereseau') == 'netauto') {
-				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1 | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-				// $cartereseau = "$(ip -br -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $1 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-				$cartereseau = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-			} else {
-				$cartereseau = $this->getConfiguration('cartereseau');
-			} */
 
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 
