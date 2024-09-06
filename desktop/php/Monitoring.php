@@ -6,6 +6,22 @@ if (!isConnect('admin')) {
 $plugin = plugin::byId('Monitoring');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
+
+if (version_compare(jeedom::version(), '4.5', '<')) {
+    $updateMon = update::byLogicalId('Monitoring');
+    if (is_object($updateMon)) {
+        $_doNotUpdate = $updateMon->getConfiguration('doNotUpdate', 0);
+        if ($_doNotUpdate == 0) {
+            event::add('jeedom::alert', array(
+                'level' => 'danger',
+                'title' => __('[Plugin :: Monitoring] Attention - Version Jeedom !', __FILE__),
+                'message' => __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__),
+            ));
+            log::add('Monitoring', 'warning', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités. En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__));
+        }
+    }
+}
+
 ?>
 
 <div class="row row-overflow">
