@@ -928,6 +928,10 @@ class Monitoring extends eqLogic {
 						$ARMv = trim($ARMv);
 					}
 					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv :: >' . $ARMv . '<');
+				} catch (SSHConnectException $e) {
+					$ARMv = '';
+					log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ARMv SSHConnectException :: ' . $e->getMessage());
+					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv SSHConnexionException Log :: ' . $e->getLog());
 				} catch (Exception $e) {
 					$ARMv = '';
 					log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ARMv Exception :: ' . $e->getMessage());
