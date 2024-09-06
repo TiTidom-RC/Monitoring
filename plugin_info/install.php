@@ -64,23 +64,16 @@ function Monitoring_update() {
 
     // Check Version of the plugin
     log::add('Monitoring', 'debug', '[UPDATE_CHECK] Vérification des versions :: ' . jeedom::version() . ' vs ' . '4.4' . ' :: ' . version_compare(jeedom::version(), '4.4'));
-    if (version_compare(jeedom::version(), '4.4') == -1) {
-        $updateConf = update::byLogicalId('Monitoring');
-        if (is_object($updateConf)) {
-            $updateConf->setConfiguration('doNotUpdate', "1");
-            $updateConf->save();
-            $updateConf->doUpdate();
-        } else {
-            log::add('Monitoring', 'debug', '[UPDATE_CHECK] Aucune configuration de mise à jour trouvée.');
-        }
-
+    if (version_compare(jeedom::version(), '4.4', '<')) {
         message::removeAll('Monitoring');
         message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
         event::add('jeedom::alert', array(
             'level' => 'danger',
-            'message' => __('[WARNING] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br />En attendant, les mises à jour de Monitoring sont désactivées.', __FILE__),
+            'title' => __('[Plugin :: Monitoring] Attention - Version Jeedom !', __FILE__),
+            'message' => __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__),
         ));
-        message::add('Monitoring', 'La version de Jeedom n\'est pas compatible avec le plugin Monitoring. Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.', 'update');
+        // message::add('Monitoring', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br /><br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__), 'update');
+        log::add('Monitoring', 'warning', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités. En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__));
     }
     else {
         message::removeAll('Monitoring');
