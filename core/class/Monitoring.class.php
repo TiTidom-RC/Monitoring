@@ -944,7 +944,9 @@ class Monitoring extends eqLogic {
 					}
 					
 					$namedistri = sshmanager::executeCmds($hostId, $namedistri_cmd);
-					$bitdistri = sshmanager::executeCmds($hostId, $bitdistri_cmd);
+					if (!empty($bitdistri_cmd)) {
+						$bitdistri = sshmanager::executeCmds($hostId, $bitdistri_cmd);
+					}
 					$VersionID = trim(sshmanager::executeCmds($hostId, $VersionID_cmd));
 					
 					$loadav = sshmanager::executeCmds($hostId, $loadavg_cmd);
