@@ -7,7 +7,7 @@ $plugin = plugin::byId('Monitoring');
 sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
 
-if (version_compare(jeedom::version(), '4.6', '<')) {
+if (version_compare(jeedom::version(), '4.4', '<')) {
     $updateMon = update::byLogicalId('Monitoring');
     if (is_object($updateMon)) {
         $_doNotUpdate = $updateMon->getConfiguration('doNotUpdate', 0);
