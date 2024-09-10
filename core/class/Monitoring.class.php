@@ -1204,7 +1204,7 @@ class Monitoring extends eqLogic {
 								$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
 								$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
 							}
-							$cpufreq=preg_replace("/[^0-9.]/","",$cpufreq);
+							$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1618,7 +1618,7 @@ class Monitoring extends eqLogic {
 						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
 						$cpufreq = exec($cpufreqVMbis_cmd);
 					}
-					$cpufreq = preg_replace("/[^0-9.]/","",$cpufreq);
+					$cpufreq = preg_replace("/[^0-9.,]/","",$cpufreq);
 					
 					$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 					if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
