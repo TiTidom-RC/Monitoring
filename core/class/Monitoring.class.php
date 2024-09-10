@@ -1182,7 +1182,7 @@ class Monitoring extends eqLogic {
 								$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'"; // OK pour LXC Linux/Ubuntu
 								$nbcpu = $sshconnection->exec($nbcpuVMbis_cmd);
 							}
-							$nbcpu = preg_replace("/[^0-9]/","",$nbcpu);
+							$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
@@ -1601,7 +1601,7 @@ class Monitoring extends eqLogic {
 						$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $NF }'"; // OK pour LXC Linux/Ubuntu
 						$nbcpu = exec($nbcpuVMbis_cmd);
 					}
-					$nbcpu = preg_replace("/[^0-9]/","",$nbcpu);
+					$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
 					
 					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
 					$cpufreq = exec($cpufreqVM_cmd);
@@ -1618,7 +1618,7 @@ class Monitoring extends eqLogic {
 						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
 						$cpufreq = exec($cpufreqVMbis_cmd);
 					}
-					$cpufreq = preg_replace("/[^0-9.,]/","",$cpufreq);
+					$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
 					
 					$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 					if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1691,7 +1691,7 @@ class Monitoring extends eqLogic {
 							if (isset($hdddatav2[0]) && isset($hdddatav2[1]) && isset($hdddatav2[2])) {
 								$hddtotalv2 = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatav2[0]);
 								$hddusedv2 = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatav2[1]);
-								$hddusedv2_pourc = preg_replace("/[^0-9.]/","",$hdddatav2[2]);
+								$hddusedv2_pourc = preg_replace("/[^0-9.]/", "", $hdddatav2[2]);
 								$hddusedv2_pourc = trim($hddusedv2_pourc);
 							} else {
 								$hddtotalv2 = '';
@@ -1708,7 +1708,7 @@ class Monitoring extends eqLogic {
 							if (isset($hdddatausb[0]) && isset($hdddatausb[1]) && isset($hdddatausb[2])) {
 								$hddtotalusb = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatausb[0]);
 								$hddusedusb = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddatausb[1]);
-								$hddusedusb_pourc = preg_replace("/[^0-9.]/","",$hdddatausb[2]);
+								$hddusedusb_pourc = preg_replace("/[^0-9.]/", "", $hdddatausb[2]);
 								$hddusedusb_pourc = trim($hddusedusb_pourc);
 							} else {
 								$hddtotalusb = '';
@@ -1725,7 +1725,7 @@ class Monitoring extends eqLogic {
 							if (isset($hdddataesata[0]) && isset($hdddataesata[1]) && isset($hdddataesata[2])) {
 								$hddtotalesata = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddataesata[0]);
 								$hddusedesata = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddataesata[1]);
-								$hddusedesata_pourc = preg_replace("/[^0-9.]/","",$hdddataesata[2]);
+								$hddusedesata_pourc = preg_replace("/[^0-9.]/", "", $hdddataesata[2]);
 								$hddusedesata_pourc = trim($hddusedesata_pourc);
 							} else {
 								$hddtotalesata = '';
@@ -1913,7 +1913,7 @@ class Monitoring extends eqLogic {
 						if (isset($hdddata[0]) && isset($hdddata[1]) && isset($hdddata[2])) {
 							$hddtotal = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddata[0]);
 							$hddused = str_replace(array("K","M","G","T"),array(" Ko"," Mo"," Go"," To"), $hdddata[1]);
-							$hddused_pourc = preg_replace("/[^0-9.]/","",$hdddata[2]);
+							$hddused_pourc = preg_replace("/[^0-9.]/", "", $hdddata[2]);
 							$hddused_pourc = trim($hddused_pourc);
 						}
 					}
