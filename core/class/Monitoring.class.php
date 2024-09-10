@@ -442,7 +442,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('binary');
 			$MonitoringCmd->setIsVisible(1);
-			$MonitoringCmd->setIsHistorized(1);
+			$MonitoringCmd->setIsHistorized(0);
 			$MonitoringCmd->save();
 		}
 		$cron_status_cmd = $MonitoringCmd->getId();
