@@ -48,7 +48,7 @@ class Monitoring extends eqLogic {
 		} else {
 			$_isActive = config::byKey('active', $_plugin->getId(), 0);
 			if (!$_isActive) {
-				log::add('Monitoring', 'error', __('[DEP-INSTALL] Le plugin SSHManager n\'est pas activé', __FILE__));
+				log::add($_logName, 'error', __('[DEP-INSTALL] Le plugin SSHManager n\'est pas activé', __FILE__));
 				$_plugin->setIsEnable(1);
 				$_plugin->save();
 			}
@@ -57,8 +57,10 @@ class Monitoring extends eqLogic {
     }
 
 	public static function dependancy_info() {
-        $return = array();
-        $return['log'] = log::getPathToLog(__CLASS__ . '_dep');
+        $_logName = __CLASS__ . '_dep';
+
+		$return = array();
+        $return['log'] = log::getPathToLog($_logName);
         $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
         if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
             $return['state'] = 'in_progress';
@@ -66,15 +68,15 @@ class Monitoring extends eqLogic {
 			$_plugin = plugin::byId('sshmanager');
 			if (!is_object($_plugin)) {
 				$return['state'] = 'nok';
-				log::add('Monitoring', 'error', __('[DEP] Le plugin SSHManager n\'est pas installé', __FILE__));
+				log::add($_logName, 'error', __('[DEP-INFO] Le plugin SSHManager n\'est pas installé', __FILE__));
 			} else {
 				$_isActive = config::byKey('active', $_plugin->getId(), 0);
 				if (!$_isActive) {
 					$return['state'] = 'nok';
-					log::add('Monitoring', 'error', __('[DEP] Le plugin SSHManager n\'est pas activé', __FILE__));
+					log::add($_logName, 'error', __('[DEP-INFO] Le plugin SSHManager n\'est pas activé', __FILE__));
 				} else {
 					$return['state'] = 'ok';
-					log::add('Monitoring', 'info', __('[DEP] Vérification des dépendances :: OK', __FILE__));
+					log::add($_logName, 'info', __('[DEP-INFO] Vérification des dépendances :: OK', __FILE__));
 				}
 			}
 		}
