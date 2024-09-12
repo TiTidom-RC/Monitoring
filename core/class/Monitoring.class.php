@@ -36,20 +36,26 @@ class Monitoring extends eqLogic {
 
 	public static function dependancy_info() {
         $return = array();
-        $return['log'] = log::getPathToLog(__CLASS__ . '_update');
-        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
+        /* $return['log'] = log::getPathToLog(__CLASS__ . '_packages');
+        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency'; */
         if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
             $return['state'] = 'in_progress';
         } else {
-			if (!class_exists('sshmanager')) {
-				$return['launchable'] = 'nok';
-				$return['launchable_message'] = __('Le plugin SSH-Manager n\'est pas installé', __FILE__);
+			$_plugin = plugin::byId('sshmanager');
+			if (!is_object($_plugin)) {
+				$return['state'] = 'nok';
+				$return['message'] = __('Le plugin SSHManager n\'est pas installé', __FILE__);
 			} else {
-                $return['state'] = 'ok';
-            }
-        }
-        return $return;
-    }
+				if (!$_plugin->getIsEnabled()) {
+					$return['state'] = 'nok';
+					$return['message'] = __('Le plugin SSHManager n\'est pas activé', __FILE__);
+				} else {
+					$return['state'] = 'ok';
+				}
+			}
+		}
+		return $return;
+	}
 
 	public static function pull() {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
