@@ -41,7 +41,7 @@ class Monitoring extends eqLogic {
 
         $_plugin = plugin::byId('sshmanager');
 		log::add($_logName, 'info', __('[DEP] Installation des dépendances', __FILE__));
-		
+
 		if (!is_object($_plugin)) {
 			log::add($_logName, 'error', __('[DEP] Le plugin SSHManager n\'est pas installé', __FILE__));
 			// TODO Installation du plugin SSHManager
@@ -51,7 +51,6 @@ class Monitoring extends eqLogic {
 			if (!$_isActive) {
 				log::add($_logName, 'error', __('[DEP-INSTALL] Le plugin SSHManager n\'est pas activé', __FILE__));
 				$_plugin->setIsEnable(1);
-				$_plugin->save();
 			}
 		}
         return array('log' => log::getPathToLog(__CLASS__ . '_dep'));
