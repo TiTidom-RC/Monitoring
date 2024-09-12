@@ -35,7 +35,7 @@ class Monitoring extends eqLogic {
 	}
 
 	public static function dependancy_install() {
-		$_logName = __CLASS__ . '_dep';
+		$_logName = __CLASS__ . '_update';
 		
 		log::remove($_logName);
 
@@ -53,11 +53,11 @@ class Monitoring extends eqLogic {
 				$_plugin->setIsEnable(1);
 			}
 		}
-        return array('log' => log::getPathToLog(__CLASS__ . '_dep'));
+        return array('log' => log::getPathToLog(__CLASS__ . '_update'));
     }
 
 	public static function dependancy_info() {
-        $_logName = __CLASS__ . '_dep';
+        $_logName = __CLASS__ . '_update';
 
 		$return = array();
         $return['log'] = log::getPathToLog($_logName);
