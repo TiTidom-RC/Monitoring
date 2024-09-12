@@ -34,6 +34,23 @@ class Monitoring extends eqLogic {
 		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
 	}
 
+	public static function dependancy_info() {
+        $return = array();
+        $return['log'] = log::getPathToLog(__CLASS__ . '_update');
+        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
+        if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
+            $return['state'] = 'in_progress';
+        } else {
+			if (!class_exists('sshmanager')) {
+				$return['launchable'] = 'nok';
+				$return['launchable_message'] = __('Le plugin SSH-Manager n\'est pas installé', __FILE__);
+			} else {
+                $return['state'] = 'ok';
+            }
+        }
+        return $return;
+    }
+
 	public static function pull() {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
