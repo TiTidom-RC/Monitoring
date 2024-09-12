@@ -34,9 +34,31 @@ class Monitoring extends eqLogic {
 		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
 	}
 
+	public static function dependancy_install() {
+		$_logName = __CLASS__ . '_dep';
+		
+		log::remove($_logName);
+		log::add($_logName, 'info', __('[DEP] Installation des dépendances', __FILE__));
+
+        $_plugin = plugin::byId('sshmanager');
+		if (!is_object($_plugin)) {
+			log::add($_logName, 'error', __('[DEP] Le plugin SSHManager n\'est pas installé', __FILE__));
+			// TODO Installation du plugin SSHManager
+			
+		} else {
+			$_isActive = config::byKey('active', $_plugin->getId(), 0);
+			if (!$_isActive) {
+				log::add('Monitoring', 'error', __('[DEP-INSTALL] Le plugin SSHManager n\'est pas activé', __FILE__));
+				$_plugin->setIsEnable(1);
+				$_plugin->save();
+			}
+		}
+        return array('log' => log::getPathToLog(__CLASS__ . '_dep'));
+    }
+
 	public static function dependancy_info() {
         $return = array();
-        /* $return['log'] = log::getPathToLog(__CLASS__ . '_packages');
+        $return['log'] = log::getPathToLog(__CLASS__ . '_dep');
         $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency'; */
         if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
             $return['state'] = 'in_progress';
