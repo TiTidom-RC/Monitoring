@@ -59,7 +59,7 @@ class Monitoring extends eqLogic {
 	public static function dependancy_info() {
         $return = array();
         $return['log'] = log::getPathToLog(__CLASS__ . '_dep');
-        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency'; */
+        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
         if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
             $return['state'] = 'in_progress';
         } else {
