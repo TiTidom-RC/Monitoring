@@ -44,11 +44,11 @@ class Monitoring extends eqLogic {
 			$_plugin = plugin::byId('sshmanager');
 			if (!is_object($_plugin)) {
 				$return['state'] = 'nok';
-				$return['message'] = __('Le plugin SSHManager n\'est pas installé', __FILE__);
+				log::add('Monitoring', 'error', __('Le plugin SSHManager n\'est pas installé', __FILE__));
 			} else {
 				if (!$_plugin->getIsEnabled()) {
 					$return['state'] = 'nok';
-					$return['message'] = __('Le plugin SSHManager n\'est pas activé', __FILE__);
+					log:add('Monitoring', 'error', __('Le plugin SSHManager n\'est pas activé', __FILE__));
 				} else {
 					$return['state'] = 'ok';
 				}
