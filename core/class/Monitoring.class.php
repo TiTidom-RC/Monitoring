@@ -51,6 +51,7 @@ class Monitoring extends eqLogic {
 					log:add('Monitoring', 'error', __('Le plugin SSHManager n\'est pas activé', __FILE__));
 				} else {
 					$return['state'] = 'ok';
+					log::add('Monitoring', 'info', __('Vérification des dépendances :: OK', __FILE__));
 				}
 			}
 		}
