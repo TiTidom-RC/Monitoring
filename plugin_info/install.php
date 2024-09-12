@@ -132,7 +132,7 @@ function Monitoring_update() {
         );
         
         $filesToDelete = array(
-            /* __DIR__ . '/../plugin_info/packages.json', */
+            __DIR__ . '/../plugin_info/packages.json',
             __DIR__ . '/../desktop/js/panel.js',
             __DIR__ . '/../desktop/php/panel.php',
             __DIR__ . '/../composer.json',
