@@ -37,7 +37,7 @@ class Monitoring extends eqLogic {
 	public static function dependancy_install() {
 		$_logName = __CLASS__ . '_update';
 		
-		log::remove($_logName);
+		// log::remove($_logName);
 
         $_plugin = plugin::byId('sshmanager');
 		log::add($_logName, 'info', __('[DEP] Installation des dépendances', __FILE__));
