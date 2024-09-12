@@ -992,10 +992,10 @@ class Monitoring extends eqLogic {
 						// $ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 						
 						// ARMv Command
-						try {
-							// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-							// $ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
-							$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+						// $ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
+						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+						try {	
 							$ARMv = $sshconnection->exec($ARMv_cmd);
 							if (!empty($ARMv)) {
 								$ARMv = trim($ARMv);
@@ -1009,10 +1009,10 @@ class Monitoring extends eqLogic {
 						}
 
 						// Uptime Command
-						try {
-							// $uptime_cmd = "uptime";
-							// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
-							$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+						// $uptime_cmd = "uptime";
+						// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+						$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+						try {	
 							$uptime = $sshconnection->exec($uptime_cmd);
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime :: >' . $uptime . '<');
 						} catch (Exception $e) {
@@ -1022,23 +1022,81 @@ class Monitoring extends eqLogic {
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception Log :: ' . $sshconnection->getLog());
 						}
 						
-						$namedistri = $sshconnection->exec($namedistri_cmd);
-						$bitdistri = $sshconnection->exec($bitdistri_cmd);
-						$VersionID = trim($sshconnection->exec($VersionID_cmd));
+						try {
+							$namedistri = $sshconnection->exec($namedistri_cmd);
+						} catch (Exception $e) {
+							$namedistri = '';
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] namedistri Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception LastError :: ' . $sshconnection->getLastError());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception Log :: ' . $sshconnection->getLog());
+						}
 						
-						$loadav = $sshconnection->exec($loadavg_cmd);
-						$ReseauRXTX = $sshconnection->exec($ReseauRXTX_cmd);
-						$ReseauIP = $sshconnection->exec($ReseauIP_cmd);
+						try {
+							$bitdistri = $sshconnection->exec($bitdistri_cmd);
+						} catch (Exception $e) {
+							$bitdistri = '';
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] bitdistri Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception LastError :: ' . $sshconnection->getLastError());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception Log :: ' . $sshconnection->getLog());
+						}
+						
+						try {
+							$VersionID = trim($sshconnection->exec($VersionID_cmd));
+						} catch (Exception $e) {
+							$VersionID = '';
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] VersionID Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] VersionID Exception LastError :: ' . $sshconnection->getLastError());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] VersionID Exception Log :: ' . $sshconnection->getLog());
+						}
+						
+						try {
+							$loadav = $sshconnection->exec($loadavg_cmd);
+						} catch (Exception $e) {
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Load Average Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Load Average Exception LastError :: ' . $sshconnection->getLastError());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Load Average Exception Log :: ' . $sshconnection->getLog());
+						}
 
-						$memory = $sshconnection->exec($memory_cmd);
-						$swap = $sshconnection->exec($swap_cmd);
+						try {
+							$ReseauRXTX = $sshconnection->exec($ReseauRXTX_cmd);
+						} catch (Exception $e) {
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ReseauRXTX Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ReseauRXTX Exception LastError :: ' . $sshconnection->getLastError());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ReseauRXTX Exception Log :: ' . $sshconnection->getLog());
+							$ReseauRXTX = '';
+						}
+						try {
+							$ReseauIP = $sshconnection->exec($ReseauIP_cmd);
+						} catch (Exception $e) {
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ReseauIP Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ReseauIP Exception LastError :: ' . $sshconnection->getLastError());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ReseauIP Exception Log :: ' . $sshconnection->getLog());
+							$ReseauIP = '';
+						}
+
+						try {
+							$memory = $sshconnection->exec($memory_cmd);
+						} catch (Exception $e) {
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Memory Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Memory Exception LastError :: ' . $sshconnection->getLastError());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Memory Exception Log :: ' . $sshconnection->getLog());
+							$memory = '';
+						}
+						try {
+							$swap = $sshconnection->exec($swap_cmd);
+						} catch (Exception $e) {
+							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Swap Exception :: ' . $e->getMessage());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Swap Exception LastError :: ' . $sshconnection->getLastError());
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Swap Exception Log :: ' . $sshconnection->getLog());
+							$swap = '';
+						}
 
 						$perso1_cmd = $this->getConfiguration('perso1');
 						$perso2_cmd = $this->getConfiguration('perso2');
 
 						if ($perso1_cmd != '' /* && $Perso1Visible == 'OK' */) {
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Cmd :: ' . $perso1_cmd);
 							try {
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Cmd :: ' . $perso1_cmd);
 								$perso1 = $sshconnection->exec($perso1_cmd);
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exec :: ' . $perso1);
 							} catch (Exception $e) {
@@ -1049,8 +1107,8 @@ class Monitoring extends eqLogic {
 							}
 						}
 						if ($perso2_cmd != '' /* && $Perso2Visible == 'OK' */) {
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Cmd :: ' . $perso2_cmd);
 							try {
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Cmd :: ' . $perso2_cmd);
 								$perso2 = $sshconnection->exec($perso2_cmd);
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exec :: ' . $perso2);
 							} catch (Exception $e) {
@@ -1066,20 +1124,47 @@ class Monitoring extends eqLogic {
 							// $synoplatform = $sshconnection->exec($platform_cmd);
 
 							$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
-							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
+							try {
+								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
+							} catch (Exception $e) {
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
+								$nbcpu = '';
+							}
 
 							$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
-							$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
-							
+							try {
+								$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
+							} catch (Exception $e) {
+								$cpufreq0 = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+							}
+
 							$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
-							$hdd = $sshconnection->exec($hdd_cmd);
+							try {	
+								$hdd = $sshconnection->exec($hdd_cmd);
+							} catch (Exception $e) {
+								$hdd = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception Log :: ' . $sshconnection->getLog());
+							}
 
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
 							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 							$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
-							$versionsyno = $sshconnection->exec($versionsyno_cmd);
+							try {	
+								$versionsyno = $sshconnection->exec($versionsyno_cmd);
+							} catch (Exception $e) {
+								$versionsyno = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] versionsyno Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] versionsyno Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] versionsyno Exception Log :: ' . $sshconnection->getLog());
+							}
 
 							if ($this->getconfiguration('syno_use_temp_path')) {
 								$cputemp0_cmd = $this->getconfiguration('syno_temp_path');
@@ -1088,42 +1173,100 @@ class Monitoring extends eqLogic {
 								$cputemp0_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
 								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO-TEMP] Commande Température :: ' . $cputemp0_cmd);
 							}
-							$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+							try {
+								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+							} catch (Exception $e) {
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+								$cputemp0 = '';
+							}
 						
-							if ($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
+							if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
 								$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-								$hddv2 = $sshconnection->exec($hddv2cmd);
+								try {
+									$hddv2 = $sshconnection->exec($hddv2cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDDv2 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDv2 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDv2 Exception Log :: ' . $sshconnection->getLog());
+									$hddv2 = '';
+								}
 							}
 
-							if ($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
+							if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
 								$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-								$hddusb = $sshconnection->exec($hddusbcmd);
+								try {
+									$hddusb = $sshconnection->exec($hddusbcmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDDusb Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDusb Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDusb Exception Log :: ' . $sshconnection->getLog());
+									$hddusb = '';
+								}
 							}
 
 							if ($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1') {
 								$hddesatacmd = "df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-								$hddesata = $sshconnection->exec($hddesatacmd);
+								try {
+									$hddesata = $sshconnection->exec($hddesatacmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDDesata Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDesata Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDesata Exception Log :: ' . $sshconnection->getLog());
+									$hddesata = '';
+								}
 							}
+
 						} elseif ($ARMv == 'armv6l') {
-							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
-							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
+							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
+							try {
+								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
+							} catch (Exception $e) {
+								$nbcpu = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
+							}
 
 							$uname = '.';
 
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-							$hdd = $sshconnection->exec($hdd_cmd);
+							try {
+								$hdd = $sshconnection->exec($hdd_cmd);
+							} catch (Exception $e) {
+								$hdd = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception Log :: ' . $sshconnection->getLog());
+							}
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-							$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);						
+							try {
+								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+							} catch (Exception $e) {
+								$cpufreq0 = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+							}
+
 							if ($cpufreq0 == '') {
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								try {
+									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								} catch (Exception $e) {
+									$cpufreq0 = '';
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+								}
 							}
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
+							if (is_object($cputemp_cmd)) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0armv6l_cmd=$this->getconfiguration('linux_temp_cmd');
 									log::add('Monitoring', 'info', '['. $equipement .'][SSH-CMD][ARM6L-TEMP] Commande Température (Custom) :: ' . $cputemp0armv6l_cmd);	
@@ -1131,41 +1274,98 @@ class Monitoring extends eqLogic {
 									$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
 									log::add('Monitoring', 'info', '['. $equipement .'][SSH-CMD][ARM6L-TEMP] Commande Température :: ' . $cputemp0armv6l_cmd);
 								}
-								$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
+								
+								try {
+									$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+									$cputemp0 = '';
+								}
 							}
 
 						} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
-							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
-							$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
 							
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
+							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
+							try {
+								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
+							} catch (Exception $e) {
+								$nbcpu = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
+							}
 
 							$uname = '.';
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-							$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
+							try {
+								$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
+							} catch (Exception $e) {
+								$cpufreq0 = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+							}
 
 							if ($cpufreq0 == '') {
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
+								try {
+									$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
+								} catch (Exception $e) {
+									$cpufreq0 = '';
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+								}
 							}
 
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-							$hdd = $sshconnection->exec($hdd_cmd);
+							try {
+								$hdd = $sshconnection->exec($hdd_cmd);
+							} catch (Exception $e) {
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception Log :: ' . $sshconnection->getLog());
+								$hdd = '';
+							}
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
+							if (is_object($cputemp_cmd)) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);	
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 								} else {
-									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";	// OK RPi2
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";    // OK RPi2
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 									
 									if ($cputemp0 == '') {
 										$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"; // OK Banana Pi (Cubie surement un jour...)
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										try {
+											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										} catch (Exception $e) {
+											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+											$cputemp0 = '';
+										}
 									}
 									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64-TEMP] Commande Température :: ' . $cputemp0_cmd);
 								}							
@@ -1176,66 +1376,164 @@ class Monitoring extends eqLogic {
 							$uname = '.';
 							
 							$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
-							$nbcpu = $sshconnection->exec($nbcpuVM_cmd);
+							try {
+								$nbcpu = $sshconnection->exec($nbcpuVM_cmd);
+							} catch (Exception $e) {
+								$nbcpu = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
+							}
 
 							if ($nbcpu == '') {
 								$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'"; // OK pour LXC Linux/Ubuntu
-								$nbcpu = $sshconnection->exec($nbcpuVMbis_cmd);
+								try {
+									$nbcpu = $sshconnection->exec($nbcpuVMbis_cmd);
+								} catch (Exception $e) {
+									$nbcpu = '';
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
+								}
 							}
 							$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-							$hdd = $sshconnection->exec($hdd_cmd);
+							try {
+								$hdd = $sshconnection->exec($hdd_cmd);
+							} catch (Exception $e) {
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception Log :: ' . $sshconnection->getLog());
+								$hdd = '';
+							}
 
 							$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
-							$cpufreq = $sshconnection->exec($cpufreqVM_cmd);
-
-							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
-								$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
+							try {
+								$cpufreq = $sshconnection->exec($cpufreqVM_cmd);
+							} catch (Exception $e) {
+								$cpufreq = '';
+								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq Exception :: ' . $e->getMessage());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception LastError :: ' . $sshconnection->getLastError());
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception Log :: ' . $sshconnection->getLog());
 							}
 
 							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
-								$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
+								$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";    // OK pour LXC Linux, Proxmox
+								try {
+									$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
+								} catch (Exception $e) {
+									$cpufreq = '';
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception Log :: ' . $sshconnection->getLog());
+								}
+							}
+
+							if ($cpufreq == '') {
+								$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";    // OK pour LXC Linux
+								try {
+									$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
+								} catch (Exception $e) {
+									$cpufreq = '';
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception Log :: ' . $sshconnection->getLog());
+								}
 							}
 							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
-								$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
+								$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";    // OK pour Debian 10/11, Ubuntu 22.04
+								try {
+									$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
+								} catch (Exception $e) {
+									$cpufreq = '';
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception Log :: ' . $sshconnection->getLog());
+								}
 							}
 							$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
+							if (is_object($cputemp_cmd)) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
-									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									$cputemp0_cmd = $this->getconfiguration('linux_temp_cmd');
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);	
 								} else {
 									$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// Default
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 									
 									if ($cputemp0 == '') {
 										$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"; // Default Zone 1
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
+										try {
+											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										} catch (Exception $e) {
+											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+											$cputemp0 = '';
+										}
 									}
 									if ($cputemp0 == '') {
 										$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null";	// OK AOpen DE2700
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);		
+										try {
+											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										} catch (Exception $e) {
+											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+											$cputemp0 = '';
+										}
 									}
 									if ($cputemp0 == '') {
 										// $cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input 2>/dev/null";	// OK AMD Ryzen
 										$cputemp0AMD_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"; // OK Search temp?_input
-										$cputemp0 = $sshconnection->exec($cputemp0AMD_cmd);
+										try {
+											$cputemp0 = $sshconnection->exec($cputemp0AMD_cmd);
+										} catch (Exception $e) {
+											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+											$cputemp0 = '';
+										}
 									}
 									if ($cputemp0 == '') {
 										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"; // OK by sensors
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										try {
+											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										} catch (Exception $e) {
+											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+											$cputemp0 = '';
+										}
 									}
 									if ($cputemp0 == '') {
 										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"; // OK by sensors
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										try {
+											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+										} catch (Exception $e) {
+											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+											$cputemp0 = '';
+										}
 									}
 									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86-TEMP] Commande Température :: ' . $cputemp0_cmd);
 								}
@@ -1250,14 +1548,35 @@ class Monitoring extends eqLogic {
 								$ARMv = 'arm';
 
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								try {
+									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								} catch (Exception $e) {
+									$nbcpu = '';
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
+								}
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
 								$hdd_cmd = "df -h 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
-								$hdd = $sshconnection->exec($hdd_cmd);
+								try {
+									$hdd = $sshconnection->exec($hdd_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
+									$hdd = '';
+								}
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								try {
+									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+									$cpufreq0 = '';
+								}
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1268,20 +1587,47 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 								}
 							} elseif (preg_match("#osmc#", $namedistri)) {
 								$bitdistri = '32';
 								$ARMv = 'arm';
 
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								try {
+									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
+								}
 
 								$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-								$hdd = $sshconnection->exec($hdd_cmd);
+								try {
+									$hdd = $sshconnection->exec($hdd_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
+									$hdd = '';
+								}
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								try {
+									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+									$cpufreq0 = '';
+								}
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1292,23 +1638,57 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 								}
 							}
 							elseif (preg_match("#piCorePlayer#", $uname)) {
 								$bitdistri = '32';
 								$ARMv = 'arm';
 								$namedistri_cmd = "uname -a 2>/dev/null | awk '{print $2,$3}'";
-								$namedistri = $sshconnection->exec($namedistri_cmd);
+								try {
+									$namedistri = $sshconnection->exec($namedistri_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] namedistri Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception Log :: ' . $sshconnection->getLog());
+									$namedistri = '';
+								}
 
 								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								try {
+									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
+								}
 
 								$hdd_cmd = "df -h 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
-								$hdd = $sshconnection->exec($hdd_cmd);
+								try {
+									$hdd = $sshconnection->exec($hdd_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
+									$hdd = '';
+								}
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								try {
+									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+									$cpufreq0 = '';
+								}
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1319,36 +1699,98 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 								}
 							}
 							elseif (preg_match("#FreeBSD#", $uname)) {
 								$namedistri_cmd = "uname -a 2>/dev/null | awk '{ print $1,$3}'";
-								$namedistri = $sshconnection->exec($namedistri_cmd);
+								try {
+									$namedistri = $sshconnection->exec($namedistri_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] namedistri Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception Log :: ' . $sshconnection->getLog());
+									$namedistri = '';
+								}
 
 								$ARMv_cmd = "sysctl hw.machine | awk '{ print $2}'";
-								$ARMv = $sshconnection->exec($ARMv_cmd);
-								if (!empty($ARMv)) {
-									$ARMv = trim($ARMv);
+								try {
+									$ARMv = $sshconnection->exec($ARMv_cmd);
+									if (!empty($ARMv)) {
+										$ARMv = trim($ARMv);
+									}
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ARMv Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception Log :: ' . $sshconnection->getLog());
+									$ARMv = '';
 								}
 
 								$loadavg_cmd = "uptime | awk '{print $8,$9,$10}'";
-								$loadav = $sshconnection->exec($loadavg_cmd);
+								try {
+									$loadav = $sshconnection->exec($loadavg_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] loadav Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] loadav Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] loadav Exception Log :: ' . $sshconnection->getLog());
+									$loadav = '';
+								}
 
 								$memory_cmd = "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'";
-								$memory = $sshconnection->exec($memory_cmd);
+								try {
+									$memory = $sshconnection->exec($memory_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] memory Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] memory Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] memory Exception Log :: ' . $sshconnection->getLog());
+									$memory = '';
+								}
 
 								$bitdistri_cmd = "sysctl kern.smp.maxcpus | awk '{ print $2}'";
-								$bitdistri = $sshconnection->exec($bitdistri_cmd);
+								try {
+									$bitdistri = $sshconnection->exec($bitdistri_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] bitdistri Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception Log :: ' . $sshconnection->getLog());
+									$bitdistri = '';
+								}
 
 								$nbcpuARM_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
-								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								try {
+									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
+								}
 
 								$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-								$hdd = $sshconnection->exec($hdd_cmd);
+								try {
+									$hdd = $sshconnection->exec($hdd_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
+									$hdd = '';
+								}
 
 								$cpufreq0ARM_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
-								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								try {
+									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+									$cpufreq0 = '';
+								}
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
@@ -1359,7 +1801,14 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][BSD-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 								}
 							}
 							elseif (preg_match("#medion#", $uname)) {
@@ -1374,10 +1823,38 @@ class Monitoring extends eqLogic {
 								$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 								$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
 								
-								$namedistri = $sshconnection->exec($namedistri_cmd);
-								$VersionID = trim($sshconnection->exec($VersionID_cmd));
-								$bitdistri = $sshconnection->exec($bitdistri_cmd);
-								$hdd = $sshconnection->exec($hdd_cmd);
+								try {
+									$namedistri = $sshconnection->exec($namedistri_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] namedistri Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception Log :: ' . $sshconnection->getLog());
+									$namedistri = '';
+								}
+								try {
+									$VersionID = trim($sshconnection->exec($VersionID_cmd));
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] VersionID Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] VersionID Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] VersionID Exception Log :: ' . $sshconnection->getLog());
+									$VersionID = '';
+								}
+								try {
+									$bitdistri = $sshconnection->exec($bitdistri_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] bitdistri Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception Log :: ' . $sshconnection->getLog());
+									$bitdistri = '';
+								}
+								try {
+									$hdd = $sshconnection->exec($hdd_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
+									$hdd = '';
+								}
 
 								if (isset($namedistri) && isset($VersionID)) {
 									$namedistri = "Medion/Linux " . $VersionID . " (" . $namedistri . ")";
@@ -1385,17 +1862,38 @@ class Monitoring extends eqLogic {
 								}
 
 								$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
-								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								try {
+									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
+								}
 
 								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);						
+								try {
+									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+								} catch (Exception $e) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+									$cpufreq0 = '';
+								}
+								
 								if ($cpufreq0 == '') {
 									$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+									try {
+										$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
+										$cpufreq0 = '';
+									}
 								}
 
 								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
+								if (is_object($cputemp_cmd)) {
 									if ($this->getconfiguration('linux_use_temp_cmd')) {
 										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
@@ -1403,7 +1901,14 @@ class Monitoring extends eqLogic {
 										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
 										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION-TEMP] Commande Température :: ' . $cputemp0_cmd);
 									}
-									$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									try {
+										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
+									} catch (Exception $e) {
+										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
+										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
+										$cputemp0 = '';
+									}
 								}
 							}
 						}
