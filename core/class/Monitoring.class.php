@@ -38,9 +38,10 @@ class Monitoring extends eqLogic {
 		$_logName = __CLASS__ . '_dep';
 		
 		log::remove($_logName);
-		log::add($_logName, 'info', __('[DEP] Installation des dépendances', __FILE__));
 
         $_plugin = plugin::byId('sshmanager');
+		log::add($_logName, 'info', __('[DEP] Installation des dépendances', __FILE__));
+		
 		if (!is_object($_plugin)) {
 			log::add($_logName, 'error', __('[DEP] Le plugin SSHManager n\'est pas installé', __FILE__));
 			// TODO Installation du plugin SSHManager
@@ -64,6 +65,7 @@ class Monitoring extends eqLogic {
         $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
         if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
             $return['state'] = 'in_progress';
+			log::add($_logName, 'info', __('[DEP-INFO] Installation des dépendances en cours', __FILE__));
         } else {
 			$_plugin = plugin::byId('sshmanager');
 			if (!is_object($_plugin)) {
