@@ -53,6 +53,7 @@ class Monitoring extends eqLogic {
 			$_update->setConfiguration('user', 'TiTidom-RC');
 			$_update->setConfiguration('repository', 'SSH-Manager');
 			$_update->setConfiguration('version', 'dev');
+			$_update->setConfiguration('token', '');
 			$_update->save();
 			$_update->doUpdate();
 			sleep(2);
