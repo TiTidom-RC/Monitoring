@@ -36,16 +36,33 @@ class Monitoring extends eqLogic {
 
 	public static function dependancy_install() {
 		$_logName = __CLASS__ . '_update';
-		
-		// log::remove($_logName);
 
-        $_plugin = plugin::byId('sshmanager');
 		log::add($_logName, 'info', __('[DEP-INSTALL] Installation des dépendances', __FILE__));
 
+        $_plugin = plugin::byId('sshmanager');
 		if (!is_object($_plugin)) {
-			log::add($_logName, 'error', __('[DEP-INSTALL] Le plugin SSHManager n\'est pas installé', __FILE__));
-			// TODO Installation du plugin SSHManager
+			log::add($_logName, 'error', __('[DEP-INSTALL] Plugin SSHManager absent, lancement de l\'installation', __FILE__));
 			
+			// Installation du plugin SSHManager
+			$_update = update::byLogicalId('sshmanager');
+			if (!is_object($_update)) {
+				$_update = new update();
+			}
+			$_update->setLogicalId('sshmanager');
+			$_update->setSource('github');
+			$_update->setConfiguration('user', 'TiTidom-RC');
+			$_update->setConfiguration('repository', 'SSH-Manager');
+			$_update->setConfiguration('version', 'beta');
+			$_update->save();
+			$_update->doUpdate();
+			sleep(2);
+			$_plugin = plugin::byId('sshmanager');
+			if (!is_object($_plugin)) {
+				log::add($_logName, 'error', __('[DEP-INSTALL] Le plugin SSHManager n\'a pas pu être installé', __FILE__));
+			}
+
+			$_plugin->setIsEnable(1, true, true);
+			jeedom::cleanFileSystemRight();
 		} else {
 			log::add($_logName, 'info', __('[DEP-INSTALL] Le plugin SSHManager est installé', __FILE__));
 			$_isActive = config::byKey('active', $_plugin->getId(), 0);
