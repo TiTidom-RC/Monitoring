@@ -49,7 +49,7 @@ class Monitoring extends eqLogic {
 				$_update = new update();
 			}
 			$_update->setLogicalId('sshmanager');
-			$_update->setSource('github');
+			$_update->setSource('Github');
 			$_update->setConfiguration('user', 'TiTidom-RC');
 			$_update->setConfiguration('repository', 'SSH-Manager');
 			$_update->setConfiguration('version', 'beta');
