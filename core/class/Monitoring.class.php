@@ -924,7 +924,7 @@ class Monitoring extends eqLogic {
 	public function execSSH($session, $cmd = '', $cmdName = '') {
 		$cmd_result = '';
 		try {
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: ' . str_replace(PHP_EOL, '\r\n', $cmd));
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: ' . str_replace('\\r\\n', '\r\n', $cmd));
 			$cmd_result = $session->exec($cmd);
 			if ($session->isTimeout()) {
 				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: Timeout');
