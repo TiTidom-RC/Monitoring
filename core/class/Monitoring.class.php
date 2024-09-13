@@ -36,17 +36,22 @@ class Monitoring extends eqLogic {
 
 	public static function dependancy_install() {
 		$_logName = __CLASS__ . '_update';
-
-		log::add($_logName, 'info', __('[DEP-INSTALL] Installation des dépendances', __FILE__));
+		log::add($_logName, 'info', '[INSTALL] Installation des dépendances');
 
 		try {
 			$_plugin = plugin::byId('sshmanager');
+			log::add($_logName, 'info', __('[INSTALL] Le plugin SSHManager est installé', __FILE__));
+			if (!$_plugin->isActive()) {
+				log::add($_logName, 'error', __('[INSTALL] Le plugin SSHManager n\'est pas activé', __FILE__));
+				$_plugin->setIsEnable(1, true, true);
+				log::add($_logName, 'info', __('[INSTALL] Activation du plugin SSHManager', __FILE__));
+			} else {
+				log::add($_logName, 'info', __('[INSTALL] Plugin SSHManager :: actif', __FILE__));
+			}
 		} catch (Exception $e) {
-			log::add($_logName, 'error', __('[DEP-INSTALL] Error: ' . $e->getMessage(), __FILE__));
-		}
-
-		if (!is_object($_plugin)) {
-			log::add($_logName, 'error', __('[DEP-INSTALL] Plugin SSHManager absent, lancement de l\'installation', __FILE__));
+			log::add($_logName, 'warning', __('[INSTALL] Exception: ' . $e->getMessage(), __FILE__));
+			
+			log::add($_logName, 'error', __('[INSTALL] Lancement de l\'installation du plugin SSHManager', __FILE__));
 			
 			// Installation du plugin SSHManager
 			$_update = update::byLogicalId('sshmanager');
@@ -54,6 +59,7 @@ class Monitoring extends eqLogic {
 				$_update = new update();
 			}
 			$_update->setLogicalId('sshmanager');
+			$_update->setType('plugin');
 			$_update->setSource('github');
 			$_update->setConfiguration('user', 'TiTidom-RC');
 			$_update->setConfiguration('repository', 'SSH-Manager');
@@ -65,24 +71,12 @@ class Monitoring extends eqLogic {
 			
 			try {
 				$_plugin = plugin::byId('sshmanager');
-			} catch (Exception $e) {
-				log::add($_logName, 'error', __('[DEP-INSTALL] Error: ' . $e->getMessage(), __FILE__));
-			}
-			
-			if (!is_object($_plugin)) {
-				log::add($_logName, 'error', __('[DEP-INSTALL] Le plugin SSHManager n\'a pas pu être installé', __FILE__));
-			}
-
-			$_plugin->setIsEnable(1, true, true);
-			jeedom::cleanFileSystemRight();
-		} else {
-			log::add($_logName, 'info', __('[DEP-INSTALL] Le plugin SSHManager est installé', __FILE__));
-			$_isActive = config::byKey('active', $_plugin->getId(), 0);
-			if (!$_isActive) {
-				log::add($_logName, 'error', __('[DEP-INSTALL] Le plugin SSHManager n\'est pas activé', __FILE__));
 				$_plugin->setIsEnable(1, true, true);
-			} else {
-				log::add($_logName, 'info', __('[DEP-INSTALL] Le plugin SSHManager est actif', __FILE__));
+				log::add($_logName, 'info', __('[INSTALL] Activation du plugin SSHManager', __FILE__));
+				jeedom::cleanFileSystemRight();
+			} catch (Exception $e) {
+				log::add($_logName, 'warning', '[INSTALL] Exception :: ' . $e->getMessage());
+				log::add($_logName, 'error', '[INSTALL] Le plugin SSHManager n\'a pas pu être installé !');
 			}
 		}
         return array('log' => log::getPathToLog(__CLASS__ . '_update'));
@@ -92,30 +86,29 @@ class Monitoring extends eqLogic {
         $_logName = __CLASS__ . '_update';
 
 		$return = array();
-        $return['log'] = log::getPathToLog($_logName);
-        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
-        if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
-            log::add($_logName, 'info', __('[DEP-INFO] Installation des dépendances en cours', __FILE__));
+		$return['log'] = log::getPathToLog($_logName);
+		$return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
+		if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
+			log::add($_logName, 'info', __('[DEP] Installation des dépendances en cours', __FILE__));
 			$return['state'] = 'in_progress';
-        } else {
-			$_plugin = plugin::byId('sshmanager');
-			if (!is_object($_plugin)) {
-				log::add($_logName, 'error', __('[DEP-INFO] Le plugin SSHManager n\'est pas installé', __FILE__));
-				$return['state'] = 'nok';
-			} else {
-				// TODO voir la commande $plugin->isActive()
-
-				$_isActive = config::byKey('active', $_plugin->getId(), 0);
-				if (!$_isActive) {
-					log::add($_logName, 'error', __('[DEP-INFO] Le plugin SSHManager n\'est pas activé', __FILE__));
+		} else {
+			try {
+				$_plugin = plugin::byId('sshmanager');
+				if (!$_plugin->isActive()) {
+					log::add($_logName, 'error', __('[DEP] Le plugin SSHManager n\'est pas activé', __FILE__));
 					$return['state'] = 'nok';
-					
+
 				} else {
-					log::add($_logName, 'info', __('[DEP-INFO] Vérification des dépendances :: OK', __FILE__));
+					log::add($_logName, 'info', __('[DEP] Vérification des dépendances :: OK', __FILE__));
 					$return['state'] = 'ok';
 				}
+			} catch (Exception $e) {
+				log::add($_logName, 'warning', '[DEP] Exception :: ' . $e->getMessage());
+				log::add($_logName, 'error', '[DEP] Le plugin SSHManager n\'est pas installé');
+				$return['state'] = 'nok';
 			}
 		}
+		
 		return $return;
 	}
 
