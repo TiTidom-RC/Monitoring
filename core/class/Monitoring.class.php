@@ -1402,6 +1402,11 @@ class Monitoring extends eqLogic {
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							try {
 								$hdd = $sshconnection->exec($hdd_cmd);
+								if ($sshconnection->isTimeout()) {
+									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Timeout');
+									$hdd = '';
+									$sshconnection->reset();
+								}
 							} catch (Exception $e) {
 								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
