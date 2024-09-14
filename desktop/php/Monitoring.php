@@ -187,6 +187,16 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         </select>
                                     </div>
                                 </div>
+                                <div class="local" style="display:none;">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">{{Timeout SRV}}
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration d'une commande executée en local (par défaut : 30s)}}"></i></sup>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="timeoutsrv" type="text" placeholder="{{Saisir le timeout SRV}}" />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="distant" style="display:none;">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Adresse IP}}</label>
