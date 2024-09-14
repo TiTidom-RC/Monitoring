@@ -937,8 +937,14 @@ class Monitoring extends eqLogic {
 		$cmd_result = '';
 
 		try {
-			if ($timeout && $timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout|sudo)\b)/', trim($cmd))) {
-				$cmd = 'timeout ' . $timeoutSrv . ' ' . trim($cmd);
+			$cmd = trim($cmd);
+			if ($timeout && $timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $cmd)) {
+				if (preg_match('/LC_ALL=C/', $cmd)) {
+					$cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $timeoutSrv . ' ', $cmd, 1);
+				}
+				else {
+					$cmd = 'timeout ' . $timeoutSrv . ' ' . $cmd;
+				}
 			}
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' :: ' . json_encode($cmd));
 
