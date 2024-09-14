@@ -1594,7 +1594,8 @@ class Monitoring extends eqLogic {
 						$nbcpu = $this->execSRV($nbcpuVMbis_cmd, 'NbCPU');
 					}
 					$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
-					
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] NbCPU :: ' . $nbcpu);
+
 					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print \$NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
 					$cpufreq = $this->execSRV($cpufreqVM_cmd, 'cpufreq0');
 					
