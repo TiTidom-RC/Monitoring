@@ -1172,11 +1172,11 @@ class Monitoring extends eqLogic {
 							}							
 						}
 					} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-						$NF = '';
+						// $NF = '';
 						$cputemp0 ='';
 						$uname = '.';
 						
-						$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
+						$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print \$NF }'"; // OK pour Debian
 						$nbcpu = $this->execSSH($sshconnection, $nbcpuVM_cmd, 'NbCPU');
 
 						if ($nbcpu == '') {
@@ -1189,20 +1189,20 @@ class Monitoring extends eqLogic {
 						$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
-						$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
+						$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print \$NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
 						$cpufreq = $this->execSSH($sshconnection, $cpufreqVM_cmd, 'cpufreq');
 						
 						if ($cpufreq == '') {
-							$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";    // OK pour LXC Linux, Proxmox
+							$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print \$NF }'";    // OK pour LXC Linux, Proxmox
 							$cpufreq = $this->execSSH($sshconnection, $cpufreqVMbis_cmd, 'cpufreq');
 						}
 
 						if ($cpufreq == '') {
-							$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";    // OK pour LXC Linux
+							$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print \$NF }'";    // OK pour LXC Linux
 							$cpufreq = $this->execSSH($sshconnection, $cpufreqVMbis_cmd, 'cpufreq');
 						}
 						if ($cpufreq == '') {
-							$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";    // OK pour Debian 10/11, Ubuntu 22.04
+							$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'";    // OK pour Debian 10/11, Ubuntu 22.04
 							$cpufreq = $this->execSSH($sshconnection, $cpufreqVMbis_cmd, 'cpufreq');
 						}
 						$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
@@ -1581,33 +1581,34 @@ class Monitoring extends eqLogic {
 						}
 					}
 				} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-					$NF = '';
+					// $NF = '';
 					$uname = '.';
 					$cputemp0 = '';
 					$cpufreq = '';
 
-					$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
+					$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print \$NF }'"; // OK pour Debian
 					$nbcpu = $this->execSRV($nbcpuVM_cmd, 'NbCPU');
 
 					if ($nbcpu == '') {
-						$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $NF }'"; // OK pour LXC Linux/Ubuntu
+						$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'"; // OK pour LXC Linux/Ubuntu
 						$nbcpu = $this->execSRV($nbcpuVMbis_cmd, 'NbCPU');
 					}
 					$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
-					
-					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] NbCPU :: ' . $nbcpu);
+
+					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print \$NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
 					$cpufreq = $this->execSRV($cpufreqVM_cmd, 'cpufreq0');
 					
 					if ($cpufreq == '') {
-						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
+						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print \$NF }'";	// OK pour LXC Linux, Proxmox
 						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
 					}
 					if ($cpufreq == '') {
-						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
+						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print \$NF }'";	// OK pour LXC Linux
 						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
 					}
 					if ($cpufreq == '') {
-						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
+						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
 						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
 					}
 					$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
