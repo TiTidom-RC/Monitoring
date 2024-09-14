@@ -153,14 +153,17 @@ $(".eqLogicAttr[data-l2key='pull_use_custom']").on('change', function () {
 
 $(".eqLogicAttr[data-l2key='maitreesclave']").on('change', function () {
 	if (this.selectedIndex == 1) {
-	  $(".distant").show();
-	  $(".distant-password").show();
-	  $(".distant-key").hide();
+		$(".local").hide();
+		$(".distant").show();
+	  	$(".distant-password").show();
+	  	$(".distant-key").hide();
 	} else if (this.selectedIndex == 2) {
+		$(".local").hide();
 		$(".distant").show();
 		$(".distant-password").hide();
 		$(".distant-key").show();
 	} else { 
+		$(".local").show();
 		$(".distant").hide();
 	}
 });
@@ -170,7 +173,6 @@ function toggleSSHPassword() {
 	var sshPasswordField = document.getElementById("ssh-password");
 	sshPasswordIcon.className = sshPasswordField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
 	sshPasswordField.type = sshPasswordField.type === "password" ? "text" : "password";
-	
 }
 
 function toggleSSHPassphrase() {

@@ -867,6 +867,129 @@ class Monitoring extends eqLogic {
 		return $networkCard;
 	}
 
+	public function connectSSH() {
+		$ip = $this->getConfiguration('addressip');
+		$port = $this->getConfiguration('portssh', 22);
+		$timeout = $this->getConfiguration('timeoutssh', 30);
+		$user = $this->getConfiguration('user');
+		$pass = $this->getConfiguration('password');
+		$sshkey = $this->getConfiguration('ssh-key');
+		$sshpassphrase = $this->getConfiguration('ssh-passphrase');
+		
+		$sshconnection = '';
+		$cnx_ssh = '';
+
+		try {
+			$sshconnection = new SSH2($ip, $port, $timeout);
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
+		} catch (Exception $e) {
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: '. $e->getMessage());
+			$cnx_ssh = 'KO';
+		}
+
+		if ($cnx_ssh != 'KO') {
+			if ($this->getConfiguration('maitreesclave') == 'deporte-key') {
+				try {
+					$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
+					log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: OK');
+				} catch (Exception $e) {
+					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: '. $e->getMessage());
+					$keyOrPwd = '';
+				}
+			}
+			else {
+				$keyOrPwd = $pass;
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Authentification SSH par Mot de passe');
+			}
+
+			try {
+				if (!$sshconnection->login($user, $keyOrPwd)) {
+					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login ERROR :: ' . $user);
+					$cnx_ssh = 'KO';
+				}
+			} catch (Exception $e) {
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Authentification SSH :: '. $e->getMessage());
+				$cnx_ssh = 'KO';
+			}
+		}
+
+		if ($cnx_ssh != 'KO') {
+			$cnx_ssh = 'OK';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connexion SSH (cnx_ssh) :: OK');
+		}
+
+		return [$cnx_ssh, $sshconnection];
+	}
+
+	public function closeSSH($session) {
+		try {
+			$session->disconnect();
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Deconnexion SSH :: OK');
+		} catch (Exception $e) {
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CLOSE] Exception :: '. $e->getMessage());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Exception LastError :: ' . $session->getLastError());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Exception Log :: ' . $session->getLog());
+		}
+	}
+
+	public function execSRV($cmd = '', $cmdName = '', $timeout = true) {
+		$timeoutSrv = $this->getConfiguration('timeoutsrv', 30);
+		$cmd_result = '';
+
+		try {
+			$cmd = trim($cmd);
+			if ($timeout && $timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $cmd)) {
+				if (preg_match('/LC_ALL=C/', $cmd)) {
+					$cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $timeoutSrv, $cmd, 1);
+				}
+				else {
+					$cmd = 'timeout ' . $timeoutSrv . ' ' . $cmd;
+				}
+			}
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' :: ' . json_encode($cmd));
+
+			$cmd_result = exec($cmd, $output, $return_code);
+			if ($return_code !== 0) {
+				log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' ReturnCode :: ' . $return_code);
+				$cmd_result = '';
+			}
+			if (!empty($cmd_result)) {
+				$cmd_result = trim($cmd_result);
+			}
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' Result :: ' . $cmd_result);
+		} catch (Exception $e) {
+			$cmd_result = '';
+			log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' Exception :: ' . $e->getMessage());
+
+		}
+		return $cmd_result;
+	}
+
+	public function execSSH($session, $cmd = '', $cmdName = '') {
+		$cmd_result = '';
+		try {
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: ' . json_encode($cmd));
+			$cmd_result = $session->exec($cmd);
+			if ($session->isTimeout()) {
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: Timeout');
+				$cmd_result = '';
+				$session->reset();
+			}
+
+			if (!empty($cmd_result)) {
+				$cmd_result = trim($cmd_result);
+			}
+			
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' Result :: ' . $cmd_result);
+		} catch (Exception $e) {
+			$cmd_result = '';
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' Exception :: ' . $e->getMessage());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' Exception LastError :: ' . $session->getLastError());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' Exception Log :: ' . $session->getLog());
+		}
+		return $cmd_result;
+	}
+
 	public function getInformations() {
 		$equipement = $this->getName();
 		try {
@@ -878,1038 +1001,411 @@ class Monitoring extends eqLogic {
 			$ethernet0_name = '';
 			$ethernet0_ip = '';
 
-			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));			
-
-			/* if ($this->getConfiguration('cartereseau') == 'netautre') {
-				$cartereseau = $this->getConfiguration('cartereseauautre');
-			} elseif ($this->getConfiguration('cartereseau') == 'netauto') {
-				// $cartereseau = "$(ip a | awk '/^[^ ]/ && NR!=1 {print \"\"} {printf \"%s\", $0} END {print \"\"}' | awk '!/master|docker/ && /state UP/ && /inet/' | awk -F': ' '{ print $2 }' | head -1 | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-				// $cartereseau = "$(ip -br -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $1 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-				$cartereseau = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-			} else {
-				$cartereseau = $this->getConfiguration('cartereseau');
-			} */
+			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 
 			$confLocalOrRemote = $this->getConfiguration('maitreesclave');
 
 			// Configuration distante
 			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
-				$ip = $this->getConfiguration('addressip');
-				$port = $this->getConfiguration('portssh', 22);
-				$timeout = $this->getConfiguration('timeoutssh', 30);
-				$user = $this->getConfiguration('user');
-				$pass = $this->getConfiguration('password');
-				$sshkey = $this->getConfiguration('ssh-key');
-				$sshpassphrase = $this->getConfiguration('ssh-passphrase');
-				$cnx_ssh = '';
-
-
-				// Début de la connexion SSH
-				try {
-					$sshconnection = new SSH2($ip, $port, $timeout);
-					log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
-				} catch (Exception $e) {
-					log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH :: '. $e->getMessage());
-					$cnx_ssh = 'KO';
-				}
-
-				if ($cnx_ssh != 'KO') {
-					if ($confLocalOrRemote == 'deporte-key') {
-						try {
-							$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] PublicKeyLoader :: OK');
-						} catch (Exception $e) {
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] PublicKeyLoader :: '. $e->getMessage());
-							$keyOrPwd = '';
-						}
-					}
-					else {
-						$keyOrPwd = $pass;
-						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Authentification SSH par Mot de passe');
-					}
-
-					try {
-						if (!$sshconnection->login($user, $keyOrPwd)) {
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Login ERROR :: ' . $user);
-							$cnx_ssh = 'KO';
-						}
-					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Authentification SSH :: '. $e->getMessage());
-						$cnx_ssh = 'KO';
-					}
-
-					try {
-						if ($sshconnection->isConnected()) {
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (isConnected) :: OK');
-							if ($sshconnection->isAuthenticated()) {
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (isAuthenticated) :: OK');
-							}
-							else {
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH (isAuthenticated) :: KO');
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH LastError :: ' . $sshconnection->getLastError());
-								$cnx_ssh = 'KO';
-							}
-						} else {
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH (isConnected) :: KO');
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH LastError :: ' . $sshconnection->getLastError());
-							$cnx_ssh = 'KO';
-						}
-					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Connexion SSH :: '. $e->getMessage());
-						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH Log :: ' . $sshconnection->getLog());
-						$cnx_ssh = 'KO';
-					}
-
-					// Fin de la connexion SSH
-					if ($cnx_ssh != 'KO') {
-						$cnx_ssh = 'OK';
-						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Connexion SSH (cnx_ssh) :: OK');
-
-						if ($this->getConfiguration('synology') == '1') {
-							if ($this->getConfiguration('syno_alt_name') == '1') {
-								$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
-							}
-							else {
-								$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
-							}
-							$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+				[$cnx_ssh, $sshconnection] = $this->connectSSH();
+				
+				if ($cnx_ssh == 'OK') {
+					if ($this->getConfiguration('synology') == '1') {
+						if ($this->getConfiguration('syno_alt_name') == '1') {
+							$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
 						}
 						else {
-							$namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+							$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
+						}
+						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+					}
+					else {
+						$namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 
-							$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
-						}
+						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+						$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
+					}
 
-						$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
-						$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
-						$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
-						
-						// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
-						$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
-						
-						$ReseauIP_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
-						// $ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
-						
-						// ARMv Command
-						// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
-						// $ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
-						$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-						try {	
-							$ARMv = $sshconnection->exec($ARMv_cmd);
-							if (!empty($ARMv)) {
-								$ARMv = trim($ARMv);
-							}
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv :: >' . $ARMv . '<');
-						} catch (Exception $e) {
-							$ARMv = '';
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ARMv Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception Log :: ' . $sshconnection->getLog());
-						}
+					$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
+					$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
+					$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
+					
+					// $ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | tr -d ':'";
+					$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
+					
+					$ReseauIP_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+					// $ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+					
+					// ARMv Command
+					// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
+					// $ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | tr -d '[:space:]'";
+					$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+					
+					$ARMv = $this->execSSH($sshconnection, $ARMv_cmd, 'ARMv');
 
-						// Uptime Command
-						// $uptime_cmd = "uptime";
-						// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
-						$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-						try {	
-							$uptime = $sshconnection->exec($uptime_cmd);
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime :: >' . $uptime . '<');
-						} catch (Exception $e) {
-							$uptime = '';
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Uptime Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Uptime Exception Log :: ' . $sshconnection->getLog());
-						}
-						
-						try {
-							$namedistri = $sshconnection->exec($namedistri_cmd);
-						} catch (Exception $e) {
-							$namedistri = '';
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] namedistri Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception Log :: ' . $sshconnection->getLog());
-						}
-						
-						try {
-							$bitdistri = $sshconnection->exec($bitdistri_cmd);
-						} catch (Exception $e) {
-							$bitdistri = '';
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] bitdistri Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception Log :: ' . $sshconnection->getLog());
-						}
-						
-						try {
-							$VersionID = trim($sshconnection->exec($VersionID_cmd));
-						} catch (Exception $e) {
-							$VersionID = '';
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] VersionID Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] VersionID Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] VersionID Exception Log :: ' . $sshconnection->getLog());
-						}
-						
-						try {
-							$loadav = $sshconnection->exec($loadavg_cmd);
-						} catch (Exception $e) {
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Load Average Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Load Average Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Load Average Exception Log :: ' . $sshconnection->getLog());
-						}
+					// Uptime Command
+					// $uptime_cmd = "uptime";
+					// $uptime_cmd = "awk '{ print $1 }' /proc/uptime | tr -d '[:space:]'";
+					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+					$uptime = $this->execSSH($sshconnection, $uptime_cmd, 'Uptime');
+					$namedistri = $this->execSSH($sshconnection, $namedistri_cmd, 'NameDistri');
+					$bitdistri = $this->execSSH($sshconnection, $bitdistri_cmd, 'BitDistri');
+					$VersionID = $this->execSSH($sshconnection, $VersionID_cmd, 'VersionID');
+					$loadav = $this->execSSH($sshconnection, $loadavg_cmd, 'LoadAverage');
+					$ReseauRXTX = $this->execSSH($sshconnection, $ReseauRXTX_cmd, 'ReseauRXTX');
+					$ReseauIP = $this->execSSH($sshconnection, $ReseauIP_cmd, 'ReseauIP');
+					$memory = $this->execSSH($sshconnection, $memory_cmd, 'Memory');
+					$swap = $this->execSSH($sshconnection, $swap_cmd, 'Swap');
 
-						try {
-							$ReseauRXTX = $sshconnection->exec($ReseauRXTX_cmd);
-						} catch (Exception $e) {
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ReseauRXTX Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ReseauRXTX Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ReseauRXTX Exception Log :: ' . $sshconnection->getLog());
-							$ReseauRXTX = '';
+					$perso1_cmd = $this->getConfiguration('perso1');
+					$perso2_cmd = $this->getConfiguration('perso2');
+
+					if ($perso1_cmd != '') {
+						$perso1 = $this->execSSH($sshconnection, $perso1_cmd, 'Perso1');
+					}
+					if ($perso2_cmd != '') {
+						$perso2 = $this->execSSH($sshconnection, $perso2_cmd, 'Perso2');
+					}
+					
+					if ($this->getConfiguration('synology') == '1') {
+						// $platform_cmd = "get_key_value /etc/synoinfo.conf unique | cut -d'_' -f2";
+						// $synoplatform = $sshconnection->exec($platform_cmd);
+
+						$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
+						$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
+
+						$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
+						$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
+
+						$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
+
+						// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
+						// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+						$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+						$versionsyno = $this->execSSH($sshconnection, $versionsyno_cmd, 'VersionSyno');
+
+						if ($this->getconfiguration('syno_use_temp_path')) {
+							$cputemp0_cmd = $this->getconfiguration('syno_temp_path');
+							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));
+						} else {
+							$cputemp0_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
+							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
 						}
-						try {
-							$ReseauIP = $sshconnection->exec($ReseauIP_cmd);
-						} catch (Exception $e) {
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ReseauIP Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ReseauIP Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ReseauIP Exception Log :: ' . $sshconnection->getLog());
-							$ReseauIP = '';
+						$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+					
+						if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
+							$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$hddv2 = $this->execSSH($sshconnection, $hddv2cmd, 'HDDv2');
 						}
 
-						try {
-							$memory = $sshconnection->exec($memory_cmd);
-						} catch (Exception $e) {
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Memory Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Memory Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Memory Exception Log :: ' . $sshconnection->getLog());
-							$memory = '';
-						}
-						try {
-							$swap = $sshconnection->exec($swap_cmd);
-						} catch (Exception $e) {
-							log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Swap Exception :: ' . $e->getMessage());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Swap Exception LastError :: ' . $sshconnection->getLastError());
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Swap Exception Log :: ' . $sshconnection->getLog());
-							$swap = '';
+						if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
+							$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$hddusb = $this->execSSH($sshconnection, $hddusbcmd, 'HDDusb');
 						}
 
-						$perso1_cmd = $this->getConfiguration('perso1');
-						$perso2_cmd = $this->getConfiguration('perso2');
-
-						if ($perso1_cmd != '' /* && $Perso1Visible == 'OK' */) {
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Cmd :: ' . $perso1_cmd);
-							try {
-								$perso1 = $sshconnection->exec($perso1_cmd);
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exec :: ' . $perso1);
-							} catch (Exception $e) {
-								$perso1 = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso1 Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso1 Exception Log :: ' . $sshconnection->getLog());
-							}
+						if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1') {
+							$hddesatacmd = "df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$hddesata = $this->execSSH($sshconnection, $hddesatacmd, 'HDDesata');
 						}
-						if ($perso2_cmd != '' /* && $Perso2Visible == 'OK' */) {
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Cmd :: ' . $perso2_cmd);
-							try {
-								$perso2 = $sshconnection->exec($perso2_cmd);
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exec :: ' . $perso2);
-							} catch (Exception $e) {
-								$perso2 = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] Perso2 Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] Perso2 Exception Log :: ' . $sshconnection->getLog());
-							}
+
+					} elseif ($ARMv == 'armv6l') {
+						$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
+						$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
+
+						$uname = '.';
+
+						$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
+
+						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
+						$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
+
+						if ($cpufreq0 == '') {
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+							$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
 						}
-						
-						if ($this->getConfiguration('synology') == '1') {
-							// $platform_cmd = "get_key_value /etc/synoinfo.conf unique | cut -d'_' -f2";
-							// $synoplatform = $sshconnection->exec($platform_cmd);
 
-							$nbcpuARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
-							try {
-								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
-							} catch (Exception $e) {
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
-								$nbcpu = '';
-							}
-
-							$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
-							try {
-								$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
-							} catch (Exception $e) {
-								$cpufreq0 = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
-							try {	
-								$hdd = $sshconnection->exec($hdd_cmd);
-							} catch (Exception $e) {
-								$hdd = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | paste -s -d '&'"; // Cette version est bien mais 'parse' n'est pas une commande dispo sur SRM (routeurs Syno)
-							// $versionsyno_cmd = "cat /etc.defaults/VERSION | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
-							$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
-							try {	
-								$versionsyno = $sshconnection->exec($versionsyno_cmd);
-							} catch (Exception $e) {
-								$versionsyno = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] versionsyno Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] versionsyno Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] versionsyno Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							if ($this->getconfiguration('syno_use_temp_path')) {
-								$cputemp0_cmd = $this->getconfiguration('syno_temp_path');
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
+						// TODO A vérifier sur les conditions des IF
+						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
+						if (is_object($cputemp_cmd)) {
+							if ($this->getconfiguration('linux_use_temp_cmd')) {
+								$cputemp0armv6l_cmd = $this->getconfiguration('linux_temp_cmd');
+								log::add('Monitoring', 'info', '['. $equipement .'][SSH-CMD][ARM6L-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0armv6l_cmd));	
 							} else {
-								$cputemp0_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO-TEMP] Commande Température :: ' . $cputemp0_cmd);
+								$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+								log::add('Monitoring', 'info', '['. $equipement .'][SSH-CMD][ARM6L-TEMP] Commande Température :: ' . json_encode($cputemp0armv6l_cmd));
 							}
-							try {
-								$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-							} catch (Exception $e) {
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-								$cputemp0 = '';
-							}
+							$cputemp0 = $this->execSSH($sshconnection, $cputemp0armv6l_cmd, 'cputemp0');
+						}
+
+					} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
 						
-							if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
-								$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-								try {
-									$hddv2 = $sshconnection->exec($hddv2cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDDv2 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDv2 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDv2 Exception Log :: ' . $sshconnection->getLog());
-									$hddv2 = '';
+						$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
+						$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
+
+						$uname = '.';
+
+						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
+						$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
+
+						if ($cpufreq0 == '') {
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+							$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
+						}
+
+						$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
+
+						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
+						if (is_object($cputemp_cmd)) {
+							if ($this->getconfiguration('linux_use_temp_cmd')) {
+								$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+							} else {
+								$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";    // OK RPi2
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+								
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"; // OK Banana Pi (Cubie surement un jour...)
+									$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+								}
+								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
+							}							
+						}
+					} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
+						$NF = '';
+						$cputemp0 ='';
+						$uname = '.';
+						
+						$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
+						$nbcpu = $this->execSSH($sshconnection, $nbcpuVM_cmd, 'NbCPU');
+
+						if ($nbcpu == '') {
+							$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'"; // OK pour LXC Linux/Ubuntu
+							$nbcpu = $this->execSSH($sshconnection, $nbcpuVMbis_cmd, 'NbCPU');
+						}
+						$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
+						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
+
+						$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
+
+						$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
+						$cpufreq = $this->execSSH($sshconnection, $cpufreqVM_cmd, 'cpufreq');
+						
+						if ($cpufreq == '') {
+							$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";    // OK pour LXC Linux, Proxmox
+							$cpufreq = $this->execSSH($sshconnection, $cpufreqVMbis_cmd, 'cpufreq');
+						}
+
+						if ($cpufreq == '') {
+							$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";    // OK pour LXC Linux
+							$cpufreq = $this->execSSH($sshconnection, $cpufreqVMbis_cmd, 'cpufreq');
+						}
+						if ($cpufreq == '') {
+							$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";    // OK pour Debian 10/11, Ubuntu 22.04
+							$cpufreq = $this->execSSH($sshconnection, $cpufreqVMbis_cmd, 'cpufreq');
+						}
+						$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
+						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] CPUFreq :: ' . $cpufreq);
+
+						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
+						if (is_object($cputemp_cmd)) {
+							if ($this->getconfiguration('linux_use_temp_cmd')) {
+								$cputemp0_cmd = $this->getconfiguration('linux_temp_cmd');
+								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));	
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+							} else {
+								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// Default
+								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+								
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"; // Default Zone 1
+									$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+								}
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null";	// OK AOpen DE2700
+									$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+								}
+								if ($cputemp0 == '') {
+									// $cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input 2>/dev/null";	// OK AMD Ryzen
+									$cputemp0AMD_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"; // OK Search temp?_input
+									$cputemp0 = $this->execSSH($sshconnection, $cputemp0AMD_cmd, 'cputemp0');
+								}
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"; // OK by sensors
+									$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+								}
+								if ($cputemp0 == '') {
+									$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"; // OK by sensors
+									$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
 								}
 							}
+						}
+					} elseif ($ARMv == '' & $this->getConfiguration('synology') != '1') {
+						$unamecmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
+						$unamedata = $sshconnection->exec($unamecmd);
+						$uname = $unamedata;
 
-							if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
-								$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-								try {
-									$hddusb = $sshconnection->exec($hddusbcmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDDusb Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDusb Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDusb Exception Log :: ' . $sshconnection->getLog());
-									$hddusb = '';
-								}
-							}
+						if (preg_match("#RasPlex|OpenELEC|LibreELEC#", $namedistri)) {
+							$bitdistri = '32';
+							$ARMv = 'arm';
 
-							if ($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1') {
-								$hddesatacmd = "df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
-								try {
-									$hddesata = $sshconnection->exec($hddesatacmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDDesata Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDesata Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDDesata Exception Log :: ' . $sshconnection->getLog());
-									$hddesata = '';
-								}
-							}
+							$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
+							$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
 
-						} elseif ($ARMv == 'armv6l') {
-							
-							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
-							try {
-								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
-							} catch (Exception $e) {
-								$nbcpu = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
-							}
+							// TODO faut il ajouter le preg_match pour les autres distri ARM ?
+							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
 
-							$uname = '.';
+							$hdd_cmd = "df -h 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
-							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-							try {
-								$hdd = $sshconnection->exec($hdd_cmd);
-							} catch (Exception $e) {
-								$hdd = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-							try {
-								$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
-							} catch (Exception $e) {
-								$cpufreq0 = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							if ($cpufreq0 == '') {
-								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								try {
-									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
-								} catch (Exception $e) {
-									$cpufreq0 = '';
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-								}
-							}
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+							$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd)) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
-									$cputemp0armv6l_cmd=$this->getconfiguration('linux_temp_cmd');
-									log::add('Monitoring', 'info', '['. $equipement .'][SSH-CMD][ARM6L-TEMP] Commande Température (Custom) :: ' . $cputemp0armv6l_cmd);	
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));
 								} else {
-									$cputemp0armv6l_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-									log::add('Monitoring', 'info', '['. $equipement .'][SSH-CMD][ARM6L-TEMP] Commande Température :: ' . $cputemp0armv6l_cmd);
+									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
 								}
-								
-								try {
-									$cputemp0 = $sshconnection->exec($cputemp0armv6l_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-									$cputemp0 = '';
-								}
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
 							}
+						} elseif (preg_match("#osmc#", $namedistri)) {
+							$bitdistri = '32';
+							$ARMv = 'arm';
 
-						} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
-							
-							$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
-							try {
-								$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
-							} catch (Exception $e) {
-								$nbcpu = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							$uname = '.';
-
-							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-							try {
-								$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
-							} catch (Exception $e) {
-								$cpufreq0 = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							if ($cpufreq0 == '') {
-								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								try {
-									$cpufreq0 = trim($sshconnection->exec($cpufreq0ARM_cmd));
-								} catch (Exception $e) {
-									$cpufreq0 = '';
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-								}
-							}
+							$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
+							$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
 
 							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-							try {
-								$hdd = $sshconnection->exec($hdd_cmd);
-							} catch (Exception $e) {
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception Log :: ' . $sshconnection->getLog());
-								$hdd = '';
+							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
+
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+							$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
+
+							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
+							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));
+								} else {
+									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
+								}
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+							}
+						} elseif (preg_match("#piCorePlayer#", $uname)) {
+							$bitdistri = '32';
+							$ARMv = 'arm';
+							$namedistri_cmd = "uname -a 2>/dev/null | awk '{print $2,$3}'";
+							$namedistri = $this->execSSH($sshconnection, $namedistri_cmd, 'NameDistri');
+
+							$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
+							$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
+
+							$hdd_cmd = "df -h 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
+							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
+
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+							$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
+
+							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
+							if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));
+								} else {
+									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
+								}
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+							}
+						} elseif (preg_match("#FreeBSD#", $uname)) {
+							$namedistri_cmd = "uname -a 2>/dev/null | awk '{ print $1,$3}'";
+							$namedistri = $this->execSSH($sshconnection, $namedistri_cmd, 'NameDistri');
+
+							$ARMv_cmd = "sysctl hw.machine | awk '{ print $2}'";
+							$ARMv = $this->execSSH($sshconnection, $ARMv_cmd, 'ARMv');
+
+							$loadavg_cmd = "uptime | awk '{print $8,$9,$10}'";
+							$loadav = $this->execSSH($sshconnection, $loadavg_cmd, 'LoadAverage');
+
+							$memory_cmd = "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'";
+							$memory = $this->execSSH($sshconnection, $memory_cmd, 'Memory');
+
+							$bitdistri_cmd = "sysctl kern.smp.maxcpus | awk '{ print $2}'";
+							$bitdistri = $this->execSSH($sshconnection, $bitdistri_cmd, 'BitDistri');
+
+							$nbcpuARM_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
+							$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
+
+							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
+
+							$cpufreq0ARM_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
+							$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
+
+							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
+							if (is_object($cputemp_cmd)) {
+								if ($this->getconfiguration('linux_use_temp_cmd')) {
+									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][BSD-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));
+								} else {
+									$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][BSD-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
+								}
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
+							}
+						}
+						elseif (preg_match("#medion#", $uname)) {
+							$nbcpu = '';
+							$cpufreq0 = '';
+							$cputemp0 = '';
+
+							$ARMv = "arm";
+
+							$namedistri_cmd = "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'";
+							$VersionID_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
+							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
+							$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
+							
+							$namedistri = $this->execSSH($sshconnection, $namedistri_cmd, 'NameDistri');
+							$VersionID = $this->execSSH($sshconnection, $VersionID_cmd, 'VersionID');
+							$bitdistri = $this->execSSH($sshconnection, $bitdistri_cmd, 'BitDistri');
+							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
+							
+							if (isset($namedistri) && isset($VersionID)) {
+								$namedistri = "Medion/Linux " . $VersionID . " (" . $namedistri . ")";
+								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][MEDION] Distribution :: ' . $namedistri);
+							}
+
+							$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
+							$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
+
+							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
+							$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
+							
+							if ($cpufreq0 == '') {
+								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
+								$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
 							}
 
 							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 							if (is_object($cputemp_cmd)) {
 								if ($this->getconfiguration('linux_use_temp_cmd')) {
 									$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));
 								} else {
-									$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";    // OK RPi2
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
-									
-									if ($cputemp0 == '') {
-										$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"; // OK Banana Pi (Cubie surement un jour...)
-										try {
-											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-										} catch (Exception $e) {
-											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-											$cputemp0 = '';
-										}
-									}
-									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64-TEMP] Commande Température :: ' . $cputemp0_cmd);
-								}							
-							}
-						} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-							$NF = '';
-							$cputemp0 ='';
-							$uname = '.';
-							
-							$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
-							try {
-								$nbcpu = $sshconnection->exec($nbcpuVM_cmd);
-							} catch (Exception $e) {
-								$nbcpu = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							if ($nbcpu == '') {
-								$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'"; // OK pour LXC Linux/Ubuntu
-								try {
-									$nbcpu = $sshconnection->exec($nbcpuVMbis_cmd);
-								} catch (Exception $e) {
-									$nbcpu = '';
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] NbCPU Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU Exception Log :: ' . $sshconnection->getLog());
+									$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
+									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
 								}
-							}
-							$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
-
-							$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-							try {
-								$hdd = $sshconnection->exec($hdd_cmd);
-							} catch (Exception $e) {
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] HDD Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] HDD Exception Log :: ' . $sshconnection->getLog());
-								$hdd = '';
-							}
-
-							$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
-							try {
-								$cpufreq = $sshconnection->exec($cpufreqVM_cmd);
-							} catch (Exception $e) {
-								$cpufreq = '';
-								log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq Exception :: ' . $e->getMessage());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception LastError :: ' . $sshconnection->getLastError());
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception Log :: ' . $sshconnection->getLog());
-							}
-
-							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";    // OK pour LXC Linux, Proxmox
-								try {
-									$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
-								} catch (Exception $e) {
-									$cpufreq = '';
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception Log :: ' . $sshconnection->getLog());
-								}
-							}
-
-							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";    // OK pour LXC Linux
-								try {
-									$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
-								} catch (Exception $e) {
-									$cpufreq = '';
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception Log :: ' . $sshconnection->getLog());
-								}
-							}
-							if ($cpufreq == '') {
-								$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";    // OK pour Debian 10/11, Ubuntu 22.04
-								try {
-									$cpufreq = $sshconnection->exec($cpufreqVMbis_cmd);
-								} catch (Exception $e) {
-									$cpufreq = '';
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq Exception Log :: ' . $sshconnection->getLog());
-								}
-							}
-							$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
-
-							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd)) {
-								if ($this->getconfiguration('linux_use_temp_cmd')) {
-									$cputemp0_cmd = $this->getconfiguration('linux_temp_cmd');
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
-									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);	
-								} else {
-									$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null";	// Default
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
-									
-									if ($cputemp0 == '') {
-										$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"; // Default Zone 1
-										try {
-											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-										} catch (Exception $e) {
-											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-											$cputemp0 = '';
-										}
-									}
-									if ($cputemp0 == '') {
-										$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null";	// OK AOpen DE2700
-										try {
-											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-										} catch (Exception $e) {
-											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-											$cputemp0 = '';
-										}
-									}
-									if ($cputemp0 == '') {
-										// $cputemp0AMD_cmd = "cat /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon0/temp1_input 2>/dev/null";	// OK AMD Ryzen
-										$cputemp0AMD_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"; // OK Search temp?_input
-										try {
-											$cputemp0 = $sshconnection->exec($cputemp0AMD_cmd);
-										} catch (Exception $e) {
-											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-											$cputemp0 = '';
-										}
-									}
-									if ($cputemp0 == '') {
-										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"; // OK by sensors
-										try {
-											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-										} catch (Exception $e) {
-											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-											$cputemp0 = '';
-										}
-									}
-									if ($cputemp0 == '') {
-										$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"; // OK by sensors
-										try {
-											$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-										} catch (Exception $e) {
-											log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-											log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-											$cputemp0 = '';
-										}
-									}
-									log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86-TEMP] Commande Température :: ' . $cputemp0_cmd);
-								}
-							}
-						} elseif ($ARMv == '' & $this->getConfiguration('synology') != '1') {
-							$unamecmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
-							$unamedata = $sshconnection->exec($unamecmd);
-							$uname = $unamedata;
-
-							if (preg_match("#RasPlex|OpenELEC|LibreELEC#", $namedistri)) {
-								$bitdistri = '32';
-								$ARMv = 'arm';
-
-								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								try {
-									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-								} catch (Exception $e) {
-									$nbcpu = '';
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
-								}
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] NbCPU :: ' . $nbcpu);
-
-								$hdd_cmd = "df -h 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
-								try {
-									$hdd = $sshconnection->exec($hdd_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
-									$hdd = '';
-								}
-
-								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								try {
-									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-									$cpufreq0 = '';
-								}
-
-								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
-									if ($this->getconfiguration('linux_use_temp_cmd')) {
-										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
-									} else {
-										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
-									}
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
-								}
-							} elseif (preg_match("#osmc#", $namedistri)) {
-								$bitdistri = '32';
-								$ARMv = 'arm';
-
-								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								try {
-									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
-								}
-
-								$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-								try {
-									$hdd = $sshconnection->exec($hdd_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
-									$hdd = '';
-								}
-
-								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								try {
-									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-									$cpufreq0 = '';
-								}
-
-								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
-									if ($this->getconfiguration('linux_use_temp_cmd')) {
-										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
-									} else {
-										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
-									}
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
-								}
-							}
-							elseif (preg_match("#piCorePlayer#", $uname)) {
-								$bitdistri = '32';
-								$ARMv = 'arm';
-								$namedistri_cmd = "uname -a 2>/dev/null | awk '{print $2,$3}'";
-								try {
-									$namedistri = $sshconnection->exec($namedistri_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] namedistri Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception Log :: ' . $sshconnection->getLog());
-									$namedistri = '';
-								}
-
-								$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-								try {
-									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
-								}
-
-								$hdd_cmd = "df -h 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
-								try {
-									$hdd = $sshconnection->exec($hdd_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
-									$hdd = '';
-								}
-
-								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-								try {
-									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-									$cpufreq0 = '';
-								}
-
-								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
-									if ($this->getconfiguration('linux_use_temp_cmd')) {
-										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
-									} else {
-										$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM-TEMP] Commande Température :: ' . $cputemp0_cmd);
-									}
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
-								}
-							}
-							elseif (preg_match("#FreeBSD#", $uname)) {
-								$namedistri_cmd = "uname -a 2>/dev/null | awk '{ print $1,$3}'";
-								try {
-									$namedistri = $sshconnection->exec($namedistri_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] namedistri Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception Log :: ' . $sshconnection->getLog());
-									$namedistri = '';
-								}
-
-								$ARMv_cmd = "sysctl hw.machine | awk '{ print $2}'";
-								try {
-									$ARMv = $sshconnection->exec($ARMv_cmd);
-									if (!empty($ARMv)) {
-										$ARMv = trim($ARMv);
-									}
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] ARMv Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] ARMv Exception Log :: ' . $sshconnection->getLog());
-									$ARMv = '';
-								}
-
-								$loadavg_cmd = "uptime | awk '{print $8,$9,$10}'";
-								try {
-									$loadav = $sshconnection->exec($loadavg_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] loadav Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] loadav Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] loadav Exception Log :: ' . $sshconnection->getLog());
-									$loadav = '';
-								}
-
-								$memory_cmd = "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'";
-								try {
-									$memory = $sshconnection->exec($memory_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] memory Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] memory Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] memory Exception Log :: ' . $sshconnection->getLog());
-									$memory = '';
-								}
-
-								$bitdistri_cmd = "sysctl kern.smp.maxcpus | awk '{ print $2}'";
-								try {
-									$bitdistri = $sshconnection->exec($bitdistri_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] bitdistri Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception Log :: ' . $sshconnection->getLog());
-									$bitdistri = '';
-								}
-
-								$nbcpuARM_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
-								try {
-									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
-								}
-
-								$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
-								try {
-									$hdd = $sshconnection->exec($hdd_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
-									$hdd = '';
-								}
-
-								$cpufreq0ARM_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
-								try {
-									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-									$cpufreq0 = '';
-								}
-
-								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-								if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
-									if ($this->getconfiguration('linux_use_temp_cmd')) {
-										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][BSD-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
-									} else {
-										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][BSD-TEMP] Commande Température :: ' . $cputemp0_cmd);
-									}
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
-								}
-							}
-							elseif (preg_match("#medion#", $uname)) {
-								$nbcpu = '';
-								$cpufreq0 = '';
-								$cputemp0 = '';
-
-								$ARMv = "arm";
-
-								$namedistri_cmd = "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'";
-								$VersionID_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
-								$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
-								$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
-								
-								try {
-									$namedistri = $sshconnection->exec($namedistri_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] namedistri Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] namedistri Exception Log :: ' . $sshconnection->getLog());
-									$namedistri = '';
-								}
-								try {
-									$VersionID = trim($sshconnection->exec($VersionID_cmd));
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] VersionID Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] VersionID Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] VersionID Exception Log :: ' . $sshconnection->getLog());
-									$VersionID = '';
-								}
-								try {
-									$bitdistri = $sshconnection->exec($bitdistri_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] bitdistri Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] bitdistri Exception Log :: ' . $sshconnection->getLog());
-									$bitdistri = '';
-								}
-								try {
-									$hdd = $sshconnection->exec($hdd_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] hdd Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] hdd Exception Log :: ' . $sshconnection->getLog());
-									$hdd = '';
-								}
-
-								if (isset($namedistri) && isset($VersionID)) {
-									$namedistri = "Medion/Linux " . $VersionID . " (" . $namedistri . ")";
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][MEDION] Distribution :: ' . $namedistri);
-								}
-
-								$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
-								try {
-									$nbcpu = trim($sshconnection->exec($nbcpuARM_cmd));
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] nbcpu Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] nbcpu Exception Log :: ' . $sshconnection->getLog());
-								}
-
-								$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
-								try {
-									$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-									$cpufreq0 = '';
-								}
-								
-								if ($cpufreq0 == '') {
-									$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-									try {
-										$cpufreq0 = $sshconnection->exec($cpufreq0ARM_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cpufreq0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cpufreq0 Exception Log :: ' . $sshconnection->getLog());
-										$cpufreq0 = '';
-									}
-								}
-
-								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-								if (is_object($cputemp_cmd)) {
-									if ($this->getconfiguration('linux_use_temp_cmd')) {
-										$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
-									} else {
-										$cputemp0_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
-										log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION-TEMP] Commande Température :: ' . $cputemp0_cmd);
-									}
-									try {
-										$cputemp0 = $sshconnection->exec($cputemp0_cmd);
-									} catch (Exception $e) {
-										log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD] cputemp0 Exception :: ' . $e->getMessage());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception LastError :: ' . $sshconnection->getLastError());
-										log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD] cputemp0 Exception Log :: ' . $sshconnection->getLog());
-										$cputemp0 = '';
-									}
-								}
+								$cputemp0 = $this->execSSH($sshconnection, $cputemp0_cmd, 'cputemp0');
 							}
 						}
 					}
@@ -1927,7 +1423,7 @@ class Monitoring extends eqLogic {
 					$hdd_cmd = "df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 					// $VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | tr -d '\"'";
 					$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | -v ORS=\"\" awk '{ gsub(/\"/, \"\"); print }'";
-				}else {
+				} else {
 					// $ARMv_cmd = "lscpu 2>/dev/null | grep Architecture | awk '{ print $2 }'";
 					$ARMv_cmd = "lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 					
@@ -1941,11 +1437,8 @@ class Monitoring extends eqLogic {
 					$hdd_cmd = "df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 					$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 					
-					$ARMv = exec($ARMv_cmd);
-					if (!empty($ARMv)) {
-						$ARMv = trim($ARMv);
-					}
-					$bitdistri = exec($bitdistri_cmd);
+					$ARMv = $this->execSRV($ARMv_cmd, 'ARMv');
+					$bitdistri = $this->execSRV($bitdistri_cmd, 'BitDistri');
 				}
 
 				// $uptime_cmd = "uptime";
@@ -1962,28 +1455,26 @@ class Monitoring extends eqLogic {
 				$ReseauIP_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 				// $ReseauIP_cmd = "ip -br -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $3 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 				
-				$uptime = exec($uptime_cmd);
-				$namedistri = exec($namedistri_cmd);
-				$VersionID = trim(exec($VersionID_cmd));
-				$loadav = exec($loadavg_cmd);
-				$ReseauRXTX = exec($ReseauRXTX_cmd);
-				$ReseauIP = exec($ReseauIP_cmd);
-				$hdd = exec($hdd_cmd);
-				$memory = exec($memory_cmd);
-				$swap = exec($swap_cmd);
+				$uptime = $this->execSRV($uptime_cmd, 'Uptime');
+				$namedistri = $this->execSRV($namedistri_cmd, 'NameDistri');
+				$VersionID = $this->execSRV($VersionID_cmd, 'VersionID');
+				$loadav = $this->execSRV($loadavg_cmd, 'LoadAverage');
+				$ReseauRXTX = $this->execSRV($ReseauRXTX_cmd, 'ReseauRXTX');
+				$ReseauIP = $this->execSRV($ReseauIP_cmd, 'ReseauIP');
+				$hdd = $this->execSRV($hdd_cmd, 'HDD');
+				$memory = $this->execSRV($memory_cmd, 'Memory');
+				$swap = $this->execSRV($swap_cmd, 'Swap');
 				
 				$perso1_cmd = $this->getConfiguration('perso1');
 				$perso2_cmd = $this->getConfiguration('perso2');
 
-				if ($perso1_cmd != '' /* && $Perso1Visible == 'OK' */) {
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . $perso1_cmd);
-					$perso1 = exec($perso1_cmd);
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Exec :: ' . $perso1);
+				if ($perso1_cmd != '') {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . json_encode($perso1_cmd));
+					$perso1 = $this->execSRV($perso1_cmd, 'Perso1');
 				}
-				if ($perso2_cmd != '' /* && $Perso2Visible == 'OK' */) {
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Cmd :: ' . $perso2_cmd);
-					$perso2 = exec($perso2_cmd);
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Exec :: ' . $perso2);
+				if ($perso2_cmd != '') {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Cmd :: ' . json_encode($perso2_cmd));
+					$perso2 = $this->execSRV($perso2_cmd, 'Perso2');
 				}
 
 				if ($this->getConfiguration('synology') == '1') {
@@ -1994,81 +1485,79 @@ class Monitoring extends eqLogic {
 					// $versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | tr -d '\"' | awk NF=NF RS='\r\n' OFS='&'"; // on récupère le fichier entier pour avoir le nom des champs
 					$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 
-					$nbcpu = exec($nbcpuARM_cmd);
-					$cpufreq0 = exec($cpufreq0ARM_cmd);
-					$versionsyno = exec($versionsyno_cmd);
+					$nbcpu = $this->execSRV($nbcpuARM_cmd, 'NbCPU');
+					$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
+					$versionsyno = $this->execSRV($versionsyno_cmd, 'VersionSyno');
 
 					if ($this->getconfiguration('syno_use_temp_path')) {
 						$cputemp0_cmd=$this->getconfiguration('syno_temp_path');
-						log::add('Monitoring','debug', '['. $equipement .'][LOCAL][SYNO-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);
+						log::add('Monitoring','debug', '['. $equipement .'][LOCAL][SYNO-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));
 					} else {
 						$cputemp0_cmd="timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null";
-						log::add('Monitoring','debug', '['. $equipement .'][LOCAL][SYNO-TEMP] Commande Température :: ' . $cputemp0_cmd);
+						log::add('Monitoring','debug', '['. $equipement .'][LOCAL][SYNO-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
 					}
-					$cputemp0 = exec($cputemp0_cmd);
+					$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 
 					if ($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
 						$hddv2cmd = "df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'";
-						$hddv2 = exec($hddv2cmd);
+						$hddv2 = $this->execSRV($hddv2cmd, 'HDDv2');
 					}
 
 					if ($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
 						$hddusbcmd = "df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'";
-						$hddusb = exec($hddusbcmd);
+						$hddusb = $this->execSRV($hddusbcmd, 'HDDUSB');
 					}
 
 					if ($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1') {
 						$hddesatacmd = "df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'";
-						$hddesata = exec($hddesatacmd);
+						$hddesata = $this->execSRV($hddesatacmd, 'HDDeSATA');
 					}
-				}
-				elseif ($ARMv == 'armv6l') {
+				} elseif ($ARMv == 'armv6l') {
 					$uname = '.';
 					$cpufreq0 = '';
 					$cputemp0 = '';
 
 					$nbcpuARM_cmd = "lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
-					$nbcpu = exec($nbcpuARM_cmd);
+					$nbcpu = $this->execSRV($nbcpuARM_cmd, 'NbCPU');
 					
 					if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq')) {
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
-						$cpufreq0 = exec($cpufreq0ARM_cmd);
+						$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
 					}
 					if ($cpufreq0 == '') {
 						if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq')) {
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
-							$cpufreq0 = exec($cpufreq0ARM_cmd);
+							$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
 						}
 					}
 					$cputemp_cmd = $this->getCmd(null,'cpu_temp');
 					if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-							$cputemp0 = exec($cputemp0_cmd);
-							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);	
+							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));	
+							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 						} elseif (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
 							$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp";
-							$cputemp0 = exec($cputemp0_cmd);
-							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L-TEMP] Commande Température :: ' . $cputemp0_cmd);
+							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
+							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 						}
 					}
-				}
-				elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64') {
+				} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64') {
 					$uname = '.';
 					$cputemp0 = '';
 					$cpufreq0 = '';
 
 					$nbcpuARM_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
-					$nbcpu = exec($nbcpuARM_cmd);
+					$nbcpu = $this->execSRV($nbcpuARM_cmd, 'NbCPU');
 					
 					if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq')) {
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
-						$cpufreq0 = exec($cpufreq0ARM_cmd);
+						$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
 					}
 					if ($cpufreq0 == '') {
 						if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq')) {
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
-							$cpufreq0 = exec($cpufreq0ARM_cmd);
+							$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
 						}
 					}	
 					
@@ -2076,52 +1565,52 @@ class Monitoring extends eqLogic {
 					if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-							$cputemp0 = exec($cputemp0_cmd);
-							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][AARCH64-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);	
+							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][AARCH64-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));	
+							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+
 						} else {
 							if (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
 								$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp"; // OK RPi2/3, Odroid
-								$cputemp0 = exec($cputemp0_cmd);
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 							}
 							if ($cputemp0 == '') {
 								if (file_exists('/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1')) {
 									$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"; // OK Banana Pi (Cubie surement un jour...)
-									$cputemp0 = exec($cputemp0_cmd);
+									$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 								}
 							}
-							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][AARCH64-TEMP] Commande Température :: ' . $cputemp0_cmd);
+							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][AARCH64-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
 						}
 					}
-				}
-				elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
+				} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
 					$NF = '';
 					$uname = '.';
 					$cputemp0 = '';
 					$cpufreq = '';
 
 					$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print $NF }'"; // OK pour Debian
-					$nbcpu = exec($nbcpuVM_cmd);
+					$nbcpu = $this->execSRV($nbcpuVM_cmd, 'NbCPU');
 
 					if ($nbcpu == '') {
 						$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $NF }'"; // OK pour LXC Linux/Ubuntu
-						$nbcpu = exec($nbcpuVMbis_cmd);
+						$nbcpu = $this->execSRV($nbcpuVMbis_cmd, 'NbCPU');
 					}
 					$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
 					
 					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print $NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
-					$cpufreq = exec($cpufreqVM_cmd);
+					$cpufreq = $this->execSRV($cpufreqVM_cmd, 'cpufreq0');
 					
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print $NF }'";	// OK pour LXC Linux, Proxmox
-						$cpufreq = exec($cpufreqVMbis_cmd);
+						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
 					}
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print $NF }'";	// OK pour LXC Linux
-						$cpufreq = exec($cpufreqVMbis_cmd);
+						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
 					}
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print $NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
-						$cpufreq = exec($cpufreqVMbis_cmd);
+						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
 					}
 					$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
 					
@@ -2129,32 +1618,33 @@ class Monitoring extends eqLogic {
 					if (is_object($cputemp_cmd) /* && $cputemp_cmd->getIsVisible() == 1 */) {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
-							$cputemp0 = exec($cputemp0_cmd);
-							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][X86-TEMP] Commande Température (Custom) :: ' . $cputemp0_cmd);	
+							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][X86-TEMP] Commande Température (Custom) :: ' . json_encode($cputemp0_cmd));	
+							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+							
 						} else {
 							if (file_exists('/sys/devices/virtual/thermal/thermal_zone0/temp')) {
 								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp"; // OK Dell Whyse
-								$cputemp0 = exec($cputemp0_cmd);
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 							}					
 							if ($cputemp0 == '') {
 								if (file_exists('/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input')) {
 									$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input";	// OK AOpen DE2700
-									$cputemp0 = exec($cputemp0_cmd);
+									$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 								}
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"; // OK AMD Ryzen
-								$cputemp0 = exec($cputemp0_cmd); 
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"; // OK by sensors
-								$cputemp0 = exec($cputemp0_cmd);
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"; // OK by sensors MB
-								$cputemp0 = exec($cputemp0_cmd);
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
 							}
-							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][X86-TEMP] Commande Température :: ' . $cputemp0_cmd);
+							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][X86-TEMP] Commande Température :: ' . json_encode($cputemp0_cmd));
 						}
 					}
 				}
@@ -2303,8 +1793,7 @@ class Monitoring extends eqLogic {
 							if (isset($memtotal) && isset($memorylibre)) {
 								$Mem = 'Total : '.$memtotal.' - Libre : '.$memorylibre;
 							}
-						}
-						elseif (preg_match("#FreeBSD#", $uname)) {
+						} elseif (preg_match("#FreeBSD#", $uname)) {
 							$memory = explode(' ', $memory);
 							if (isset($memory[0]) && isset($memory[1])) {
 								if (intval($memory[0]) != 0) {
@@ -2325,8 +1814,7 @@ class Monitoring extends eqLogic {
 							}
 							$Mem = 'Total : '.$memtotal.' - Libre : '.$memorylibre;
 						}
-					}
-					else {
+					} else {
 						$Mem = '';
 					}
 
@@ -2439,8 +1927,7 @@ class Monitoring extends eqLogic {
 								}
 							}
 							$cpu = $nbcpu.' - '.$cpufreq;
-						}
-						elseif ($ARMv == 'armv6l' || $ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
+						} elseif ($ARMv == 'armv6l' || $ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
 							if ((floatval($cpufreq0) / 1000) > 1000) {
 								$cpufreq0 = round(floatval($cpufreq0) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
 							} else {
@@ -2460,8 +1947,7 @@ class Monitoring extends eqLogic {
 							} else {
 								$cpu = $nbcpu.' - '.$cpufreq0;
 							}
-						}
-						elseif ($ARMv == 'arm') {
+						} elseif ($ARMv == 'arm') {
 							if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $namedistri) || preg_match("#piCorePlayer#", $uname) || preg_match("#medion#", $uname)) {
 								if ((floatval($cpufreq0) / 1000) > 1000) {
 									$cpufreq0 = round(floatval($cpufreq0) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
@@ -2719,134 +2205,60 @@ class Monitoring extends eqLogic {
 
 	function getCaseAction($paramaction) {
 		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
+		$equipement = $this->getName();
 		
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
-			$ip = $this->getConfiguration('addressip');
-			$port = $this->getConfiguration('portssh', 22);
-			$timeout = $this->getConfiguration('timeoutssh', 30);
-			$user = $this->getConfiguration('user');
-			$pass = $this->getConfiguration('password');
-			$sshkey = $this->getConfiguration('ssh-key');
-			$sshpassphrase = $this->getConfiguration('ssh-passphrase');
-			$equipement = $this->getName();
-			$cnx_ssh = '';
-
-			// Debut de la connexion SSH
-			try {
-				$sshconnection = new SSH2($ip,$port, $timeout);
-				log::add('Monitoring', 'debug', '['. $equipement .'][SSH] Connexion SSH (IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout . ') :: OK');
-			} catch (Exception $e) {
-				log::add('Monitoring', 'error', '['. $equipement .'][SSH] Connexion SSH :: '. $e->getMessage());
-				$cnx_ssh = 'KO';
-			}
-
-			if ($cnx_ssh != 'KO') {
-				if ($confLocalOrRemote == 'deporte-key') {
-					try {
-						$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-						log::add('Monitoring', 'debug', '['. $equipement .'][SSH] PublicKeyLoader :: OK');
-					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '['. $equipement .'][SSH] PublicKeyLoader :: '. $e->getMessage());
-						$keyOrPwd = '';
-					}
-				} else {
-					$keyOrPwd = $pass;
-					log::add('Monitoring', 'debug', '['. $equipement .'][SSH] Authentification SSH par Mot de passe');
-				}
-
-				try {
-					if (!$sshconnection->login($user, $keyOrPwd)) {
-						log::add('Monitoring', 'error', '['. $equipement .'][SSH] Login ERROR :: ' . $user);
-						$cnx_ssh = 'KO';
-					}
-				} catch (Exception $e) {
-					log::add('Monitoring', 'error', '['. $equipement .'][SSH] Authentification SSH :: '. $e->getMessage());
-					$cnx_ssh = 'KO';
-				}
-
-				// Fin de la connexion SSH
-				if ($cnx_ssh != 'KO') {
-					log::add('Monitoring', 'debug', '['. $equipement .'][SSH] Authentification SSH :: OK');
-					if ($this->getConfiguration('synology') == '1') {
-						switch ($paramaction) {
-							case "reboot":
-								try {
-									$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null & /sbin/shutdown -r now >/dev/null";
-									$sshconnection->exec($rebootcmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH][SYNO-REBOOT] Exception [REBOOT] :: '. $e->getMessage());	
-								}
-								log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
-								break;
-							case "poweroff":
-								try {
-									// $poweroffcmd = 'sudo /sbin/shutdown -P now >/dev/null & /sbin/shutdown -P now >/dev/null';
-									$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
-									$sshconnection->exec($poweroffcmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH][SYNO-OFF] Exception [POWEROFF] :: '. $e->getMessage());
-								}
-								log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-OFF] Lancement commande distante POWEROFF');
-								break;
+			[$cnx_ssh, $sshconnection] = $this->connectSSH();
+				
+			if ($cnx_ssh == 'OK') {
+				switch ($paramaction) {
+					case "reboot":
+						if ($this->getConfiguration('synology') == '1') {
+							$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null & /sbin/shutdown -r now >/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
+						} else {
+							$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][REBOOT] Lancement commande distante REBOOT');
 						}
-					}
-					else {
-						switch ($paramaction) {
-							case "reboot":
-								log::add('Monitoring', 'info', '['. $equipement .'][SSH][REBOOT] Lancement commande distante REBOOT');
-								try {
-									// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
-									$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
-									$sshconnection->exec($rebootcmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH][REBOOT] Exception [REBOOT] :: '. $e->getMessage());	
-								}
-								break;
-							case "poweroff":
-								log::add('Monitoring', 'info', '['. $equipement .'][SSH][POWEROFF] Lancement commande distante POWEROFF');
-								try {
-									// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
-									$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
-									$sshconnection->exec($poweroffcmd);
-								} catch (Exception $e) {
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH][POWEROFF] Exception [POWEROFF] :: '. $e->getMessage());	
-								}
-								log::add('Monitoring', 'info', '['. $equipement .'][SSH][POWEROFF] Lancement commande distante POWEROFF');
-								break;
+						$reboot = $this->execSSH($sshconnection, $rebootcmd, 'Reboot');
+						break;
+					case "poweroff":
+						if ($this->getConfiguration('synology') == '1') {
+							$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-POWEROFF] Lancement commande distante POWEROFF');
+						} else {
+							$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][POWEROFF] Lancement commande distante POWEROFF');
 						}
-					}
+						$poweroff = $this->execSSH($sshconnection, $poweroffcmd, 'PowerOff');
+						break;
 				}
 			}
 		} elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
-			$equipement = $this->getName();
-			if ($this->getConfiguration('synology') == '1') {
-				switch ($paramaction) {
-					case "reboot":
-						$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null & /sbin/shutdown -r now >/dev/null";
+			switch ($paramaction) {
+				case "reboot":
+					if ($this->getConfiguration('synology') == '1') {
+						$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 						log::add('Monitoring', 'info', '['. $equipement .'][LOCAL][SYNO-REBOOT] Lancement commande locale REBOOT');
-						exec($rebootcmd);
-						break;
-					case "poweroff":
-						$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
-						log::add('Monitoring', 'info', '['. $equipement .'][LOCAL][SYNO-POWEROFF] Lancement commande locale POWEROFF');
-						exec($poweroffcmd);
-						break;
-				}
-			} else {
-				switch ($paramaction) {
-					case "reboot":
-						// $rebootcmd = "sudo shutdown -r now >/dev/null & shutdown -r now >/dev/null";
-						$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
+					} else {
+						// $rebootcmd = "timeout 3 sudo -S shutdown -r now 2>/dev/null";
+						$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
 						log::add('Monitoring', 'info', '['. $equipement .'][LOCAL][LINUX-REBOOT] Lancement commande locale REBOOT');
-						exec($rebootcmd);
-						break;
-					case "poweroff":
-						// $poweroffcmd = 'sudo shutdown -h now >/dev/null & shutdown -h now >/dev/null';
-						$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
+					}
+					$reboot = $this->execSRV($rebootcmd, 'Reboot');
+					break;
+				case "poweroff":
+					if ($this->getConfiguration('synology') == '1') {
+						// $poweroffcmd = 'sudo /sbin/shutdown -P now >/dev/null & /sbin/shutdown -P now >/dev/null';
+						$poweroffcmd = 'timeout 3 sudo -S /sbin/shutdown -h now 2>/dev/null';
+						log::add('Monitoring', 'info', '['. $equipement .'][LOCAL][SYNO-POWEROFF] Lancement commande locale POWEROFF');
+					} else {
+						// $poweroffcmd = 'timeout 3 sudo -S shutdown -h now 2>/dev/null';
+						$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
 						log::add('Monitoring', 'info', '['. $equipement .'][LOCAL][LINUX-POWEROFF] Lancement commande locale POWEROFF');
-						exec($poweroffcmd);
-						break;
-				}
+					}
+					$poweroff = $this->execSRV($poweroffcmd, 'PowerOff');
+					break;
 			}
 		}
 	}
