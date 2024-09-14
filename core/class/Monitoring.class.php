@@ -940,7 +940,7 @@ class Monitoring extends eqLogic {
 			$cmd = trim($cmd);
 			if ($timeout && $timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $cmd)) {
 				if (preg_match('/LC_ALL=C/', $cmd)) {
-					$cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $timeoutSrv . ' ', $cmd, 1);
+					$cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $timeoutSrv, $cmd, 1);
 				}
 				else {
 					$cmd = 'timeout ' . $timeoutSrv . ' ' . $cmd;
