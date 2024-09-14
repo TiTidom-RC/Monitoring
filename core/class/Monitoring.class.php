@@ -881,9 +881,9 @@ class Monitoring extends eqLogic {
 
 		try {
 			$sshconnection = new SSH2($ip, $port, $timeout);
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CMD] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
 		} catch (Exception $e) {
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CMD] Connexion SSH :: '. $e->getMessage());
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: '. $e->getMessage());
 			$cnx_ssh = 'KO';
 		}
 
@@ -891,34 +891,71 @@ class Monitoring extends eqLogic {
 			if ($this->getConfiguration('maitreesclave') == 'deporte-key') {
 				try {
 					$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-					log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CMD] PublicKeyLoader :: OK');
+					log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: OK');
 				} catch (Exception $e) {
-					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CMD] PublicKeyLoader :: '. $e->getMessage());
+					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: '. $e->getMessage());
 					$keyOrPwd = '';
 				}
 			}
 			else {
 				$keyOrPwd = $pass;
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CMD] Authentification SSH par Mot de passe');
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Authentification SSH par Mot de passe');
 			}
 
 			try {
 				if (!$sshconnection->login($user, $keyOrPwd)) {
-					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CMD] Login ERROR :: ' . $user);
+					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login ERROR :: ' . $user);
 					$cnx_ssh = 'KO';
 				}
 			} catch (Exception $e) {
-				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CMD] Authentification SSH :: '. $e->getMessage());
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Authentification SSH :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			}
 		}
 
 		if ($cnx_ssh != 'KO') {
 			$cnx_ssh = 'OK';
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CMD] Connexion SSH (cnx_ssh) :: OK');
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connexion SSH (cnx_ssh) :: OK');
 		}
 
 		return [$cnx_ssh, $sshconnection];
+	}
+
+	public function closeSSH($session) {
+		try {
+			$session->disconnect();
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Deconnexion SSH :: OK');
+		} catch (Exception $e) {
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CLOSE] Exception :: '. $e->getMessage());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Exception LastError :: ' . $session->getLastError());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Exception Log :: ' . $session->getLog());
+		}
+	}
+
+	public function execSRV($cmd = '', $cmdName = '', $timeout = 0) {
+		$cmd_result = '';
+		try {
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' :: ' . json_encode($cmd));
+
+			if ($timeout > 0 && strpos(trim($cmd), 'timeout') !== 0) {
+				$cmd = 'timeout ' . $timeout . ' ' . trim($cmd);
+			}
+
+			$cmd_result = exec($cmd, null, $return_code);
+			if ($return_code !== 0) {
+				log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' ReturnCode :: ' . $return_code);
+				$cmd_result = '';
+			}
+			if (!empty($cmd_result)) {
+				$cmd_result = trim($cmd_result);
+			}
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' Result :: ' . $cmd_result);
+		} catch (Exception $e) {
+			$cmd_result = '';
+			log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' Exception :: ' . $e->getMessage());
+
+		}
+		return $cmd_result;
 	}
 
 	public function execSSH($session, $cmd = '', $cmdName = '') {
@@ -1429,7 +1466,8 @@ class Monitoring extends eqLogic {
 
 				if ($perso1_cmd != '') {
 					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . json_encode($perso1_cmd));
-					$perso1 = exec($perso1_cmd);
+					// $perso1 = exec($perso1_cmd);
+					$perso1 = $this->execSRV($perso1_cmd, 'perso1', 10);
 					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Exec :: ' . $perso1);
 				}
 				if ($perso2_cmd != '') {
