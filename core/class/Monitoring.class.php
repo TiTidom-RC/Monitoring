@@ -907,6 +907,12 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login ERROR :: ' . $user);
 					$cnx_ssh = 'KO';
 				}
+			} catch (RuntimeException $e) {
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login SSH :: '. $e->getMessage());
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Login LastError :: ' . $sshconnection->getLastError());
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Login Log :: ' . $sshconnection->getLog());
+				$sshconnection->disconnect();
+				$cnx_ssh = 'KO';
 			} catch (Exception $e) {
 				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Authentification SSH :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
