@@ -881,9 +881,9 @@ class Monitoring extends eqLogic {
 
 		try {
 			$sshconnection = new SSH2($ip, $port, $timeout);
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connection SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
 		} catch (Exception $e) {
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: '. $e->getMessage());
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection Exception :: '. $e->getMessage());
 			$cnx_ssh = 'KO';
 		}
 
@@ -893,7 +893,7 @@ class Monitoring extends eqLogic {
 					$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
 					log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: OK');
 				} catch (Exception $e) {
-					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: '. $e->getMessage());
+					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader Exception :: '. $e->getMessage());
 					$keyOrPwd = '';
 				}
 			}
@@ -908,13 +908,10 @@ class Monitoring extends eqLogic {
 					$cnx_ssh = 'KO';
 				}
 			} catch (RuntimeException $e) {
-				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login SSH :: '. $e->getMessage());
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Login LastError :: ' . $sshconnection->getLastError());
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Login Log :: ' . $sshconnection->getLog());
-				$sshconnection->disconnect();
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login RuntimeException :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			} catch (Exception $e) {
-				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Authentification SSH :: '. $e->getMessage());
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login Exception :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			}
 		}
@@ -978,6 +975,8 @@ class Monitoring extends eqLogic {
 		$cmdResult_ssh = '';
 		try {
 			$cmdResult_ssh = $session->exec($cmd_ssh);
+
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Exit Status :: ' . $session->getExitStatus());
 
 			if ($session->isTimeout()) {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
