@@ -1019,15 +1019,15 @@ class Monitoring extends eqLogic {
 							$namedistri_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
 						}
 						else {
-							$namedistri_cmd = "LC_ALL=C get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
+							$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 						}
-						$VersionID_cmd = "LC_ALL=C awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 					}
 					else {
-						$namedistri_cmd = "LC_ALL=C awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+						$namedistri_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 
-						$VersionID_cmd = "LC_ALL=C awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-						$bitdistri_cmd = "LC_ALL=C getconf LONG_BIT 2>/dev/null";
+						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+						$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
 					}
 
 					$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
@@ -1044,7 +1044,7 @@ class Monitoring extends eqLogic {
 					$ARMv = $this->execSSH($sshconnection, $ARMv_cmd, 'ARMv');
 
 					// Uptime Command
-					$uptime_cmd = "LC_ALL=C awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 					$uptime = $this->execSSH($sshconnection, $uptime_cmd, 'Uptime');
 					$namedistri = $this->execSSH($sshconnection, $namedistri_cmd, 'NameDistri');
 					$bitdistri = $this->execSSH($sshconnection, $bitdistri_cmd, 'BitDistri');
@@ -1087,7 +1087,7 @@ class Monitoring extends eqLogic {
 							$cputemp0_cmd = $this->getconfiguration('syno_temp_path');
 							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cputemp0_cmd));
 						} else {
-							$cputemp0_cmd = "LC_ALL=C timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
+							$cputemp0_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
 							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cputemp0_cmd));
 						}
 						if ($cputemp0_cmd != '') {
