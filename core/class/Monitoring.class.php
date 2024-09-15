@@ -1526,12 +1526,12 @@ class Monitoring extends eqLogic {
 					
 					if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq')) {
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
-						$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
+						$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0-1');
 					}
 					if ($cpufreq0 == '') {
 						if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq')) {
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
-							$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
+							$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0-2');
 						}
 					}
 					$cputemp_cmd = $this->getCmd(null,'cpu_temp');
@@ -1539,11 +1539,11 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L-TEMP] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cputemp0_cmd));	
-							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-1');
 						} elseif (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
 							$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp";
 							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L-TEMP] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cputemp0_cmd));
-							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-2');
 						}
 					}
 				} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64') {
@@ -1556,12 +1556,12 @@ class Monitoring extends eqLogic {
 					
 					if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq')) {
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq";
-						$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
+						$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0-1');
 					}
 					if ($cpufreq0 == '') {
 						if (file_exists('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq')) {
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq";
-							$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0');
+							$cpufreq0 = $this->execSRV($cpufreq0ARM_cmd, 'cpufreq0-2');
 						}
 					}	
 					
@@ -1570,17 +1570,17 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][AARCH64-TEMP] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cputemp0_cmd));	
-							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-1');
 
 						} else {
 							if (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
 								$cputemp0_cmd = "cat /sys/class/thermal/thermal_zone0/temp"; // OK RPi2/3, Odroid
-								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-2');
 							}
 							if ($cputemp0 == '') {
 								if (file_exists('/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1')) {
 									$cputemp0_cmd = "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"; // OK Banana Pi (Cubie surement un jour...)
-									$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+									$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-3');
 								}
 							}
 							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][AARCH64-TEMP] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cputemp0_cmd));
@@ -1593,29 +1593,29 @@ class Monitoring extends eqLogic {
 					$cpufreq = '';
 
 					$nbcpuVM_cmd = "lscpu 2>/dev/null | grep 'Processeur(s)' | awk '{ print \$NF }'"; // OK pour Debian
-					$nbcpu = $this->execSRV($nbcpuVM_cmd, 'NbCPU');
+					$nbcpu = $this->execSRV($nbcpuVM_cmd, 'NbCPU-1');
 
 					if ($nbcpu == '') {
 						$nbcpuVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'"; // OK pour LXC Linux/Ubuntu
-						$nbcpu = $this->execSRV($nbcpuVMbis_cmd, 'NbCPU');
+						$nbcpu = $this->execSRV($nbcpuVMbis_cmd, 'NbCPU-2');
 					}
 					$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
 					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] NbCPU :: ' . $nbcpu);
 
 					$cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print \$NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
-					$cpufreq = $this->execSRV($cpufreqVM_cmd, 'cpufreq0');
+					$cpufreq = $this->execSRV($cpufreqVM_cmd, 'cpufreq0-1');
 					
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU max MHz' | awk '{ print \$NF }'";	// OK pour LXC Linux, Proxmox
-						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
+						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0-2');
 					}
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "lscpu 2>/dev/null | grep '^CPU MHz' | awk '{ print \$NF }'";	// OK pour LXC Linux
-						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
+						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0-3');
 					}
 					if ($cpufreq == '') {
 						$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'";	// OK pour Debian 10/11, Ubuntu 22.04
-						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0');
+						$cpufreq = $this->execSRV($cpufreqVMbis_cmd, 'cpufreq0-4');
 					}
 					$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
 					
@@ -1624,30 +1624,30 @@ class Monitoring extends eqLogic {
 						if ($this->getconfiguration('linux_use_temp_cmd')) {
 							$cputemp0_cmd=$this->getconfiguration('linux_temp_cmd');
 							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][X86-TEMP] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cputemp0_cmd));	
-							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+							$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-1');
 							
 						} else {
 							if (file_exists('/sys/devices/virtual/thermal/thermal_zone0/temp')) {
 								$cputemp0_cmd = "cat /sys/devices/virtual/thermal/thermal_zone0/temp"; // OK Dell Whyse
-								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-2');
 							}					
 							if ($cputemp0 == '') {
 								if (file_exists('/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input')) {
 									$cputemp0_cmd = "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input";	// OK AOpen DE2700
-									$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+									$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-3');
 								}
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"; // OK AMD Ryzen
-								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-4');
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"; // OK by sensors
-								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-5');
 							}
 							if ($cputemp0 == '') {
 								$cputemp0_cmd = "sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"; // OK by sensors MB
-								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0');
+								$cputemp0 = $this->execSRV($cputemp0_cmd, 'cputemp0-6');
 							}
 							log::add('Monitoring','debug', '['. $equipement .'][LOCAL][X86-TEMP] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cputemp0_cmd));
 						}
