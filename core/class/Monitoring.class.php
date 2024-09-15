@@ -881,9 +881,9 @@ class Monitoring extends eqLogic {
 
 		try {
 			$sshconnection = new SSH2($ip, $port, $timeout);
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connection SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
 		} catch (Exception $e) {
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: '. $e->getMessage());
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection Exception :: '. $e->getMessage());
 			$cnx_ssh = 'KO';
 		}
 
@@ -893,7 +893,7 @@ class Monitoring extends eqLogic {
 					$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
 					log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: OK');
 				} catch (Exception $e) {
-					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: '. $e->getMessage());
+					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader Exception :: '. $e->getMessage());
 					$keyOrPwd = '';
 				}
 			}
@@ -907,8 +907,11 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login ERROR :: ' . $user);
 					$cnx_ssh = 'KO';
 				}
+			} catch (RuntimeException $e) {
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login RuntimeException :: '. $e->getMessage());
+				$cnx_ssh = 'KO';
 			} catch (Exception $e) {
-				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Authentification SSH :: '. $e->getMessage());
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login Exception :: '. $e->getMessage());
 				$cnx_ssh = 'KO';
 			}
 		}
@@ -972,6 +975,8 @@ class Monitoring extends eqLogic {
 		$cmdResult_ssh = '';
 		try {
 			$cmdResult_ssh = $session->exec($cmd_ssh);
+			// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Exit Status :: ' . $session->getExitStatus());
+
 			if ($session->isTimeout()) {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Timeout');
@@ -983,13 +988,19 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Result :: ' . $cmdResult_ssh);
 			}
-			
+		} catch (RuntimeException $e) {
+			$cmdResult_ssh = '';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException :: ' . $e->getMessage());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException LastError :: ' . $session->getLastError());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException Log :: ' . $session->getLog());
+			$session->disconnect();
 		} catch (Exception $e) {
 			$cmdResult_ssh = '';
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception :: ' . $e->getMessage());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception LastError :: ' . $session->getLastError());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception Log :: ' . $session->getLog());
+			// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception LastError :: ' . $session->getLastError());
+			// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception Log :: ' . $session->getLog());
 		}
 		return $cmdResult_ssh;
 	}
@@ -1004,6 +1015,7 @@ class Monitoring extends eqLogic {
 			$ethernet0 = '';
 			$ethernet0_name = '';
 			$ethernet0_ip = '';
+			$cnx_ssh = '';
 
 			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 
@@ -1180,7 +1192,6 @@ class Monitoring extends eqLogic {
 							}							
 						}
 					} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-						// $NF = '';
 						$cputemp0 ='';
 						$uname = '.';
 						
@@ -2239,20 +2250,20 @@ class Monitoring extends eqLogic {
 				switch ($paramaction) {
 					case "reboot":
 						if ($this->getConfiguration('synology') == '1') {
-							$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null & /sbin/shutdown -r now >/dev/null";
+							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
 						} else {
-							$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
+							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-REBOOT] Lancement commande distante REBOOT');
 						}
 						$reboot = $this->execSSH($sshconnection, $rebootcmd, 'Reboot');
 						break;
 					case "poweroff":
 						if ($this->getConfiguration('synology') == '1') {
-							$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
+							$poweroffcmd = 'timeout 3 sudo -S /sbin/shutdown -h now 2>/dev/null';
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
-							$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
+							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-POWEROFF] Lancement commande distante POWEROFF');
 						}
 						$poweroff = $this->execSSH($sshconnection, $poweroffcmd, 'PowerOff');
