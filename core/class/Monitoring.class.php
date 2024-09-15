@@ -1024,6 +1024,7 @@ class Monitoring extends eqLogic {
 			$ethernet0 = '';
 			$ethernet0_name = '';
 			$ethernet0_ip = '';
+			$cnx_ssh = '';
 
 			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 
