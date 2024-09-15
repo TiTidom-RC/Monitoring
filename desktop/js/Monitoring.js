@@ -151,8 +151,10 @@ document.querySelector(".eqLogicAttr[data-l2key='pull_use_custom']").addEventLis
 document.querySelector(".eqLogicAttr[data-l2key='localoudistant']").addEventListener('change', function () {
 	if (this.selectedIndex == 1) {
 	  document.querySelector(".distant").style.display = "block";
+	  document.querySelector(".local").style.display = "none";
 	} else { 
 		document.querySelector(".distant").style.display = "none";
+		document.querySelector(".local").style.display = "block";
 	}
 });
 
