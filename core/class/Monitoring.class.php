@@ -2246,7 +2246,7 @@ class Monitoring extends eqLogic {
 		$confLocalOrRemote = $this->getConfiguration('localoudistant');
 		$equipement = $this->getName();
 		
-		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
+		if ($confLocalOrRemote == 'distant' && $this->getIsEnable()) {
 			[$cnx_ssh, $hostId] = $this->connectSSH();
 				
 			if ($cnx_ssh == 'OK') {
