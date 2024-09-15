@@ -974,7 +974,13 @@ class Monitoring extends eqLogic {
 	public function execSSH($session, $cmd_ssh = '', $cmdName_ssh = '') {
 		$cmdResult_ssh = '';
 		try {
-			$cmdResult_ssh = $session->exec($cmd_ssh);
+			if ($cmdName_ssh == 'Reboot') {
+				$session->read('username@username:~$');
+				$session->write( $cmd_ssh . '\n');
+			}
+			else {
+				$cmdResult_ssh = $session->exec($cmd_ssh);
+			}
 
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Exit Status :: ' . $session->getExitStatus());
 
