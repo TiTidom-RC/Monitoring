@@ -909,6 +909,8 @@ class Monitoring extends eqLogic {
 				}
 			} catch (RuntimeException $e) {
 				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login RuntimeException :: '. $e->getMessage());
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Login RuntimeException LastError :: ' . $sshconnection->getLastError());
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Login RuntimeException Log :: ' . $sshconnection->getLog());
 				$cnx_ssh = 'KO';
 			} catch (Exception $e) {
 				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Login Exception :: '. $e->getMessage());
@@ -974,17 +976,8 @@ class Monitoring extends eqLogic {
 	public function execSSH($session, $cmd_ssh = '', $cmdName_ssh = '') {
 		$cmdResult_ssh = '';
 		try {
-			if ($cmdName_ssh == 'eboot') {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT !');
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT :: ' . $session->read('tidom@docker-ws:~$'));
-				$session->write($cmd_ssh . '\n');
-				// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT :: ' . $session->read('tidom@docker-ws:~$'));
-			}
-			else {
-				$cmdResult_ssh = $session->exec($cmd_ssh);
-			}
-
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Exit Status :: ' . $session->getExitStatus());
+			$cmdResult_ssh = $session->exec($cmd_ssh);
+			// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Exit Status :: ' . $session->getExitStatus());
 
 			if ($session->isTimeout()) {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
@@ -1008,8 +1001,8 @@ class Monitoring extends eqLogic {
 			$cmdResult_ssh = '';
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception :: ' . $e->getMessage());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception LastError :: ' . $session->getLastError());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception Log :: ' . $session->getLog());
+			// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception LastError :: ' . $session->getLastError());
+			// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception Log :: ' . $session->getLog());
 		}
 		return $cmdResult_ssh;
 	}
@@ -1201,7 +1194,6 @@ class Monitoring extends eqLogic {
 							}							
 						}
 					} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-						// $NF = '';
 						$cputemp0 ='';
 						$uname = '.';
 						
