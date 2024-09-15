@@ -161,7 +161,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                     <div class="col-md-6">
                                         <select id="cartereseau" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cartereseau"
                                             onchange="if(this.selectedIndex == 3) document.getElementById('netautre').style.display = 'block'; else document.getElementById('netautre').style.display = 'none';">
-                                            <option value="netauto" selected>{{Auto (par défaut)}}</option>
+                                            <option value="netauto" selected="selected">{{Auto (par défaut)}}</option>
                                             <option value="eth0">{{1er port Ethernet}}</option>
                                             <option value="wlan0">{{1er port Wi-Fi}}</option>
                                             <option value="netautre">{{Autre}}</option>
@@ -181,7 +181,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                     <label class="col-md-4 control-label">{{Local ou Distant ?}}</label>
                                     <div class="col-md-6">
                                         <select id="maitreesclave" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="maitreesclave">
-                                            <option value="local" selected>{{Local}}</option>
+                                            <option value="local" selected="selected">{{Local}}</option>
                                             <option value="deporte">{{Distant (Mot de Passe)}}</option>
                                             <option value="deporte-key">{{Distant (Clé SSH)}}</option>
                                         </select>
