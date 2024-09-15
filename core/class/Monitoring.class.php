@@ -2253,20 +2253,20 @@ class Monitoring extends eqLogic {
 				switch ($paramaction) {
 					case "reboot":
 						if ($this->getConfiguration('synology') == '1') {
-							$rebootcmd = "sudo /sbin/shutdown -r now >/dev/null & /sbin/shutdown -r now >/dev/null";
+							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
 						} else {
-							$rebootcmd = "sudo reboot >/dev/null & reboot >/dev/null";
+							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-REBOOT] Lancement commande distante REBOOT');
 						}
 						$reboot = $this->execSSH($hostId, $rebootcmd, 'Reboot');
 						break;
 					case "poweroff":
 						if ($this->getConfiguration('synology') == '1') {
-							$poweroffcmd = 'sudo /sbin/shutdown -h now >/dev/null & /sbin/shutdown -h now >/dev/null';
+							$poweroffcmd = 'timeout 3 sudo -S /sbin/shutdown -h now 2>/dev/null';
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
-							$poweroffcmd = "sudo poweroff >/dev/null & poweroff >/dev/null";
+							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-POWEROFF] Lancement commande distante POWEROFF');
 						}
 						$poweroff = $this->execSSH($hostId, $poweroffcmd, 'PowerOff');
