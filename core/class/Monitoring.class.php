@@ -971,11 +971,7 @@ class Monitoring extends eqLogic {
 	public function execSSH($session, $cmd_ssh = '', $cmdName_ssh = '') {
 		$cmdResult_ssh = '';
 		try {
-			$output = array();
-			$returnCode = 0;
-			
-			$cmdResult_ssh = $session->exec($cmd_ssh, $output, $returnCode);
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' ReturnCode :: ' . $returnCode);
+			$cmdResult_ssh = $session->exec($cmd_ssh);
 
 			if ($session->isTimeout()) {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
@@ -988,7 +984,13 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Result :: ' . $cmdResult_ssh);
 			}
-			
+		} catch (RuntimeException $e) {
+			$cmdResult_ssh = '';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException :: ' . $e->getMessage());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException LastError :: ' . $session->getLastError());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException Log :: ' . $session->getLog());
+			$session->disconnect();
 		} catch (Exception $e) {
 			$cmdResult_ssh = '';
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
