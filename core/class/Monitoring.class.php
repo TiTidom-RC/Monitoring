@@ -957,7 +957,7 @@ class Monitoring extends eqLogic {
 		}
 	
 		if ($cnx_ssh != 'KO') {
-			if ($this->getConfiguration('maitreesclave') == 'deporte-key') {
+			if ($this->getConfiguration('localoudistant') == 'deporte-key') {
 				try {
 					$keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
 					log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] PublicKeyLoader :: OK');
@@ -1076,7 +1076,7 @@ class Monitoring extends eqLogic {
 	
 			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 	
-			$confLocalOrRemote = $this->getConfiguration('maitreesclave');
+			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 	
 			// Configuration distante
 			if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
@@ -1510,7 +1510,7 @@ class Monitoring extends eqLogic {
 					}
 				}
 			}
-			elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
+			elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 				$cnx_ssh = 'No';
 				
 				if ($this->getConfiguration('synology') == '1') {
@@ -1745,7 +1745,7 @@ class Monitoring extends eqLogic {
 			}
 	
 			if (isset($cnx_ssh)) {
-				if ($this->getConfiguration('maitreesclave') == 'local' || $cnx_ssh == 'OK') {
+				if ($this->getConfiguration('localoudistant') == 'local' || $cnx_ssh == 'OK') {
 					if ($this->getConfiguration('synology') == '1') {
 						if (isset($versionsyno)) {
 							parse_str($versionsyno, $versionsyno_DSM);
@@ -2298,7 +2298,7 @@ class Monitoring extends eqLogic {
 	}
 
 	function getCaseAction($paramaction) {
-		$confLocalOrRemote = $this->getConfiguration('maitreesclave');
+		$confLocalOrRemote = $this->getConfiguration('localoudistant');
 		$equipement = $this->getName();
 		
 		if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
@@ -2328,7 +2328,7 @@ class Monitoring extends eqLogic {
 						break;
 				}
 			}
-		} elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
+		} elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 			switch ($paramaction) {
 				case "reboot":
 					if ($this->getConfiguration('synology') == '1') {
