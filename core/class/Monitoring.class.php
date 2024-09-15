@@ -932,66 +932,66 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	public function execSRV($cmd = '', $cmdName = '', $timeout = true) {
-		$timeoutSrv = $this->getConfiguration('timeoutsrv', 30);
-		$cmd_result = '';
+	public function execSRV($cmd_srv = '', $cmdName_srv = '', $timeout_srv = true) {
+		$conf_timeoutSrv = $this->getConfiguration('timeoutsrv', 30);
+		$cmdResult_srv = '';
 
 		try {
-			$cmd = trim($cmd);
-			if ($timeout && $timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $cmd)) {
-				if (preg_match('/LC_ALL=C/', $cmd)) {
-					$cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $timeoutSrv, $cmd, 1);
+			$cmd_srv = trim($cmd_srv);
+			if ($timeout_srv && $conf_timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $cmd_srv)) {
+				if (preg_match('/LC_ALL=C/', $cmd_srv)) {
+					$cmd_srv = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $conf_timeoutSrv, $cmd_srv, 1);
 				}
 				else {
-					$cmd = 'timeout ' . $timeoutSrv . ' ' . $cmd;
+					$cmd_srv = 'timeout ' . $conf_timeoutSrv . ' ' . $cmd_srv;
 				}
 			}
 
-			$cmd_result = exec($cmd, $output, $return_code);
-			if ($return_code !== 0) {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-				log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' ReturnCode :: ' . $return_code);
-				$cmd_result = '';
+			$cmdResult_srv = exec($cmd_srv, $output_srv, $returnCode_srv);
+			if ($returnCode_srv !== 0) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_srv));
+				log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' ReturnCode :: ' . $returnCode_srv);
+				$cmdResult_srv = '';
 			}
-			if (!empty($cmd_result)) {
-				$cmd_result = trim($cmd_result);
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' Result :: ' . $cmd_result);
+			if (!empty($cmdResult_srv)) {
+				$cmdResult_srv = trim($cmdResult_srv);
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_srv));
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Result :: ' . $cmdResult_srv);
 			}
 			
 		} catch (Exception $e) {
-			$cmd_result = '';
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-			log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName . ' Exception :: ' . $e->getMessage());
+			$cmdResult_srv = '';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_srv));
+			log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Exception :: ' . $e->getMessage());
 
 		}
-		return $cmd_result;
+		return $cmdResult_srv;
 	}
 
-	public function execSSH($session, $cmd = '', $cmdName = '') {
-		$cmd_result = '';
+	public function execSSH($session, $cmd_ssh = '', $cmdName_ssh = '') {
+		$cmdResult_ssh = '';
 		try {
-			$cmd_result = $session->exec($cmd);
+			$cmdResult_ssh = $session->exec($cmd_ssh);
 			if ($session->isTimeout()) {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: Timeout');
-				$cmd_result = '';
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Timeout');
+				$cmdResult_ssh = '';
 				$session->reset();
 			}
-			if (!empty($cmd_result)) {
-				$cmd_result = trim($cmd_result);
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' Result :: ' . $cmd_result);
+			if (!empty($cmdResult_ssh)) {
+				$cmdResult_ssh = trim($cmdResult_ssh);
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Result :: ' . $cmdResult_ssh);
 			}
 			
 		} catch (Exception $e) {
-			$cmd_result = '';
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' Exception :: ' . $e->getMessage());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' Exception LastError :: ' . $session->getLastError());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName . ' Exception Log :: ' . $session->getLog());
+			$cmdResult_ssh = '';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception :: ' . $e->getMessage());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception LastError :: ' . $session->getLastError());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception Log :: ' . $session->getLog());
 		}
-		return $cmd_result;
+		return $cmdResult_ssh;
 	}
 
 	public function getInformations() {
