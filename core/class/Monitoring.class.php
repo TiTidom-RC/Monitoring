@@ -975,8 +975,10 @@ class Monitoring extends eqLogic {
 		$cmdResult_ssh = '';
 		try {
 			if ($cmdName_ssh == 'Reboot') {
-				$session->read('username@username:~$');
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT !');
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT :: ' . $session->read('username@username:~$'));
 				$session->write( $cmd_ssh . '\n');
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT :: ' . $session->read('username@username:~$'));
 			}
 			else {
 				$cmdResult_ssh = $session->exec($cmd_ssh);
