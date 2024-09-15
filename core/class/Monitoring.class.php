@@ -974,11 +974,11 @@ class Monitoring extends eqLogic {
 	public function execSSH($session, $cmd_ssh = '', $cmdName_ssh = '') {
 		$cmdResult_ssh = '';
 		try {
-			if ($cmdName_ssh == 'Reboot') {
+			if ($cmdName_ssh == 'eboot') {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT !');
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT :: ' . $session->read('tidom@docker-ws:~$'));
 				$session->write($cmd_ssh . '\n');
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT :: ' . $session->read('tidom@docker-ws:~$'));
+				// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] REBOOT :: ' . $session->read('tidom@docker-ws:~$'));
 			}
 			else {
 				$cmdResult_ssh = $session->exec($cmd_ssh);
