@@ -931,7 +931,7 @@ class Monitoring extends eqLogic {
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CLOSE] Exception :: '. $e->getMessage());
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Exception LastError :: ' . $session->getLastError());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Exception Logs ::\\r\\n' . $session->getLog());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CLOSE] Exception Logs ::' . "\r\n" . $session->getLog());
 		}
 	}
 
@@ -1000,7 +1000,7 @@ class Monitoring extends eqLogic {
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException :: ' . $e->getMessage());
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException LastError :: ' . $session->getLastError());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException Logs ::\\r\\n' . $session->getLog());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException Logs ::' . "\r\n" . $session->getLog());
 			$cmdResult_ssh = '';
 			$session->disconnect();
 		} catch (Exception $e) {
