@@ -15,9 +15,9 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
             event::add('jeedom::alert', array(
                 'level' => 'danger',
                 'title' => __('[Plugin :: Monitoring] Attention - Version Jeedom !', __FILE__),
-                'message' => __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br /><br />En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__),
+                'message' => __('[ATTENTION] La prochaine version majeure (v3.x.x) du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4".<br />Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.', __FILE__),
             ));
-            log::add('Monitoring', 'warning', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités. En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__));
+            log::add('Monitoring', 'warning', __('[ATTENTION] La prochaine version majeure (v3.x.x) du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.', __FILE__));
         }
     }
 }
@@ -185,6 +185,16 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                             <option value="deporte">{{Distant (Mot de Passe)}}</option>
                                             <option value="deporte-key">{{Distant (Clé SSH)}}</option>
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="local" style="display:none;">
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label">{{Timeout SRV}}
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration d'une commande executée en local (par défaut : 30s)}}"></i></sup>
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="timeoutsrv" type="text" placeholder="{{Saisir le timeout SRV}}" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="distant" style="display:none;">
