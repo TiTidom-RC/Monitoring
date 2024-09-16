@@ -984,7 +984,7 @@ class Monitoring extends eqLogic {
 				$session->disconnect();
 				return $cmdResult_ssh;
 			}
-			
+
 			if ($session->isTimeout()) {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Timeout');
@@ -2261,7 +2261,8 @@ class Monitoring extends eqLogic {
 							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
 						} else {
-							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
+							// $rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
+							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-REBOOT] Lancement commande distante REBOOT');
 						}
 						$reboot = $this->execSSH($sshconnection, $rebootcmd, 'Reboot');
