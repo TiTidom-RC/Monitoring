@@ -975,7 +975,6 @@ class Monitoring extends eqLogic {
 		$cmdResult_ssh = '';
 		try {
 			$cmdResult_ssh = $session->exec($cmd_ssh);
-			// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Exit Status :: ' . $session->getExitStatus());
 
 			if (!$session->isConnected()) {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
@@ -991,11 +990,13 @@ class Monitoring extends eqLogic {
 				$cmdResult_ssh = '';
 				$session->reset();
 			}
+
 			if (!empty($cmdResult_ssh)) {
 				$cmdResult_ssh = trim($cmdResult_ssh);
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Result :: ' . $cmdResult_ssh);
 			}
+
 		} catch (RuntimeException $e) {
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException :: ' . $e->getMessage());
@@ -1003,11 +1004,13 @@ class Monitoring extends eqLogic {
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' RuntimeException Logs ::' . "\r\n" . $session->getLog());
 			$cmdResult_ssh = '';
 			$session->disconnect();
+
 		} catch (Exception $e) {
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception :: ' . $e->getMessage());
 			$cmdResult_ssh = '';
 		}
+
 		return $cmdResult_ssh;
 	}
 
@@ -2259,8 +2262,8 @@ class Monitoring extends eqLogic {
 							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
 						} else {
-							// $rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
-							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
+							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
+							// $rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-REBOOT] Lancement commande distante REBOOT');
 						}
 						$reboot = $this->execSSH($sshconnection, $rebootcmd, 'Reboot');
