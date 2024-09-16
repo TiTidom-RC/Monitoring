@@ -1459,6 +1459,8 @@ class Monitoring extends eqLogic {
 							}
 						}
 					}
+				} else {
+					log::add('Monitoring', 'debug', '['. $equipement .'][SSH] Connexion SSH impossible');
 				}
 			}
 			elseif ($this->getConfiguration('maitreesclave') == 'local' && $this->getIsEnable()) {
