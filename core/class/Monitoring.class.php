@@ -977,6 +977,14 @@ class Monitoring extends eqLogic {
 			$cmdResult_ssh = $session->exec($cmd_ssh);
 			// log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Exit Status :: ' . $session->getExitStatus());
 
+			if (!$session->isConnected()) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Disconnected');
+				$cmdResult_ssh = '';
+				$session->disconnect();
+				return $cmdResult_ssh;
+			}
+			
 			if ($session->isTimeout()) {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: Timeout');
