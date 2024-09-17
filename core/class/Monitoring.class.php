@@ -942,16 +942,11 @@ class Monitoring extends eqLogic {
 	
 		try {
 			$cnx_ssh = sshmanager::checkConnection($hostId) ? 'OK' : 'KO';
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connexion SSH :: ' . $cnx_ssh);
-		} catch (SSHConnectException $e) {
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] SSHException :: '. $e->getMessage());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CMD] SSHException Log :: ' . $e->getLog());
-			$cnx_ssh = 'KO';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connection SSH :: ' . $cnx_ssh);
 		} catch (Exception $e) {
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Exception :: '. $e->getMessage());
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection Exception :: '. $e->getMessage());
 			$cnx_ssh = 'KO';
 		}
-	
 		return [$cnx_ssh, $hostId];
 	}
 
@@ -994,16 +989,17 @@ class Monitoring extends eqLogic {
 	public function execSSH($hostId, $cmd_ssh = '', $cmdName_ssh = '') {
 		$cmdResult_ssh = '';
 		try {
-			$cmdResult_ssh = sshmanager::executeCmds($hostId, $cmd_ssh);
-		} catch (SSHConnectException $ex) {
+			$cmdResult_ssh = sshmanager::executeCmds($hostId, $cmd_ssh, $cmdName_ssh);
+		} catch (SSHException $ex) {
 			$cmdResult_ssh = '';
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHConnectException :: ' . $ex->getMessage());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHConnectException Log :: ' . $ex->getLog());
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException :: ' . $ex->getMessage());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException Logs :: ' . $ex->getLastError());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException Logs ::' . "\r\n" . $ex->getLog());
 		} catch (Exception $e) {
 			$cmdResult_ssh = '';
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Exception :: ' . $e->getMessage());
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Cmd Exception :: ' . $e->getMessage());
 		}
 		return $cmdResult_ssh;
 	}
