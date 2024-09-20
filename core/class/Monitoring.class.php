@@ -1072,12 +1072,12 @@ class Monitoring extends eqLogic {
 					$perso1_cmd = $this->getConfiguration('perso1');
 					$perso2_cmd = $this->getConfiguration('perso2');
 	
-					if ($perso1_cmd != '') {
+					if (trim($perso1_cmd) !== '') {
 						$perso1 = $this->execSSH($hostId, $perso1_cmd, 'Perso1');
 					} else {
 						$perso1 = '';
 					}
-					if ($perso2_cmd != '') {
+					if (trim($perso2_cmd) !== '') {
 						$perso2 = $this->execSSH($hostId, $perso2_cmd, 'Perso2');
 					} else {
 						$perso2 = '';
@@ -1500,11 +1500,11 @@ class Monitoring extends eqLogic {
 				$perso1_cmd = $this->getConfiguration('perso1');
 				$perso2_cmd = $this->getConfiguration('perso2');
 	
-				if ($perso1_cmd != '') {
+				if (trim($perso1_cmd) !== '') {
 					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
 					$perso1 = $this->execSRV($perso1_cmd, 'Perso1');
 				}
-				if ($perso2_cmd != '') {
+				if (trim($perso2_cmd) !== '') {
 					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Cmd :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
 					$perso2 = $this->execSRV($perso2_cmd, 'Perso2');
 				}
