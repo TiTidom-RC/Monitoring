@@ -1501,11 +1501,11 @@ class Monitoring extends eqLogic {
 				$perso2_cmd = $this->getConfiguration('perso2');
 	
 				if (trim($perso1_cmd) !== '') {
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
+					// log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso1 Cmd :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
 					$perso1 = $this->execSRV($perso1_cmd, 'Perso1');
 				}
 				if (trim($perso2_cmd) !== '') {
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Cmd :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
+					// log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Perso2 Cmd :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
 					$perso2 = $this->execSRV($perso2_cmd, 'Perso2');
 				}
 	
