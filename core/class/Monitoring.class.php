@@ -1061,7 +1061,13 @@ class Monitoring extends eqLogic {
 					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 					$uptime = $this->execSSH($hostId, $uptime_cmd, 'Uptime');
 					$namedistri = $this->execSSH($hostId, $namedistri_cmd, 'NameDistri');
-					$bitdistri = $this->execSSH($hostId, $bitdistri_cmd, 'BitDistri');
+					
+					if (trim($bitdistri_cmd) !== '') {
+						$bitdistri = $this->execSSH($hostId, $bitdistri_cmd, 'BitDistri');
+					} else {
+						$bitdistri = '';
+					}
+					
 					$VersionID = $this->execSSH($hostId, $VersionID_cmd, 'VersionID');
 					$loadav = $this->execSSH($hostId, $loadavg_cmd, 'LoadAverage');
 					$ReseauRXTX = $this->execSSH($hostId, $ReseauRXTX_cmd, 'ReseauRXTX');
