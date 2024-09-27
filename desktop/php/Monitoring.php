@@ -223,14 +223,14 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Identifiant}}</label>
                                         <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="user" type="text" autocomplete="off" placeholder="{{Saisir le login}}" />
                                         </div>
                                     </div>
                                     <div class="distant-password" style="display:none;">
                                         <div class="form-group">
                                             <label class="col-md-4 control-label">{{Mot de passe}}</label>
                                             <div class="col-md-6 input-group">
-                                                <input type="password" id="ssh-password" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
+                                                <input type="password" autocomplete="new-password" id="ssh-password" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="password" placeholder="{{Saisir le password}}" />
                                                 <span class="input-group-btn">
 											        <a class="btn btn-default form-control roundedRight" onclick="toggleSSHPassword()"><i id="btnToggleSSHPasswordIcon" class="fas fa-eye"></i></a>
 										        </span>
@@ -243,7 +243,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                                 <sup><i class="fas fa-question-circle tooltips" title="{{Optionnel : Phrase secrète pour la clé SSH}}"></i></sup>
                                             </label>
                                             <div class="col-md-6 input-group">
-                                                <input type="password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="ssh-passphrase" placeholder="{{Saisir la passphrase SSH}}" />
+                                                <input type="password" autocomplete="new-password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="ssh-passphrase" placeholder="{{Saisir la passphrase SSH}}" />
                                                 <span class="input-group-btn">
 											        <a class="btn btn-default form-control roundedRight" onclick="toggleSSHPassphrase()"><i id="btnToggleSSHPassphraseIcon" class="fas fa-eye"></i></a>
 										        </span>
