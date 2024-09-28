@@ -941,7 +941,7 @@ class Monitoring extends eqLogic {
 		$cnx_ssh = '';
 	
 		try {
-			$cnx_ssh = sshmanager::checkConnection($hostId) ? 'OK' : 'KO';
+			$cnx_ssh = sshmanager::checkSSHConnection($hostId) ? 'OK' : 'KO';
 			log::add('Monitoring', ($cnx_ssh == 'KO' ? 'error': 'debug'), '['. $this->getName() .'][SSH-CNX] Connection :: ' . $cnx_ssh);
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection Exception :: '. $e->getMessage());
