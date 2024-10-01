@@ -1870,7 +1870,7 @@ class Monitoring extends eqLogic {
 							if (intval($swap[0]) != 0) {
 								$swaplibre_pourc = round(intval($swap[2]) / intval($swap[0]) * 100);
 							} else {
-								$swaplibre_pourc = '-';
+								$swaplibre_pourc = 0;
 							}
 						}
 	
@@ -2023,15 +2023,15 @@ class Monitoring extends eqLogic {
 						}
 						$cpu = $nbcpu.' - '.$cpufreq0;
 					}
-					if (empty($cputemp0)) {$cputemp0 = '';}
-					if (empty($perso1)) {$perso1 = '';}
-					if (empty($perso2)) {$perso2 = '';}
-					if (empty($cnx_ssh)) {$cnx_ssh = '';}
-					if (empty($uname)) {$uname = 'Inconnu';}
-					if (empty($Mem)) {$Mem = '';}
-					if (empty($memorylibre_pourc)) {$memorylibre_pourc = '';}
-					if (empty($Memswap)) {$Memswap = '';}
-					if (empty($swaplibre_pourc)) {$swaplibre_pourc = '';}
+					if (!isset($cputemp0)) {$cputemp0 = '';}
+					if (!isset($perso1)) {$perso1 = '';}
+					if (!isset($perso2)) {$perso2 = '';}
+					if (!isset($cnx_ssh)) {$cnx_ssh = '';}
+					if (!isset($uname)) {$uname = 'Inconnu';}
+					if (!isset($Mem)) {$Mem = '';}
+					if (!isset($memorylibre_pourc)) {$memorylibre_pourc = '0';}
+					if (!isset($Memswap)) {$Memswap = '';}
+					if (!isset($swaplibre_pourc)) {$swaplibre_pourc = '0';}
 					# TODO ajouter les commandes type syno ou temp
 	
 					$dataresult = array(
