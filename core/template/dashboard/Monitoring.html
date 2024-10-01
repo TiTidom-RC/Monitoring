@@ -85,11 +85,11 @@
 	</div>
 	<div class="cmds text-left" style="display:block;">
 		<div class="tooltips" data-cmd_id="#namedistriid#" style="margin-left:5px;display: #namedistri_display#;">
-			<span title="Distribution Linux</br><i>Date de valeur : #namedistri_value#</br>Date de collecte : #namedistri_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fab fa-linux"></i></span>
+			<span title="Distribution Linux</br><i>Date de valeur : #namedistri_value#</br>Date de collecte : #namedistri_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#namedistri_icon#</span>
 			<span>#namedistri#</span>
 		</div>
 		<div class="tooltips" data-cmd_id="#uptimeid#" style="margin-left:5px;display: #uptime_display#;">
-			<span title="Temps d'Activité (UpTime)</br><i>Date de valeur : #uptime_value#</br>Date de collecte : #uptime_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fas fa-tachometer-alt"></i></span>
+			<span title="Temps d'Activité (UpTime)</br><i>Date de valeur : #uptime_value#</br>Date de collecte : #uptime_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
 			<span id="uptime#id#"></span>
 		</div>
 		<script>
@@ -98,7 +98,7 @@
 			}
 		</script>
 		<div class="tooltips" style="margin-left:5px;display: #loadavg_display#;">
-			<span title="Charge Système (Load Average)</br><i>Date de valeur : #loadavg_value#</br>Date de collecte : #loadavg_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fa techno-courbes3"></i></span>
+			<span title="Charge Système (Load Average)</br><i>Date de valeur : #loadavg_value#</br>Date de collecte : #loadavg_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#loadavg1mn_icon#</span>
 			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
 		</div>
 		<script>
@@ -140,7 +140,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#;">
-			<span title="Mémoire Vive (% Libre)</br><i>Date de valeur : #Mem_value#</br>Date de collecte : #Mem_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fa techno-memory"></i></span>
+			<span title="Mémoire Vive (% Libre)</br><i>Date de valeur : #Mem_value#</br>Date de collecte : #Mem_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#Mem_icon#</span>
 			<span id="Mempourcent#id#"></span>
 		</div>
 		<script>
@@ -159,7 +159,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#;">
-			<span title="Mémoire Swap (% Libre)</br><i>Date de valeur : #Mem_swap_value#</br>Date de collecte : #Mem_swap_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fas fa-list"></i></span>
+			<span title="Mémoire Swap (% Libre)</br><i>Date de valeur : #Mem_swap_value#</br>Date de collecte : #Mem_swap_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#Mem_swap_icon#</span>
 			<span id="Swappourc#id#"></span>
 		</div>
 		<script>
@@ -178,7 +178,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#;">
-			<span title="Trafic Réseau (#ethernet0_name# / #ethernet0_ip#)</br><i>Date de valeur : #ethernet0_value#</br>Date de collecte : #ethernet0_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fa techno-fleches"></i></span>
+			<span title="Trafic Réseau (#ethernet0_name# / #ethernet0_ip#)</br><i>Date de valeur : #ethernet0_value#</br>Date de collecte : #ethernet0_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#ethernet0_icon#</span>
 			<span id="ethernet0#id#"></span>
 		</div>
 		<script>
@@ -187,7 +187,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#;">
-			<span title="Espace Disque (% Utilisé)</br><i>Date de valeur : #hddtotal_value#</br>Date de collecte : #hddtotal_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fas fa-hdd"></i></span>
+			<span title="Espace Disque (% Utilisé)</br><i>Date de valeur : #hddtotal_value#</br>Date de collecte : #hddtotal_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hddtotal_icon#</span>
 			<span id="hddpourcused#id#"></span>
 		</div>
 		<script>
@@ -209,7 +209,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolume2_display#' == 'OK') {
-					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fas fa-hdd"></i></span> <span id="hddpourcusedv2#id#"></span></div>';
+					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)</br><i>Date de valeur : #hddtotalv2_value#</br>Date de collecte : #hddtotalv2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hddtotalv2_icon#</span> <span id="hddpourcusedv2#id#"></span></div>';
 					if ('#hddpourcusedv2#' === '') {
 						document.getElementById('hddpourcusedv2#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2_colorlow#')) {
@@ -228,7 +228,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fas fa-hdd"></i></span> <span id="hddpourcusedusb#id#"></span></div>';
+					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)</br><i>Date de valeur : #hddtotalusb_value#</br>Date de collecte : #hddtotalusb_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hddtotalusb_icon#</span> <span id="hddpourcusedusb#id#"></span></div>';
 				
 					if ('#hddpourcusedusb#' === '') {
 						document.getElementById('hddpourcusedusb#id#').innerHTML = '<span></span>';
@@ -248,7 +248,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeesata_display#' == 'OK') {
-					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fas fa-hdd"></i></span> <span id="hddpourcusedesata#id#"></span></div>';
+					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)</br><i>Date de valeur : #hddtotalesata_value#</br>Date de collecte : #hddtotalesata_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hddtotalesata_icon#</span> <span id="hddpourcusedesata#id#"></span></div>';
 					if ('#hddpourcusedesata#' === '') {
 						document.getElementById('hddpourcusedesata#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#hddpourcusedesata#') < parseInt('#hddpourcusedesata_colorlow#')) {
@@ -264,7 +264,7 @@
 			}
 		</script>
 		<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#;">
-			<span title="Nombre CPU - Fréquence (Température)</br><i>Date de valeur : #cpu_value#</br>Date de collecte : #cpu_collect#</i>" style="width:15px;max-width:15px;max-height:15px;"><i class="fa techno-pc"></i></span>
+			<span title="Nombre CPU - Fréquence (Température)</br><i>Date de valeur : #cpu_value#</br>Date de collecte : #cpu_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
 		<script>
