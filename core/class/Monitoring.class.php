@@ -268,7 +268,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('Mem');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setDisplay('icon', '<i class="fa techno-memory"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-memory"></i>');
 			$MonitoringCmd->save();
 		}
 
@@ -314,7 +314,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('ethernet0');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setDisplay('icon', '<i class="fa techno-fleches"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-network-wired"></i>');
 			$MonitoringCmd->save();
 		}
 
@@ -423,7 +423,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('hddtotalusb');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
-					$MonitoringCmd->setDisplay('icon', '<i class="fas fa-hdd"></i>');
+					$MonitoringCmd->setDisplay('icon', '<i class="fab fa-usb"></i>');
 					$MonitoringCmd->save();
 				}
 
@@ -460,7 +460,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('hddtotalesata');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
-					$MonitoringCmd->setDisplay('icon', '<i class="fas fa-hdd"></i>');
+					$MonitoringCmd->setDisplay('icon', '<i class="fab fa-usb"></i>');
 					$MonitoringCmd->save();
 				}
 
@@ -746,7 +746,8 @@ class Monitoring extends eqLogic {
 		$replace['#hddpourcused_colorhigh#'] = $this->getConfiguration('hddpourcused_colorhigh');
 				
 		$Mem = $this->getCmd(null,'Mem');
-		$replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fa techno-memory"></i>') : '';
+		// $replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fa techno-memory"></i>') : '';
+		$replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fas fa-memory"></i>') : '';
 		$replace['#Mem#'] = is_object($Mem) ? $Mem->execCmd() : '';
 		$replace['#Memid#'] = is_object($Mem) ? $Mem->getId() : '';
 		$replace['#Mem_display#'] = (is_object($Mem) && $Mem->getIsVisible()) ? "block" : "none";
@@ -776,7 +777,8 @@ class Monitoring extends eqLogic {
 		$replace['#Swappourc_colorlow#'] = $this->getConfiguration('Swappourc_colorlow');
 
 		$ethernet0 = $this->getCmd(null,'ethernet0');
-		$replace['#ethernet0_icon#'] = is_object($ethernet0) ? (!empty($ethernet0->getDisplay('icon')) ? $ethernet0->getDisplay('icon') : '<i class="fa techno-fleches"></i>') : '';
+		// $replace['#ethernet0_icon#'] = is_object($ethernet0) ? (!empty($ethernet0->getDisplay('icon')) ? $ethernet0->getDisplay('icon') : '<i class="fa techno-fleches"></i>') : '';
+		$replace['#ethernet0_icon#'] = is_object($ethernet0) ? (!empty($ethernet0->getDisplay('icon')) ? $ethernet0->getDisplay('icon') : '<i class="fas fa-network-wired"></i>') : '';
 		$replace['#ethernet0#'] = is_object($ethernet0) ? $ethernet0->execCmd() : '';
 		$replace['#ethernet0id#'] = is_object($ethernet0) ? $ethernet0->getId() : '';
 		$replace['#ethernet0_display#'] = (is_object($ethernet0) && $ethernet0->getIsVisible()) ? "block" : "none";
@@ -847,7 +849,7 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedusb_colorhigh#'] = $this->getConfiguration('hddpourcusedusb_colorhigh');
 
 			$hddtotalusb = $this->getCmd(null,'hddtotalusb');
-			$replace['#hddtotalusb_icon#'] = is_object($hddtotalusb) ? (!empty($hddtotalusb->getDisplay('icon')) ? $hddtotalusb->getDisplay('icon') : '<i class="fas fa-hdd"></i>') : '';
+			$replace['#hddtotalusb_icon#'] = is_object($hddtotalusb) ? (!empty($hddtotalusb->getDisplay('icon')) ? $hddtotalusb->getDisplay('icon') : '<i class="fab fa-usb"></i>') : '';
 			$replace['#synovolumeusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? 'OK' : '';
 			$replace['#hddusedusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalusb#'] = is_object($hddtotalusb) ? $hddtotalusb->execCmd() : '';
@@ -872,7 +874,7 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedesata_colorhigh#'] = $this->getConfiguration('hddpourcusedesata_colorhigh');
 
 			$hddtotalesata = $this->getCmd(null,'hddtotalesata');
-			$replace['#hddtotalesata_icon#'] = is_object($hddtotalesata) ? (!empty($hddtotalesata->getDisplay('icon')) ? $hddtotalesata->getDisplay('icon') : '<i class="fas fa-hdd"></i>') : '';
+			$replace['#hddtotalesata_icon#'] = is_object($hddtotalesata) ? (!empty($hddtotalesata->getDisplay('icon')) ? $hddtotalesata->getDisplay('icon') : '<i class="fab fa-usb"></i>') : '';
 			$replace['#synovolumeesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? 'OK' : '';
 			$replace['#hddusedesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalesata#'] = is_object($hddtotalesata) ? $hddtotalesata->execCmd() : '';
