@@ -33,18 +33,49 @@
 				<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
 				<script>
 					document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"] .action')?.addEventListener('click', function () {
-						jeeDialog.confirm("Etes-vous sûr de vouloir éteindre l'équipement #name# ?", function () {
-							jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
+						jeeDialog.confirm({
+							title: '<i class="success fas fa-check-circle"></i> {{Eteindre l\'équipement}}',
+							message: '{{Etes-vous sûr de vouloir éteindre l\'équipement}} #name# ?',
+							buttons: {
+								confirm: {
+									label: '{{Eteindre}}',
+									className: 'success'
+								},
+								cancel: {
+									label: '{{Annuler}}',
+									className: 'info'
+								}
+							},
+							callback: function (result) {
+								if (result) {
+									jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
+								}
+							}
 						});
-					});
 				</script>
 			</span>
 			<span title="Redémarrer l'équipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#;">
 				<a class="action" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
 				<script>
 					document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"] .action').addEventListener('click', function () {
-						jeeDialog.confirm("Etes-vous sûr de vouloir redémarrer l'équipement #name# ?", function () {
-							jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
+						jeeDialog.confirm({
+							title: '<i class="success fas fa-check-circle"></i> {{Redémarrer l\'équipement}}',
+							message: '{{Etes-vous sûr de vouloir redémarrer l\'équipement}} #name# ?',
+							buttons: {
+								confirm: {
+									label: '{{Redémarrer}}',
+									className: 'success'
+								},
+								cancel: {
+									label: '{{Annuler}}',
+									className: 'info'
+								}
+							},
+							callback: function (result) {
+								if (result) {
+									jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
+								}
+							}
 						});
 					});
 				</script>
