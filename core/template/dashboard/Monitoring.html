@@ -34,12 +34,12 @@
 				<script>
 					document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"] .action')?.addEventListener('click', function () {
 						jeeDialog.confirm({
-							title: '<i class="info fas fa-question-circle"></i> Eteindre l\'équipement',
+							title: '<i class="danger fas fa-question-circle"></i> Eteindre l\'équipement',
 							message: 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?',
 							buttons: {
 								confirm: {
 									label: 'Eteindre',
-									className: 'success'
+									className: 'danger'
 								},
 								cancel: {
 									label: 'Annuler',
@@ -60,12 +60,12 @@
 				<script>
 					document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"] .action').addEventListener('click', function () {
 						jeeDialog.confirm({
-							title: '<i class="info fas fa-question-circle"></i> Redémarrer l\'équipement',
+							title: '<i class="danger fas fa-question-circle"></i> Redémarrer l\'équipement',
 							message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
 							buttons: {
 								confirm: {
 									label: 'Redémarrer',
-									className: 'success'
+									className: 'danger'
 								},
 								cancel: {
 									label: 'Annuler',
