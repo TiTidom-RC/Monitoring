@@ -544,7 +544,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cron_on');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
-			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-play-circle"></i>');
+			/* $MonitoringCmd->setDisplay('icon', '<i class="fas fa-play-circle"></i>'); */
 			$MonitoringCmd->setValue($cron_status_cmd);
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
@@ -560,7 +560,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cron_off');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
-			$MonitoringCmd->setDisplay('icon', '<i class="icon fas fa-pause-circle"></i>');
+			/* $MonitoringCmd->setDisplay('icon', '<i class="icon fas fa-pause-circle"></i>'); */
 			$MonitoringCmd->setValue($cron_status_cmd);
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
@@ -672,11 +672,11 @@ class Monitoring extends eqLogic {
 		$replace['#cnx_ssh#'] = is_object($cnx_ssh) ? $cnx_ssh->execCmd() : '';
 		$replace['#cnx_ssh_id#'] = is_object($cnx_ssh) ? $cnx_ssh->getId() : '';
 
-		$cron_on = $this->getCmd(null,'cron_on');
+		/* $cron_on = $this->getCmd(null,'cron_on');
 		$replace['#cron_on_icon#'] = is_object($cron_on) ? (!empty($cron_on->getDisplay('icon')) ? $cron_on->getDisplay('icon') : '<i class="fas fa-play-circle"></i>') : '';	
 		
 		$cron_off = $this->getCmd(null,'cron_off');
-		$replace['#cron_off_icon#'] = is_object($cron_off) ? (!empty($cron_off->getDisplay('icon')) ? $cron_off->getDisplay('icon') : '<i class="icon fas fa-pause-circle"></i>') : '';
+		$replace['#cron_off_icon#'] = is_object($cron_off) ? (!empty($cron_off->getDisplay('icon')) ? $cron_off->getDisplay('icon') : '<i class="icon fas fa-pause-circle"></i>') : ''; */
 
 		$cron_status = $this->getCmd(null,'cron_status');
 		$replace['#cron_status#'] = is_object($cron_status) ? $cron_status->execCmd() : '';

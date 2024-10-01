@@ -7,16 +7,16 @@
 			<script>
 				if ('#cron_status#' == '1') {
 					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<span title="Cron ON (Custom)" class="tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;">#cron_on_icon#</span>';
+						document.getElementById('iconCron#id#').innerHTML = '<span title="Cron ON (Custom)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
 					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<span title="Cron ON (Default)" class="tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;">#cron_on_icon#</span>';
+						document.getElementById('iconCron#id#').innerHTML = '<span title="Cron ON (Default)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
 					}
 				}
 				if ('#cron_status#' == '0') {
 					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<span title="Cron OFF (Custom)" class="tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;">#cron_off_icon#</span>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
 					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<span title="Cron OFF (Default)" class="tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;">#cron_off_icon#</span>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
 					}
 				}
 			</script>

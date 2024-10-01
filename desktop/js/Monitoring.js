@@ -27,7 +27,7 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'namedistri' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'Mem' || _cmd.logicalId == 'Mem_swap' || _cmd.logicalId == 'ethernet0' || _cmd.logicalId == 'hddtotal' || _cmd.logicalId == 'hddtotalv2' || _cmd.logicalId == 'hddtotalusb' || _cmd.logicalId == 'hddtotalesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
+	if (_cmd.logicalId == 'namedistri' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'Mem' || _cmd.logicalId == 'Mem_swap' || _cmd.logicalId == 'ethernet0' || _cmd.logicalId == 'hddtotal' || _cmd.logicalId == 'hddtotalv2' || _cmd.logicalId == 'hddtotalusb' || _cmd.logicalId == 'hddtotalesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
 		tr += '<div class="input-group">'
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
