@@ -2029,9 +2029,9 @@ class Monitoring extends eqLogic {
 					if (empty($cnx_ssh)) {$cnx_ssh = '';}
 					if (empty($uname)) {$uname = 'Inconnu';}
 					if (empty($Mem)) {$Mem = '';}
-					if (empty($memorylibre_pourc)) {$memorylibre_pourc = '';}
+					if (empty($memorylibre_pourc)) {$memorylibre_pourc = '0';}
 					if (empty($Memswap)) {$Memswap = '';}
-					if (empty($swaplibre_pourc)) {$swaplibre_pourc = '';}
+					if (empty($swaplibre_pourc)) {$swaplibre_pourc = '0';}
 					# TODO ajouter les commandes type syno ou temp
 	
 					$dataresult = array(
