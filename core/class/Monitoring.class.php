@@ -1872,7 +1872,7 @@ class Monitoring extends eqLogic {
 							} else {
 								$swaplibre_pourc = 0;
 							}
-							log::add('Monitoring', 'debug', '['. $equipement .'][SWAP] Swap Free % :: ' . $memorylibre_pourc);
+							log::add('Monitoring', 'debug', '['. $equipement .'][SWAP] Swap Free % :: ' . $swaplibre_pourc);
 						}
 	
 						if (isset($swap[0])) {
