@@ -1817,7 +1817,7 @@ class Monitoring extends eqLogic {
 									$memorylibre_pourc = round(intval($memorylibre) / intval($memory[0]) * 100);
 									log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memorylibre% :: ' . $memorylibre_pourc);
 								} else {
-									$memorylibre_pourc = '-';
+									$memorylibre_pourc = 0;
 								}
 							}
 	
