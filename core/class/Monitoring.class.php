@@ -673,10 +673,10 @@ class Monitoring extends eqLogic {
 		$replace['#cnx_ssh_id#'] = is_object($cnx_ssh) ? $cnx_ssh->getId() : '';
 
 		$cron_on = $this->getCmd(null,'cron_on');
-		$replace['#cron_on_icon#'] = (is_object($cron_on)) ? $cron_on->getDisplay('icon') : '';
+		$replace['#cron_on_icon#'] = (is_object($cron_on)) ? $cron_on->getDisplay('icon') : '<i class="fas fa-play-circle"></i>';
 
 		$cron_off = $this->getCmd(null,'cron_off');
-		$replace['#cron_off_icon#'] = (is_object($cron_off)) ? $cron_off->getDisplay('icon') : '';
+		$replace['#cron_off_icon#'] = (is_object($cron_off)) ? $cron_off->getDisplay('icon') : '<i class="icon fas fa-pause-circle"></i>';
 
 		$cron_status = $this->getCmd(null,'cron_status');
 		$replace['#cron_status#'] = (is_object($cron_status)) ? $cron_status->execCmd() : '';
@@ -685,7 +685,7 @@ class Monitoring extends eqLogic {
 		$replace['#cron_status_custom#'] = $this->getConfiguration('pull_use_custom', '0');
 
 		$namedistri = $this->getCmd(null,'namedistri');
-		$replace['#namedistri_icon#'] = (is_object($namedistri)) ? $namedistri->getDisplay('icon') : '';
+		$replace['#namedistri_icon#'] = (is_object($namedistri)) ? $namedistri->getDisplay('icon') : '<i class="fab fa-linux"></i>';
 		$replace['#namedistri#'] = (is_object($namedistri)) ? $namedistri->execCmd() : '';
 		$replace['#namedistriid#'] = is_object($namedistri) ? $namedistri->getId() : '';
 		$replace['#namedistri_display#'] = (is_object($namedistri) && $namedistri->getIsVisible()) ? "block" : "none";
@@ -694,7 +694,7 @@ class Monitoring extends eqLogic {
 
 
 		$loadavg1mn = $this->getCmd(null,'loadavg1mn');
-		$replace['#loadavg1mn_icon#'] = (is_object($loadavg1mn)) ? $loadavg1mn->getDisplay('icon') : '';
+		$replace['#loadavg1mn_icon#'] = (is_object($loadavg1mn)) ? $loadavg1mn->getDisplay('icon') : '<i class="fa techno-courbes3"></i>';
 		$replace['#loadavg1mn#'] = (is_object($loadavg1mn)) ? $loadavg1mn->execCmd() : '';
 		$replace['#loadavg1mnid#'] = is_object($loadavg1mn) ? $loadavg1mn->getId() : '';
 		$replace['#loadavg_display#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? "block" : "none";
@@ -719,7 +719,7 @@ class Monitoring extends eqLogic {
 		$replace['#loadavg15mn_colorhigh#'] = $this->getConfiguration('loadavg15mn_colorhigh');
 		
 		$uptime = $this->getCmd(null,'uptime');
-		$replace['#uptime_icon#'] = (is_object($uptime)) ? $uptime->getDisplay('icon') : '';
+		$replace['#uptime_icon#'] = (is_object($uptime)) ? $uptime->getDisplay('icon') : '<i class="fas fa-tachometer-alt"></i>';
 		$replace['#uptime#'] = (is_object($uptime)) ? $uptime->execCmd() : '';
 		$replace['#uptimeid#'] = is_object($uptime) ? $uptime->getId() : '';
 		$replace['#uptime_display#'] = (is_object($uptime) && $uptime->getIsVisible()) ? "block" : "none";
@@ -727,7 +727,7 @@ class Monitoring extends eqLogic {
         $replace['#uptime_value#'] = (is_object($uptime) && $uptime->getIsVisible()) ? $uptime->getValueDate() : "-";
 		
 		$hddtotal = $this->getCmd(null,'hddtotal');
-		$replace['#hddtotal_icon#'] = (is_object($hddtotal)) ? $hddtotal->getDisplay('icon') : '';
+		$replace['#hddtotal_icon#'] = (is_object($hddtotal)) ? $hddtotal->getDisplay('icon') : '<i class="fas fa-hdd"></i>';
 		$replace['#hddtotal#'] = (is_object($hddtotal)) ? $hddtotal->execCmd() : '';
 		$replace['#hddtotalid#'] = is_object($hddtotal) ? $hddtotal->getId() : '';
 		$replace['#hddused_display#'] = (is_object($hddtotal) && $hddtotal->getIsVisible()) ? "block" : "none";
@@ -746,7 +746,7 @@ class Monitoring extends eqLogic {
 		$replace['#hddpourcused_colorhigh#'] = $this->getConfiguration('hddpourcused_colorhigh');
 				
 		$Mem = $this->getCmd(null,'Mem');
-		$replace['#Mem_icon#'] = (is_object($Mem)) ? $Mem->getDisplay('icon') : '';
+		$replace['#Mem_icon#'] = (is_object($Mem)) ? $Mem->getDisplay('icon') : '<i class="fa techno-memory"></i>';
 		$replace['#Mem#'] = (is_object($Mem)) ? $Mem->execCmd() : '';
 		$replace['#Memid#'] = is_object($Mem) ? $Mem->getId() : '';
 		$replace['#Mem_display#'] = (is_object($Mem) && $Mem->getIsVisible()) ? "block" : "none";
@@ -761,7 +761,7 @@ class Monitoring extends eqLogic {
 		$replace['#Mempourc_colorlow#'] = $this->getConfiguration('Mempourc_colorlow');
 
 		$Mem_swap = $this->getCmd(null,'Mem_swap');
-		$replace['#Mem_swap_icon#'] = (is_object($Mem_swap)) ? $Mem_swap->getDisplay('icon') : '';
+		$replace['#Mem_swap_icon#'] = (is_object($Mem_swap)) ? $Mem_swap->getDisplay('icon') : '<i class="fas fa-list"></i>';
 		$replace['#Mem_swap#'] = (is_object($Mem_swap)) ? $Mem_swap->execCmd() : '';
 		$replace['#Mem_swapid#'] = is_object($Mem_swap) ? $Mem_swap->getId() : '';
 		$replace['#Mem_swap_display#'] = (is_object($Mem_swap) && $Mem_swap->getIsVisible()) ? "block" : "none";
@@ -776,7 +776,7 @@ class Monitoring extends eqLogic {
 		$replace['#Swappourc_colorlow#'] = $this->getConfiguration('Swappourc_colorlow');
 
 		$ethernet0 = $this->getCmd(null,'ethernet0');
-		$replace['#ethernet0_icon#'] = (is_object($ethernet0)) ? $ethernet0->getDisplay('icon') : '';
+		$replace['#ethernet0_icon#'] = (is_object($ethernet0)) ? $ethernet0->getDisplay('icon') : '<i class="fa techno-fleches"></i>';
 		$replace['#ethernet0#'] = (is_object($ethernet0)) ? $ethernet0->execCmd() : '';
 		$replace['#ethernet0id#'] = is_object($ethernet0) ? $ethernet0->getId() : '';
 		$replace['#ethernet0_display#'] = (is_object($ethernet0) && $ethernet0->getIsVisible()) ? "block" : "none";
@@ -792,7 +792,7 @@ class Monitoring extends eqLogic {
 		$replace['#ethernet0_ipid#'] = is_object($ethernet0_ip) ? $ethernet0_ip->getId() : '';
 
 		$cpu = $this->getCmd(null,'cpu');
-		$replace['#cpu_icon#'] = (is_object($cpu)) ? $cpu->getDisplay('icon') : '';
+		$replace['#cpu_icon#'] = (is_object($cpu)) ? $cpu->getDisplay('icon') : '<i class="fa techno-pc"></i>';
 		$replace['#cpu#'] = (is_object($cpu)) ? $cpu->execCmd() : '';
 		$replace['#cpuid#'] = is_object($cpu) ? $cpu->getId() : '';
 		$replace['#cpu_display#'] = (is_object($cpu) && $cpu->getIsVisible()) ? "block" : "none";
@@ -822,7 +822,7 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedv2_colorhigh#'] = $this->getConfiguration('hddpourcusedv2_colorhigh');
 
 			$hddtotalv2 = $this->getCmd(null,'hddtotalv2');
-			$replace['#hddtotalv2_icon#'] = (is_object($hddtotalv2)) ? $hddtotalv2->getDisplay('icon') : '';
+			$replace['#hddtotalv2_icon#'] = (is_object($hddtotalv2)) ? $hddtotalv2->getDisplay('icon') : '<i class="fas fa-hdd"></i>';
 			$replace['#synovolume2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? 'OK' : '';
 			$replace['#hddusedv2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalv2#'] = (is_object($hddtotalv2)) ? $hddtotalv2->execCmd() : '';
@@ -847,7 +847,7 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedusb_colorhigh#'] = $this->getConfiguration('hddpourcusedusb_colorhigh');
 
 			$hddtotalusb = $this->getCmd(null,'hddtotalusb');
-			$replace['#hddtotalusb_icon#'] = (is_object($hddtotalusb)) ? $hddtotalusb->getDisplay('icon') : '';
+			$replace['#hddtotalusb_icon#'] = (is_object($hddtotalusb)) ? $hddtotalusb->getDisplay('icon') : '<i class="fas fa-hdd"></i>';
 			$replace['#synovolumeusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? 'OK' : '';
 			$replace['#hddusedusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalusb#'] = (is_object($hddtotalusb)) ? $hddtotalusb->execCmd() : '';
@@ -872,7 +872,7 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedesata_colorhigh#'] = $this->getConfiguration('hddpourcusedesata_colorhigh');
 
 			$hddtotalesata = $this->getCmd(null,'hddtotalesata');
-			$replace['#hddtotalesata_icon#'] = (is_object($hddtotalesata)) ? $hddtotalesata->getDisplay('icon') : '';
+			$replace['#hddtotalesata_icon#'] = (is_object($hddtotalesata)) ? $hddtotalesata->getDisplay('icon') : '<i class="fas fa-hdd"></i>';
 			$replace['#synovolumeesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? 'OK' : '';
 			$replace['#hddusedesata_display#'] = (is_object($hddtotalesata) && $hddtotalesata->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalesata#'] = (is_object($hddtotalesata)) ? $hddtotalesata->execCmd() : '';
@@ -889,7 +889,7 @@ class Monitoring extends eqLogic {
         $replace['#perso1_value#'] = (is_object($perso1) && $perso1->getIsVisible()) ? $perso1->getValueDate() : "-";
 		
 		$replace['#perso1_name#'] = (is_object($perso1)) ? $perso1->getName() : '';
-		$replace['#perso1_icon#'] = (is_object($perso1)) ? $perso1->getdisplay('icon') : '';
+		$replace['#perso1_icon#'] = (is_object($perso1)) ? $perso1->getdisplay('icon') : '<i class="fas fa-question-circle"></i>';
 
 		$perso1_unite = $this->getConfiguration('perso1_unite');
 		$replace['#perso1_unite#'] = (is_object($perso1)) ? $perso1_unite : '';
@@ -905,7 +905,7 @@ class Monitoring extends eqLogic {
         $replace['#perso2_value#'] = (is_object($perso2) && $perso2->getIsVisible()) ? $perso2->getValueDate() : "-";
 		
 		$replace['#perso2_name#'] = (is_object($perso2)) ? $perso2->getName() : '';
-		$replace['#perso2_icon#'] = (is_object($perso2)) ? $perso2->getdisplay('icon') : '';
+		$replace['#perso2_icon#'] = (is_object($perso2)) ? $perso2->getdisplay('icon') : '<i class="fas fa-question-circle"></i>';
 		
 		$perso2_unite = $this->getConfiguration('perso2_unite');
 		$replace['#perso2_unite#'] = (is_object($perso2)) ? $perso2_unite : '';
