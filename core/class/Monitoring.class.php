@@ -268,7 +268,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('Mem');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-memory"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fa techno-memory"></i>');
 			$MonitoringCmd->save();
 		}
 
@@ -746,8 +746,7 @@ class Monitoring extends eqLogic {
 		$replace['#hddpourcused_colorhigh#'] = $this->getConfiguration('hddpourcused_colorhigh');
 				
 		$Mem = $this->getCmd(null,'Mem');
-		// $replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fa techno-memory"></i>') : '';
-		$replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fas fa-memory"></i>') : '';
+		$replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fa techno-memory"></i>') : '';
 		$replace['#Mem#'] = is_object($Mem) ? $Mem->execCmd() : '';
 		$replace['#Memid#'] = is_object($Mem) ? $Mem->getId() : '';
 		$replace['#Mem_display#'] = (is_object($Mem) && $Mem->getIsVisible()) ? "block" : "none";
