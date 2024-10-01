@@ -1817,7 +1817,7 @@ class Monitoring extends eqLogic {
 									$memorylibre_pourc = round(intval($memorylibre) / intval($memory[0]) * 100);
 									log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memorylibre% :: ' . $memorylibre_pourc);
 								} else {
-									$memorylibre_pourc = 0;
+									$memorylibre_pourc = '-';
 								}
 							}
 	
@@ -1870,7 +1870,7 @@ class Monitoring extends eqLogic {
 							if (intval($swap[0]) != 0) {
 								$swaplibre_pourc = round(intval($swap[2]) / intval($swap[0]) * 100);
 							} else {
-								$swaplibre_pourc = 0;
+								$swaplibre_pourc = '-';
 							}
 						}
 	
@@ -2029,9 +2029,9 @@ class Monitoring extends eqLogic {
 					if (empty($cnx_ssh)) {$cnx_ssh = '';}
 					if (empty($uname)) {$uname = 'Inconnu';}
 					if (empty($Mem)) {$Mem = '';}
-					if (empty($memorylibre_pourc)) {$memorylibre_pourc = '0';}
+					if (empty($memorylibre_pourc)) {$memorylibre_pourc = '';}
 					if (empty($Memswap)) {$Memswap = '';}
-					if (empty($swaplibre_pourc)) {$swaplibre_pourc = '0';}
+					if (empty($swaplibre_pourc)) {$swaplibre_pourc = '';}
 					# TODO ajouter les commandes type syno ou temp
 	
 					$dataresult = array(
