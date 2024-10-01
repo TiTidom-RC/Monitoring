@@ -673,10 +673,10 @@ class Monitoring extends eqLogic {
 		$replace['#cnx_ssh_id#'] = is_object($cnx_ssh) ? $cnx_ssh->getId() : '';
 
 		$cron_on = $this->getCmd(null,'cron_on');
-		$replace['#cron_on_icon#'] = (is_object($cron_on)) ? $cron_on->getDisplay('icon') : '<i class="fas fa-play-circle"></i>';
-
+		$replace['#cron_on_icon#'] = is_object($cron_on) ? (!empty($cron_on->getDisplay('icon')) ? $cron_on->getDisplay('icon') : '<i class="fas fa-play-circle"></i>') : '';	
+		
 		$cron_off = $this->getCmd(null,'cron_off');
-		$replace['#cron_off_icon#'] = (is_object($cron_off)) ? $cron_off->getDisplay('icon') : '<i class="icon fas fa-pause-circle"></i>';
+		$replace['#cron_off_icon#'] = is_object($cron_off) ? (!empty($cron_off->getDisplay('icon')) ? $cron_off->getDisplay('icon') : '<i class="icon fas fa-pause-circle"></i>') : '';
 
 		$cron_status = $this->getCmd(null,'cron_status');
 		$replace['#cron_status#'] = (is_object($cron_status)) ? $cron_status->execCmd() : '';
@@ -685,7 +685,7 @@ class Monitoring extends eqLogic {
 		$replace['#cron_status_custom#'] = $this->getConfiguration('pull_use_custom', '0');
 
 		$namedistri = $this->getCmd(null,'namedistri');
-		$replace['#namedistri_icon#'] = (is_object($namedistri)) ? $namedistri->getDisplay('icon') : '<i class="fab fa-linux"></i>';
+		$replace['#namedistri_icon#'] = is_object($namedistri) ? (!empty($namedistri->getDisplay('icon')) ? $namedistri->getDisplay('icon') : '<i class="fab fa-linux"></i>') : '';
 		$replace['#namedistri#'] = (is_object($namedistri)) ? $namedistri->execCmd() : '';
 		$replace['#namedistriid#'] = is_object($namedistri) ? $namedistri->getId() : '';
 		$replace['#namedistri_display#'] = (is_object($namedistri) && $namedistri->getIsVisible()) ? "block" : "none";
