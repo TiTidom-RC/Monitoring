@@ -1815,10 +1815,10 @@ class Monitoring extends eqLogic {
 							if (isset($memory[0]) && isset($memorylibre)) {
 								if (intval($memory[0]) != 0) {
 									$memorylibre_pourc = round(intval($memorylibre) / intval($memory[0]) * 100);
-									log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memorylibre% :: ' . $memorylibre_pourc);
 								} else {
 									$memorylibre_pourc = 0;
 								}
+								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free % :: ' . $memorylibre_pourc);
 							}
 	
 							if (isset($memorylibre)) {
@@ -1872,6 +1872,7 @@ class Monitoring extends eqLogic {
 							} else {
 								$swaplibre_pourc = 0;
 							}
+							log::add('Monitoring', 'debug', '['. $equipement .'][SWAP] Swap Free % :: ' . $memorylibre_pourc);
 						}
 	
 						if (isset($swap[0])) {
