@@ -60,12 +60,12 @@
 				<script>
 					document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"] .action').addEventListener('click', function () {
 						jeeDialog.confirm({
-							title: '<i class="danger fas fa-question-circle"></i> Redémarrer l\'équipement',
+							title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
 							message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
 							buttons: {
 								confirm: {
 									label: 'Redémarrer',
-									className: 'danger'
+									className: 'warning'
 								},
 								cancel: {
 									label: 'Annuler',
