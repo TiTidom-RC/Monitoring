@@ -136,16 +136,16 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#Swappourc#' === '') {
-					document.querySelector('#Swappourc#id#')?.innerHTML = '<span></span>';
+				if ('#Swappourc#' === '' || '#Swappourc#' === null) {
+					document.querySelector('#Swappourc#id#').innerHTML = '<span></span>';
 				} else if ((parseInt('#Swappourc#') > parseInt('#Swappourc_colorhigh#')) && '#Swappourc_colorhigh#' !== '') {
-					document.querySelector('#Swappourc#id#')?.innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="value history cursor" style="color: var(--al-success-color) !important;">#Swappourc#</span><span>%</span>)';
+					document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="value history cursor" style="color: var(--al-success-color) !important;">#Swappourc#</span><span>%</span>)';
 				} else if ((parseInt('#Swappourc#') >= parseInt('#Swappourc_colorlow#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourc_colorhigh#'))) {
-					document.querySelector('#Swappourc#id#')?.innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="value history cursor" style="color: var(--al-warning-color) !important;">#Swappourc#</span><span>%</span>)';
+					document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="value history cursor" style="color: var(--al-warning-color) !important;">#Swappourc#</span><span>%</span>)';
 				} else if (parseInt('#Swappourc#') < parseInt('#Swappourc_colorlow#')) {
-					document.querySelector('#Swappourc#id#')?.innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="value history cursor" style="color: var(--al-danger-color) !important;">#Swappourc#</span><span>%</span>)';
+					document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="value history cursor" style="color: var(--al-danger-color) !important;">#Swappourc#</span><span>%</span>)';
 				} else {
-					document.querySelector('#Swappourc#id#')?.innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="value history cursor">#Swappourc#</span><span>%</span>)';
+					document.querySelector('#Swappourc#id#').innerHTML = '#Mem_swap# (<span data-cmd_id="#Swappourcid#" class="value history cursor">#Swappourc#</span><span>%</span>)';
 				}
 			}
 		</script>
