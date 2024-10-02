@@ -38,7 +38,8 @@ class Monitoring extends eqLogic {
 		$_logName = __CLASS__ . '_update';
 		log::add($_logName, 'info', '[INSTALL] Installation des dépendances');
 
-		try {
+		$_pluginIsInstalled = plugin::isInstalled('sshmanager');
+		if ($_pluginIsInstalled) {
 			$_plugin = plugin::byId('sshmanager');
 			log::add($_logName, 'info', __('[INSTALL] Le plugin SSHManager est déjà installé', __FILE__));
 			if (!$_plugin->isActive()) {
@@ -48,8 +49,7 @@ class Monitoring extends eqLogic {
 			} else {
 				log::add($_logName, 'info', __('[INSTALL] Plugin SSHManager :: actif', __FILE__));
 			}
-		} catch (Exception $e) {
-			log::add($_logName, 'warning', __('[INSTALL] Exception: ' . $e->getMessage(), __FILE__));
+		} else {
 			log::add($_logName, 'info', __('[INSTALL] Lancement de l\'installation du plugin SSHManager', __FILE__));
 			
 			// Installation du plugin SSHManager (même version que celle du plugin Monitoring)
@@ -61,16 +61,15 @@ class Monitoring extends eqLogic {
 			}
 			$_pluginToInstall->setLogicalId('sshmanager');
 			$_pluginToInstall->setType('plugin');
-			$_pluginToInstall->setSource($_pluginSource->getConfiguration('source'));
-			if ($_pluginSource->getConfiguration('source') == 'github') {
+			$_pluginToInstall->setSource($_pluginSource->getSource());
+			if ($_pluginSource->getSource() == 'github') {
 				$_pluginToInstall->setConfiguration('user', $_pluginSource->getConfiguration('user'));
 				$_pluginToInstall->setConfiguration('repository', 'SSH-Manager');
-				if (strpos($_pluginSource->getConfiguration('version'), 'dev') !== false) {
+				if (strpos($_pluginSource->getConfiguration('version', 'stable'), 'dev') !== false) {
 					$_pluginToInstall->setConfiguration('version', 'dev');
 				} else {
-					$_pluginToInstall->setConfiguration('version', $_pluginSource->getConfiguration('version'));
+					$_pluginToInstall->setConfiguration('version', $_pluginSource->getConfiguration('version', 'stable'));
 				}
-				$_pluginToInstall->setConfiguration('version', $_pluginSource->getConfiguration('version'));
 				$_pluginToInstall->setConfiguration('token', $_pluginSource->getConfiguration('token'));
 			} else {
 				$_pluginToInstall->setConfiguration('version', $_pluginSource->getConfiguration('version'));
@@ -108,6 +107,7 @@ class Monitoring extends eqLogic {
 				}
 			}
 		}
+			
         return array('log' => log::getPathToLog(__CLASS__ . '_update'));
     }
 
