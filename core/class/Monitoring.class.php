@@ -684,10 +684,14 @@ class Monitoring extends eqLogic {
 				$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
 			}
 		} else {
-			$replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+			/* $replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
 			$replace['#' . $cmdName . '_minHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
 			$replace['#' . $cmdName . '_maxHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
-			$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
+			$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>'; */
+			$replace['#' . $cmdName . '_averageHistory#'] = '-';
+			$replace['#' . $cmdName . '_minHistory#'] = '-';
+			$replace['#' . $cmdName . '_maxHistory#'] = '-';
+			$replace['#' . $cmdName . '_tendance#'] = '';
 		}
 	}
 
