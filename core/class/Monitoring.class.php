@@ -704,13 +704,13 @@ class Monitoring extends eqLogic {
 			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
 			$historyStatistique = $loadavg1mn->getStatistique($startHist, date('Y-m-d H:i:s'));
 			if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
-				$replace['#loadavg1mn_averageHistory#'] = round(intval($replace['#loadavg1mn#']), 1);
-				$replace['#loadavg1mn_minHistory#'] = round(intval($replace['#loadavg1mn#']), 1);
-				$replace['#loadavg1mn_maxHistory#'] = round(intval($replace['#loadavg1mn#']), 1);
+				$replace['#loadavg1mn_averageHistory#'] = round(intval($replace['#loadavg1mn#']), 2);
+				$replace['#loadavg1mn_minHistory#'] = round(intval($replace['#loadavg1mn#']), 2);
+				$replace['#loadavg1mn_maxHistory#'] = round(intval($replace['#loadavg1mn#']), 2);
 			} else {
-				$replace['#loadavg1mn_averageHistory#'] = round($historyStatistique['avg'], 1);
-				$replace['#loadavg1mn_minHistory#'] = round($historyStatistique['min'], 1);
-				$replace['#loadavg1mn_maxHistory#'] = round($historyStatistique['max'], 1);
+				$replace['#loadavg1mn_averageHistory#'] = round($historyStatistique['avg'], 2);
+				$replace['#loadavg1mn_minHistory#'] = round($historyStatistique['min'], 2);
+				$replace['#loadavg1mn_maxHistory#'] = round($historyStatistique['max'], 2);
 			}
 			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculTendance') . ' hour'));
 			$tendance = $loadavg1mn->getTendance($startHist, date('Y-m-d H:i:s'));
