@@ -723,8 +723,6 @@ class Monitoring extends eqLogic {
 			}
 		}
 
-		$replace['#loadavg1mn_min#'] = $this
-
 		$replace['#loadavg1mn_colorlow#'] = $this->getConfiguration('loadavg1mn_colorlow');
 		$replace['#loadavg1mn_colorhigh#'] = $this->getConfiguration('loadavg1mn_colorhigh');
 
