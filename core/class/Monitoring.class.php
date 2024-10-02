@@ -666,9 +666,9 @@ class Monitoring extends eqLogic {
 			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
 			$historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
 			if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
-				$replace['#' . $cmdName . '_averageHistory#'] = round(intval($replace['#' . $cmdName . '#']), $precision);
-				$replace['#' . $cmdName . '_minHistory#'] = round(intval($replace['#' . $cmdName . '#']), $precision);
-				$replace['#' . $cmdName . '_maxHistory#'] = round(intval($replace['#' . $cmdName . '#']), $precision);
+				$replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+				$replace['#' . $cmdName . '_minHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+				$replace['#' . $cmdName . '_maxHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
 			} else {
 				$replace['#' . $cmdName . '_averageHistory#'] = round($historyStatistique['avg'], $precision);
 				$replace['#' . $cmdName . '_minHistory#'] = round($historyStatistique['min'], $precision);
@@ -684,9 +684,9 @@ class Monitoring extends eqLogic {
 				$replace['#' . $cmdName . '_tendance#'] = '<i class="fas fa-minus"></i>';
 			}
 		} else {
-			$replace['#' . $cmdName . '_averageHistory#'] = round(intval($replace['#' . $cmdName . '#']), $precision);
-			$replace['#' . $cmdName . '_minHistory#'] = round(intval($replace['#' . $cmdName . '#']), $precision);
-			$replace['#' . $cmdName . '_maxHistory#'] = round(intval($replace['#' . $cmdName . '#']), $precision);
+			$replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+			$replace['#' . $cmdName . '_minHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+			$replace['#' . $cmdName . '_maxHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
 			$replace['#' . $cmdName . '_tendance#'] = '<i class="fas fa-minus"></i>';
 		}
 	}
