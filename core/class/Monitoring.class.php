@@ -53,7 +53,7 @@ class Monitoring extends eqLogic {
 			log::add($_logName, 'info', __('[INSTALL] Lancement de l\'installation du plugin SSHManager', __FILE__));
 			
 			// Installation du plugin SSHManager (même version que celle du plugin Monitoring)
-			$_pluginSource = plugin::byId('Monitoring');
+			$_pluginSource = update::byLogicalId('Monitoring');
 			
 			$_pluginToInstall = update::byLogicalId('sshmanager');
 			if (!is_object($_pluginToInstall)) {
