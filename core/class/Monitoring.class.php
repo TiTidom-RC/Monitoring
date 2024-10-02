@@ -64,7 +64,7 @@ class Monitoring extends eqLogic {
 			$_pluginToInstall->setSource($_pluginSource->getConfiguration('source'));
 			if ($_pluginSource->getConfiguration('source') == 'github') {
 				$_pluginToInstall->setConfiguration('user', $_pluginSource->getConfiguration('user'));
-				$_pluginToInstall->setConfiguration('repository', $_pluginSource->getConfiguration('repository'));
+				$_pluginToInstall->setConfiguration('repository', 'SSH-Manager');
 				if (strpos($_pluginSource->getConfiguration('version'), 'dev') !== false) {
 					$_pluginToInstall->setConfiguration('version', 'dev');
 				} else {
