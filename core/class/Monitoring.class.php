@@ -40,7 +40,7 @@ class Monitoring extends eqLogic {
 
 		try {
 			$_plugin = plugin::byId('sshmanager');
-			log::add($_logName, 'info', __('[INSTALL] Le plugin SSHManager est installé', __FILE__));
+			log::add($_logName, 'info', __('[INSTALL] Le plugin SSHManager est déjà installé', __FILE__));
 			if (!$_plugin->isActive()) {
 				log::add($_logName, 'error', __('[INSTALL] Le plugin SSHManager n\'est pas activé', __FILE__));
 				$_plugin->setIsEnable(1, true, true);
@@ -50,33 +50,62 @@ class Monitoring extends eqLogic {
 			}
 		} catch (Exception $e) {
 			log::add($_logName, 'warning', __('[INSTALL] Exception: ' . $e->getMessage(), __FILE__));
+			log::add($_logName, 'info', __('[INSTALL] Lancement de l\'installation du plugin SSHManager', __FILE__));
 			
-			log::add($_logName, 'error', __('[INSTALL] Lancement de l\'installation du plugin SSHManager', __FILE__));
+			// Installation du plugin SSHManager (même version que celle du plugin Monitoring)
+			$_pluginSource = plugin::byId('Monitoring');
 			
-			// Installation du plugin SSHManager
-			$_update = update::byLogicalId('sshmanager');
-			if (!is_object($_update)) {
-				$_update = new update();
+			$_pluginToInstall = update::byLogicalId('sshmanager');
+			if (!is_object($_pluginToInstall)) {
+				$_pluginToInstall = new update();
 			}
-			$_update->setLogicalId('sshmanager');
-			$_update->setType('plugin');
-			$_update->setSource('github');
-			$_update->setConfiguration('user', 'TiTidom-RC');
-			$_update->setConfiguration('repository', 'SSH-Manager');
-			$_update->setConfiguration('version', 'dev');
-			$_update->setConfiguration('token', '');
-			$_update->save();
-			$_update->doUpdate();
-			sleep(2);
+			$_pluginToInstall->setLogicalId('sshmanager');
+			$_pluginToInstall->setType('plugin');
+			$_pluginToInstall->setSource($_pluginSource->getConfiguration('source'));
+			if ($_pluginSource->getConfiguration('source') == 'github') {
+				$_pluginToInstall->setConfiguration('user', $_pluginSource->getConfiguration('user'));
+				$_pluginToInstall->setConfiguration('repository', $_pluginSource->getConfiguration('repository'));
+				if (strpos($_pluginSource->getConfiguration('version'), 'dev') !== false) {
+					$_pluginToInstall->setConfiguration('version', 'dev');
+				} else {
+					$_pluginToInstall->setConfiguration('version', $_pluginSource->getConfiguration('version'));
+				}
+				$_pluginToInstall->setConfiguration('version', $_pluginSource->getConfiguration('version'));
+				$_pluginToInstall->setConfiguration('token', $_pluginSource->getConfiguration('token'));
+			} else {
+				$_pluginToInstall->setConfiguration('version', $_pluginSource->getConfiguration('version'));
+			}
+			$_pluginToInstall->save();
+			$_pluginToInstall->doUpdate();
 			
-			try {
-				$_plugin = plugin::byId('sshmanager');
-				$_plugin->setIsEnable(1, true, true);
-				log::add($_logName, 'info', __('[INSTALL] Activation du plugin SSHManager', __FILE__));
-				jeedom::cleanFileSystemRight();
-			} catch (Exception $e) {
-				log::add($_logName, 'warning', '[INSTALL] Exception :: ' . $e->getMessage());
+			// Vérification de l'installation du plugin SSHManager
+			$isNotInstalled = true;
+			$num = 30;
+			$_plugin = null;
+			while ($isNotInstalled && $num > 0) {
+				try {
+					$_plugin = plugin::byId('sshmanager');
+					$isNotInstalled = false;
+				} catch (Exception $e) {
+					log::add($_logName, 'debug', '[INSTALL][DEP] While Exception :: ' . $e->getMessage());
+					$num--;
+					sleep(1);
+				}
+			}
+			if ($num == 0) {
 				log::add($_logName, 'error', '[INSTALL] Le plugin SSHManager n\'a pas pu être installé !');
+			} else {
+				log::add($_logName, 'info', '[INSTALL] Le plugin SSHManager est installé');
+				if (is_object($_plugin)) {
+					try {
+						$_plugin->setIsEnable(1, true, true);
+						log::add($_logName, 'info', '[INSTALL] Activation du plugin SSHManager');
+						jeedom::cleanFileSystemRight();
+					} catch (Exception $e) {
+						log::add($_logName, 'warning', '[INSTALL] Exception :: ' . $e->getMessage());
+						log::add($_logName, 'error', '[INSTALL] Le plugin SSHManager n\'a pas pu être installé !');
+					}
+				}
 			}
 		}
         return array('log' => log::getPathToLog(__CLASS__ . '_update'));
