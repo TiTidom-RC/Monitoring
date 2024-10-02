@@ -692,14 +692,38 @@ class Monitoring extends eqLogic {
 		$replace['#namedistri_collect#'] = (is_object($namedistri) && $namedistri->getIsVisible()) ? $namedistri->getCollectDate() : "-";
         $replace['#namedistri_value#'] = (is_object($namedistri) && $namedistri->getIsVisible()) ? $namedistri->getValueDate() : "-";
 
-
 		$loadavg1mn = $this->getCmd(null,'loadavg1mn');
 		$replace['#loadavg1mn_icon#'] = is_object($loadavg1mn) ? (!empty($loadavg1mn->getDisplay('icon')) ? $loadavg1mn->getDisplay('icon') : '<i class="fa techno-courbes3"></i>') : '';
 		$replace['#loadavg1mn#'] = is_object($loadavg1mn) ? $loadavg1mn->execCmd() : '';
 		$replace['#loadavg1mnid#'] = is_object($loadavg1mn) ? $loadavg1mn->getId() : '';
 		$replace['#loadavg_display#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? "block" : "none";
 		$replace['#loadavg_collect#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getCollectDate() : "-";
-        $replace['#loadavg_value#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getValueDate() : "-";	
+        $replace['#loadavg_value#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getValueDate() : "-";
+
+		if ($loadavg1mn->getIsHistorized() == 1) {
+			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
+			$historyStatistique = $loadavg1mn->getStatistique($startHist, date('Y-m-d H:i:s'));
+			if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
+				$replace['#loadavg1mn_averageHistoryValue#'] = round(intval($replace['#loadavg1mn#']), 1);
+				$replace['#loadavg1mn_minHistoryValue#'] = round(intval($replace['#loadavg1mn#']), 1);
+				$replace['#loadavg1mn_maxHistoryValue#'] = round(intval($replace['#loadavg1mn#']), 1);
+			} else {
+				$replace['#loadavg1mn_averageHistoryValue#'] = round($historyStatistique['avg'], 1);
+				$replace['#loadavg1mn_minHistoryValue#'] = round($historyStatistique['min'], 1);
+				$replace['#loadavg1mn_maxHistoryValue#'] = round($historyStatistique['max'], 1);
+			}
+			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculTendance') . ' hour'));
+			$tendance = $this->getTendance($startHist, date('Y-m-d H:i:s'));
+			if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
+				$replace['#loadavg1mn_tendance#'] = 'fas fa-arrow-up';
+			} else if ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
+				$replace['#loadavg1mn_tendance#'] = 'fas fa-arrow-down';
+			} else {
+				$replace['#loadavg1mn_tendance#'] = 'fas fa-minus';
+			}
+		}
+
+		$replace['#loadavg1mn_min#'] = $this
 
 		$replace['#loadavg1mn_colorlow#'] = $this->getConfiguration('loadavg1mn_colorlow');
 		$replace['#loadavg1mn_colorhigh#'] = $this->getConfiguration('loadavg1mn_colorhigh');
