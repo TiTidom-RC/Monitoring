@@ -121,23 +121,21 @@ class Monitoring extends eqLogic {
 			log::add($_logName, 'info', __('[DEP] Installation des dépendances en cours', __FILE__));
 			$return['state'] = 'in_progress';
 		} else {
-			try {
+			$_pluginIsInstalled = plugin::isInstalled('sshmanager');
+			if ($_pluginIsInstalled) {
 				$_plugin = plugin::byId('sshmanager');
 				if (!$_plugin->isActive()) {
 					log::add($_logName, 'error', __('[DEP] Le plugin SSHManager n\'est pas activé', __FILE__));
 					$return['state'] = 'nok';
-
 				} else {
 					log::add($_logName, 'info', __('[DEP] Vérification des dépendances :: OK', __FILE__));
 					$return['state'] = 'ok';
 				}
-			} catch (Exception $e) {
-				log::add($_logName, 'warning', '[DEP] Exception :: ' . $e->getMessage());
-				log::add($_logName, 'error', '[DEP] Le plugin SSHManager n\'est pas installé');
+			} else {
+				log::add($_logName, 'error', __('[DEP] Le plugin SSHManager n\'est pas installé', __FILE__));
 				$return['state'] = 'nok';
 			}
 		}
-		
 		return $return;
 	}
 
