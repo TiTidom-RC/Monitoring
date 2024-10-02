@@ -713,7 +713,7 @@ class Monitoring extends eqLogic {
 				$replace['#loadavg1mn_maxHistoryValue#'] = round($historyStatistique['max'], 1);
 			}
 			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculTendance') . ' hour'));
-			$tendance = $this->getTendance($startHist, date('Y-m-d H:i:s'));
+			$tendance = $loadavg1mn->getTendance($startHist, date('Y-m-d H:i:s'));
 			if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
 				$replace['#loadavg1mn_tendance#'] = 'fas fa-arrow-up';
 			} else if ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
