@@ -715,11 +715,11 @@ class Monitoring extends eqLogic {
 			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculTendance') . ' hour'));
 			$tendance = $loadavg1mn->getTendance($startHist, date('Y-m-d H:i:s'));
 			if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
-				$replace['#loadavg1mn_tendance#'] = 'fas fa-arrow-up';
+				$replace['#loadavg1mn_tendance#'] = '<i class="fas fa-arrow-up"></i>';
 			} else if ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
-				$replace['#loadavg1mn_tendance#'] = 'fas fa-arrow-down';
+				$replace['#loadavg1mn_tendance#'] = '<i class="fas fa-arrow-down"</i>';
 			} else {
-				$replace['#loadavg1mn_tendance#'] = 'fas fa-minus';
+				$replace['#loadavg1mn_tendance#'] = '<i class="fas fa-minus"></i>';
 			}
 		}
 
