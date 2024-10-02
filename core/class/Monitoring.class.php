@@ -661,7 +661,7 @@ class Monitoring extends eqLogic {
 
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
-	public function getStats($cmd, $cmdName, &$replace) {
+	public function getStats($cmd, $cmdName, &$replace, int $precision = 2) {
 		if ($cmd->getIsHistorized() == 1) {
 			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
 			$historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
@@ -725,7 +725,10 @@ class Monitoring extends eqLogic {
 		$replace['#loadavg_collect#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getCollectDate() : "-";
         $replace['#loadavg_value#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? $loadavg1mn->getValueDate() : "-";
 
-		$this->getStats($loadavg1mn, 'loadavg1mn', $replace);
+		$replace['#loadavg1mn_colorlow#'] = $this->getConfiguration('loadavg1mn_colorlow');
+		$replace['#loadavg1mn_colorhigh#'] = $this->getConfiguration('loadavg1mn_colorhigh');
+
+		$this->getStats($loadavg1mn, 'loadavg1mn', $replace, 2);
 
 		/* if ($loadavg1mn->getIsHistorized() == 1) {
 			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
@@ -750,15 +753,14 @@ class Monitoring extends eqLogic {
 			}
 		} */
 
-		$replace['#loadavg1mn_colorlow#'] = $this->getConfiguration('loadavg1mn_colorlow');
-		$replace['#loadavg1mn_colorhigh#'] = $this->getConfiguration('loadavg1mn_colorhigh');
-
 		$loadavg5mn = $this->getCmd(null,'loadavg5mn');
 		$replace['#loadavg5mn#'] = is_object($loadavg5mn) ? $loadavg5mn->execCmd() : '';
 		$replace['#loadavg5mnid#'] = is_object($loadavg5mn) ? $loadavg5mn->getId() : '';
 
 		$replace['#loadavg5mn_colorlow#'] = $this->getConfiguration('loadavg5mn_colorlow');
 		$replace['#loadavg5mn_colorhigh#'] = $this->getConfiguration('loadavg5mn_colorhigh');
+
+		$this->getStats($loadavg5mn, 'loadavg5mn', $replace, 2);
 
 		$loadavg15mn = $this->getCmd(null,'loadavg15mn');
 		$replace['#loadavg15mn#'] = is_object($loadavg15mn) ? $loadavg15mn->execCmd() : '';
@@ -767,6 +769,8 @@ class Monitoring extends eqLogic {
 		$replace['#loadavg15mn_colorlow#'] = $this->getConfiguration('loadavg15mn_colorlow');
 		$replace['#loadavg15mn_colorhigh#'] = $this->getConfiguration('loadavg15mn_colorhigh');
 		
+		$this->getStats($loadavg15mn, 'loadavg15mn', $replace, 2);
+
 		$uptime = $this->getCmd(null,'uptime');
 		$replace['#uptime_icon#'] = is_object($uptime) ? (!empty($uptime->getDisplay('icon')) ? $uptime->getDisplay('icon') : '<i class="fas fa-tachometer-alt"></i>') : '';
 		$replace['#uptime#'] = is_object($uptime) ? $uptime->execCmd() : '';
@@ -793,7 +797,9 @@ class Monitoring extends eqLogic {
 
 		$replace['#hddpourcused_colorlow#'] = $this->getConfiguration('hddpourcused_colorlow');
 		$replace['#hddpourcused_colorhigh#'] = $this->getConfiguration('hddpourcused_colorhigh');
-				
+
+		$this->getStats($hddused_pourc, 'hddpourcused', $replace, 0);
+		
 		$Mem = $this->getCmd(null,'Mem');
 		$replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fa techno-memory"></i>') : '';
 		$replace['#Mem#'] = is_object($Mem) ? $Mem->execCmd() : '';
@@ -809,6 +815,8 @@ class Monitoring extends eqLogic {
 		$replace['#Mempourc_colorhigh#'] = $this->getConfiguration('Mempourc_colorhigh');
 		$replace['#Mempourc_colorlow#'] = $this->getConfiguration('Mempourc_colorlow');
 
+		$this->getStats($Mempourc, 'Mempourc', $replace, 0);
+
 		$Mem_swap = $this->getCmd(null,'Mem_swap');
 		$replace['#Mem_swap_icon#'] = is_object($Mem_swap) ? (!empty($Mem_swap->getDisplay('icon')) ? $Mem_swap->getDisplay('icon') : '<i class="fas fa-list"></i>') : '';
 		$replace['#Mem_swap#'] = is_object($Mem_swap) ? $Mem_swap->execCmd() : '';
@@ -823,6 +831,8 @@ class Monitoring extends eqLogic {
 
 		$replace['#Swappourc_colorhigh#'] = $this->getConfiguration('Swappourc_colorhigh');
 		$replace['#Swappourc_colorlow#'] = $this->getConfiguration('Swappourc_colorlow');
+
+		$this->getStats($Swappourc, 'Swappourc', $replace, 0);
 
 		$ethernet0 = $this->getCmd(null,'ethernet0');
 		// $replace['#ethernet0_icon#'] = is_object($ethernet0) ? (!empty($ethernet0->getDisplay('icon')) ? $ethernet0->getDisplay('icon') : '<i class="fa techno-fleches"></i>') : '';
@@ -857,6 +867,8 @@ class Monitoring extends eqLogic {
 		$replace['#cpu_temp_colorlow#'] = $this->getConfiguration('cpu_temp_colorlow');
 		$replace['#cpu_temp_colorhigh#'] = $this->getConfiguration('cpu_temp_colorhigh');
 
+		$this->getStats($cpu_temp, 'cpu_temp', $replace, 0);
+
 		// Syno Volume 2
 		$SynoV2Visible = (is_object($this->getCmd(null,'hddtotalv2')) && $this->getCmd(null,'hddtotalv2')->getIsVisible()) ? 'OK' : '';
 
@@ -870,6 +882,8 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedv2id#'] = is_object($hddusedv2_pourc) ? $hddusedv2_pourc->getId() : '';
 			$replace['#hddpourcusedv2_colorlow#'] = $this->getConfiguration('hddpourcusedv2_colorlow');
 			$replace['#hddpourcusedv2_colorhigh#'] = $this->getConfiguration('hddpourcusedv2_colorhigh');
+
+			$this->getStats($hddusedv2_pourc, 'hddpourcusedv2', $replace, 0);
 
 			$hddtotalv2 = $this->getCmd(null,'hddtotalv2');
 			$replace['#hddtotalv2_icon#'] = is_object($hddtotalv2) ? (!empty($hddtotalv2->getDisplay('icon')) ? $hddtotalv2->getDisplay('icon') : '<i class="fas fa-hdd"></i>') : '';
@@ -896,6 +910,8 @@ class Monitoring extends eqLogic {
 			$replace['#hddpourcusedusb_colorlow#'] = $this->getConfiguration('hddpourcusedusb_colorlow');
 			$replace['#hddpourcusedusb_colorhigh#'] = $this->getConfiguration('hddpourcusedusb_colorhigh');
 
+			$this->getStats($hddusedusb_pourc, 'hddpourcusedusb', $replace, 0);
+
 			$hddtotalusb = $this->getCmd(null,'hddtotalusb');
 			$replace['#hddtotalusb_icon#'] = is_object($hddtotalusb) ? (!empty($hddtotalusb->getDisplay('icon')) ? $hddtotalusb->getDisplay('icon') : '<i class="fab fa-usb"></i>') : '';
 			$replace['#synovolumeusb_display#'] = (is_object($hddtotalusb) && $hddtotalusb->getIsVisible()) ? 'OK' : '';
@@ -920,6 +936,8 @@ class Monitoring extends eqLogic {
 
 			$replace['#hddpourcusedesata_colorlow#'] = $this->getConfiguration('hddpourcusedesata_colorlow');
 			$replace['#hddpourcusedesata_colorhigh#'] = $this->getConfiguration('hddpourcusedesata_colorhigh');
+
+			$this->getStats($hddusedesata_pourc, 'hddpourcusedesata', $replace, 0);
 
 			$hddtotalesata = $this->getCmd(null,'hddtotalesata');
 			$replace['#hddtotalesata_icon#'] = is_object($hddtotalesata) ? (!empty($hddtotalesata->getDisplay('icon')) ? $hddtotalesata->getDisplay('icon') : '<i class="fab fa-usb"></i>') : '';
@@ -947,6 +965,8 @@ class Monitoring extends eqLogic {
 		$replace ['#perso1_colorlow#'] = $this->getConfiguration('perso1_colorlow');
 		$replace ['#perso1_colorhigh#'] = $this->getConfiguration('perso1_colorhigh');
 
+		$this->getStats($perso1, 'perso1', $replace, 2);
+
 		$perso2 = $this->getCmd(null,'perso2');
 		$replace['#perso2#'] = is_object($perso2) ? $perso2->execCmd() : '';
 		$replace['#perso2id#'] = is_object($perso2) ? $perso2->getId() : '';
@@ -962,6 +982,8 @@ class Monitoring extends eqLogic {
 
 		$replace ['#perso2_colorlow#'] = $this->getConfiguration('perso2_colorlow');
 		$replace ['#perso2_colorhigh#'] = $this->getConfiguration('perso2_colorhigh');
+
+		$this->getStats($perso2, 'perso2', $replace, 2);
 
 		foreach ($this->getCmd('action') as $cmd) {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
