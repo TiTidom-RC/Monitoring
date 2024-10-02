@@ -1045,14 +1045,19 @@ class Monitoring extends eqLogic {
 		$hostId = $this->getConfiguration('SSHHostId');
 		$cnx_ssh = '';
 	
-		try {
-			$cnx_ssh = sshmanager::checkSSHConnection($hostId) ? 'OK' : 'KO';
-			log::add('Monitoring', ($cnx_ssh == 'KO' ? 'error': 'debug'), '['. $this->getName() .'][SSH-CNX] Connection :: ' . $cnx_ssh);
-		} catch (Exception $e) {
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection Exception :: '. $e->getMessage());
-			$cnx_ssh = 'KO';
+		if (class_exists('sshmanager')) {
+			try {
+				$cnx_ssh = sshmanager::checkSSHConnection($hostId) ? 'OK' : 'KO';
+				log::add('Monitoring', ($cnx_ssh == 'KO' ? 'error': 'debug'), '['. $this->getName() .'][SSH-CNX] Connection :: ' . $cnx_ssh);
+			} catch (Exception $e) {
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection Exception :: '. $e->getMessage());
+				$cnx_ssh = 'KO';
+			}
+			return [$cnx_ssh, $hostId];
+		} else {
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection :: Class SSHManager not found');
+			return ['KO', $hostId];
 		}
-		return [$cnx_ssh, $hostId];
 	}
 
 	public function execSRV($cmd_srv = '', $cmdName_srv = '', $timeout_srv = true) {
@@ -2384,6 +2389,8 @@ class Monitoring extends eqLogic {
 						$poweroff = $this->execSSH($hostId, $poweroffcmd, 'PowerOff');
 						break;
 				}
+			} else {
+				log::add('Monitoring', 'error', '['. $equipement .'][SSH] Reboot/Shutdown :: Connection SSH KO');
 			}
 		} elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 			switch ($paramaction) {
