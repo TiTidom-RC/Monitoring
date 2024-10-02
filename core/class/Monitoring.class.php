@@ -683,6 +683,11 @@ class Monitoring extends eqLogic {
 			} else {
 				$replace['#' . $cmdName . '_tendance#'] = '<i class="fas fa-minus"></i>';
 			}
+		} else {
+			$replace['#' . $cmdName . '_averageHistory#'] = round(intval($replace[$cmdName]), 2);
+			$replace['#' . $cmdName . '_minHistory#'] = round(intval($replace[$cmdName]), 2);
+			$replace['#' . $cmdName . '_maxHistory#'] = round(intval($replace[$cmdName]), 2);
+			$replace['#' . $cmdName . '_tendance#'] = '<i class="fas fa-minus"></i>';
 		}
 	}
 
