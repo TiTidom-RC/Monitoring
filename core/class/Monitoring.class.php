@@ -37,6 +37,7 @@ class Monitoring extends eqLogic {
 	public static function dependancy_install() {
 		$_logName = __CLASS__ . '_update';
 		log::add($_logName, 'info', '[INSTALL] Lancement des dépendances');
+		config::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), plugin::byId('Monitoring')->getId());
 
 		$_pluginIsInstalled = plugin::isInstalled('sshmanager');
 		if ($_pluginIsInstalled) {
@@ -51,7 +52,6 @@ class Monitoring extends eqLogic {
 			}
 		} else {
 			log::add($_logName, 'info', __('[INSTALL] Lancement de l\'installation du plugin SSHManager', __FILE__));
-			config::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), plugin::byId('Monitoring')->getId());
 
 			// Installation du plugin SSHManager (même version que celle du plugin Monitoring)
 			$_pluginSource = update::byLogicalId('Monitoring');
