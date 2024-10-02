@@ -36,11 +36,10 @@ class Monitoring extends eqLogic {
 
 	public static function dependancy_install() {
 		$_logName = __CLASS__ . '_update';
-		log::add($_logName, 'info', '[INSTALL] Lancement des dépendances');
+		log::add($_logName, 'info', '[INSTALL] Début des dépendances');
 		config::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), plugin::byId('Monitoring')->getId());
 
-		$_pluginIsInstalled = plugin::isInstalled('sshmanager');
-		if ($_pluginIsInstalled) {
+		try {
 			$_plugin = plugin::byId('sshmanager');
 			log::add($_logName, 'info', __('[INSTALL] Le plugin SSHManager est déjà installé', __FILE__));
 			if (!$_plugin->isActive()) {
@@ -50,7 +49,8 @@ class Monitoring extends eqLogic {
 			} else {
 				log::add($_logName, 'info', __('[INSTALL] Plugin SSHManager :: actif', __FILE__));
 			}
-		} else {
+		} catch (Exception $e) {
+			log::add($_logName, 'warning', '[INSTALL] ' . $e->getMessage());
 			log::add($_logName, 'info', __('[INSTALL] Lancement de l\'installation du plugin SSHManager', __FILE__));
 
 			// Installation du plugin SSHManager (même version que celle du plugin Monitoring)
@@ -86,7 +86,7 @@ class Monitoring extends eqLogic {
 					$_plugin = plugin::byId('sshmanager');
 					$isNotInstalled = false;
 				} catch (Exception $e) {
-					log::add($_logName, 'debug', '[INSTALL][DEP] While Exception :: ' . $e->getMessage());
+					log::add($_logName, 'debug', '[INSTALL][DEP] While Message (' . strval($num) . ') :: ' . $e->getMessage());
 					$num--;
 					sleep(1);
 				}
@@ -94,20 +94,20 @@ class Monitoring extends eqLogic {
 			if ($num == 0) {
 				log::add($_logName, 'error', '[INSTALL] Le plugin SSHManager n\'a pas pu être installé !');
 			} else {
-				log::add($_logName, 'info', '[INSTALL] Le plugin SSHManager est installé');
+				log::add($_logName, 'info', '[INSTALL] Le plugin SSHManager est maintenant installé');
 				if (is_object($_plugin)) {
 					try {
 						$_plugin->setIsEnable(1, true, true);
-						log::add($_logName, 'info', '[INSTALL] Activation du plugin SSHManager');
+						log::add($_logName, 'info', '[INSTALL] Le plugin SSHManager est maintenant activé');
 						jeedom::cleanFileSystemRight();
+						log::add($_logName, 'info', '[INSTALL] Fin des dépendances');
 					} catch (Exception $e) {
 						log::add($_logName, 'warning', '[INSTALL] Exception :: ' . $e->getMessage());
 						log::add($_logName, 'error', '[INSTALL] Le plugin SSHManager n\'a pas pu être installé !');
 					}
 				}
 			}
-		}
-			
+		}	
         return array('log' => log::getPathToLog(__CLASS__ . '_update'));
     }
 
@@ -118,21 +118,21 @@ class Monitoring extends eqLogic {
 		$return['log'] = log::getPathToLog($_logName);
 		$return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
 		if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
-			log::add($_logName, 'info', __('[DEP] Installation des dépendances en cours', __FILE__));
+			log::add($_logName, 'info', __('[DEP-INFO] Installation des dépendances en cours', __FILE__));
 			$return['state'] = 'in_progress';
 		} else {
-			$_pluginIsInstalled = plugin::isInstalled('sshmanager');
-			if ($_pluginIsInstalled) {
+			try {
 				$_plugin = plugin::byId('sshmanager');
 				if (!$_plugin->isActive()) {
-					log::add($_logName, 'error', __('[DEP] Le plugin SSHManager n\'est pas activé', __FILE__));
+					log::add($_logName, 'error', __('[DEP-INFO] Le plugin SSHManager n\'est pas activé', __FILE__));
 					$return['state'] = 'nok';
 				} else {
-					log::add($_logName, 'info', __('[DEP] Vérification des dépendances :: OK', __FILE__));
+					log::add($_logName, 'info', __('[DEP-INFO] Vérification des dépendances :: OK', __FILE__));
 					$return['state'] = 'ok';
 				}
-			} else {
-				log::add($_logName, 'error', __('[DEP] Le plugin SSHManager n\'est pas installé', __FILE__));
+			} catch (Exception $e) {
+				log::add($_logName, 'debug', '[DEP-INFO] ' . $e->getMessage());
+				log::add($_logName, 'error', __('[DEP-INFO] Le plugin SSHManager n\'est pas installé', __FILE__));
 				$return['state'] = 'nok';
 			}
 		}
