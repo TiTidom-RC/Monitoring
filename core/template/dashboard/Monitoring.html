@@ -106,13 +106,13 @@
 				if ('#loadavg1mn#' === '') {
 					document.getElementById('loadavg1mn#id#').innerHTML = '<span></span>';
 				} else if (parseFloat('#loadavg1mn#') < parseFloat('#loadavg1mn_colorlow#')) {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="min: #minHistoryValue# | moy: #averageHistoryValue# | max: #maxHistoryValue#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#loadavg1mn#</span>';
+					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="min: #loadavg1mn_minHistory# | moy: #loadavg1mn_averageHistory# | max: #loadavg1mn_maxHistory#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#loadavg1mn#</span>';
 				} else if ((parseFloat('#loadavg1mn#') >= parseFloat('#loadavg1mn_colorlow#')) && (parseFloat('#loadavg1mn#') <= parseFloat('#loadavg1mn_colorhigh#'))) {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="min: #minHistoryValue# | moy: #averageHistoryValue# | max: #maxHistoryValue#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#loadavg1mn#</span>';
+					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="min: #loadavg1mn_minHistory# | moy: #loadavg1mn_averageHistory# | max: #loadavg1mn_maxHistory#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#loadavg1mn#</span>';
 				} else if ((parseFloat('#loadavg1mn#') > parseFloat('#loadavg1mn_colorhigh#')) && '#loadavg1mn_colorhigh#' !== '') {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="min: #minHistoryValue# | moy: #averageHistoryValue# | max: #maxHistoryValue#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#loadavg1mn#</span>';
+					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="min: #loadavg1mn_minHistory# | moy: #loadavg1mn_averageHistory# | max: #loadavg1mn_maxHistory#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#loadavg1mn#</span>';
 				} else {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="min: #minHistoryValue# | moy: #averageHistoryValue# | max: #maxHistoryValue#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips">#loadavg1mn#</span>';
+					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="min: #loadavg1mn_minHistory# | moy: #loadavg1mn_averageHistory# | max: #loadavg1mn_maxHistory#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips">#loadavg1mn#</span>';
 				}
 
 				if ('#loadavg5mn#' === '') {
