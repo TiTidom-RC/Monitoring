@@ -706,6 +706,7 @@ class Monitoring extends eqLogic {
 			// Tendance
 			if ($cmd->getConfiguration('stats_no_tendance', '0') == '1') {
 				$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
+				log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmdName . ' :: ' . strval($tendance));
 				if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
 					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
 				} else if ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
@@ -715,15 +716,6 @@ class Monitoring extends eqLogic {
 				}
 			} else {
 				$replace['#' . $cmdName . '_tendance#'] = '';
-			}
-			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculTendance') . ' hour'));
-			$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
-			if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
-				$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
-			} else if ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
-				$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"</i>';
-			} else {
-				$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
 			}
 		} else {
 			/* $replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
