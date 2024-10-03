@@ -253,7 +253,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('uptime');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-tachometer-alt"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-hourglass-half"></i>');
 			$MonitoringCmd->save();
 		}
 
@@ -265,7 +265,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('loadavg1mn');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setDisplay('icon', '<i class="fa techno-courbes3"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-chart-line"></i>');
 			$MonitoringCmd->save();
 		}
 
@@ -299,7 +299,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('Mem');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setDisplay('icon', '<i class="fa techno-memory"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-database"></i>');
 			$MonitoringCmd->save();
 		}
 
@@ -322,7 +322,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('Mem_swap');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-list"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-layer-group"></i>');
 			$MonitoringCmd->save();
 		}
 
@@ -416,7 +416,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('hddtotalv2');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
-					$MonitoringCmd->setDisplay('icon', '<i class="fas fa-hdd"></i>');
+					$MonitoringCmd->setDisplay('icon', '<i class="far fa-hdd"></i>');
 					$MonitoringCmd->save();
 				}
 
@@ -527,7 +527,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cpu');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setDisplay('icon', '<i class="fa techno-pc"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-microchip"></i>');
 			$MonitoringCmd->save();
 		}
 
@@ -575,7 +575,6 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cron_on');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
-			/* $MonitoringCmd->setDisplay('icon', '<i class="fas fa-play-circle"></i>'); */
 			$MonitoringCmd->setValue($cron_status_cmd);
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
@@ -591,7 +590,6 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cron_off');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
-			/* $MonitoringCmd->setDisplay('icon', '<i class="icon fas fa-pause-circle"></i>'); */
 			$MonitoringCmd->setValue($cron_status_cmd);
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
@@ -737,12 +735,6 @@ class Monitoring extends eqLogic {
 		$replace['#cnx_ssh#'] = is_object($cnx_ssh) ? $cnx_ssh->execCmd() : '';
 		$replace['#cnx_ssh_id#'] = is_object($cnx_ssh) ? $cnx_ssh->getId() : '';
 
-		/* $cron_on = $this->getCmd(null,'cron_on');
-		$replace['#cron_on_icon#'] = is_object($cron_on) ? (!empty($cron_on->getDisplay('icon')) ? $cron_on->getDisplay('icon') : '<i class="fas fa-play-circle"></i>') : '';	
-		
-		$cron_off = $this->getCmd(null,'cron_off');
-		$replace['#cron_off_icon#'] = is_object($cron_off) ? (!empty($cron_off->getDisplay('icon')) ? $cron_off->getDisplay('icon') : '<i class="icon fas fa-pause-circle"></i>') : ''; */
-
 		$cron_status = $this->getCmd(null,'cron_status');
 		$replace['#cron_status#'] = is_object($cron_status) ? $cron_status->execCmd() : '';
 		$replace['#cron_status_id#'] = is_object($cron_status) ? $cron_status->getId() : '';
@@ -758,7 +750,7 @@ class Monitoring extends eqLogic {
         $replace['#namedistri_value#'] = (is_object($namedistri) && $namedistri->getIsVisible()) ? $namedistri->getValueDate() : "-";
 
 		$loadavg1mn = $this->getCmd(null,'loadavg1mn');
-		$replace['#loadavg1mn_icon#'] = is_object($loadavg1mn) ? (!empty($loadavg1mn->getDisplay('icon')) ? $loadavg1mn->getDisplay('icon') : '<i class="fa techno-courbes3"></i>') : '';
+		$replace['#loadavg1mn_icon#'] = is_object($loadavg1mn) ? (!empty($loadavg1mn->getDisplay('icon')) ? $loadavg1mn->getDisplay('icon') : '<i class="fas fa-chart-line"></i>') : '';
 		$replace['#loadavg1mn#'] = is_object($loadavg1mn) ? $loadavg1mn->execCmd() : '';
 		$replace['#loadavg1mnid#'] = is_object($loadavg1mn) ? $loadavg1mn->getId() : '';
 		$replace['#loadavg_display#'] = (is_object($loadavg1mn) && $loadavg1mn->getIsVisible()) ? "block" : "none";
@@ -769,29 +761,6 @@ class Monitoring extends eqLogic {
 		$replace['#loadavg1mn_colorhigh#'] = $this->getConfiguration('loadavg1mn_colorhigh');
 
 		$this->getStats($loadavg1mn, 'loadavg1mn', $replace, 2);
-
-		/* if ($loadavg1mn->getIsHistorized() == 1) {
-			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
-			$historyStatistique = $loadavg1mn->getStatistique($startHist, date('Y-m-d H:i:s'));
-			if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
-				$replace['#loadavg1mn_averageHistory#'] = round(intval($replace['#loadavg1mn#']), 2);
-				$replace['#loadavg1mn_minHistory#'] = round(intval($replace['#loadavg1mn#']), 2);
-				$replace['#loadavg1mn_maxHistory#'] = round(intval($replace['#loadavg1mn#']), 2);
-			} else {
-				$replace['#loadavg1mn_averageHistory#'] = round($historyStatistique['avg'], 2);
-				$replace['#loadavg1mn_minHistory#'] = round($historyStatistique['min'], 2);
-				$replace['#loadavg1mn_maxHistory#'] = round($historyStatistique['max'], 2);
-			}
-			$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculTendance') . ' hour'));
-			$tendance = $loadavg1mn->getTendance($startHist, date('Y-m-d H:i:s'));
-			if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
-				$replace['#loadavg1mn_tendance#'] = '<i class="fas fa-arrow-up"></i>';
-			} else if ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
-				$replace['#loadavg1mn_tendance#'] = '<i class="fas fa-arrow-down"</i>';
-			} else {
-				$replace['#loadavg1mn_tendance#'] = '<i class="fas fa-minus"></i>';
-			}
-		} */
 
 		$loadavg5mn = $this->getCmd(null,'loadavg5mn');
 		$replace['#loadavg5mn#'] = is_object($loadavg5mn) ? $loadavg5mn->execCmd() : '';
@@ -812,7 +781,7 @@ class Monitoring extends eqLogic {
 		$this->getStats($loadavg15mn, 'loadavg15mn', $replace, 2);
 
 		$uptime = $this->getCmd(null,'uptime');
-		$replace['#uptime_icon#'] = is_object($uptime) ? (!empty($uptime->getDisplay('icon')) ? $uptime->getDisplay('icon') : '<i class="fas fa-tachometer-alt"></i>') : '';
+		$replace['#uptime_icon#'] = is_object($uptime) ? (!empty($uptime->getDisplay('icon')) ? $uptime->getDisplay('icon') : '<i class="fas fa-hourglass-half"></i>') : '';
 		$replace['#uptime#'] = is_object($uptime) ? $uptime->execCmd() : '';
 		$replace['#uptimeid#'] = is_object($uptime) ? $uptime->getId() : '';
 		$replace['#uptime_display#'] = (is_object($uptime) && $uptime->getIsVisible()) ? "block" : "none";
@@ -841,7 +810,7 @@ class Monitoring extends eqLogic {
 		$this->getStats($hddused_pourc, 'hddpourcused', $replace, 0);
 		
 		$Mem = $this->getCmd(null,'Mem');
-		$replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fa techno-memory"></i>') : '';
+		$replace['#Mem_icon#'] = is_object($Mem) ? (!empty($Mem->getDisplay('icon')) ? $Mem->getDisplay('icon') : '<i class="fas fa-database"></i>') : '';
 		$replace['#Mem#'] = is_object($Mem) ? $Mem->execCmd() : '';
 		$replace['#Memid#'] = is_object($Mem) ? $Mem->getId() : '';
 		$replace['#Mem_display#'] = (is_object($Mem) && $Mem->getIsVisible()) ? "block" : "none";
@@ -858,7 +827,7 @@ class Monitoring extends eqLogic {
 		$this->getStats($Mempourc, 'Mempourc', $replace, 0);
 
 		$Mem_swap = $this->getCmd(null,'Mem_swap');
-		$replace['#Mem_swap_icon#'] = is_object($Mem_swap) ? (!empty($Mem_swap->getDisplay('icon')) ? $Mem_swap->getDisplay('icon') : '<i class="fas fa-list"></i>') : '';
+		$replace['#Mem_swap_icon#'] = is_object($Mem_swap) ? (!empty($Mem_swap->getDisplay('icon')) ? $Mem_swap->getDisplay('icon') : '<i class="fas fa-layer-group"></i>') : '';
 		$replace['#Mem_swap#'] = is_object($Mem_swap) ? $Mem_swap->execCmd() : '';
 		$replace['#Mem_swapid#'] = is_object($Mem_swap) ? $Mem_swap->getId() : '';
 		$replace['#Mem_swap_display#'] = (is_object($Mem_swap) && $Mem_swap->getIsVisible()) ? "block" : "none";
@@ -875,7 +844,6 @@ class Monitoring extends eqLogic {
 		$this->getStats($Swappourc, 'Swappourc', $replace, 0);
 
 		$ethernet0 = $this->getCmd(null,'ethernet0');
-		// $replace['#ethernet0_icon#'] = is_object($ethernet0) ? (!empty($ethernet0->getDisplay('icon')) ? $ethernet0->getDisplay('icon') : '<i class="fa techno-fleches"></i>') : '';
 		$replace['#ethernet0_icon#'] = is_object($ethernet0) ? (!empty($ethernet0->getDisplay('icon')) ? $ethernet0->getDisplay('icon') : '<i class="fas fa-network-wired"></i>') : '';
 		$replace['#ethernet0#'] = is_object($ethernet0) ? $ethernet0->execCmd() : '';
 		$replace['#ethernet0id#'] = is_object($ethernet0) ? $ethernet0->getId() : '';
@@ -892,7 +860,7 @@ class Monitoring extends eqLogic {
 		$replace['#ethernet0_ipid#'] = is_object($ethernet0_ip) ? $ethernet0_ip->getId() : '';
 
 		$cpu = $this->getCmd(null,'cpu');
-		$replace['#cpu_icon#'] = is_object($cpu) ? (!empty($cpu->getDisplay('icon')) ? $cpu->getDisplay('icon') : '<i class="fa techno-pc"></i>') : '';
+		$replace['#cpu_icon#'] = is_object($cpu) ? (!empty($cpu->getDisplay('icon')) ? $cpu->getDisplay('icon') : '<i class="fas fa-microchip"></i>') : '';
 		$replace['#cpu#'] = is_object($cpu) ? $cpu->execCmd() : '';
 		$replace['#cpuid#'] = is_object($cpu) ? $cpu->getId() : '';
 		$replace['#cpu_display#'] = (is_object($cpu) && $cpu->getIsVisible()) ? "block" : "none";
@@ -926,7 +894,7 @@ class Monitoring extends eqLogic {
 			$this->getStats($hddusedv2_pourc, 'hddpourcusedv2', $replace, 0);
 
 			$hddtotalv2 = $this->getCmd(null,'hddtotalv2');
-			$replace['#hddtotalv2_icon#'] = is_object($hddtotalv2) ? (!empty($hddtotalv2->getDisplay('icon')) ? $hddtotalv2->getDisplay('icon') : '<i class="fas fa-hdd"></i>') : '';
+			$replace['#hddtotalv2_icon#'] = is_object($hddtotalv2) ? (!empty($hddtotalv2->getDisplay('icon')) ? $hddtotalv2->getDisplay('icon') : '<i class="far fa-hdd"></i>') : '';
 			$replace['#synovolume2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? 'OK' : '';
 			$replace['#hddusedv2_display#'] = (is_object($hddtotalv2) && $hddtotalv2->getIsVisible()) ? "block" : "none";
 			$replace['#hddtotalv2#'] = is_object($hddtotalv2) ? $hddtotalv2->execCmd() : '';
