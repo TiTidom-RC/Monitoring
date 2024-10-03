@@ -704,7 +704,7 @@ class Monitoring extends eqLogic {
 				$replace['#' . $cmdName . '_maxHistory#'] = round($historyStatistique['max'], $precision);
 			}
 			// Tendance
-			if ($cmd->getConfiguration('stats_no_tendance', 0) == 1) {
+			if ($cmd->getConfiguration('stats_no_tendance', '0') == '1') {
 				$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
 				if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
 					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
