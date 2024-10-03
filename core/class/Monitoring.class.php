@@ -708,11 +708,11 @@ class Monitoring extends eqLogic {
 				$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
 				log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
 				if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
-					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
+					$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
 				} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
-					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"></i>';
+					$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"></i>';
 				} else {
-					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
+					$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
 				}
 			} else {
 				$replace['#' . $cmdName . '_tendance#'] = '';
