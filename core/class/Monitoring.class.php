@@ -710,7 +710,7 @@ class Monitoring extends eqLogic {
 				if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
 					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
 				} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
-					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"</i>';
+					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"></i>';
 				} else {
 					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
 				}
