@@ -83,9 +83,9 @@
 		<span class="widget-name" style="#hideEqLogicName#;">#name_display# <span class="object_name" style="font-size: 0.85em;position: relative;top:-2px;display:none;">#object_name#</span></span>
 	</center>
 	<div style="padding: 5px;">
-		<div class="cmd tooltips" style="margin-left:5px;display: #namedistri_display#;">
-			<span title="Distribution Linux || Date valeur : #namedistri_value# || Date collecte : #namedistri_collect#" style="width:15px;max-width:15px;max-height:15px;">#namedistri_icon#</span>
-			<span>#namedistri#</span>
+		<div class="cmd tooltips" style="margin-left:5px;display: #distri_name_display#;">
+			<span title="Distribution Linux || Date valeur : #distri_name_value# || Date collecte : #distri_name_collect#" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
+			<span>#distri_name#</span>
 		</div>
 		<div class="cmd tooltips" style="margin-left:5px;display: #uptime_display#;">
 			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
@@ -97,109 +97,109 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #loadavg_display#;">
-			<span title="Charge système (load average) || Date valeur : #loadavg_value# || Date collecte : #loadavg_collect#" style="width:15px;max-width:15px;max-height:15px;">#loadavg1mn_icon#</span>
-			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
+			<span title="Charge système (load average) || Date valeur : #loadavg_value# || Date collecte : #loadavg_collect#" style="width:15px;max-width:15px;max-height:15px;">#load_avg_1mn_icon#</span>
+			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#loadavg1mn#' === '') {
-					document.getElementById('loadavg1mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#loadavg1mn#') < parseFloat('#loadavg1mn_colorlow#')) {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-success-color) !important;">#loadavg1mn#</span>';
-				} else if ((parseFloat('#loadavg1mn#') >= parseFloat('#loadavg1mn_colorlow#')) && (parseFloat('#loadavg1mn#') <= parseFloat('#loadavg1mn_colorhigh#'))) {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-warning-color) !important;">#loadavg1mn#</span>';
-				} else if ((parseFloat('#loadavg1mn#') > parseFloat('#loadavg1mn_colorhigh#')) && '#loadavg1mn_colorhigh#' !== '') {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-danger-color) !important;">#loadavg1mn#</span>';
+				if ('#load_avg_1mn#' === '') {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_1mn#') < parseFloat('#load_avg_1mn_colorlow#')) {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_1mn#</span>';
+				} else if ((parseFloat('#load_avg_1mn#') >= parseFloat('#load_avg_1mn_colorlow#')) && (parseFloat('#load_avg_1mn#') <= parseFloat('#load_avg_1mn_colorhigh#'))) {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_1mn#</span>';
+				} else if ((parseFloat('#load_avg_1mn#') > parseFloat('#load_avg_1mn_colorhigh#')) && '#load_avg_1mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_1mn#</span>';
 				} else {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span class="state">#loadavg1mn#</span>';
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state">#load_avg_1mn#</span>';
 				}
-				if ('#loadavg5mn#' === '') {
-					document.getElementById('loadavg5mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#loadavg5mn#') < parseFloat('#loadavg5mn_colorlow#')) {
-					document.getElementById('loadavg5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-success-color) !important;">#loadavg5mn#</span>';
-				} else if ((parseFloat('#loadavg5mn#') >= parseFloat('#loadavg5mn_colorlow#')) && (parseFloat('#loadavg5mn#') <= parseFloat('#loadavg5mn_colorhigh#'))) {
-					document.getElementById('loadavg5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-warning-color) !important;">#loadavg5mn#</span>';
-				} else if ((parseFloat('#loadavg5mn#') > parseFloat('#loadavg5mn_colorhigh#')) && '#loadavg5mn_colorhigh#' !== '') {
-					document.getElementById('loadavg5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-danger-color) !important;">#loadavg5mn#</span>';
+				if ('#load_avg_5mn#' === '') {
+					document.getElementById('load_avg_5mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_5mn#') < parseFloat('#load_avg_5mn_colorlow#')) {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_5mn#</span>';
+				} else if ((parseFloat('#load_avg_5mn#') >= parseFloat('#load_avg_5mn_colorlow#')) && (parseFloat('#load_avg_5mn#') <= parseFloat('#load_avg_5mn_colorhigh#'))) {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_5mn#</span>';
+				} else if ((parseFloat('#load_avg_5mn#') > parseFloat('#load_avg_5mn_colorhigh#')) && '#load_avg_5mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_5mn#</span>';
 				} else {
-					document.getElementById('loadavg5mn#id#').innerHTML = ' - 5 min : <span class="state">#loadavg5mn#</span>';
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state">#load_avg_5mn#</span>';
 				}
-				if ('#loadavg15mn#' === '') {
-					document.getElementById('loadavg15mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#loadavg15mn#') < parseFloat('#loadavg15mn_colorlow#')) {
-					document.getElementById('loadavg15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-success-color) !important;">#loadavg15mn#</span>';
-				} else if ((parseFloat('#loadavg15mn#') >= parseFloat('#loadavg15mn_colorlow#')) && (parseFloat('#loadavg15mn#') <= parseFloat('#loadavg15mn_colorhigh#'))) {
-					document.getElementById('loadavg15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-warning-color) !important;">#loadavg15mn#</span>';
-				} else if ((parseFloat('#loadavg15mn#') > parseFloat('#loadavg15mn_colorhigh#')) && '#loadavg15mn_colorhigh#' !== '') {
-					document.getElementById('loadavg15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-danger-color) !important;">#loadavg15mn#</span>';
+				if ('#load_avg_15mn#' === '') {
+					document.getElementById('load_avg_15mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_15mn#') < parseFloat('#load_avg_15mn_colorlow#')) {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_15mn#</span>';
+				} else if ((parseFloat('#load_avg_15mn#') >= parseFloat('#load_avg_15mn_colorlow#')) && (parseFloat('#load_avg_15mn#') <= parseFloat('#load_avg_15mn_colorhigh#'))) {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_15mn#</span>';
+				} else if ((parseFloat('#load_avg_15mn#') > parseFloat('#load_avg_15mn_colorhigh#')) && '#load_avg_15mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_15mn#</span>';
 				} else {
-					document.getElementById('loadavg15mn#id#').innerHTML = ' - 15 min : <span class="state">#loadavg15mn#</span>';
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state">#load_avg_15mn#</span>';
 				}
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #Mem_display#;">
 			<span title="Mémoire Vive (% Libre) || Date valeur : #Mem_value# || Date collecte : #Mem_collect#" style="width:15px;max-width:15px;max-height:15px;">#Mem_icon#</span>
-			<span id="Mempourcent#id#"></span>
+			<span id="memory_free_percent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#Mempourc#' === '') {
-					document.getElementById('Mempourcent#id#').innerHTML = '<span>#Mem#</span>';
-				} else if ((parseInt('#Mempourc#') > parseInt('#Mempourc_colorhigh#')) && '#Mempourc_colorhigh#' !== '') {
-					document.getElementById('Mempourcent#id#').innerHTML = '#Mem# (<span class="state" style="color: var(--al-success-color) !important;">#Mempourc#</span><span>%</span>)';
-				} else if ((parseInt('#Mempourc#') >= parseInt('#Mempourc_colorlow#')) && (parseInt('#Mempourc#') <= parseInt('#Mempourc_colorhigh#'))) {
-					document.getElementById('Mempourcent#id#').innerHTML = '#Mem# (<span class="state" style="color: var(--al-warning-color) !important;">#Mempourc#</span><span>%</span>)';
-				} else if (parseInt('#Mempourc#') < parseInt('#Mempourc_colorlow#')) {
-					document.getElementById('Mempourcent#id#').innerHTML = '#Mem# (<span class="state" style="color: var(--al-danger-color) !important;">#Mempourc#</span><span>%</span>)';
+				if ('#memory_free_percent#' === '') {
+					document.getElementById('memory_free_percent#id#').innerHTML = '<span>#Mem#</span>';
+				} else if ((parseInt('#memory_free_percent#') > parseInt('#memory_free_percent_colorhigh#')) && '#memory_free_percent_colorhigh#' !== '') {
+					document.getElementById('memory_free_percent#id#').innerHTML = '#Mem# (<span class="state" style="color: var(--al-success-color) !important;">#memory_free_percent#</span><span>%</span>)';
+				} else if ((parseInt('#memory_free_percent#') >= parseInt('#memory_free_percent_colorlow#')) && (parseInt('#memory_free_percent#') <= parseInt('#memory_free_percent_colorhigh#'))) {
+					document.getElementById('memory_free_percent#id#').innerHTML = '#Mem# (<span class="state" style="color: var(--al-warning-color) !important;">#memory_free_percent#</span><span>%</span>)';
+				} else if (parseInt('#memory_free_percent#') < parseInt('#memory_free_percent_colorlow#')) {
+					document.getElementById('memory_free_percent#id#').innerHTML = '#Mem# (<span class="state" style="color: var(--al-danger-color) !important;">#memory_free_percent#</span><span>%</span>)';
 				} else {
-					document.getElementById('Mempourcent#id#').innerHTML = '#Mem# (<span class="state">#Mempourc#</span><span>%</span>)';
+					document.getElementById('memory_free_percent#id#').innerHTML = '#Mem# (<span class="state">#memory_free_percent#</span><span>%</span>)';
 				}
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #Mem_swap_display#;">
-			<span title="Mémoire Swap (% Libre) || Date valeur : #Mem_swap_value# || Date collecte : #Mem_swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#Mem_swap_icon#</span>
-			<span id="Swappourc#id#"></span>
+		<div class="cmd tooltips" style="margin-left:5px;display: #swap_display#;">
+			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
+			<span id="swap_free_percent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#Swappourc#' === '') {
-					document.getElementById('Swappourc#id#').innerHTML = '<span>#Mem_swap#</span>';
-				} else if ((parseInt('#Swappourc#') > parseInt('#Swappourc_colorhigh#')) && '#Swappourc_colorhigh#' !== '') {
-					document.getElementById('Swappourc#id#').innerHTML = '#Mem_swap# (<span class="state" style="color: var(--al-success-color) !important;">#Swappourc#</span><span>%</span>)';
-				} else if ((parseInt('#Swappourc#') >= parseInt('#Swappourc_colorlow#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourcc_colorhigh#'))) {
-					document.getElementById('Swappourc#id#').innerHTML = '#Mem_swap# (<span class="state" style="color: var(--al-warning-color) !important;">#Swappourc#</span><span>%</span>)';
-				} else if (parseInt('#Swappourc#') < parseInt('#Swappourc_colorlow#')) {
-					document.getElementById('Swappourc#id#').innerHTML = '#Mem_swap# (<span class="state" style="color: var(--al-danger-color) !important;">#Swappourc#</span><span>%</span>)';
+				if ('#swap_free_percent#' === '') {
+					document.getElementById('swap_free_percent#id#').innerHTML = '<span>#swap#</span>';
+				} else if ((parseInt('#swap_free_percent#') > parseInt('#swap_free_percent_colorhigh#')) && '#swap_free_percent_colorhigh#' !== '') {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-success-color) !important;">#swap_free_percent#</span><span>%</span>)';
+				} else if ((parseInt('#swap_free_percent#') >= parseInt('#swap_free_percent_colorlow#')) && (parseInt('#swap_free_percent#') <= parseInt('#swap_free_percentc_colorhigh#'))) {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-warning-color) !important;">#swap_free_percent#</span><span>%</span>)';
+				} else if (parseInt('#swap_free_percent#') < parseInt('#swap_free_percent_colorlow#')) {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-danger-color) !important;">#swap_free_percent#</span><span>%</span>)';
 				} else {
-					document.getElementById('Swappourc#id#').innerHTML = '#Mem_swap# (<span class="state">#Swappourc#</span><span>%</span>)';
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state">#swap_free_percent#</span><span>%</span>)';
 				}
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #ethernet0_display#;">
-			<span title="Trafic Réseau (#ethernet0_name# / #ethernet0_ip#) || Date valeur : #ethernet0_value# || Date collecte : #ethernet0_collect#" style="width:15px;max-width:15px;max-height:15px;">#ethernet0_icon#</span>
-			<span id="ethernet0#id#"></span>
+		<div class="cmd tooltips" style="margin-left:5px;display: #network_display#;">
+			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
+			<span id="network#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('ethernet0#id#').innerHTML = '<span>#ethernet0#</span>';
+				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #hddused_display#;">
-			<span title="Espace disque (% utilisé) || Date valeur : #hddtotal_value# || Date collecte : #hddtotal_collect#" style="width:15px;max-width:15px;max-height:15px;">#hddtotal_icon#</span>
-			<span id="hddpourcused#id#"></span>
+		<div class="cmd tooltips" style="margin-left:5px;display: #hdd_used_display#;">
+			<span title="Espace disque (% utilisé) || Date valeur : #hdd_total_value# || Date collecte : #hdd_total_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_total_icon#</span>
+			<span id="hdd_used_percent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#hddpourcused#' === '') {
-					document.getElementById('hddpourcused#id#').innerHTML = '<span></span>';
-				} else if (parseInt('#hddpourcused#') < parseInt('#hddpourcused_colorlow#')) {
-					document.getElementById('hddpourcused#id#').innerHTML = 'Total : <span class="state">#hddtotal#</span> - Utilisé : <span class="state">#hddused#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcused#</span><span>%</span>)';
-				} else if ((parseInt('#hddpourcused#') >= parseInt('#hddpourcused_colorlow#')) && (parseInt('#hddpourcused#') <= parseInt('#hddpourcused_colorhigh#'))) {
-					document.getElementById('hddpourcused#id#').innerHTML = 'Total : <span class="state">#hddtotal#</span> - Utilisé : <span class="state">#hddused#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcused#</span><span>%</span>)';
-				} else if ((parseInt('#hddpourcused#') > parseInt('#hddpourcused_colorhigh#')) && '#hddpourcused_colorhigh#' !== '') {
-					document.getElementById('hddpourcused#id#').innerHTML = 'Total : <span class="state">#hddtotal#</span> - Utilisé : <span class="state">#hddused#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcused#</span><span>%</span>)';
+				if ('#hdd_used_percent#' === '') {
+					document.getElementById('hdd_used_percent#id#').innerHTML = '<span></span>';
+				} else if (parseInt('#hdd_used_percent#') < parseInt('#hdd_used_percent_colorlow#')) {
+					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hdd_used_percent#</span><span>%</span>)';
+				} else if ((parseInt('#hdd_used_percent#') >= parseInt('#hdd_used_percent_colorlow#')) && (parseInt('#hdd_used_percent#') <= parseInt('#hdd_used_percent_colorhigh#'))) {
+					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hdd_used_percent#</span><span>%</span>)';
+				} else if ((parseInt('#hdd_used_percent#') > parseInt('#hdd_used_percent_colorhigh#')) && '#hdd_used_percent_colorhigh#' !== '') {
+					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hdd_used_percent#</span><span>%</span>)';
 				} else {
-					document.getElementById('hddpourcused#id#').innerHTML = 'Total : <span class="state">#hddtotal#</span> - Utilisé : <span class="state">#hddused#</span> (<span class="state">#hddpourcused#</span><span>%</span>)';
+					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state">#hdd_used_percent#</span><span>%</span>)';
 				}
 			}
 		</script>
@@ -207,17 +207,17 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolume2_display#' == 'OK') {
-					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% utilisé) || Date valeur : #hddtotalv2_value# || Date collecte : #hddtotalv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#hddtotalv2_icon#</span> <span id="hddpourcusedv2#id#"></span></div>';
-					if ('#hddpourcusedv2#' === '') {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2_colorlow#')) {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = 'Total : <span class="state">#hddtotalv2#</span> - Utilisé : <span class="state">#hddusedv2#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedv2#</span><span>%</span>)';
-					} else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2_colorlow#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2_colorhigh#'))) {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = 'Total : <span class="state">#hddtotalv2#</span> - Utilisé : <span class="state">#hddusedv2#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#</span><span>%</span>)';
-					} else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2_colorhigh#')) && '#hddpourcusedv2_colorhigh#' !== '') {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = 'Total : <span class="state">#hddtotalv2#</span> - Utilisé : <span class="state">#hddusedv2#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#</span><span>%</span>)';
+					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddv2_used_display#;"><span title="Syno Volume 2 (% utilisé) || Date valeur : #syno_hddv2_total_value# || Date collecte : #syno_hddv2_total_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_total_icon#</span> <span id="syno_hddv2_used_percent#id#"></span></div>';
+					if ('#syno_hddv2_used_percent#' === '') {
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddv2_used_percent#') < parseInt('#syno_hddv2_used_percent_colorlow#')) {
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv2_used_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddv2_used_percent#') >= parseInt('#syno_hddv2_used_percent_colorlow#')) && (parseInt('#syno_hddv2_used_percent#') <= parseInt('#syno_hddv2_used_percent_colorhigh#'))) {
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv2_used_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddv2_used_percent#') > parseInt('#syno_hddv2_used_percent_colorhigh#')) && '#syno_hddv2_used_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv2_used_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = 'Total : <span class="state">#hddtotalv2#</span> - Utilisé : <span class="state">#hddusedv2#</span> (<span class="state">#hddpourcusedv2#</span><span>%</span>)';
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state">#syno_hddv2_used_percent#</span><span>%</span>)';
 					}
 				}
 			}
@@ -226,17 +226,17 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% utilisé) || Date valeur : #hddtotalusb_value# || Date collecte : #hddtotalusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#hddtotalusb_icon#</span> <span id="hddpourcusedusb#id#"></span></div>';
-					if ('#hddpourcusedusb#' === '') {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusb_colorlow#')) {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = 'Total : <span class="state">#hddtotalusb#</span> - Utilisé : <span class="state">#hddusedusb#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedusb#</span><span>%</span>)';
-					} else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusb_colorlow#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusb_colorhigh#'))) {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = 'Total : <span class="state">#hddtotalusb#</span> - Utilisé : <span class="state">#hddusedusb#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#</span><span>%</span>)';
-					} else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusb_colorhigh#')) && '#hddpourcusedusb_colorhigh#' !== '') {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = 'Total : <span class="state">#hddtotalusb#</span> - Utilisé : <span class="state">#hddusedusb#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#</span><span>%</span>)';
+					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddusb_used_display#;"><span title="Syno Volume USB (% utilisé) || Date valeur : #syno_hddusb_total_value# || Date collecte : #syno_hddusb_total_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_total_icon#</span> <span id="syno_hddusb_used_percent#id#"></span></div>';
+					if ('#syno_hddusb_used_percent#' === '') {
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddusb_used_percent#') < parseInt('#syno_hddusb_used_percent_colorlow#')) {
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddusb_used_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddusb_used_percent#') >= parseInt('#syno_hddusb_used_percent_colorlow#')) && (parseInt('#syno_hddusb_used_percent#') <= parseInt('#syno_hddusb_used_percent_colorhigh#'))) {
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddusb_used_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddusb_used_percent#') > parseInt('#syno_hddusb_used_percent_colorhigh#')) && '#syno_hddusb_used_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddusb_used_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = 'Total : <span class="state">#hddtotalusb#</span> - Utilisé : <span class="state">#hddusedusb#</span> (<span class="state">#hddpourcusedusb#</span><span>%</span>)';
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state">#syno_hddusb_used_percent#</span><span>%</span>)';
 					}
 				}
 			}
@@ -245,17 +245,17 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeesata_display#' == 'OK') {
-					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% utilisé) || Date valeur : #hddtotalesata_value# || Date collecte : #hddtotalesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#hddtotalesata_icon#</span> <span id="hddpourcusedesata#id#"></span></div>';
-					if ('#hddpourcusedesata#' === '') {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#hddpourcusedesata#') < parseInt('#hddpourcusedesata_colorlow#')) {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = 'Total : <span class="state">#hddtotalesata#</span> - Utilisé : <span class="state">#hddusedesata#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hddpourcusedesata#</span><span>%</span>)';
-					} else if ((parseInt('#hddpourcusedesata#') >= parseInt('#hddpourcusedesata_colorlow#')) && (parseInt('#hddpourcusedesata#') <= parseInt('#hddpourcusedesata_colorhigh#'))) {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = 'Total : <span class="state">#hddtotalesata#</span> - Utilisé : <span class="state">#hddusedesata#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hddpourcusedesata#</span><span>%</span>)';
-					} else if ((parseInt('#hddpourcusedesata#') > parseInt('#hddpourcusedesata_colorhigh#')) && '#hddpourcusedesata_colorhigh#' !== '') {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = 'Total : <span class="state">#hddtotalesata#</span> - Utilisé : <span class="state">#hddusedesata#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hddpourcusedesata#</span><span>%</span>)';
+					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddesata_used_display#;"><span title="Syno Volume eSATA (% utilisé) || Date valeur : #syno_hddesata_total_value# || Date collecte : #syno_hddesata_total_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_total_icon#</span> <span id="syno_hddesata_used_percent#id#"></span></div>';
+					if ('#syno_hddesata_used_percent#' === '') {
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddesata_used_percent#') < parseInt('#syno_hddesata_used_percent_colorlow#')) {
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_used_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddesata_used_percent#') >= parseInt('#syno_hddesata_used_percent_colorlow#')) && (parseInt('#syno_hddesata_used_percent#') <= parseInt('#syno_hddesata_used_percent_colorhigh#'))) {
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_used_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddesata_used_percent#') > parseInt('#syno_hddesata_used_percent_colorhigh#')) && '#syno_hddesata_used_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_used_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = 'Total : <span class="state">#hddtotalesata#</span> - Utilisé : <span class="state">#hddusedesata#</span> (<span class="state">#hddpourcusedesata#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state">#syno_hddesata_used_percent#</span><span>%</span>)';
 					}
 				}
 			}

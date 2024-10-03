@@ -84,11 +84,11 @@
 		</span>
 	</div>
 	<div class="cmds text-left" style="display:block;">
-		<div class="tooltips" data-cmd_id="#namedistriid#" style="margin-left:5px;display: #namedistri_display#;">
-			<span title="Distribution Linux<br><i>Date de valeur : #namedistri_value#<br>Date de collecte : #namedistri_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#namedistri_icon#</span>
-			<span>#namedistri#</span>
+		<div class="tooltips" data-cmd_id="#distri_name_id#" style="margin-left:5px;display: #distri_name_display#;">
+			<span title="Distribution Linux<br><i>Date de valeur : #distri_name_value#<br>Date de collecte : #distri_name_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
+			<span>#distri_name#</span>
 		</div>
-		<div class="tooltips" data-cmd_id="#uptimeid#" style="margin-left:5px;display: #uptime_display#;">
+		<div class="tooltips" data-cmd_id="#uptime_id#" style="margin-left:5px;display: #uptime_display#;">
 			<span title="Temps d'Activité (UpTime)<br><i>Date de valeur : #uptime_value#<br>Date de collecte : #uptime_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
 			<span id="uptime#id#"></span>
 		</div>
@@ -98,111 +98,111 @@
 			}
 		</script>
 		<div class="tooltips" style="margin-left:5px;display: #loadavg_display#;">
-			<span title="Charge Système (Load Average)<br><i>Date de valeur : #loadavg_value#<br>Date de collecte : #loadavg_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#loadavg1mn_icon#</span>
-			<span id="loadavg1mn#id#"></span><span id="loadavg5mn#id#"></span><span id="loadavg15mn#id#"></span>
+			<span title="Charge Système (Load Average)<br><i>Date de valeur : #loadavg_value#<br>Date de collecte : #loadavg_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#load_avg_1mn_icon#</span>
+			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#loadavg1mn#' === '') {
-					document.getElementById('loadavg1mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#loadavg1mn#') < parseFloat('#loadavg1mn_colorlow#')) {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #loadavg1mn_minHistory# | Moy : #loadavg1mn_averageHistory# | Max : #loadavg1mn_maxHistory#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#loadavg1mn##loadavg1mn_tendance#</span>';
-				} else if ((parseFloat('#loadavg1mn#') >= parseFloat('#loadavg1mn_colorlow#')) && (parseFloat('#loadavg1mn#') <= parseFloat('#loadavg1mn_colorhigh#'))) {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #loadavg1mn_minHistory# | Moy : #loadavg1mn_averageHistory# | Max : #loadavg1mn_maxHistory#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#loadavg1mn##loadavg1mn_tendance#</span>';
-				} else if ((parseFloat('#loadavg1mn#') > parseFloat('#loadavg1mn_colorhigh#')) && '#loadavg1mn_colorhigh#' !== '') {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #loadavg1mn_minHistory# | Moy : #loadavg1mn_averageHistory# | Max : #loadavg1mn_maxHistory#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#loadavg1mn##loadavg1mn_tendance#</span>';
+				if ('#load_avg_1mn#' === '') {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_1mn#') < parseFloat('#load_avg_1mn_colorlow#')) {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #load_avg_1mn_minHistory# | Moy : #load_avg_1mn_averageHistory# | Max : #load_avg_1mn_maxHistory#" data-cmd_id="#load_avg_1mn_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#load_avg_1mn##load_avg_1mn_tendance#</span>';
+				} else if ((parseFloat('#load_avg_1mn#') >= parseFloat('#load_avg_1mn_colorlow#')) && (parseFloat('#load_avg_1mn#') <= parseFloat('#load_avg_1mn_colorhigh#'))) {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #load_avg_1mn_minHistory# | Moy : #load_avg_1mn_averageHistory# | Max : #load_avg_1mn_maxHistory#" data-cmd_id="#load_avg_1mn_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#load_avg_1mn##load_avg_1mn_tendance#</span>';
+				} else if ((parseFloat('#load_avg_1mn#') > parseFloat('#load_avg_1mn_colorhigh#')) && '#load_avg_1mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #load_avg_1mn_minHistory# | Moy : #load_avg_1mn_averageHistory# | Max : #load_avg_1mn_maxHistory#" data-cmd_id="#load_avg_1mn_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#load_avg_1mn##load_avg_1mn_tendance#</span>';
 				} else {
-					document.getElementById('loadavg1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #loadavg1mn_minHistory# | Moy : #loadavg1mn_averageHistory# | Max : #loadavg1mn_maxHistory#" data-cmd_id="#loadavg1mnid#" class="value history cursor tooltips">#loadavg1mn##loadavg1mn_tendance#</span>';
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #load_avg_1mn_minHistory# | Moy : #load_avg_1mn_averageHistory# | Max : #load_avg_1mn_maxHistory#" data-cmd_id="#load_avg_1mn_id#" class="value history cursor tooltips">#load_avg_1mn##load_avg_1mn_tendance#</span>';
 				}
 
-				if ('#loadavg5mn#' === '') {
-					document.getElementById('loadavg5mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#loadavg5mn#') < parseFloat('#loadavg5mn_colorlow#')) {
+				if ('#load_avg_5mn#' === '') {
+					document.getElementById('load_avg_5mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_5mn#') < parseFloat('#load_avg_5mn_colorlow#')) {
 					
-					document.getElementById('loadavg5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #loadavg5mn_minHistory# | Moy : #loadavg5mn_averageHistory# | Max : #loadavg5mn_maxHistory#" data-cmd_id="#loadavg5mnid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#loadavg5mn##loadavg5mn_tendance#</span>';
-				} else if ((parseFloat('#loadavg5mn#') >= parseFloat('#loadavg5mn_colorlow#')) && (parseFloat('#loadavg5mn#') <= parseFloat('#loadavg5mn_colorhigh#'))) {
-					document.getElementById('loadavg5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #loadavg5mn_minHistory# | Moy : #loadavg5mn_averageHistory# | Max : #loadavg5mn_maxHistory#" data-cmd_id="#loadavg5mnid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#loadavg5mn##loadavg5mn_tendance#</span>';
-				} else if ((parseFloat('#loadavg5mn#') > parseFloat('#loadavg5mn_colorhigh#')) && '#loadavg5mn_colorhigh#' !== '') {
-					document.getElementById('loadavg5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #loadavg5mn_minHistory# | Moy : #loadavg5mn_averageHistory# | Max : #loadavg5mn_maxHistory#" data-cmd_id="#loadavg5mnid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#loadavg5mn##loadavg5mn_tendance#</span>';
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #load_avg_5mn_minHistory# | Moy : #load_avg_5mn_averageHistory# | Max : #load_avg_5mn_maxHistory#" data-cmd_id="#load_avg_5mn_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#load_avg_5mn##load_avg_5mn_tendance#</span>';
+				} else if ((parseFloat('#load_avg_5mn#') >= parseFloat('#load_avg_5mn_colorlow#')) && (parseFloat('#load_avg_5mn#') <= parseFloat('#load_avg_5mn_colorhigh#'))) {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #load_avg_5mn_minHistory# | Moy : #load_avg_5mn_averageHistory# | Max : #load_avg_5mn_maxHistory#" data-cmd_id="#load_avg_5mn_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#load_avg_5mn##load_avg_5mn_tendance#</span>';
+				} else if ((parseFloat('#load_avg_5mn#') > parseFloat('#load_avg_5mn_colorhigh#')) && '#load_avg_5mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #load_avg_5mn_minHistory# | Moy : #load_avg_5mn_averageHistory# | Max : #load_avg_5mn_maxHistory#" data-cmd_id="#load_avg_5mn_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#load_avg_5mn##load_avg_5mn_tendance#</span>';
 				} else {
-					document.getElementById('loadavg5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #loadavg5mn_minHistory# | Moy : #loadavg5mn_averageHistory# | Max : #loadavg5mn_maxHistory#" data-cmd_id="#loadavg5mnid#" class="value history cursor tooltips">#loadavg5mn# #loadavg5mn_tendance#</span>';
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #load_avg_5mn_minHistory# | Moy : #load_avg_5mn_averageHistory# | Max : #load_avg_5mn_maxHistory#" data-cmd_id="#load_avg_5mn_id#" class="value history cursor tooltips">#load_avg_5mn# #load_avg_5mn_tendance#</span>';
 				}
-				if ('#loadavg15mn#' === '') {
-					document.getElementById('loadavg15mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#loadavg15mn#') < parseFloat('#loadavg15mn_colorlow#')) {
-					document.getElementById('loadavg15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #loadavg15mn_minHistory# | Moy : #loadavg15mn_averageHistory# | Max : #loadavg15mn_maxHistory#" data-cmd_id="#loadavg15mnid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#loadavg15mn##loadavg15mn_tendance#</span>';
-				} else if ((parseFloat('#loadavg15mn#') >= parseFloat('#loadavg15mn_colorlow#')) && (parseFloat('#loadavg15mn#') <= parseFloat('#loadavg15mn_colorhigh#'))) {
-					document.getElementById('loadavg15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #loadavg15mn_minHistory# | Moy : #loadavg15mn_averageHistory# | Max : #loadavg15mn_maxHistory#" data-cmd_id="#loadavg15mnid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#loadavg15mn##loadavg15mn_tendance#</span>';
-				} else if ((parseFloat('#loadavg15mn#') > parseFloat('#loadavg15mn_colorhigh#')) && '#loadavg15mn_colorhigh#' !== '') {
-					document.getElementById('loadavg15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #loadavg15mn_minHistory# | Moy : #loadavg15mn_averageHistory# | Max : #loadavg15mn_maxHistory#" data-cmd_id="#loadavg15mnid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#loadavg15mn##loadavg15mn_tendance#</span>';
+				if ('#load_avg_15mn#' === '') {
+					document.getElementById('load_avg_15mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_15mn#') < parseFloat('#load_avg_15mn_colorlow#')) {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #load_avg_15mn_minHistory# | Moy : #load_avg_15mn_averageHistory# | Max : #load_avg_15mn_maxHistory#" data-cmd_id="#load_avg_15mn_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#load_avg_15mn##load_avg_15mn_tendance#</span>';
+				} else if ((parseFloat('#load_avg_15mn#') >= parseFloat('#load_avg_15mn_colorlow#')) && (parseFloat('#load_avg_15mn#') <= parseFloat('#load_avg_15mn_colorhigh#'))) {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #load_avg_15mn_minHistory# | Moy : #load_avg_15mn_averageHistory# | Max : #load_avg_15mn_maxHistory#" data-cmd_id="#load_avg_15mn_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#load_avg_15mn##load_avg_15mn_tendance#</span>';
+				} else if ((parseFloat('#load_avg_15mn#') > parseFloat('#load_avg_15mn_colorhigh#')) && '#load_avg_15mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #load_avg_15mn_minHistory# | Moy : #load_avg_15mn_averageHistory# | Max : #load_avg_15mn_maxHistory#" data-cmd_id="#load_avg_15mn_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#load_avg_15mn##load_avg_15mn_tendance#</span>';
 				} else {
-					document.getElementById('loadavg15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #loadavg15mn_minHistory# | Moy : #loadavg15mn_averageHistory# | Max : #loadavg15mn_maxHistory#" data-cmd_id="#loadavg15mnid#" class="value history cursor tooltips">#loadavg15mn##loadavg15mn_tendance#</span>';
-				}
-			}
-		</script>
-		<div class="tooltips" data-cmd_id="#Mempourcid#" style="margin-left:5px;display: #Mem_display#;">
-			<span title="Mémoire Vive (% Libre)<br><i>Date de valeur : #Mem_value#<br>Date de collecte : #Mem_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#Mem_icon#</span>
-			<span id="Mempourcent#id#"></span>
-		</div>
-		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#Mempourc#' === '') {
-					document.getElementById('Mempourcent#id#').innerHTML = '<span>#Mem#</span>';
-				} else if ((parseInt('#Mempourc#') > parseInt('#Mempourc_colorhigh#')) && '#Mempourc_colorhigh#' !== '') {
-					document.getElementById('Mempourcent#id#').innerHTML = '#Mem# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #Mempourc_minHistory# | Moy : #Mempourc_averageHistory# | Max : #Mempourc_maxHistory#" data-cmd_id="#Mempourcid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#Mempourc#</span><span>%#Mempourc_tendance#</span>)';
-				} else if ((parseInt('#Mempourc#') >= parseInt('#Mempourc_colorlow#')) && (parseInt('#Mempourc#') <= parseInt('#Mempourc_colorhigh#'))) {
-					document.getElementById('Mempourcent#id#').innerHTML = '#Mem# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #Mempourc_minHistory# | Moy : #Mempourc_averageHistory# | Max : #Mempourc_maxHistory#" data-cmd_id="#Mempourcid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#Mempourc#</span><span>%#Mempourc_tendance#</span>)';
-				} else if (parseInt('#Mempourc#') < parseInt('#Mempourc_colorlow#')) {
-					document.getElementById('Mempourcent#id#').innerHTML = '#Mem# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #Mempourc_minHistory# | Moy : #Mempourc_averageHistory# | Max : #Mempourc_maxHistory#" data-cmd_id="#Mempourcid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#Mempourc#</span><span>%#Mempourc_tendance#</span>)';
-				} else {
-					document.getElementById('Mempourcent#id#').innerHTML = '#Mem# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #Mempourc_minHistory# | Moy : #Mempourc_averageHistory# | Max : #Mempourc_maxHistory#" data-cmd_id="#Mempourcid#" class="value history cursor tooltips">#Mempourc#</span><span>%#Mempourc_tendance#</span>)';
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #load_avg_15mn_minHistory# | Moy : #load_avg_15mn_averageHistory# | Max : #load_avg_15mn_maxHistory#" data-cmd_id="#load_avg_15mn_id#" class="value history cursor tooltips">#load_avg_15mn##load_avg_15mn_tendance#</span>';
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#Swappourcid#" style="margin-left:5px;display: #Mem_swap_display#;">
-			<span title="Mémoire Swap (% Libre)<br><i>Date de valeur : #Mem_swap_value#<br>Date de collecte : #Mem_swap_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#Mem_swap_icon#</span>
-			<span id="Swappourc#id#"></span>
+		<div class="tooltips" data-cmd_id="#memory_free_percent_id#" style="margin-left:5px;display: #memory_display#;">
+			<span title="Mémoire Vive (% Libre)<br><i>Date de valeur : #memory_value#<br>Date de collecte : #memory_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
+			<span id="memory_free_percent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#Swappourc#' === '') {
-					document.getElementById('Swappourc#id#').innerHTML = '<span></span>';
-				} else if ((parseInt('#Swappourc#') > parseInt('#Swappourc_colorhigh#')) && '#Swappourc_colorhigh#' !== '') {
-					document.getElementById('Swappourc#id#').innerHTML = '#Mem_swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #Swappourc_minHistory# | Moy : #Swappourc_averageHistory# | Max : #Swappourc_maxHistory#" data-cmd_id="#Swappourcid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#Swappourc#</span><span>%#Swappourc_tendance#</span>)';
-				} else if ((parseInt('#Swappourc#') >= parseInt('#Swappourc_colorlow#')) && (parseInt('#Swappourc#') <= parseInt('#Swappourc_colorhigh#'))) {
-					document.getElementById('Swappourc#id#').innerHTML = '#Mem_swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #Swappourc_minHistory# | Moy : #Swappourc_averageHistory# | Max : #Swappourc_maxHistory#" data-cmd_id="#Swappourcid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#Swappourc#</span><span>%#Swappourc_tendance#</span>)';
-				} else if (parseInt('#Swappourc#') < parseInt('#Swappourc_colorlow#')) {
-					document.getElementById('Swappourc#id#').innerHTML = '#Mem_swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #Swappourc_minHistory# | Moy : #Swappourc_averageHistory# | Max : #Swappourc_maxHistory#" data-cmd_id="#Swappourcid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#Swappourc#</span><span>%#Swappourc_tendance#</span>)';
+				if ('#memory_free_percent#' === '') {
+					document.getElementById('memory_free_percent#id#').innerHTML = '<span>#memory#</span>';
+				} else if ((parseInt('#memory_free_percent#') > parseInt('#memory_free_percent_colorhigh#')) && '#memory_free_percent_colorhigh#' !== '') {
+					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #memory_free_percent_minHistory# | Moy : #memory_free_percent_averageHistory# | Max : #memory_free_percent_maxHistory#" data-cmd_id="#memory_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#memory_free_percent#</span><span>%#memory_free_percent_tendance#</span>)';
+				} else if ((parseInt('#memory_free_percent#') >= parseInt('#memory_free_percent_colorlow#')) && (parseInt('#memory_free_percent#') <= parseInt('#memory_free_percent_colorhigh#'))) {
+					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #memory_free_percent_minHistory# | Moy : #memory_free_percent_averageHistory# | Max : #memory_free_percent_maxHistory#" data-cmd_id="#memory_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#memory_free_percent#</span><span>%#memory_free_percent_tendance#</span>)';
+				} else if (parseInt('#memory_free_percent#') < parseInt('#memory_free_percent_colorlow#')) {
+					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #memory_free_percent_minHistory# | Moy : #memory_free_percent_averageHistory# | Max : #memory_free_percent_maxHistory#" data-cmd_id="#memory_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#memory_free_percent#</span><span>%#memory_free_percent_tendance#</span>)';
 				} else {
-					document.getElementById('Swappourc#id#').innerHTML = '#Mem_swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #Swappourc_minHistory# | Moy : #Swappourc_averageHistory# | Max : #Swappourc_maxHistory#" data-cmd_id="#Swappourcid#" class="value history cursor tooltips">#Swappourc#</span><span>%#Swappourc_tendance#</span>)';
+					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #memory_free_percent_minHistory# | Moy : #memory_free_percent_averageHistory# | Max : #memory_free_percent_maxHistory#" data-cmd_id="#memory_free_percent_id#" class="value history cursor tooltips">#memory_free_percent#</span><span>%#memory_free_percent_tendance#</span>)';
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#ethernet0id#" style="margin-left:5px;display: #ethernet0_display#;">
-			<span title="Trafic Réseau (#ethernet0_name# / #ethernet0_ip#)<br><i>Date de valeur : #ethernet0_value#<br>Date de collecte : #ethernet0_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#ethernet0_icon#</span>
-			<span id="ethernet0#id#"></span>
+		<div class="tooltips" data-cmd_id="#swap_free_percent_id#" style="margin-left:5px;display: #swap_display#;">
+			<span title="Mémoire Swap (% Libre)<br><i>Date de valeur : #swap_value#<br>Date de collecte : #swap_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
+			<span id="swap_free_percent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('ethernet0#id#').innerHTML = '<span>#ethernet0#</span>';
+				if ('#swap_free_percent#' === '') {
+					document.getElementById('swap_free_percent#id#').innerHTML = '<span></span>';
+				} else if ((parseInt('#swap_free_percent#') > parseInt('#swap_free_percent_colorhigh#')) && '#swap_free_percent_colorhigh#' !== '') {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#swap_free_percent#</span><span>%#swap_free_percent_tendance#</span>)';
+				} else if ((parseInt('#swap_free_percent#') >= parseInt('#swap_free_percent_colorlow#')) && (parseInt('#swap_free_percent#') <= parseInt('#swap_free_percent_colorhigh#'))) {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#swap_free_percent#</span><span>%#swap_free_percent_tendance#</span>)';
+				} else if (parseInt('#swap_free_percent#') < parseInt('#swap_free_percent_colorlow#')) {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#swap_free_percent#</span><span>%#swap_free_percent_tendance#</span>)';
+				} else {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips">#swap_free_percent#</span><span>%#swap_free_percent_tendance#</span>)';
+				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#hddpourcusedid#" style="margin-left:5px;display: #hddused_display#;">
-			<span title="Espace Disque (% Utilisé)<br><i>Date de valeur : #hddtotal_value#<br>Date de collecte : #hddtotal_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hddtotal_icon#</span>
-			<span id="hddpourcused#id#"></span>
+		<div class="tooltips" data-cmd_id="#network_id#" style="margin-left:5px;display: #network_display#;">
+			<span title="Trafic Réseau (#network_name# / #network_ip#)<br><i>Date de valeur : #network_value#<br>Date de collecte : #network_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
+			<span id="network#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#hddpourcused#' === '') {
-					document.getElementById('hddpourcused#id#').innerHTML = '<span></span>';
-				} else if (parseInt('#hddpourcused#') < parseInt('#hddpourcused_colorlow#')) {
-					document.getElementById('hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hddpourcused_minHistory# | Moy : #hddpourcused_averageHistory# | Max : #hddpourcused_maxHistory#" data-cmd_id="#hddpourcusedid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#hddpourcused#</span><span>%#hddpourcused_tendance#</span>)';
-				} else if ((parseInt('#hddpourcused#') >= parseInt('#hddpourcused_colorlow#')) && (parseInt('#hddpourcused#') <= parseInt('#hddpourcused_colorhigh#'))) {
-					document.getElementById('hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hddpourcused_minHistory# | Moy : #hddpourcused_averageHistory# | Max : #hddpourcused_maxHistory#" data-cmd_id="#hddpourcusedid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#hddpourcused#</span><span>%#hddpourcused_tendance#</span>)';	
-				} else if ((parseInt('#hddpourcused#') > parseInt('#hddpourcused_colorhigh#')) && '#hddpourcused_colorhigh#' !== '') {
-					document.getElementById('hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hddpourcused_minHistory# | Moy : #hddpourcused_averageHistory# | Max : #hddpourcused_maxHistory#" data-cmd_id="#hddpourcusedid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hddpourcused#</span><span>%#hddpourcused_tendance#</span>)';
+				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
+			}
+		</script>
+		<div class="tooltips" data-cmd_id="#hdd_used_percent_id#" style="margin-left:5px;display: #hdd_used_display#;">
+			<span title="Espace Disque (% Utilisé)<br><i>Date de valeur : #hdd_total_value#<br>Date de collecte : #hdd_total_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hdd_total_icon#</span>
+			<span id="hdd_used_percent#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#hdd_used_percent#' === '') {
+					document.getElementById('hdd_used_percent#id#').innerHTML = '<span></span>';
+				} else if (parseInt('#hdd_used_percent#') < parseInt('#hdd_used_percent_colorlow#')) {
+					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';
+				} else if ((parseInt('#hdd_used_percent#') >= parseInt('#hdd_used_percent_colorlow#')) && (parseInt('#hdd_used_percent#') <= parseInt('#hdd_used_percent_colorhigh#'))) {
+					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';	
+				} else if ((parseInt('#hdd_used_percent#') > parseInt('#hdd_used_percent_colorhigh#')) && '#hdd_used_percent_colorhigh#' !== '') {
+					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';
 				} else {
-					document.getElementById('hddpourcused#id#').innerHTML = 'Total : #hddtotal# - Utilisé : #hddused# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hddpourcused_minHistory# | Moy : #hddpourcused_averageHistory# | Max : #hddpourcused_maxHistory#" data-cmd_id="#hddpourcusedid#" class="value history cursor tooltips">#hddpourcused#</span><span>%#hddpourcused_tendance#</span>)';
+					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';
 				}
 			}
 		</script>
@@ -210,17 +210,17 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolume2_display#' == 'OK') {
-					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="tooltips" data-cmd_id="#hddpourcusedv2id#" style="margin-left:5px;display: #hddusedv2_display#;"><span title="Syno Volume 2 (% Utilisé)<br><i>Date de valeur : #hddtotalv2_value#<br>Date de collecte : #hddtotalv2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hddtotalv2_icon#</span> <span id="hddpourcusedv2#id#"></span></div>';
-					if ('#hddpourcusedv2#' === '') {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#hddpourcusedv2#') < parseInt('#hddpourcusedv2_colorlow#')) {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span title="Stats : Syno Volume 2 (% Utilisé)<br>Min: #hddpourcusedv2_minHistory# | Moy : #hddpourcusedv2_averageHistory# | Max : #hddpourcusedv2_maxHistory#" data-cmd_id="#hddpourcusedv2id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#hddpourcusedv2#</span><span>%#hddpourcusedv2_tendance#</span>)';
-					} else if ((parseInt('#hddpourcusedv2#') >= parseInt('#hddpourcusedv2_colorlow#')) && (parseInt('#hddpourcusedv2#') <= parseInt('#hddpourcusedv2_colorhigh#'))) {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span title="Stats : Syno Volume 2 (% Utilisé)<br>Min: #hddpourcusedv2_minHistory# | Moy : #hddpourcusedv2_averageHistory# | Max : #hddpourcusedv2_maxHistory#" data-cmd_id="#hddpourcusedv2id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#hddpourcusedv2#</span><span>%#hddpourcusedv2_tendance#</span>)';
-					} else if ((parseInt('#hddpourcusedv2#') > parseInt('#hddpourcusedv2_colorhigh#')) && '#hddpourcusedv2_colorhigh#' !== '') {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span title="Stats : Syno Volume 2 (% Utilisé)<br>Min: #hddpourcusedv2_minHistory# | Moy : #hddpourcusedv2_averageHistory# | Max : #hddpourcusedv2_maxHistory#" data-cmd_id="#hddpourcusedv2id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hddpourcusedv2#</span><span>%#hddpourcusedv2_tendance#</span>)';
+					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="tooltips" data-cmd_id="#syno_hddv2_used_percent_id#" style="margin-left:5px;display: #syno_hddv2_used_display#;"><span title="Syno Volume 2 (% Utilisé)<br><i>Date de valeur : #syno_hddv2_total_value#<br>Date de collecte : #syno_hddv2_total_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_total_icon#</span> <span id="syno_hddv2_used_percent#id#"></span></div>';
+					if ('#syno_hddv2_used_percent#' === '') {
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddv2_used_percent#') < parseInt('#syno_hddv2_used_percent_colorlow#')) {
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : #syno_hddv2_total# - Utilisé : #syno_hddv2_used# (<span title="Stats : Syno Volume 2 (% Utilisé)<br>Min: #syno_hddv2_used_percent_minHistory# | Moy : #syno_hddv2_used_percent_averageHistory# | Max : #syno_hddv2_used_percent_maxHistory#" data-cmd_id="#syno_hddv2_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#syno_hddv2_used_percent#</span><span>%#syno_hddv2_used_percent_tendance#</span>)';
+					} else if ((parseInt('#syno_hddv2_used_percent#') >= parseInt('#syno_hddv2_used_percent_colorlow#')) && (parseInt('#syno_hddv2_used_percent#') <= parseInt('#syno_hddv2_used_percent_colorhigh#'))) {
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : #syno_hddv2_total# - Utilisé : #syno_hddv2_used# (<span title="Stats : Syno Volume 2 (% Utilisé)<br>Min: #syno_hddv2_used_percent_minHistory# | Moy : #syno_hddv2_used_percent_averageHistory# | Max : #syno_hddv2_used_percent_maxHistory#" data-cmd_id="#syno_hddv2_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#syno_hddv2_used_percent#</span><span>%#syno_hddv2_used_percent_tendance#</span>)';
+					} else if ((parseInt('#syno_hddv2_used_percent#') > parseInt('#syno_hddv2_used_percent_colorhigh#')) && '#syno_hddv2_used_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : #syno_hddv2_total# - Utilisé : #syno_hddv2_used# (<span title="Stats : Syno Volume 2 (% Utilisé)<br>Min: #syno_hddv2_used_percent_minHistory# | Moy : #syno_hddv2_used_percent_averageHistory# | Max : #syno_hddv2_used_percent_maxHistory#" data-cmd_id="#syno_hddv2_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#syno_hddv2_used_percent#</span><span>%#syno_hddv2_used_percent_tendance#</span>)';
 					} else {
-						document.getElementById('hddpourcusedv2#id#').innerHTML = 'Total : #hddtotalv2# - Utilisé : #hddusedv2# (<span title="Stats : Syno Volume 2 (% Utilisé)<br>Min: #hddpourcusedv2_minHistory# | Moy : #hddpourcusedv2_averageHistory# | Max : #hddpourcusedv2_maxHistory#" data-cmd_id="#hddpourcusedv2id#" class="value history cursor tooltips">#hddpourcusedv2#</span><span>%#hddpourcusedv2_tendance#</span>)';
+						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : #syno_hddv2_total# - Utilisé : #syno_hddv2_used# (<span title="Stats : Syno Volume 2 (% Utilisé)<br>Min: #syno_hddv2_used_percent_minHistory# | Moy : #syno_hddv2_used_percent_averageHistory# | Max : #syno_hddv2_used_percent_maxHistory#" data-cmd_id="#syno_hddv2_used_percent_id#" class="value history cursor tooltips">#syno_hddv2_used_percent#</span><span>%#syno_hddv2_used_percent_tendance#</span>)';
 					}
 				}
 			}
@@ -229,18 +229,18 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="tooltips" data-cmd_id="#hddpourcusedusbid#" style="margin-left:5px;display: #hddusedusb_display#;"><span title="Syno Volume USB (% Utilisé)<br><i>Date de valeur : #hddtotalusb_value#<br>Date de collecte : #hddtotalusb_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hddtotalusb_icon#</span> <span id="hddpourcusedusb#id#"></span></div>';
+					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="tooltips" data-cmd_id="#syno_hddusb_used_percent_id#" style="margin-left:5px;display: #syno_hddusb_used_display#;"><span title="Syno Volume USB (% Utilisé)<br><i>Date de valeur : #syno_hddusb_total_value#<br>Date de collecte : #syno_hddusb_total_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_total_icon#</span> <span id="syno_hddusb_used_percent#id#"></span></div>';
 				
-					if ('#hddpourcusedusb#' === '') {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#hddpourcusedusb#') < parseInt('#hddpourcusedusb_colorlow#')) {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span title="Stats : Syno Volume USB (% Utilisé)<br>Min: #hddpourcusedusb_minHistory# | Moy : #hddpourcusedusb_averageHistory# | Max : #hddpourcusedusb_maxHistory#" data-cmd_id="#hddpourcusedusbid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#hddpourcusedusb#</span><span>%#hddpourcusedusb_tendance#</span>)';
-					} else if ((parseInt('#hddpourcusedusb#') >= parseInt('#hddpourcusedusb_colorlow#')) && (parseInt('#hddpourcusedusb#') <= parseInt('#hddpourcusedusb_colorhigh#'))) {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span title="Stats : Syno Volume USB (% Utilisé)<br>Min: #hddpourcusedusb_minHistory# | Moy : #hddpourcusedusb_averageHistory# | Max : #hddpourcusedusb_maxHistory#" data-cmd_id="#hddpourcusedusbid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#hddpourcusedusb#</span><span>%#hddpourcusedusb_tendance#</span>)';
-					} else if ((parseInt('#hddpourcusedusb#') > parseInt('#hddpourcusedusb_colorhigh#')) && '#hddpourcusedusb_colorhigh#' !== '') {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span title="Stats : Syno Volume USB (% Utilisé)<br>Min: #hddpourcusedusb_minHistory# | Moy : #hddpourcusedusb_averageHistory# | Max : #hddpourcusedusb_maxHistory#" data-cmd_id="#hddpourcusedusbid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hddpourcusedusb#</span><span>%#hddpourcusedusb_tendance#</span>)';
+					if ('#syno_hddusb_used_percent#' === '') {
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddusb_used_percent#') < parseInt('#syno_hddusb_used_percent_colorlow#')) {
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : #syno_hddusb_total# - Utilisé : #syno_hddusb_used# (<span title="Stats : Syno Volume USB (% Utilisé)<br>Min: #syno_hddusb_used_percent_minHistory# | Moy : #syno_hddusb_used_percent_averageHistory# | Max : #syno_hddusb_used_percent_maxHistory#" data-cmd_id="#syno_hddusb_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#syno_hddusb_used_percent#</span><span>%#syno_hddusb_used_percent_tendance#</span>)';
+					} else if ((parseInt('#syno_hddusb_used_percent#') >= parseInt('#syno_hddusb_used_percent_colorlow#')) && (parseInt('#syno_hddusb_used_percent#') <= parseInt('#syno_hddusb_used_percent_colorhigh#'))) {
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : #syno_hddusb_total# - Utilisé : #syno_hddusb_used# (<span title="Stats : Syno Volume USB (% Utilisé)<br>Min: #syno_hddusb_used_percent_minHistory# | Moy : #syno_hddusb_used_percent_averageHistory# | Max : #syno_hddusb_used_percent_maxHistory#" data-cmd_id="#syno_hddusb_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#syno_hddusb_used_percent#</span><span>%#syno_hddusb_used_percent_tendance#</span>)';
+					} else if ((parseInt('#syno_hddusb_used_percent#') > parseInt('#syno_hddusb_used_percent_colorhigh#')) && '#syno_hddusb_used_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : #syno_hddusb_total# - Utilisé : #syno_hddusb_used# (<span title="Stats : Syno Volume USB (% Utilisé)<br>Min: #syno_hddusb_used_percent_minHistory# | Moy : #syno_hddusb_used_percent_averageHistory# | Max : #syno_hddusb_used_percent_maxHistory#" data-cmd_id="#syno_hddusb_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#syno_hddusb_used_percent#</span><span>%#syno_hddusb_used_percent_tendance#</span>)';
 					} else {
-						document.getElementById('hddpourcusedusb#id#').innerHTML = 'Total : #hddtotalusb# - Utilisé : #hddusedusb# (<span title="Stats : Syno Volume USB (% Utilisé)<br>Min: #hddpourcusedusb_minHistory# | Moy : #hddpourcusedusb_averageHistory# | Max : #hddpourcusedusb_maxHistory#" data-cmd_id="#hddpourcusedusbid#" class="value history cursor tooltips">#hddpourcusedusb#</span><span>%#hddpourcusedusb_tendance#</span>)';
+						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : #syno_hddusb_total# - Utilisé : #syno_hddusb_used# (<span title="Stats : Syno Volume USB (% Utilisé)<br>Min: #syno_hddusb_used_percent_minHistory# | Moy : #syno_hddusb_used_percent_averageHistory# | Max : #syno_hddusb_used_percent_maxHistory#" data-cmd_id="#syno_hddusb_used_percent_id#" class="value history cursor tooltips">#syno_hddusb_used_percent#</span><span>%#syno_hddusb_used_percent_tendance#</span>)';
 					}
 				}
 			}
@@ -249,22 +249,22 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeesata_display#' == 'OK') {
-					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="tooltips" data-cmd_id="#hddpourcusedesataid#" style="margin-left:5px;display: #hddusedesata_display#;"><span title="Syno Volume eSATA (% Utilisé)<br><i>Date de valeur : #hddtotalesata_value#<br>Date de collecte : #hddtotalesata_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hddtotalesata_icon#</span> <span id="hddpourcusedesata#id#"></span></div>';
-					if ('#hddpourcusedesata#' === '') {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#hddpourcusedesata#') < parseInt('#hddpourcusedesata_colorlow#')) {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span title="Stats : Syno Volume eSATA (% Utilisé)<br>Min: #hddpourcusedesata_minHistory# | Moy : #hddpourcusedesata_averageHistory# | Max : #hddpourcusedesata_maxHistory#" data-cmd_id="#hddpourcusedesataid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#hddpourcusedesata#</span><span>%#hddpourcusedesata_tendance#</span>)';
-					} else if ((parseInt('#hddpourcusedesata#') >= parseInt('#hddpourcusedesata_colorlow#')) && (parseInt('#hddpourcusedesata#') <= parseInt('#hddpourcusedesata_colorhigh#'))) {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span title="Stats : Syno Volume eSATA (% Utilisé)<br>Min: #hddpourcusedesata_minHistory# | Moy : #hddpourcusedesata_averageHistory# | Max : #hddpourcusedesata_maxHistory#" data-cmd_id="#hddpourcusedesataid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#hddpourcusedesata#</span><span>%#hddpourcusedesata_tendance#</span>)';
-					} else if ((parseInt('#hddpourcusedesata#') > parseInt('#hddpourcusedesata_colorhigh#')) && '#hddpourcusedesata_colorhigh#' !== '') {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span title="Stats : Syno Volume eSATA (% Utilisé)<br>Min: #hddpourcusedesata_minHistory# | Moy : #hddpourcusedesata_averageHistory# | Max : #hddpourcusedesata_maxHistory#" data-cmd_id="#hddpourcusedesataid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hddpourcusedesata#</span><span>%#hddpourcusedesata_tendance#</span>)';
+					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="tooltips" data-cmd_id="#syno_hddesata_used_percent_id#" style="margin-left:5px;display: #syno_hddesata_used_display#;"><span title="Syno Volume eSATA (% Utilisé)<br><i>Date de valeur : #syno_hddesata_total_value#<br>Date de collecte : #syno_hddesata_total_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_total_icon#</span> <span id="syno_hddesata_used_percent#id#"></span></div>';
+					if ('#syno_hddesata_used_percent#' === '') {
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddesata_used_percent#') < parseInt('#syno_hddesata_used_percent_colorlow#')) {
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : #syno_hddesata_total# - Utilisé : #syno_hddesata_used# (<span title="Stats : Syno Volume eSATA (% Utilisé)<br>Min: #syno_hddesata_used_percent_minHistory# | Moy : #syno_hddesata_used_percent_averageHistory# | Max : #syno_hddesata_used_percent_maxHistory#" data-cmd_id="#syno_hddesata_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#syno_hddesata_used_percent#</span><span>%#syno_hddesata_used_percent_tendance#</span>)';
+					} else if ((parseInt('#syno_hddesata_used_percent#') >= parseInt('#syno_hddesata_used_percent_colorlow#')) && (parseInt('#syno_hddesata_used_percent#') <= parseInt('#syno_hddesata_used_percent_colorhigh#'))) {
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : #syno_hddesata_total# - Utilisé : #syno_hddesata_used# (<span title="Stats : Syno Volume eSATA (% Utilisé)<br>Min: #syno_hddesata_used_percent_minHistory# | Moy : #syno_hddesata_used_percent_averageHistory# | Max : #syno_hddesata_used_percent_maxHistory#" data-cmd_id="#syno_hddesata_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#syno_hddesata_used_percent#</span><span>%#syno_hddesata_used_percent_tendance#</span>)';
+					} else if ((parseInt('#syno_hddesata_used_percent#') > parseInt('#syno_hddesata_used_percent_colorhigh#')) && '#syno_hddesata_used_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : #syno_hddesata_total# - Utilisé : #syno_hddesata_used# (<span title="Stats : Syno Volume eSATA (% Utilisé)<br>Min: #syno_hddesata_used_percent_minHistory# | Moy : #syno_hddesata_used_percent_averageHistory# | Max : #syno_hddesata_used_percent_maxHistory#" data-cmd_id="#syno_hddesata_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#syno_hddesata_used_percent#</span><span>%#syno_hddesata_used_percent_tendance#</span>)';
 					} else {
-						document.getElementById('hddpourcusedesata#id#').innerHTML = 'Total : #hddtotalesata# - Utilisé : #hddusedesata# (<span title="Stats : Syno Volume eSATA (% Utilisé)<br>Min: #hddpourcusedesata_minHistory# | Moy : #hddpourcusedesata_averageHistory# | Max : #hddpourcusedesata_maxHistory#" data-cmd_id="#hddpourcusedesataid#" class="value history cursor tooltips">#hddpourcusedesata#</span><span>%#hddpourcusedesata_tendance#</span>)';
+						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : #syno_hddesata_total# - Utilisé : #syno_hddesata_used# (<span title="Stats : Syno Volume eSATA (% Utilisé)<br>Min: #syno_hddesata_used_percent_minHistory# | Moy : #syno_hddesata_used_percent_averageHistory# | Max : #syno_hddesata_used_percent_maxHistory#" data-cmd_id="#syno_hddesata_used_percent_id#" class="value history cursor tooltips">#syno_hddesata_used_percent#</span><span>%#syno_hddesata_used_percent_tendance#</span>)';
 					}
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#cpu_tempid#" style="margin-left:5px;display: #cpu_display#;">
+		<div class="tooltips" data-cmd_id="#cpu_temp_id#" style="margin-left:5px;display: #cpu_display#;">
 			<span title="Nombre CPU - Fréquence (Température)<br><i>Date de valeur : #cpu_value#<br>Date de collecte : #cpu_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
@@ -273,20 +273,20 @@
 				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' == 'OK') {
 					document.getElementById('cpu#id#').innerHTML = '<span>#cpu# </span>';
 					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
-						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_tempid#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
+						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
 					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temp_colorlow#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temp_colorhigh#'))) {
-						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_tempid#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
+						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
 					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temp_colorhigh#')) && '#cpu_temp_colorhigh#' !== '') {
-						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_tempid#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
+						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
 					} else {
-						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_tempid#" class="value history cursor tooltips">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
+						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
 					}
 				} else {
 					document.getElementById('cpu#id#').innerHTML = '<span>#cpu#</span>';
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#perso1id#" style="margin-left:5px;display: #perso1_display#;">
+		<div class="tooltips" data-cmd_id="#perso1_id#" style="margin-left:5px;display: #perso1_display#;">
 			<span title="#perso1_name#<br><i>Date de valeur : #perso1_value#<br>Date de collecte : #perso1_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
@@ -294,20 +294,20 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso1#' !== '') {
 					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
+						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
 					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
+						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
 					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
+						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
 					} else {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1id#" class="value history cursor tooltips">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
+						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1_id#" class="value history cursor tooltips">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
 					}
 				} else {
 					document.getElementById('perso1_unite#id#').innerHTML = '<span></span>';
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#perso2id#" style="margin-left:5px;display: #perso2_display#;">
+		<div class="tooltips" data-cmd_id="#perso2_id#" style="margin-left:5px;display: #perso2_display#;">
 			<span title="#perso2_name#<br><i>Date de valeur : #perso2_value#<br>Date de collecte : #perso2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
@@ -315,13 +315,13 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#perso2#' !== '') {
 					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
+						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
 					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
+						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
 					} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
+						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
 					} else {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2id#" class="value history cursor tooltips">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
+						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2_id#" class="value history cursor tooltips">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
 					}
 				} else {
 					document.getElementById('perso2_unite#id#').innerHTML = '<span></span>';

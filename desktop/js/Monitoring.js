@@ -27,7 +27,7 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'namedistri' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'Mem' || _cmd.logicalId == 'Mem_swap' || _cmd.logicalId == 'ethernet0' || _cmd.logicalId == 'hddtotal' || _cmd.logicalId == 'hddtotalv2' || _cmd.logicalId == 'hddtotalusb' || _cmd.logicalId == 'hddtotalesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (_cmd.logicalId == 'namedistri' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'memory' || _cmd.logicalId == 'swap' || _cmd.logicalId == 'network' || _cmd.logicalId == 'hdd_total' || _cmd.logicalId == 'syno_hddv2_total' || _cmd.logicalId == 'syno_hddusb_total' || _cmd.logicalId == 'syno_hddesata_total' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
 		tr += '<div class="input-group">'
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
@@ -47,10 +47,10 @@ function addCmdToTable(_cmd) {
 	}
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'loadavg5mn' || _cmd.logicalId == 'loadavg15mn' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddpourcused' || _cmd.logicalId == 'hddpourcusedv2' || _cmd.logicalId == 'hddpourcusedusb' || _cmd.logicalId == 'hddpourcusedesata') {
+	if (_cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'load_avg_5mn' || _cmd.logicalId == 'load_avg_15mn' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hdd_used_percent' || _cmd.logicalId == 'syno_hddv2_used_percent' || _cmd.logicalId == 'syno_hddusb_used_percent' || _cmd.logicalId == 'syno_hddesata_used_percent') {
 		tr += '<span class="cmdAttr" style="color: green;font-weight: bold;">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red;font-weight: bold;"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	}
-	if (_cmd.logicalId == 'Mempourc' || _cmd.logicalId == 'Swappourc') {
+	if (_cmd.logicalId == 'memory_free_percent' || _cmd.logicalId == 'swap_free_percent') {
 		tr += '<span class="cmdAttr" style="color: red;font-weight: bold;">[Rouge] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: green;font-weight: bold;"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Vert]</span>';
 	}
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
@@ -61,10 +61,10 @@ function addCmdToTable(_cmd) {
 	tr += '</td>';
 	
 	tr += '<td>';
-	if (_cmd.logicalId == 'reboot' || _cmd.logicalId == 'poweroff' || _cmd.logicalId == 'namedistri' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'Mem' || _cmd.logicalId == 'Mem_swap' || _cmd.logicalId == 'ethernet0' || _cmd.logicalId == 'hddtotal' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddtotalv2' || _cmd.logicalId == 'hddtotalusb' || _cmd.logicalId == 'hddtotalesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_status' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
+	if (_cmd.logicalId == 'reboot' || _cmd.logicalId == 'poweroff' || _cmd.logicalId == 'namedistri' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'memory' || _cmd.logicalId == 'swap' || _cmd.logicalId == 'network' || _cmd.logicalId == 'hdd_total' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'syno_hddv2_total' || _cmd.logicalId == 'syno_hddusb_total' || _cmd.logicalId == 'syno_hddesata_total' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_status' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
 		tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked/> {{Afficher}}<br/></span>';
 	}
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'loadavg5mn' || _cmd.logicalId == 'loadavg15mn' || _cmd.logicalId == 'Mempourc' || _cmd.logicalId == 'Swappourc' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hddpourcused' || _cmd.logicalId == 'hddpourcusedv2' || _cmd.logicalId == 'hddpourcusedusb' || _cmd.logicalId == 'hddpourcusedesata' || _cmd.logicalId == 'cron_status') {
+	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'loadavg1mn' || _cmd.logicalId == 'load_avg_5mn' || _cmd.logicalId == 'load_avg_15mn' || _cmd.logicalId == 'memory_free_percent' || _cmd.logicalId == 'swap_free_percent' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hdd_used_percent' || _cmd.logicalId == 'syno_hddv2_used_percent' || _cmd.logicalId == 'syno_hddusb_used_percent' || _cmd.logicalId == 'syno_hddesata_used_percent' || _cmd.logicalId == 'cron_status') {
 		tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isHistorized"/> {{Historiser}}</span>';
 	}
 	tr += '</td>';
