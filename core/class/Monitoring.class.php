@@ -706,7 +706,7 @@ class Monitoring extends eqLogic {
 			// Tendance
 			if ($cmd->getConfiguration('stats_no_tendance', '0') == '1') {
 				$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
-				log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmdName . ' :: ' . strval($tendance));
+				log::add('Monitoring', 'debug', '[' . $cmd->getName() . '][getStats] Tendance :: ' . $cmdName . ' :: ' . strval($tendance));
 				if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
 					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
 				} else if ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
