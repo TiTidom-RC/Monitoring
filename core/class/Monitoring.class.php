@@ -1046,9 +1046,9 @@ class Monitoring extends eqLogic {
 		// Load Average
 		$load_avg = $this->getCmd(null,'load_avg');
 		$replace['#load_avg_icon#'] = is_object($load_avg) ? (!empty($load_avg->getDisplay('icon')) ? $load_avg->getDisplay('icon') : '<i class="fas fa-chart-line"></i>') : '';
-		$replace['#loadavg_display#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? "block" : "none";
-		$replace['#loadavg_collect#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? $load_avg->getCollectDate() : "-";
-        $replace['#loadavg_value#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? $load_avg->getValueDate() : "-";
+		$replace['#load_avg_display#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? "block" : "none";
+		$replace['#load_avg_collect#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? $load_avg->getCollectDate() : "-";
+        $replace['#load_avg_value#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? $load_avg->getValueDate() : "-";
 		$replace['#load_avg_id#'] = is_object($load_avg) ? $load_avg->getId() : '';
 
 		$load_avg_1mn = $this->getCmd(null,'load_avg_1mn');
