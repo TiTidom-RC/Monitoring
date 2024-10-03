@@ -709,7 +709,7 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
 				if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
 					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
-				} else if ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
+				} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
 					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"</i>';
 				} else {
 					$replace['#' . $cmdName . '_tendance#'] = '<i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
