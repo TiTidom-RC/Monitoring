@@ -427,7 +427,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'memory_free_percent');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire Libre (%)', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire Libre (Pourcent)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('memory_free_percent');
 			$MonitoringCmd->setType('info');
@@ -449,7 +449,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'memory_used_percent');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire Utilisée (%)', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire Utilisée (Pourcent)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('memory_used_percent');
 			$MonitoringCmd->setType('info');
@@ -494,7 +494,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'swap_free_percent');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Swap Libre (%)', __FILE__));
+			$MonitoringCmd->setName(__('Swap Libre (Pourcent)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('swap_free_percent');
 			$MonitoringCmd->setType('info');
@@ -516,7 +516,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'swap_used_percent');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Swap Utilisé (%)', __FILE__));
+			$MonitoringCmd->setName(__('Swap Utilisé (Pourcent)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('swap_used_percent');
 			$MonitoringCmd->setType('info');
@@ -617,7 +617,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'hdd_free_percent');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace Disque Libre (%)', __FILE__));
+			$MonitoringCmd->setName(__('Espace Disque Libre (Pourcent)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('hdd_free_percent');
 			$MonitoringCmd->setType('info');
@@ -639,7 +639,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'hdd_used_percent');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace Disque Utilisé (%)', __FILE__));
+			$MonitoringCmd->setName(__('Espace Disque Utilisé (Pourcent)', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('hdd_used_percent');
 			$MonitoringCmd->setType('info');
@@ -688,7 +688,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_free_percent');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Libre (%)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume 2 Libre (Pourcent)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('syno_hddv2_free_percent');
 					$MonitoringCmd->setType('info');
@@ -710,7 +710,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_used_percent');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Utilisé (%)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume 2 Utilisé (Pourcent)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('syno_hddv2_used_percent');
 					$MonitoringCmd->setType('info');
@@ -759,7 +759,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_free_percent');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Libre (%)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume USB Libre (Pourcent)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('syno_hddusb_free_percent');
 					$MonitoringCmd->setType('info');
@@ -781,7 +781,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_used_percent');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Utilisé (%)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume USB Utilisé (Pourcent)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('syno_hddusb_percent');
 					$MonitoringCmd->setType('info');
@@ -830,7 +830,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_free_percent');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume eSATA Libre (%)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume eSATA Libre (Pourcent)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('syno_hddesata_free_percent');
 					$MonitoringCmd->setType('info');
@@ -852,7 +852,7 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_used_percent');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume eSATA Utilisé (%)', __FILE__));
+					$MonitoringCmd->setName(__('Syno Volume eSATA Utilisé (Pourcent)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
 					$MonitoringCmd->setLogicalId('syno_hddesata_used_percent');
 					$MonitoringCmd->setType('info');
