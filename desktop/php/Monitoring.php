@@ -317,7 +317,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                             <fieldset>
                                 <legend>{{Statistiques}} :</legend>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label" >{{Tendance}}</label>
+                                    <label class="col-md-2 control-label" >{{Ne PAS afficher la 'Tendance'}}</label>
                                     <div class="col-md-8">
                                         <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="stats_no_tendance" />
                                         <span style="font-size: 85%;">({{A cocher pour NE PAS afficher les tendances (statistiques) sur le widget du dashboard}})</span>
