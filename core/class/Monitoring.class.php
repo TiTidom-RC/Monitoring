@@ -1034,6 +1034,7 @@ class Monitoring extends eqLogic {
 		$replace['#cron_status_display#'] = (is_object($cron_status) && $cron_status->getIsVisible()) ? "inline-block" : "none";
 		$replace['#cron_status_custom#'] = $this->getConfiguration('pull_use_custom', '0');
 
+		// Distribution Linux
 		$distri_name = $this->getCmd(null,'distri_name');
 		$replace['#distri_name_icon#'] = is_object($distri_name) ? (!empty($distri_name->getDisplay('icon')) ? $distri_name->getDisplay('icon') : '<i class="fab fa-linux"></i>') : '';
 		$replace['#distri_name#'] = is_object($distri_name) ? $distri_name->execCmd() : '';
@@ -1042,13 +1043,17 @@ class Monitoring extends eqLogic {
 		$replace['#distri_name_collect#'] = (is_object($distri_name) && $distri_name->getIsVisible()) ? $distri_name->getCollectDate() : "-";
         $replace['#distri_name_value#'] = (is_object($distri_name) && $distri_name->getIsVisible()) ? $distri_name->getValueDate() : "-";
 
+		// Load Average
+		$load_avg = $this->getCmd(null,'load_avg');
+		$replace['#load_avg_icon#'] = is_object($load_avg) ? (!empty($load_avg->getDisplay('icon')) ? $load_avg->getDisplay('icon') : '<i class="fas fa-chart-line"></i>') : '';
+		$replace['#loadavg_display#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? "block" : "none";
+		$replace['#loadavg_collect#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? $load_avg->getCollectDate() : "-";
+        $replace['#loadavg_value#'] = (is_object($load_avg) && $load_avg->getIsVisible()) ? $load_avg->getValueDate() : "-";
+		$replace['#load_avg_id#'] = is_object($load_avg) ? $load_avg->getId() : '';
+
 		$load_avg_1mn = $this->getCmd(null,'load_avg_1mn');
-		$replace['#load_avg_1mn_icon#'] = is_object($load_avg_1mn) ? (!empty($load_avg_1mn->getDisplay('icon')) ? $load_avg_1mn->getDisplay('icon') : '<i class="fas fa-chart-line"></i>') : '';
 		$replace['#load_avg_1mn#'] = is_object($load_avg_1mn) ? $load_avg_1mn->execCmd() : '';
 		$replace['#load_avg_1mn_id#'] = is_object($load_avg_1mn) ? $load_avg_1mn->getId() : '';
-		$replace['#loadavg_display#'] = (is_object($load_avg_1mn) && $load_avg_1mn->getIsVisible()) ? "block" : "none";
-		$replace['#loadavg_collect#'] = (is_object($load_avg_1mn) && $load_avg_1mn->getIsVisible()) ? $load_avg_1mn->getCollectDate() : "-";
-        $replace['#loadavg_value#'] = (is_object($load_avg_1mn) && $load_avg_1mn->getIsVisible()) ? $load_avg_1mn->getValueDate() : "-";
 
 		$replace['#load_avg_1mn_colorlow#'] = $this->getConfiguration('load_avg_1mn_colorlow');
 		$replace['#load_avg_1mn_colorhigh#'] = $this->getConfiguration('load_avg_1mn_colorhigh');
@@ -1073,6 +1078,7 @@ class Monitoring extends eqLogic {
 		
 		$this->getStats($load_avg_15mn, 'load_avg_15mn', $replace, 2);
 
+		// Uptime
 		$uptime = $this->getCmd(null,'uptime');
 		$replace['#uptime_icon#'] = is_object($uptime) ? (!empty($uptime->getDisplay('icon')) ? $uptime->getDisplay('icon') : '<i class="fas fa-hourglass-half"></i>') : '';
 		$replace['#uptime#'] = is_object($uptime) ? $uptime->execCmd() : '';
@@ -1081,13 +1087,17 @@ class Monitoring extends eqLogic {
 		$replace['#uptime_collect#'] = (is_object($uptime) && $uptime->getIsVisible()) ? $uptime->getCollectDate() : "-";
         $replace['#uptime_value#'] = (is_object($uptime) && $uptime->getIsVisible()) ? $uptime->getValueDate() : "-";
 		
+		// HDD
+		$hdd = $this->getCmd(null,'hdd');
+		$replace['#hdd_icon#'] = is_object($hdd) ? (!empty($hdd->getDisplay('icon')) ? $hdd->getDisplay('icon') : '<i class="fas fa-hdd"></i>') : '';
+		$replace['#hdd_display#'] = (is_object($hdd) && $hdd->getIsVisible()) ? "block" : "none";
+		$replace['#hdd_collect#'] = (is_object($hdd) && $hdd->getIsVisible()) ? $hdd->getCollectDate() : "-";
+        $replace['#hdd_value#'] = (is_object($hdd) && $hdd->getIsVisible()) ? $hdd->getValueDate() : "-";
+		$replace['#hdd_id#'] = is_object($hdd) ? $hdd->getId() : '';
+
 		$hdd_total = $this->getCmd(null,'hdd_total');
-		$replace['#hdd_total_icon#'] = is_object($hdd_total) ? (!empty($hdd_total->getDisplay('icon')) ? $hdd_total->getDisplay('icon') : '<i class="fas fa-hdd"></i>') : '';
 		$replace['#hdd_total#'] = is_object($hdd_total) ? $hdd_total->execCmd() : '';
 		$replace['#hdd_total_id#'] = is_object($hdd_total) ? $hdd_total->getId() : '';
-		$replace['#hdd_used_display#'] = (is_object($hdd_total) && $hdd_total->getIsVisible()) ? "block" : "none";
-		$replace['#hdd_total_collect#'] = (is_object($hdd_total) && $hdd_total->getIsVisible()) ? $hdd_total->getCollectDate() : "-";
-        $replace['#hdd_total_value#'] = (is_object($hdd_total) && $hdd_total->getIsVisible()) ? $hdd_total->getValueDate() : "-";
 
 		$hdd_used = $this->getCmd(null,'hdd_used');
 		$replace['#hdd_used#'] = is_object($hdd_used) ? $hdd_used->execCmd() : '';
@@ -1102,6 +1112,7 @@ class Monitoring extends eqLogic {
 
 		$this->getStats($hdd_used_percent, 'hdd_used_percent', $replace, 0);
 		
+		// Mémoire
 		$memory = $this->getCmd(null,'memory');
 		$replace['#memory_icon#'] = is_object($memory) ? (!empty($memory->getDisplay('icon')) ? $memory->getDisplay('icon') : '<i class="fas fa-database"></i>') : '';
 		$replace['#memory#'] = is_object($memory) ? $memory->execCmd() : '';
@@ -1119,6 +1130,7 @@ class Monitoring extends eqLogic {
 
 		$this->getStats($memory_free_percent, 'memory_free_percent', $replace, 0);
 
+		// Swap
 		$swap = $this->getCmd(null,'swap');
 		$replace['#swap_icon#'] = is_object($swap) ? (!empty($swap->getDisplay('icon')) ? $swap->getDisplay('icon') : '<i class="fas fa-layer-group"></i>') : '';
 		$replace['#swap#'] = is_object($swap) ? $swap->execCmd() : '';
@@ -1136,6 +1148,7 @@ class Monitoring extends eqLogic {
 
 		$this->getStats($swap_free_percent, 'swap_free_percent', $replace, 0);
 
+		// Réseau
 		$network = $this->getCmd(null,'network');
 		$replace['#network_icon#'] = is_object($network) ? (!empty($network->getDisplay('icon')) ? $network->getDisplay('icon') : '<i class="fas fa-network-wired"></i>') : '';
 		$replace['#network#'] = is_object($network) ? $network->execCmd() : '';
@@ -1152,6 +1165,7 @@ class Monitoring extends eqLogic {
 		$replace['#network_ip#'] = is_object($network_ip) ? $network_ip->execCmd() : '';
 		$replace['#network_ip_id#'] = is_object($network_ip) ? $network_ip->getId() : '';
 
+		// CPU
 		$cpu = $this->getCmd(null,'cpu');
 		$replace['#cpu_icon#'] = is_object($cpu) ? (!empty($cpu->getDisplay('icon')) ? $cpu->getDisplay('icon') : '<i class="fas fa-microchip"></i>') : '';
 		$replace['#cpu#'] = is_object($cpu) ? $cpu->execCmd() : '';
@@ -1163,6 +1177,7 @@ class Monitoring extends eqLogic {
 		$cpu_temp = $this->getCmd(null,'cpu_temp');
 		$replace['#cpu_temp#'] = is_object($cpu_temp) ? $cpu_temp->execCmd() : '';
 		$replace['#cpu_temp_id#'] = is_object($cpu_temp) ? $cpu_temp->getId() : '';
+		
 		$replace['#cpu_temp_display#'] = (is_object($cpu_temp) && $cpu_temp->getIsVisible()) ? 'OK' : '';
 
 		$replace['#cpu_temp_colorlow#'] = $this->getConfiguration('cpu_temp_colorlow');
@@ -1171,9 +1186,21 @@ class Monitoring extends eqLogic {
 		$this->getStats($cpu_temp, 'cpu_temp', $replace, 0);
 
 		// Syno Volume 2
-		$SynoV2Visible = (is_object($this->getCmd(null,'syno_hddv2_total')) && $this->getCmd(null,'syno_hddv2_total')->getIsVisible()) ? 'OK' : '';
+		$SynoV2Visible = (is_object($this->getCmd(null,'syno_hddv2')) && $this->getCmd(null,'syno_hddv2')->getIsVisible()) ? 'OK' : '';
 
 		if ($this->getConfiguration('synology') == '1' && $SynoV2Visible == 'OK' && $this->getConfiguration('synologyv2') == '1') {
+			$syno_hddv2 = $this->getCmd(null,'syno_hddv2');
+			$replace['#syno_hddv2_icon#'] = is_object($syno_hddv2) ? (!empty($syno_hddv2->getDisplay('icon')) ? $syno_hddv2->getDisplay('icon') : '<i class="far fa-hdd"></i>') : '';
+			$replace['#syno_hddv2_collect#'] = (is_object($syno_hddv2) && $syno_hddv2->getIsVisible()) ? $syno_hddv2->getCollectDate() : "-";
+        	$replace['#syno_hddv2_value#'] = (is_object($syno_hddv2) && $syno_hddv2->getIsVisible()) ? $syno_hddv2->getValueDate() : "-";
+			$replace['#syno_hddv2_display#'] = (is_object($syno_hddv2) && $syno_hddv2->getIsVisible()) ? "block" : "none";
+			
+			$replace['#synovolume2_display#'] = (is_object($syno_hddv2) && $syno_hddv2->getIsVisible()) ? 'OK' : '';
+
+			$syno_hddv2_total = $this->getCmd(null,'syno_hddv2_total');
+			$replace['#syno_hddv2_total#'] = is_object($syno_hddv2_total) ? $syno_hddv2_total->execCmd() : '';
+			$replace['#syno_hddv2_total_id#'] = is_object($syno_hddv2_total) ? $syno_hddv2_total->getId() : '';
+			
 			$syno_hddv2_used = $this->getCmd(null,'syno_hddv2_used');
 			$replace['#syno_hddv2_used#'] = is_object($syno_hddv2_used) ? $syno_hddv2_used->execCmd() : '';
 			$replace['#syno_hddv2_used_id#'] = is_object($syno_hddv2_used) ? $syno_hddv2_used->getId() : '';
@@ -1185,21 +1212,23 @@ class Monitoring extends eqLogic {
 			$replace['#syno_hddv2_used_percent_colorhigh#'] = $this->getConfiguration('syno_hddv2_used_percent_colorhigh');
 
 			$this->getStats($syno_hddv2_used_percent, 'syno_hddv2_used_percent', $replace, 0);
-
-			$syno_hddv2_total = $this->getCmd(null,'syno_hddv2_total');
-			$replace['#syno_hddv2_total_icon#'] = is_object($syno_hddv2_total) ? (!empty($syno_hddv2_total->getDisplay('icon')) ? $syno_hddv2_total->getDisplay('icon') : '<i class="far fa-hdd"></i>') : '';
-			$replace['#synovolume2_display#'] = (is_object($syno_hddv2_total) && $syno_hddv2_total->getIsVisible()) ? 'OK' : '';
-			$replace['#syno_hddv2_used_display#'] = (is_object($syno_hddv2_total) && $syno_hddv2_total->getIsVisible()) ? "block" : "none";
-			$replace['#syno_hddv2_total#'] = is_object($syno_hddv2_total) ? $syno_hddv2_total->execCmd() : '';
-			$replace['#syno_hddv2_total_id#'] = is_object($syno_hddv2_total) ? $syno_hddv2_total->getId() : '';
-			$replace['#syno_hddv2_total_collect#'] = (is_object($syno_hddv2_total) && $syno_hddv2_total->getIsVisible()) ? $syno_hddv2_total->getCollectDate() : "-";
-        	$replace['#syno_hddv2_total_value#'] = (is_object($syno_hddv2_total) && $syno_hddv2_total->getIsVisible()) ? $syno_hddv2_total->getValueDate() : "-";
 		}
 
 		// Syno Volume USB
-		$SynoUSBVisible = (is_object($this->getCmd(null,'syno_hddusb_total')) && $this->getCmd(null,'syno_hddusb_total')->getIsVisible()) ? 'OK' : '';
+		$SynoUSBVisible = (is_object($this->getCmd(null,'syno_hddusb')) && $this->getCmd(null,'syno_hddusb')->getIsVisible()) ? 'OK' : '';
 
 		if ($this->getConfiguration('synology') == '1' && $SynoUSBVisible == 'OK' && $this->getConfiguration('synologyusb') == '1') {
+			$syno_hddusb = $this->getCmd(null,'syno_hddusb');
+			$replace['#syno_hddusb_icon#'] = is_object($syno_hddusb) ? (!empty($syno_hddusb->getDisplay('icon')) ? $syno_hddusb->getDisplay('icon') : '<i class="fab fa-usb"></i>') : '';
+			$replace['#syno_hddusb_display#'] = (is_object($syno_hddusb) && $syno_hddusb->getIsVisible()) ? "block" : "none";
+			$replace['#synovolumeusb_display#'] = (is_object($syno_hddusb) && $syno_hddusb->getIsVisible()) ? 'OK' : '';
+			$replace['#syno_hddusb_collect#'] = (is_object($syno_hddusb) && $syno_hddusb->getIsVisible()) ? $syno_hddusb->getCollectDate() : "-";
+        	$replace['#syno_hddusb_value#'] = (is_object($syno_hddusb) && $syno_hddusb->getIsVisible()) ? $syno_hddusb->getValueDate() : "-";
+
+			$syno_hddusb_total = $this->getCmd(null,'syno_hddusb_total');	
+			$replace['#syno_hddusb_total#'] = is_object($syno_hddusb_total) ? $syno_hddusb_total->execCmd() : '';
+			$replace['#syno_hddusb_total_id#'] = is_object($syno_hddusb_total) ? $syno_hddusb_total->getId() : '';
+			
 			$syno_hddusb_used = $this->getCmd(null,'syno_hddusb_used');
 			$replace['#syno_hddusb_used#'] = is_object($syno_hddusb_used) ? $syno_hddusb_used->execCmd() : '';
 			$replace['#syno_hddusb_used_id#'] = is_object($syno_hddusb_used) ? $syno_hddusb_used->getId() : '';
@@ -1207,26 +1236,27 @@ class Monitoring extends eqLogic {
 			$syno_hddusb_used_percent = $this->getCmd(null,'syno_hddusb_used_percent');
 			$replace['#syno_hddusb_used_percent#'] = is_object($syno_hddusb_used_percent) ? $syno_hddusb_used_percent->execCmd() : '';
 			$replace['#syno_hddusb_used_percent_id#'] = is_object($syno_hddusb_used_percent) ? $syno_hddusb_used_percent->getId() : '';
-
 			$replace['#syno_hddusb_used_percent_colorlow#'] = $this->getConfiguration('syno_hddusb_used_percent_colorlow');
 			$replace['#syno_hddusb_used_percent_colorhigh#'] = $this->getConfiguration('syno_hddusb_used_percent_colorhigh');
 
 			$this->getStats($syno_hddusb_used_percent, 'syno_hddusb_used_percent', $replace, 0);
-
-			$syno_hddusb_total = $this->getCmd(null,'syno_hddusb_total');
-			$replace['#syno_hddusb_total_icon#'] = is_object($syno_hddusb_total) ? (!empty($syno_hddusb_total->getDisplay('icon')) ? $syno_hddusb_total->getDisplay('icon') : '<i class="fab fa-usb"></i>') : '';
-			$replace['#synovolumeusb_display#'] = (is_object($syno_hddusb_total) && $syno_hddusb_total->getIsVisible()) ? 'OK' : '';
-			$replace['#syno_hddusb_used_display#'] = (is_object($syno_hddusb_total) && $syno_hddusb_total->getIsVisible()) ? "block" : "none";
-			$replace['#syno_hddusb_total#'] = is_object($syno_hddusb_total) ? $syno_hddusb_total->execCmd() : '';
-			$replace['#syno_hddusb_total_id#'] = is_object($syno_hddusb_total) ? $syno_hddusb_total->getId() : '';
-			$replace['#syno_hddusb_total_collect#'] = (is_object($syno_hddusb_total) && $syno_hddusb_total->getIsVisible()) ? $syno_hddusb_total->getCollectDate() : "-";
-        	$replace['#syno_hddusb_total_value#'] = (is_object($syno_hddusb_total) && $syno_hddusb_total->getIsVisible()) ? $syno_hddusb_total->getValueDate() : "-";
 		}
 
 		// Syno Volume eSATA
-		$SynoeSATAVisible = (is_object($this->getCmd(null,'syno_hddesata_total')) && $this->getCmd(null,'syno_hddesata_total')->getIsVisible()) ? 'OK' : '';
+		$SynoeSATAVisible = (is_object($this->getCmd(null,'syno_hddesata')) && $this->getCmd(null,'syno_hddesata')->getIsVisible()) ? 'OK' : '';
 
 		if ($this->getConfiguration('synology') == '1' && $SynoeSATAVisible == 'OK' && $this->getConfiguration('synologyesata') == '1') {
+			$syno_hddesata = $this->getCmd(null,'syno_hddesata');
+			$replace['#syno_hddesata_icon#'] = is_object($syno_hddesata) ? (!empty($syno_hddesata->getDisplay('icon')) ? $syno_hddesata->getDisplay('icon') : '<i class="fab fa-usb"></i>') : '';
+			$replace['#syno_hddesata_display#'] = (is_object($syno_hddesata) && $syno_hddesata->getIsVisible()) ? "block" : "none";
+			$replace['#synovolumeesata_display#'] = (is_object($syno_hddesata) && $syno_hddesata->getIsVisible()) ? 'OK' : '';
+			$replace['#syno_hddesata_collect#'] = (is_object($syno_hddesata) && $syno_hddesata->getIsVisible()) ? $syno_hddesata->getCollectDate() : "-";
+        	$replace['#syno_hddesata_value#'] = (is_object($syno_hddesata) && $syno_hddesata->getIsVisible()) ? $syno_hddesata->getValueDate() : "-";
+
+			$syno_hddesata_total = $this->getCmd(null,'syno_hddesata_total');
+			$replace['#syno_hddesata_total#'] = is_object($syno_hddesata_total) ? $syno_hddesata_total->execCmd() : '';
+			$replace['#syno_hddesata_total_id#'] = is_object($syno_hddesata_total) ? $syno_hddesata_total->getId() : '';
+
 			$syno_hddesata_used = $this->getCmd(null,'syno_hddesata_used');
 			$replace['#syno_hddesata_used#'] = is_object($syno_hddesata_used) ? $syno_hddesata_used->execCmd() : '';
 			$replace['#syno_hddesata_used_id#'] = is_object($syno_hddesata_used) ? $syno_hddesata_used->getId() : '';
@@ -1234,55 +1264,43 @@ class Monitoring extends eqLogic {
 			$syno_hddesata_used_percent = $this->getCmd(null,'syno_hddesata_used_percent');
 			$replace['#syno_hddesata_used_percent#'] = is_object($syno_hddesata_used_percent) ? $syno_hddesata_used_percent->execCmd() : '';
 			$replace['#syno_hddesata_used_percent_id#'] = is_object($syno_hddesata_used_percent) ? $syno_hddesata_used_percent->getId() : '';
-
 			$replace['#syno_hddesata_used_percent_colorlow#'] = $this->getConfiguration('syno_hddesata_used_percent_colorlow');
 			$replace['#syno_hddesata_used_percent_colorhigh#'] = $this->getConfiguration('syno_hddesata_used_percent_colorhigh');
 
 			$this->getStats($syno_hddesata_used_percent, 'syno_hddesata_used_percent', $replace, 0);
-
-			$syno_hddesata_total = $this->getCmd(null,'syno_hddesata_total');
-			$replace['#syno_hddesata_total_icon#'] = is_object($syno_hddesata_total) ? (!empty($syno_hddesata_total->getDisplay('icon')) ? $syno_hddesata_total->getDisplay('icon') : '<i class="fab fa-usb"></i>') : '';
-			$replace['#synovolumeesata_display#'] = (is_object($syno_hddesata_total) && $syno_hddesata_total->getIsVisible()) ? 'OK' : '';
-			$replace['#syno_hddesata_used_display#'] = (is_object($syno_hddesata_total) && $syno_hddesata_total->getIsVisible()) ? "block" : "none";
-			$replace['#syno_hddesata_total#'] = is_object($syno_hddesata_total) ? $syno_hddesata_total->execCmd() : '';
-			$replace['#syno_hddesata_total_id#'] = is_object($syno_hddesata_total) ? $syno_hddesata_total->getId() : '';
-			$replace['#syno_hddesata_total_collect#'] = (is_object($syno_hddesata_total) && $syno_hddesata_total->getIsVisible()) ? $syno_hddesata_total->getCollectDate() : "-";
-        	$replace['#syno_hddesata_total_value#'] = (is_object($syno_hddesata_total) && $syno_hddesata_total->getIsVisible()) ? $syno_hddesata_total->getValueDate() : "-";
 		}
 
+		// Perso1
 		$perso1 = $this->getCmd(null,'perso1');
 		$replace['#perso1#'] = is_object($perso1) ? $perso1->execCmd() : '';
-		$replace['#perso1_id#'] = is_object($perso1) ? $perso1->getId() : '';
+		$replace['#perso1_icon#'] = is_object($perso1) ? (!empty($perso1->getDisplay('icon')) ? $perso1->getDisplay('icon') : '<i class="fas fa-question-circle"></i>') : '';
 		$replace['#perso1_display#'] = (is_object($perso1) && $perso1->getIsVisible()) ? "block" : "none";
 		$replace['#perso1_collect#'] = (is_object($perso1) && $perso1->getIsVisible()) ? $perso1->getCollectDate() : "-";
         $replace['#perso1_value#'] = (is_object($perso1) && $perso1->getIsVisible()) ? $perso1->getValueDate() : "-";
-		
+
+		$replace['#perso1_id#'] = is_object($perso1) ? $perso1->getId() : '';
 		$replace['#perso1_name#'] = is_object($perso1) ? $perso1->getName() : '';
-		$replace['#perso1_icon#'] = is_object($perso1) ? (!empty($perso1->getDisplay('icon')) ? $perso1->getDisplay('icon') : '<i class="fas fa-question-circle"></i>') : '';
 
-		$perso1_unite = $this->getConfiguration('perso1_unite');
-		$replace['#perso1_unite#'] = is_object($perso1) ? $perso1_unite : '';
-
-		$replace ['#perso1_colorlow#'] = $this->getConfiguration('perso1_colorlow');
-		$replace ['#perso1_colorhigh#'] = $this->getConfiguration('perso1_colorhigh');
+		$replace['#perso1_unite#'] = is_object($perso1) ? $this->getConfiguration('perso1_unite') : '';
+		$replace['#perso1_colorlow#'] = $this->getConfiguration('perso1_colorlow');
+		$replace['#perso1_colorhigh#'] = $this->getConfiguration('perso1_colorhigh');
 
 		$this->getStats($perso1, 'perso1', $replace, 2);
 
+		// Perso2
 		$perso2 = $this->getCmd(null,'perso2');
 		$replace['#perso2#'] = is_object($perso2) ? $perso2->execCmd() : '';
-		$replace['#perso2_id#'] = is_object($perso2) ? $perso2->getId() : '';
+		$replace['#perso2_icon#'] = (is_object($perso2)) ? (!empty($perso2->getDisplay('icon')) ? $perso2->getDisplay('icon') : '<i class="fas fa-question-circle"></i>') : '';
 		$replace['#perso2_display#'] = (is_object($perso2) && $perso2->getIsVisible()) ? "block" : "none";
 		$replace['#perso2_collect#'] = (is_object($perso2) && $perso2->getIsVisible()) ? $perso2->getCollectDate() : "-";
         $replace['#perso2_value#'] = (is_object($perso2) && $perso2->getIsVisible()) ? $perso2->getValueDate() : "-";
 		
+		$replace['#perso2_id#'] = is_object($perso2) ? $perso2->getId() : '';
 		$replace['#perso2_name#'] = (is_object($perso2)) ? $perso2->getName() : '';
-		$replace['#perso2_icon#'] = (is_object($perso2)) ? (!empty($perso2->getDisplay('icon')) ? $perso2->getDisplay('icon') : '<i class="fas fa-question-circle"></i>') : '';
 		
-		$perso2_unite = $this->getConfiguration('perso2_unite');
-		$replace['#perso2_unite#'] = is_object($perso2) ? $perso2_unite : '';
-
-		$replace ['#perso2_colorlow#'] = $this->getConfiguration('perso2_colorlow');
-		$replace ['#perso2_colorhigh#'] = $this->getConfiguration('perso2_colorhigh');
+		$replace['#perso2_unite#'] = is_object($perso2) ? $this->getConfiguration('perso2_unite') : '';
+		$replace['#perso2_colorlow#'] = $this->getConfiguration('perso2_colorlow');
+		$replace['#perso2_colorhigh#'] = $this->getConfiguration('perso2_colorhigh');
 
 		$this->getStats($perso2, 'perso2', $replace, 2);
 
@@ -1291,7 +1309,7 @@ class Monitoring extends eqLogic {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
 		}
 
-		$html = template_replace($replace, getTemplate('core', $_version, 'Monitoring','Monitoring'));
+		$html = template_replace($replace, getTemplate('core', $_version, 'Monitoring', 'Monitoring'));
 		cache::set('MonitoringWidget' . $_version . $this->getId(), $html, 0);
 		
 		return $html;

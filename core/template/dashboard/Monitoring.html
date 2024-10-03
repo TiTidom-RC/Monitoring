@@ -84,11 +84,11 @@
 		</span>
 	</div>
 	<div class="cmds text-left" style="display:block;">
-		<div class="tooltips" data-cmd_id="#distri_name_id#" style="margin-left:5px;display: #distri_name_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #distri_name_display#;">
 			<span title="Distribution Linux<br><i>Date de valeur : #distri_name_value#<br>Date de collecte : #distri_name_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
 			<span>#distri_name#</span>
 		</div>
-		<div class="tooltips" data-cmd_id="#uptime_id#" style="margin-left:5px;display: #uptime_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #uptime_display#;">
 			<span title="Temps d'Activité (UpTime)<br><i>Date de valeur : #uptime_value#<br>Date de collecte : #uptime_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
 			<span id="uptime#id#"></span>
 		</div>
@@ -98,7 +98,7 @@
 			}
 		</script>
 		<div class="tooltips" style="margin-left:5px;display: #loadavg_display#;">
-			<span title="Charge Système (Load Average)<br><i>Date de valeur : #loadavg_value#<br>Date de collecte : #loadavg_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#load_avg_1mn_icon#</span>
+			<span title="Charge Système (Load Average)<br><i>Date de valeur : #loadavg_value#<br>Date de collecte : #loadavg_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
 			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
 		<script>
@@ -140,7 +140,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#memory_free_percent_id#" style="margin-left:5px;display: #memory_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #memory_display#;">
 			<span title="Mémoire Vive (% Libre)<br><i>Date de valeur : #memory_value#<br>Date de collecte : #memory_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
 			<span id="memory_free_percent#id#"></span>
 		</div>
@@ -159,7 +159,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#swap_free_percent_id#" style="margin-left:5px;display: #swap_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #swap_display#;">
 			<span title="Mémoire Swap (% Libre)<br><i>Date de valeur : #swap_value#<br>Date de collecte : #swap_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
 			<span id="swap_free_percent#id#"></span>
 		</div>
@@ -178,7 +178,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#network_id#" style="margin-left:5px;display: #network_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #network_display#;">
 			<span title="Trafic Réseau (#network_name# / #network_ip#)<br><i>Date de valeur : #network_value#<br>Date de collecte : #network_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
 			<span id="network#id#"></span>
 		</div>
@@ -187,20 +187,20 @@
 				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#hdd_used_percent_id#" style="margin-left:5px;display: #hdd_used_display#;">
-			<span title="Espace Disque (% Utilisé)<br><i>Date de valeur : #hdd_total_value#<br>Date de collecte : #hdd_total_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hdd_total_icon#</span>
-			<span id="hdd_used_percent#id#"></span>
+		<div class="tooltips" style="margin-left:5px;display: #hdd_display#;">
+			<span title="Espace Disque (% Utilisé)<br><i>Date de valeur : #hdd_value#<br>Date de collecte : #hdd_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
+			<span id="hdd#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#hdd_used_percent#' === '') {
-					document.getElementById('hdd_used_percent#id#').innerHTML = '<span></span>';
+					document.getElementById('hdd#id#').innerHTML = '<span></span>';
 				} else if (parseInt('#hdd_used_percent#') < parseInt('#hdd_used_percent_colorlow#')) {
-					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';
+					document.getElementById('hdd#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';
 				} else if ((parseInt('#hdd_used_percent#') >= parseInt('#hdd_used_percent_colorlow#')) && (parseInt('#hdd_used_percent#') <= parseInt('#hdd_used_percent_colorhigh#'))) {
-					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';	
+					document.getElementById('hdd#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';	
 				} else if ((parseInt('#hdd_used_percent#') > parseInt('#hdd_used_percent_colorhigh#')) && '#hdd_used_percent_colorhigh#' !== '') {
-					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';
+					document.getElementById('hdd#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';
 				} else {
 					document.getElementById('hdd_used_percent#id#').innerHTML = 'Total : #hdd_total# - Utilisé : #hdd_used# (<span title="Stats : Espace Disque (% Utilisé)<br>Min: #hdd_used_percent_minHistory# | Moy : #hdd_used_percent_averageHistory# | Max : #hdd_used_percent_maxHistory#" data-cmd_id="#hdd_used_percent_id#" class="value history cursor tooltips">#hdd_used_percent#</span><span>%#hdd_used_percent_tendance#</span>)';
 				}
@@ -210,7 +210,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolume2_display#' == 'OK') {
-					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="tooltips" data-cmd_id="#syno_hddv2_used_percent_id#" style="margin-left:5px;display: #syno_hddv2_used_display#;"><span title="Syno Volume 2 (% Utilisé)<br><i>Date de valeur : #syno_hddv2_total_value#<br>Date de collecte : #syno_hddv2_total_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_total_icon#</span> <span id="syno_hddv2_used_percent#id#"></span></div>';
+					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="tooltips" style="margin-left:5px;display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Utilisé)<br><i>Date de valeur : #syno_hddv2_value#<br>Date de collecte : #syno_hddv2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_used_percent#id#"></span></div>';
 					if ('#syno_hddv2_used_percent#' === '') {
 						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddv2_used_percent#') < parseInt('#syno_hddv2_used_percent_colorlow#')) {
@@ -229,8 +229,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="tooltips" data-cmd_id="#syno_hddusb_used_percent_id#" style="margin-left:5px;display: #syno_hddusb_used_display#;"><span title="Syno Volume USB (% Utilisé)<br><i>Date de valeur : #syno_hddusb_total_value#<br>Date de collecte : #syno_hddusb_total_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_total_icon#</span> <span id="syno_hddusb_used_percent#id#"></span></div>';
-				
+					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="tooltips" style="margin-left:5px;display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Utilisé)<br><i>Date de valeur : #syno_hddusb_value#<br>Date de collecte : #syno_hddusb_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_used_percent#id#"></span></div>';
 					if ('#syno_hddusb_used_percent#' === '') {
 						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddusb_used_percent#') < parseInt('#syno_hddusb_used_percent_colorlow#')) {
@@ -249,7 +248,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeesata_display#' == 'OK') {
-					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="tooltips" data-cmd_id="#syno_hddesata_used_percent_id#" style="margin-left:5px;display: #syno_hddesata_used_display#;"><span title="Syno Volume eSATA (% Utilisé)<br><i>Date de valeur : #syno_hddesata_total_value#<br>Date de collecte : #syno_hddesata_total_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_total_icon#</span> <span id="syno_hddesata_used_percent#id#"></span></div>';
+					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="tooltips" style="margin-left:5px;display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Utilisé)<br><i>Date de valeur : #syno_hddesata_value#<br>Date de collecte : #syno_hddesata_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_used_percent#id#"></span></div>';
 					if ('#syno_hddesata_used_percent#' === '') {
 						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddesata_used_percent#') < parseInt('#syno_hddesata_used_percent_colorlow#')) {
@@ -264,7 +263,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#cpu_temp_id#" style="margin-left:5px;display: #cpu_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #cpu_display#;">
 			<span title="Nombre CPU - Fréquence (Température)<br><i>Date de valeur : #cpu_value#<br>Date de collecte : #cpu_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
@@ -286,7 +285,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#perso1_id#" style="margin-left:5px;display: #perso1_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #perso1_display#;">
 			<span title="#perso1_name#<br><i>Date de valeur : #perso1_value#<br>Date de collecte : #perso1_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
@@ -307,7 +306,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" data-cmd_id="#perso2_id#" style="margin-left:5px;display: #perso2_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #perso2_display#;">
 			<span title="#perso2_name#<br><i>Date de valeur : #perso2_value#<br>Date de collecte : #perso2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
