@@ -505,7 +505,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'swap_used');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Swap Libre', __FILE__));
+			$MonitoringCmd->setName(__('Swap Utilisé', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('swap_used');
 			$MonitoringCmd->setType('info');
