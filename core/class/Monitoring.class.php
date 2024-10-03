@@ -1440,7 +1440,6 @@ class Monitoring extends eqLogic {
 			$network_ip = '';
 	
 			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
-	
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 	
 			// Configuration distante
@@ -2456,12 +2455,16 @@ class Monitoring extends eqLogic {
 					# TODO ajouter les commandes type syno ou temp
 	
 					$dataresult = array(
+						'cnx_ssh' => $cnx_ssh,
 						'distri_name' => $distri_name,
 						'uptime' => $uptime,
 						'load_avg_1mn' => $load_avg_1mn,
 						'load_avg_5mn' => $load_avg_5mn,
 						'load_avg_15mn' => $load_avg_15mn,
 						'memory' => $memory,
+						'memory_free_percent' => $memorylibre_percent,
+						'swap' => $Memswap,
+						'swap_free_percent' => $swaplibre_percent,
 						'network' => $network,
 						'network_name' => $network_name,
 						'network_ip' => $network_ip,
@@ -2470,196 +2473,51 @@ class Monitoring extends eqLogic {
 						'hdd_used_percent' => $hdd_used_percent,
 						'cpu' => $cpu,
 						'cpu_temp' => $cputemp0,
-						'cnx_ssh' => $cnx_ssh,
-						'swap' => $Memswap,
-						'memory_free_percent' => $memorylibre_percent,
-						'swap_free_percent' => $swaplibre_percent,
 						'perso1' => $perso1,
 						'perso2' => $perso2,
 					);
-					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
-						$dataresultv2 = array(
-							'syno_hddv2_total' => $syno_hddv2_total,
-							'syno_hddv2_used' => $syno_hddv2_used,
-							'syno_hddv2_used_percent' => $syno_hddv2_used_percent,
-						);
+
+					if ($this->getConfiguration('synology') == '1') {
+						if ($this->getConfiguration('synologyv2') == '1') {
+							$dataresult = array_merge($dataresult, [
+								'syno_hddv2_total' => $syno_hddv2_total,
+								'syno_hddv2_used' => $syno_hddv2_used,
+								'syno_hddv2_used_percent' => $syno_hddv2_used_percent,
+							]);
+						}
+						if ($this->getConfiguration('synologyusb') == '1') {
+							$dataresult = array_merge($dataresult, [
+								'syno_hddusb_total' => $syno_hddusb_total,
+								'syno_hddusb_used' => $syno_hddusb_used,
+								'syno_hddusb_used_percent' => $syno_hddusb_used_percent,
+							]);
+						}
+						if ($this->getConfiguration('synologyesata') == '1') {
+							$dataresult = array_merge($dataresult, [
+								'syno_hddesata_total' => $syno_hddesata_total,
+								'syno_hddesata_used' => $syno_hddesata_used,
+								'syno_hddesata_used_percent' => $syno_hddesata_used_percent,
+							]);
+						}
 					}
-	
-					// Syno Volume USB
-					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
-						$dataresultusb = array(
-							'syno_hddusb_total' => $syno_hddusb_total,
-							'syno_hddusb_used' => $syno_hddusb_used,
-							'syno_hddusb_used_percent' => $syno_hddusb_used_percent,
-						);
-					}
-	
-					// Syno Volume eSATA
-					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1') {
-						$dataresultesata = array(
-							'syno_hddesata_total' => $syno_hddesata_total,
-							'syno_hddesata_used' => $syno_hddesata_used,
-							'syno_hddesata_used_percent' => $syno_hddesata_used_percent,
-						);
-					}
-	
+
 					// Event sur les commandes après récupération des données
-					$cnx_ssh = $this->getCmd(null,'cnx_ssh');
-					if (is_object($cnx_ssh)) {
-						$cnx_ssh->event($dataresult['cnx_ssh']);
-					}
-	
-					$distri_name = $this->getCmd(null,'distri_name');
-					if (is_object($distri_name)) {
-						$distri_name->event($dataresult['distri_name']);
-					}
-	
-					$uptime = $this->getCmd(null,'uptime');
-					if (is_object($uptime)) {
-						$uptime->event($dataresult['uptime']);
-					}
-	
-					$load_avg_1mn = $this->getCmd(null,'load_avg_1mn');
-					if (is_object($load_avg_1mn)) {
-						$load_avg_1mn->event($dataresult['load_avg_1mn']);
-					}
-	
-					$load_avg_5mn = $this->getCmd(null,'load_avg_5mn');
-					if (is_object($load_avg_5mn)) {
-						$load_avg_5mn->event($dataresult['load_avg_5mn']);
-					}
-	
-					$load_avg_15mn = $this->getCmd(null,'load_avg_15mn');
-					if (is_object($load_avg_15mn)) {
-						$load_avg_15mn->event($dataresult['load_avg_15mn']);
-					}
-	
-					$memory = $this->getCmd(null,'memory');
-					if (is_object($memory)) {
-						$memory->event($dataresult['memory']);
-					}
-	
-					$memory_free_percent = $this->getCmd(null,'memory_free_percent');
-					if (is_object($memory_free_percent)) {
-						$memory_free_percent->event($dataresult['memory_free_percent']);
-					}
-	
-					$swap = $this->getCmd(null,'swap');
-					if (is_object($swap)) {
-						$swap->event($dataresult['swap']);
-					}
-	
-					$swap_free_percent = $this->getCmd(null,'swap_free_percent');
-					if (is_object($swap_free_percent)) {
-						$swap_free_percent->event($dataresult['swap_free_percent']);
-					}
-	
-					$network = $this->getCmd(null,'network');
-					if (is_object($network)) {
-						$network->event($dataresult['network']);
-					}
-	
-					$network_name = $this->getCmd(null,'network_name');
-					if (is_object($network_name)) {
-						$network_name->event($dataresult['network_name']);
-					}
-	
-					$network_ip = $this->getCmd(null,'network_ip');
-					if (is_object($network_ip)) {
-						$network_ip->event($dataresult['network_ip']);
-					}
-	
-					$hdd_total = $this->getCmd(null,'hdd_total');
-					if (is_object($hdd_total)) {
-						$hdd_total->event($dataresult['hdd_total']);
-					}
-	
-					$hdd_used = $this->getCmd(null,'hdd_used');
-					if (is_object($hdd_used)) {
-						$hdd_used->event($dataresult['hdd_used']);
-					}
-	
-					$hdd_used_percent = $this->getCmd(null,'hdd_used_percent');
-					if (is_object($hdd_used_percent)) {
-						$hdd_used_percent->event($dataresult['hdd_used_percent']);
-					}
-	
-					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
-						$syno_hddv2_total = $this->getCmd(null,'syno_hddv2_total');
-						if (is_object($syno_hddv2_total)) {
-							$syno_hddv2_total->event($dataresultv2['syno_hddv2_total']);
+					foreach ($dataresult as $key => $value) {
+						$cmd = $this->getCmd(null, $key);
+						if (is_object($cmd)) {
+							$cmd->event($value);
 						}
-						$syno_hddv2_used = $this->getCmd(null,'syno_hddv2_used');
-						if (is_object($syno_hddv2_used)) {
-							$syno_hddv2_used->event($dataresultv2['syno_hddv2_used']);
-						}
-						$syno_hddv2_used_percent = $this->getCmd(null,'syno_hddv2_used_percent');
-						if (is_object($syno_hddv2_used_percent)) {
-							$syno_hddv2_used_percent->event($dataresultv2['syno_hddv2_used_percent']);
-						}
-					}
-	
-					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
-						$syno_hddusb_total = $this->getCmd(null,'syno_hddusb_total');
-						if (is_object($syno_hddusb_total)) {
-							$syno_hddusb_total->event($dataresultusb['syno_hddusb_total']);
-						}
-						$syno_hddusb_used = $this->getCmd(null,'syno_hddusb_used');
-						if (is_object($syno_hddusb_used)) {
-							$syno_hddusb_used->event($dataresultusb['syno_hddusb_used']);
-						}
-						$syno_hddusb_used_percent = $this->getCmd(null,'syno_hddusb_used_percent');
-						if (is_object($syno_hddusb_used_percent)) {
-							$syno_hddusb_used_percent->event($dataresultusb['syno_hddusb_used_percent']);
-						}
-					}
-	
-					if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1') {
-						$syno_hddesata_total = $this->getCmd(null,'syno_hddesata_total');
-						if (is_object($syno_hddesata_total)) {
-							$syno_hddesata_total->event($dataresultesata['syno_hddesata_total']);
-						}
-						$syno_hddesata_used = $this->getCmd(null,'syno_hddesata_used');
-						if (is_object($syno_hddesata_used)) {
-							$syno_hddesata_used->event($dataresultesata['syno_hddesata_used']);
-						}
-						$syno_hddesata_used_percent = $this->getCmd(null,'syno_hddesata_used_percent');
-						if (is_object($syno_hddesata_used_percent)) {
-							$syno_hddesata_used_percent->event($dataresultesata['syno_hddesata_used_percent']);
-						}
-					}
-	
-					$cpu = $this->getCmd(null,'cpu');
-					if (is_object($cpu)) {
-						$cpu->event($dataresult['cpu']);
-					}
-	
-					$cpu_temp = $this->getCmd(null,'cpu_temp');
-					if (is_object($cpu_temp)) {
-						$cpu_temp->event($dataresult['cpu_temp']);
-					}
-	
-					$perso1 = $this->getCmd(null,'perso1');
-					if (is_object($perso1)) {
-						$perso1->event($dataresult['perso1']);
-					}
-	
-					$perso2 = $this->getCmd(null,'perso2');
-					if (is_object($perso2)) {
-						$perso2->event($dataresult['perso2']);
 					}
 				} elseif ($cnx_ssh == 'KO') {
 					$dataresult = array(
 						'distri_name' => 'Connexion SSH KO',
 						'cnx_ssh' => $cnx_ssh
 					);
-					$distri_name = $this->getCmd(null,'distri_name');
-					if (is_object($distri_name)) {
-						$distri_name->event($dataresult['distri_name']);
-					}
-					$cnx_ssh = $this->getCmd(null,'cnx_ssh');
-					if (is_object($cnx_ssh)) {
-						$cnx_ssh->event($dataresult['cnx_ssh']);
+					foreach ($dataresult as $key => $value) {
+						$cmd = $this->getCmd(null, $key);
+						if (is_object($cmd)) {
+							$cmd->event($value);
+						}
 					}
 				}
 			}
