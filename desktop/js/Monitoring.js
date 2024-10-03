@@ -27,7 +27,7 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'distri_name' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'load_avg_1mn' || _cmd.logicalId == 'memory' || _cmd.logicalId == 'swap' || _cmd.logicalId == 'network' || _cmd.logicalId == 'hdd_total' || _cmd.logicalId == 'syno_hddv2_total' || _cmd.logicalId == 'syno_hddusb_total' || _cmd.logicalId == 'syno_hddesata_total' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (_cmd.logicalId == 'distri_name' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'load_avg' || _cmd.logicalId == 'memory' || _cmd.logicalId == 'swap' || _cmd.logicalId == 'network' || _cmd.logicalId == 'hdd' || _cmd.logicalId == 'syno_hddv2' || _cmd.logicalId == 'syno_hddusb' || _cmd.logicalId == 'syno_hddesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
 		tr += '<div class="input-group">'
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
