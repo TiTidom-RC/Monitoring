@@ -27,7 +27,7 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'distri_name' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'load_avg' || _cmd.logicalId == 'memory' || _cmd.logicalId == 'swap' || _cmd.logicalId == 'network' || _cmd.logicalId == 'hdd' || _cmd.logicalId == 'syno_hddv2' || _cmd.logicalId == 'syno_hddusb' || _cmd.logicalId == 'syno_hddesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (['distri_name', 'uptime', 'load_avg', 'memory', 'swap', 'network', 'hdd', 'syno_hddv2', 'syno_hddusb', 'syno_hddesata', 'cpu', 'perso1', 'perso2'].includes(_cmd.logicalId)) {
 		tr += '<div class="input-group">'
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
@@ -40,42 +40,39 @@ function addCmdToTable(_cmd) {
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
 		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom de la commande}}" style="margin: 1px auto;">';
 	}
-	if (_cmd.logicalId == 'cron_status' || _cmd.logicalId == 'cron_on' || _cmd.logicalId == 'cron_off') {
+	if (['cron_status', 'cron_on', 'cron_off'].includes(_cmd.logicalId)) {
 		tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">';
   		tr += '<option value="">{{Aucune}}</option>';
 		tr += '</select>';
 	}
 	tr += '</td>';
 	tr += '<td>';
-	if (_cmd.logicalId == 'load_avg_1mn' || _cmd.logicalId == 'load_avg_5mn' || _cmd.logicalId == 'load_avg_15mn' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hdd_used_percent' || _cmd.logicalId == 'syno_hddv2_used_percent' || _cmd.logicalId == 'syno_hddusb_used_percent' || _cmd.logicalId == 'syno_hddesata_used_percent') {
+	if (['load_avg_1mn', 'load_avg_5mn', 'load_avg_15mn', 'cpu_temp', 'hdd_used_percent', 'syno_hddv2_used_percent', 'syno_hddusb_used_percent', 'syno_hddesata_used_percent'].includes(_cmd.logicalId)) {
 		tr += '<span class="cmdAttr" style="color: green;font-weight: bold;">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red;font-weight: bold;"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	}
-	if (_cmd.logicalId == 'memory_free_percent' || _cmd.logicalId == 'swap_free_percent') {
+	if (['memory_free_percent', 'swap_free_percent'].includes(_cmd.logicalId)) {
 		tr += '<span class="cmdAttr" style="color: red;font-weight: bold;">[Rouge] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: green;font-weight: bold;"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Vert]</span>';
 	}
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2') {
+	if (['perso1', 'perso2'].includes(_cmd.logicalId)) {
 		tr += '<span><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '" style="margin: 1px auto;width: 70%;display: inherit" ></input></span>';
 		tr += '<span class="cmdAttr"> Unité : <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_unite" style="margin: 1px auto;width: 10%;display: inherit" ></input></span>';
         tr += '<br/><span class="cmdAttr" style="color: green;font-weight: bold;">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red;font-weight: bold;"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	}
 	tr += '</td>';
-	
 	tr += '<td>';
-	if (_cmd.logicalId == 'reboot' || _cmd.logicalId == 'poweroff' || _cmd.logicalId == 'distri_name' || _cmd.logicalId == 'uptime' || _cmd.logicalId == 'load_avg' || _cmd.logicalId == 'memory' || _cmd.logicalId == 'swap' || _cmd.logicalId == 'network' || _cmd.logicalId == 'hdd' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'syno_hddv2' || _cmd.logicalId == 'syno_hddusb' || _cmd.logicalId == 'syno_hddesata' || _cmd.logicalId == 'cpu' || _cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_status') {
+	if (['reboot', 'poweroff', 'distri_name', 'uptime', 'load_avg', 'memory', 'swap', 'network', 'hdd', 'cpu_temp', 'syno_hddv2', 'syno_hddusb', 'syno_hddesata', 'cpu', 'perso1', 'perso2', 'cron_status'].includes(_cmd.logicalId)) {
 		tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked /> {{Afficher}}<br/></label>';
 	}
-	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'load_avg_1mn' || _cmd.logicalId == 'load_avg_5mn' || _cmd.logicalId == 'load_avg_15mn' || _cmd.logicalId == 'memory_free_percent' || _cmd.logicalId == 'swap_free_percent' || _cmd.logicalId == 'cpu_temp' || _cmd.logicalId == 'hdd_used_percent' || _cmd.logicalId == 'syno_hddv2_used_percent' || _cmd.logicalId == 'syno_hddusb_used_percent' || _cmd.logicalId == 'syno_hddesata_used_percent' || _cmd.logicalId == 'cron_status') {
+	if (['cron_status', 'uptime_sec', 'load_avg_1mn', 'load_avg_5mn', 'load_avg_15mn', 'memory_total', 'memory_used', 'memory_free', 'memory_buffcache', 'memory_available', 'memory_free_percent', 'memory_used_percent', 'memory_available_percent', 'swap_free_percent', 'swap_used_percent', 'swap_total', 'swap_used', 'swap_free', 'network_tx', 'network_rx', 'hdd_total', 'hdd_used', 'hdd_free', 'hdd_used_percent', 'hdd_free_percent', 'cpu_temp', 'perso1', 'perso2', 'syno_hddv2_total', 'syno_hddv2_used', 'syno_hddv2_free', 'syno_hddv2_used_percent', 'syno_hddv2_free_percent', 'syno_hddusb_total', 'syno_hddusb_used', 'syno_hddusb_used_percent', 'syno_hddusb_free', 'syno_hddusb_free_percent', 'syno_hddesata_total', 'syno_hddesata_used', 'syno_hddesata_used_percent', 'syno_hddesata_free', 'syno_hddesata_free_percent'].includes(_cmd.logicalId)) {
 		tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isHistorized" /> {{Historiser}}</label>';
 	}
 	tr += '</td>';
-
 	tr += '<td>';
 	if (_cmd.logicalId == 'perso1' || _cmd.logicalId == 'perso2' || _cmd.logicalId == 'cron_status') {
 		tr += '<span class="type" type="info"></span>';
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	}
 	tr += '</td>';
-
 	tr += '<td>';
 	tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
 	tr += '</td>';
@@ -87,7 +84,6 @@ function addCmdToTable(_cmd) {
 	}
 	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i>';
 	tr += '</td>';
-	
 	tr += '</tr>';
 	
 	let newRow = document.createElement('tr')
