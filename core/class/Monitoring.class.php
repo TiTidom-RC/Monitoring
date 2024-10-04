@@ -1548,7 +1548,7 @@ class Monitoring extends eqLogic {
 					$loadav = $this->execSSH($hostId, $loadavg_cmd, 'LoadAverage');
 
 					// Memory Command
-					$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
+					$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
 					$memory = $this->execSSH($hostId, $memory_cmd, 'Memory');
 
 					// Swap Command
@@ -2042,7 +2042,7 @@ class Monitoring extends eqLogic {
 				$loadav = $this->execSRV($loadavg_cmd, 'LoadAverage');
 
 				// Memory Command
-				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$7 }'";
+				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
 				$memory = $this->execSRV($memory_cmd, 'Memory');
 
 				// Swap Command
