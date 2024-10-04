@@ -1689,14 +1689,14 @@ class Monitoring extends eqLogic {
 						
 						// CPUFreq Command
 						$cpufreqVM_cmd = "LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'";    // OK pour LXC Linux, Proxmox, Debian 10/11
-						$cpufreq = $this->execSSH($hostId, $cpufreqVM_cmd, 'cpufreq-1');
+						$cpu_freq = $this->execSSH($hostId, $cpufreqVM_cmd, 'CPUFreq-1');
 						
-						if ($cpufreq == '') {
+						if ($cpu_freq == '') {
 							$cpufreqVMbis_cmd = "cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'";    // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
-							$cpufreq = $this->execSSH($hostId, $cpufreqVMbis_cmd, 'cpufreq-2');
+							$cpu_freq = $this->execSSH($hostId, $cpufreqVMbis_cmd, 'CPUFreq-2');
 						}
-						$cpufreq = preg_replace("/[^0-9.,]/", "", $cpufreq);
-						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][X86] CPUFreq :: ' . $cpufreq);
+						$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
+						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][X86] CPUFreq :: ' . $cpu_freq);
 	
 						// cputemp Command
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
