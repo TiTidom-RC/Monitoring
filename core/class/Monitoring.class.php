@@ -232,6 +232,8 @@ class Monitoring extends eqLogic {
 	}
 
 	public function postSave() {
+		$orderCmd = 1;
+
 		$MonitoringCmd = $this->getCmd(null, 'cnx_ssh');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -240,7 +242,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cnx_ssh');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cron_status');
@@ -253,7 +258,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setSubType('binary');
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setIsHistorized(0);
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 		$cron_status_cmd = $MonitoringCmd->getId();
 
@@ -269,7 +277,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
             $MonitoringCmd->setTemplate('mobile', 'core::toggle');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cron_off');
@@ -284,7 +295,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setTemplate('dashboard', 'core::toggle');
 			$MonitoringCmd->setTemplate('mobile', 'core::toggle');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 		
 		$MonitoringCmd = $this->getCmd(null, 'reboot');
@@ -295,7 +309,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('reboot');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'poweroff');
@@ -306,7 +323,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('poweroff');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'distri_name');
@@ -319,7 +339,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fab fa-linux"></i>');
 			$MonitoringCmd->setIsVisible(1);
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'uptime');
@@ -331,7 +354,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-hourglass-half"></i>');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'uptime_sec');
@@ -342,7 +368,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('uptime_sec');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('s');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'load_avg');
@@ -354,7 +384,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-chart-line"></i>');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'load_avg_1mn');
@@ -365,7 +398,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('load_avg_1mn');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'load_avg_5mn');
@@ -376,9 +412,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('load_avg_5mn');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
-
 		$MonitoringCmd = $this->getCmd(null, 'load_avg_15mn');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -387,7 +425,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('load_avg_15mn');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'memory');
@@ -399,7 +440,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-database"></i>');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'memory_total');
@@ -410,29 +454,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_total');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'memory_free');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire Libre', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('memory_free');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'memory_free_percent');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire Libre (Pourcent)', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('memory_free_percent');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'memory_used');
@@ -443,19 +469,29 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_used');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
-		$MonitoringCmd = $this->getCmd(null, 'memory_used_percent');
+		$MonitoringCmd = $this->getCmd(null, 'memory_free');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire Utilisée (Pourcent)', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire Libre', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('memory_used_percent');
+			$MonitoringCmd->setLogicalId('memory_free');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
+
+		
 
 		$MonitoringCmd = $this->getCmd(null, 'memory_buffcache');
 		if (!is_object($MonitoringCmd)) {
@@ -465,7 +501,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_buffcache');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'memory_available');
@@ -476,9 +516,43 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_available');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
+		$MonitoringCmd = $this->getCmd(null, 'memory_used_percent');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Mémoire Utilisée (Pourcent)', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('memory_used_percent');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'memory_free_percent');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Mémoire Libre (Pourcent)', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('memory_free_percent');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+		
 		$MonitoringCmd = $this->getCmd(null, 'memory_available_percent');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -487,7 +561,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_available_percent');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'swap');
@@ -499,7 +577,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-layer-group"></i>');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'swap_total');
@@ -510,29 +591,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('swap_total');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'swap_free');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Swap Libre', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('swap_free');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'swap_free_percent');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Swap Libre (Pourcent)', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('swap_free_percent');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'swap_used');
@@ -543,7 +606,26 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('swap_used');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'swap_free');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Swap Libre', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('swap_free');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'swap_used_percent');
@@ -554,7 +636,26 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('swap_used_percent');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'swap_free_percent');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Swap Libre (Pourcent)', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('swap_free_percent');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'network');
@@ -566,7 +667,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-network-wired"></i>');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'network_tx');
@@ -577,7 +681,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_tx');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('octets');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'network_rx');
@@ -588,7 +696,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_rx');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('octets');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'network_name');
@@ -599,7 +711,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_name');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'network_ip');
@@ -610,7 +725,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_ip');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'hdd');
@@ -622,7 +740,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-hdd"></i>');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'hdd_total');
@@ -633,29 +754,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('hdd_total');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'hdd_free');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace Disque Libre', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('hdd_free');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'hdd_free_percent');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Espace Disque Libre (Pourcent)', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('hdd_free_percent');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'hdd_used');
@@ -666,7 +769,26 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('hdd_used');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'hdd_free');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Espace Disque Libre', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('hdd_free');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'hdd_used_percent');
@@ -677,7 +799,26 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('hdd_used_percent');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'hdd_free_percent');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Espace Disque Libre (Pourcent)', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('hdd_free_percent');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		if ($this->getConfiguration('synology') == '1') {
@@ -693,7 +834,10 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
 					$MonitoringCmd->setDisplay('icon', '<i class="far fa-hdd"></i>');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_total');
@@ -704,29 +848,11 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv2_total');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
-				}
-
-				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_free');
-				if (!is_object($MonitoringCmd)) {
-					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Libre', __FILE__));
-					$MonitoringCmd->setEqLogic_id($this->getId());
-					$MonitoringCmd->setLogicalId('syno_hddv2_free');
-					$MonitoringCmd->setType('info');
-					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->save();
-				}
-
-				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_free_percent');
-				if (!is_object($MonitoringCmd)) {
-					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume 2 Libre (Pourcent)', __FILE__));
-					$MonitoringCmd->setEqLogic_id($this->getId());
-					$MonitoringCmd->setLogicalId('syno_hddv2_free_percent');
-					$MonitoringCmd->setType('info');
-					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_used');
@@ -737,7 +863,26 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv2_used');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_free');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 2 Libre', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv2_free');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_used_percent');
@@ -748,7 +893,26 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv2_used_percent');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv2_free_percent');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 2 Libre (Pourcent)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv2_free_percent');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 			}
 			
@@ -764,7 +928,10 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
 					$MonitoringCmd->setDisplay('icon', '<i class="fab fa-usb"></i>');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_total');
@@ -775,29 +942,11 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddusb_total');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
-				}
-
-				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_free');
-				if (!is_object($MonitoringCmd)) {
-					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Libre', __FILE__));
-					$MonitoringCmd->setEqLogic_id($this->getId());
-					$MonitoringCmd->setLogicalId('syno_hddusb_free');
-					$MonitoringCmd->setType('info');
-					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->save();
-				}
-
-				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_free_percent');
-				if (!is_object($MonitoringCmd)) {
-					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume USB Libre (Pourcent)', __FILE__));
-					$MonitoringCmd->setEqLogic_id($this->getId());
-					$MonitoringCmd->setLogicalId('syno_hddusb_free_percent');
-					$MonitoringCmd->setType('info');
-					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_used');
@@ -808,7 +957,26 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddusb_used');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_free');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume USB Libre', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddusb_free');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_used_percent');
@@ -819,7 +987,26 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddusb_percent');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddusb_free_percent');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume USB Libre (Pourcent)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddusb_free_percent');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 			}
 
@@ -835,9 +1022,12 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
 					$MonitoringCmd->setDisplay('icon', '<i class="fab fa-usb"></i>');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
-				
+
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_total');
 				if (!is_object($MonitoringCmd)) {
 					$MonitoringCmd = new MonitoringCmd();
@@ -846,29 +1036,11 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddesata_total');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
-				}
-
-				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_free');
-				if (!is_object($MonitoringCmd)) {
-					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume eSATA Libre', __FILE__));
-					$MonitoringCmd->setEqLogic_id($this->getId());
-					$MonitoringCmd->setLogicalId('syno_hddesata_free');
-					$MonitoringCmd->setType('info');
-					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->save();
-				}
-
-				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_free_percent');
-				if (!is_object($MonitoringCmd)) {
-					$MonitoringCmd = new MonitoringCmd();
-					$MonitoringCmd->setName(__('Syno Volume eSATA Libre (Pourcent)', __FILE__));
-					$MonitoringCmd->setEqLogic_id($this->getId());
-					$MonitoringCmd->setLogicalId('syno_hddesata_free_percent');
-					$MonitoringCmd->setType('info');
-					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_used');
@@ -879,7 +1051,26 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddesata_used');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_free');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume eSATA Libre', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddesata_free');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 
 				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_used_percent');
@@ -890,7 +1081,26 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddesata_used_percent');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddesata_free_percent');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume eSATA Libre (Pourcent)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddesata_free_percent');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
 				}
 			}
 		}
@@ -904,18 +1114,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-microchip"></i>');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
-		}
-
-		$MonitoringCmd = $this->getCmd(null, 'cpu_nb');
-		if (!is_object($MonitoringCmd)) {
-			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Nb CPU', __FILE__));
-			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('cpu_nb');
-			$MonitoringCmd->setType('info');
-			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cpu_temp');
@@ -926,7 +1128,25 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cpu_temp');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('°C');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+		
+		$MonitoringCmd = $this->getCmd(null, 'cpu_nb');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Nb CPU', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('cpu_nb');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cpu_freq');
@@ -937,7 +1157,11 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cpu_freq');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setUnite('MHz');
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
@@ -949,7 +1173,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'perso2');
@@ -961,7 +1188,10 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
 		}
 
 		if ($this->getConfiguration('pull_use_custom', '0') == '1') {
