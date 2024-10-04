@@ -2411,7 +2411,7 @@ class Monitoring extends eqLogic {
 					// LoadAverage (New)
 					if (isset($loadav)) {
 						$loadavg = explode(' ', $loadav);
-						if (count($loadavg) == 3) {
+						if (count($loadavg) == 5) {
 							$load_avg_1mn = floatval($loadavg[0]);
 							$load_avg_5mn = floatval($loadavg[1]);
 							$load_avg_15mn = floatval($loadavg[2]);
