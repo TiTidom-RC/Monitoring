@@ -2710,7 +2710,7 @@ class Monitoring extends eqLogic {
 						'swap_used' => $swap_used,
 						'swap_free' => $swap_free,
 						'network' => $network,
-						'nework_tx' => $network_tx,
+						'network_tx' => $network_tx,
 						'network_rx' => $network_rx,
 						'network_name' => $network_name,
 						'network_ip' => $network_ip,
