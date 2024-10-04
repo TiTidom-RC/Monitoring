@@ -460,7 +460,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'memory_cache');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire Buff/Cache', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire Buffer+Cache', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('memory_cache');
 			$MonitoringCmd->setType('info');
