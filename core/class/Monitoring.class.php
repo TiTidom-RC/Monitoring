@@ -368,7 +368,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('uptime_sec');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('s');
+			$MonitoringCmd->setUnite('sec');
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -1134,7 +1134,7 @@ class Monitoring extends eqLogic {
 		} else {
 			$orderCmd++;
 		}
-		
+
 		$MonitoringCmd = $this->getCmd(null, 'cpu_nb');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
