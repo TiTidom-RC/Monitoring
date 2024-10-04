@@ -457,6 +457,39 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
+		$MonitoringCmd = $this->getCmd(null, 'memory_cache');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Mémoire Buff/Cache', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('memory_cache');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->save();
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'memory_available');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Mémoire Disponible', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('memory_available');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->save();
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'memory_available_percent');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Mémoire Disponible (Pourcent)', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('memory_available_percent');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->save();
+		}
+
 		$MonitoringCmd = $this->getCmd(null, 'swap');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -2434,31 +2467,41 @@ class Monitoring extends eqLogic {
 						// Cas général
 						if (!preg_match("#FreeBSD#", $uname)) {
 							$memory = explode(' ', $memory);
-							if (count($memory) == 4) {
+							if (count($memory) == 5) {
 								$memory_total = intval($memory[0]);
 								$memory_used = intval($memory[1]);
-								$memory_free = intval($memory[3]);
+								$memory_free = intval($memory[2]);
+								$memory_cache = intval($memory[3]);
+								$memory_available = intval($memory[4]);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Total :: ' . $memory_total);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used :: ' . $memory_used);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free :: ' . $memory_free);
+								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Cache :: ' . $memory_cache);
+								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Available :: ' . $memory_available);	
 
 								if ($memory_total != 0) {
 									$memory_free_percent = round($memory_free / $memory_total * 100, 1);
-									$memory_used_percent = round($memory_used / $memory_total * 100, 1);
+									$memory_used_percent = round(($memory_used + $memory_cache) / $memory_total * 100, 1);
+									$memory_available_percent = round($memory_available / $memory_total * 100, 1);
 								} else {
 									$memory_free_percent = 0.0;
 									$memory_used_percent = 0.0;
+									$memory_available_percent = 0.0;
 								}
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free % :: ' . $memory_free_percent);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used % :: ' . $memory_used_percent);
+								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Available % :: ' . $memory_available_percent);
 
-								$memory = 'Total : '. $this->formatSize($memory_total, 'Ko') . ' - Utilisé : ' . $this->formatSize($memory_used, 'Ko') . ' - Libre : ' . $this->formatSize($memory_free, 'Ko');
+								$memory = 'Total : '. $this->formatSize($memory_total, 'Ko') . ' - Utilisée : ' . $this->formatSize($memory_used, 'Ko') . ' - Disponible : ' . $this->formatSize($memory_available, 'Ko');
 							} else {
-								$memory_free = 0;
 								$memory_total = 0;
 								$memory_used = 0;
+								$memory_free = 0;
+								$memory_cache = 0;
+								$memory_available = 0;
 								$memory_free_percent = 0.0;
 								$memory_used_percent = 0.0;
+								$memory_available_percent = 0.0;
 								$memory = '';
 							}
 						// Cas spécifique FreeBSD
@@ -2553,7 +2596,7 @@ class Monitoring extends eqLogic {
 								$network_ip = '';
 							}
 							
-							log::add('Monitoring', 'debug', '['. $equipement .'][RESEAU] Nom de la carte réseau / IP (RX / TX) :: ' .$network_name.' / IP= ' . $network_ip . ' (RX= '.$ReseauRX.' / TX= '.$ReseauTX.')');
+							log::add('Monitoring', 'debug', '['. $equipement .'][RESEAU] Nom de la carte réseau / IP (RX / TX) :: ' .$network_name.' / IP= ' . $network_ip . ' (RX= '. $this->formatSize($network_rx) .' / TX= '. $this->formatSize($network_tx) .')');
 						} else {
 							$network_tx = 0;
 							$network_rx = 0;
@@ -2700,9 +2743,12 @@ class Monitoring extends eqLogic {
 						'memory_total' => $memory_total,
 						'memory_used' => $memory_used,
 						'memory_free' => $memory_free,
+						'memory_cache' => $memory_cache,
+						'memory_available' => $memory_available,
 						'memory' => $memory,
 						'memory_free_percent' => $memory_free_percent,
 						'memory_used_percent' => $memory_used_percent,
+						'memory_available_percent' => $memory_available_percent,
 						'swap' => $swap_display,
 						'swap_free_percent' => $swap_free_percent,
 						'swap_used_percent' => $swap_used_percent,
