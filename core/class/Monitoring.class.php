@@ -457,12 +457,12 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		}
 
-		$MonitoringCmd = $this->getCmd(null, 'memory_cache');
+		$MonitoringCmd = $this->getCmd(null, 'memory_buffcache');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('Mémoire Buffer+Cache', __FILE__));
+			$MonitoringCmd->setName(__('Mémoire BuffCache', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
-			$MonitoringCmd->setLogicalId('memory_cache');
+			$MonitoringCmd->setLogicalId('memory_buffcache');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->save();
@@ -2471,17 +2471,17 @@ class Monitoring extends eqLogic {
 								$memory_total = intval($memory[0]);
 								$memory_used = intval($memory[1]);
 								$memory_free = intval($memory[2]);
-								$memory_cache = intval($memory[3]);
+								$memory_buffcache = intval($memory[3]);
 								$memory_available = intval($memory[4]);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Total :: ' . $memory_total);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used :: ' . $memory_used);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free :: ' . $memory_free);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Cache :: ' . $memory_cache);
+								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Cache :: ' . $memory_buffcache);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Available :: ' . $memory_available);	
 
 								if ($memory_total != 0) {
 									$memory_free_percent = round($memory_free / $memory_total * 100, 1);
-									$memory_used_percent = round(($memory_used + $memory_cache) / $memory_total * 100, 1);
+									$memory_used_percent = round(($memory_used + $memory_buffcache) / $memory_total * 100, 1);
 									$memory_available_percent = round($memory_available / $memory_total * 100, 1);
 								} else {
 									$memory_free_percent = 0.0;
@@ -2497,7 +2497,7 @@ class Monitoring extends eqLogic {
 								$memory_total = 0;
 								$memory_used = 0;
 								$memory_free = 0;
-								$memory_cache = 0;
+								$memory_buffcache = 0;
 								$memory_available = 0;
 								$memory_free_percent = 0.0;
 								$memory_used_percent = 0.0;
@@ -2743,7 +2743,7 @@ class Monitoring extends eqLogic {
 						'memory_total' => $memory_total,
 						'memory_used' => $memory_used,
 						'memory_free' => $memory_free,
-						'memory_cache' => $memory_cache,
+						'memory_buffcache' => $memory_buffcache,
 						'memory_available' => $memory_available,
 						'memory' => $memory,
 						'memory_free_percent' => $memory_free_percent,
