@@ -75,7 +75,7 @@
         "[DEP-INSTALL] Le plugin SSHManager est déjà installé": "[DEP-INSTALL] SSHManager plugin already installed",
         "[DEP-INSTALL] Le plugin SSHManager n\\'est pas activé": "[DEP-INSTALL] SSHManager plugin not activated",
         "[DEP-INSTALL] Plugin SSHManager :: actif": "[DEP-INSTALL] SSHManager plugin :: active",
-        "perso1": "personal1",
+        "perso1": "perso1",
         "perso2": "perso2"
     },
     "plugins\/Monitoring\/desktop\/js\/Monitoring.js": {
