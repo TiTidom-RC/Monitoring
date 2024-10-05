@@ -1,20 +1,22 @@
 {
-    "id": "Monitoring",
-    "name": "Monitoring",
-    "pluginVersion": "3.0.12",
-    "description": {
-        "fr_FR": "Plugin permettant le monitoring des équipements locaux et distants (via SSH). Le plugin affichera les informations systèmes d'équipements sous Linux ou Synology (Distribution, CPU, Mémoire, Disques, Swap).",
-        "en_US": "Plugin to monitor local and remote equipments (through SSH). The plugin will display system informations from Linux or Synology (Distribution, CPU, Memory, Disks, Swap).",
-        "es_ES": "Plugin para monitorear equipos locales y remotos (a través de SSH). El complemento mostrará información del sistema de Linux o Synology (Distribución, CPU, Memoria, Discos, Intercambio).",
-        "de_DE": "Plugin zur Überwachung lokaler und entfernter Geräte (über SSH). Das Plugin zeigt Systeminformationen von Linux oder Synology an (Verteilung, CPU, Speicher, Festplatten, Swap)."
-    },
-    "utilization": "Ajoutez un équipement et choisissez s'il est local ou distant pour monitorer l'OS Linux ou Synology correspondant (Nom de la distribution Linux ou Syno, uptime, charge système, mémoire libre, disques + swap, réseau, cpu et température).",
-    "licence": "AGPL",
-    "author": "TiTidom",
-    "require": "4.4",
-    "hasDependency": true,
-    "category": "monitoring",
-    "language": [
+	"id": "Monitoring",
+	"name": "Monitoring",
+	"pluginVersion": "3.0.12",
+	"description": {
+		"fr_FR": "Plugin permettant le monitoring des équipements locaux et distants (via SSH). Le plugin affichera les informations systèmes d'équipements sous Linux ou Synology (Distribution, CPU, Mémoire, Disques, Swap).",
+		"en_US": "Plugin to monitor local and remote equipments (through SSH). The plugin will display system informations from Linux or Synology (Distribution, CPU, Memory, Disks, Swap).",
+		"es_ES": "Plugin para monitorear equipos locales y remotos (a través de SSH). El complemento mostrará información del sistema de Linux o Synology (Distribución, CPU, Memoria, Discos, Intercambio).",
+		"de_DE": "Plugin zur Überwachung lokaler und entfernter Geräte (über SSH). Das Plugin zeigt Systeminformationen von Linux oder Synology an (Verteilung, CPU, Speicher, Festplatten, Swap).",
+		"it_IT": "Plugin per il monitoraggio di apparecchiature locali e remote (via SSH). Il plugin visualizza le informazioni di sistema per i dispositivi con Linux o Synology (distribuzione, CPU, memoria, dischi, swap).",
+		"pt_PT": "Plugin para monitorizar equipamentos locais e remotos (via SSH). O plugin apresenta informações do sistema para dispositivos com Linux ou Synology (Distribuição, CPU, Memória, Discos, Swap)."
+	},
+	"utilization": "Ajoutez un équipement et choisissez s'il est local ou distant pour monitorer l'OS Linux ou Synology correspondant (Nom de la distribution Linux ou Syno, uptime, charge système, mémoire libre, disques + swap, réseau, cpu et température).",
+	"licence": "AGPL",
+	"author": "TiTidom",
+	"require": "4.4",
+	"hasDependency": true,
+	"category": "monitoring",
+	"language": [
 		"de_DE",
 		"en_US",
 		"es_ES",
@@ -22,23 +24,23 @@
 		"it_IT",
 		"pt_PT"
 	],
-    "compatibility": [
-        "smart",
-        "rpi",
-        "docker",
-        "diy",
-        "v4",
-        "atlas"
-    ],
-    "os": {
+	"compatibility": [
+		"smart",
+		"rpi",
+		"docker",
+		"diy",
+		"v4",
+		"atlas"
+	],
+	"os": {
 		"min": 11
 	},
-    "link": {
-        "forum": "https://community.jeedom.com/tag/plugin-monitoring",
-        "video": ""
-    },
-    "changelog": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/changelog",
-    "documentation": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/index",
-    "changelog_beta": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/beta/changelog",
-    "documentation_beta": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/beta/index"
+	"link": {
+		"forum": "https://community.jeedom.com/tag/plugin-monitoring",
+		"video": ""
+	},
+	"changelog": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/changelog",
+	"documentation": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/index",
+	"changelog_beta": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/beta/changelog",
+	"documentation_beta": "https://titidom-rc.github.io/Documentation/#language#/Monitoring/beta/index"
 }
