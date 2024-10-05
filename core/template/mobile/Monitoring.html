@@ -193,13 +193,13 @@
 				if ('#hdd_free_percent#' === '') {
 					document.getElementById('hdd#id#').innerHTML = '<span></span>';
 				} else if (parseInt('#hdd_free_percent#') < parseInt('#hdd_free_percent_colorlow#')) {
-					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hdd_free_percent#</span><span>%</span>)';
+					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-success-color) !important;">#hdd_free_percent#</span><span>%</span>)';
 				} else if ((parseInt('#hdd_free_percent#') >= parseInt('#hdd_free_percent_colorlow#')) && (parseInt('#hdd_free_percent#') <= parseInt('#hdd_free_percent_colorhigh#'))) {
-					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hdd_free_percent#</span><span>%</span>)';
+					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-warning-color) !important;">#hdd_free_percent#</span><span>%</span>)';
 				} else if ((parseInt('#hdd_free_percent#') > parseInt('#hdd_free_percent_colorhigh#')) && '#hdd_free_percent_colorhigh#' !== '') {
-					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hdd_free_percent#</span><span>%</span>)';
+					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-danger-color) !important;">#hdd_free_percent#</span><span>%</span>)';
 				} else {
-					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state">#hdd_free_percent#</span><span>%</span>)';
+					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state">#hdd_free_percent#</span><span>%</span>)';
 				}
 			}
 		</script>
@@ -211,13 +211,13 @@
 					if ('#syno_hddv2_free_percent#' === '') {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddv2_free_percent#') < parseInt('#syno_hddv2_free_percent_colorlow#')) {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
 					} else if ((parseInt('#syno_hddv2_free_percent#') >= parseInt('#syno_hddv2_free_percent_colorlow#')) && (parseInt('#syno_hddv2_free_percent#') <= parseInt('#syno_hddv2_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
 					} else if ((parseInt('#syno_hddv2_free_percent#') > parseInt('#syno_hddv2_free_percent_colorhigh#')) && '#syno_hddv2_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state">#syno_hddv2_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state">#syno_hddv2_free_percent#</span><span>%</span>)';
 					}
 				}
 			}
@@ -230,13 +230,13 @@
 					if ('#syno_hddusb_free_percent#' === '') {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddusb_free_percent#') < parseInt('#syno_hddusb_free_percent_colorlow#')) {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
 					} else if ((parseInt('#syno_hddusb_free_percent#') >= parseInt('#syno_hddusb_free_percent_colorlow#')) && (parseInt('#syno_hddusb_free_percent#') <= parseInt('#syno_hddusb_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
 					} else if ((parseInt('#syno_hddusb_free_percent#') > parseInt('#syno_hddusb_free_percent_colorhigh#')) && '#syno_hddusb_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state">#syno_hddusb_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state">#syno_hddusb_free_percent#</span><span>%</span>)';
 					}
 				}
 			}
@@ -249,13 +249,13 @@
 					if ('#syno_hddesata_free_percent#' === '') {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddesata_free_percent#') < parseInt('#syno_hddesata_free_percent_colorlow#')) {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else if ((parseInt('#syno_hddesata_free_percent#') >= parseInt('#syno_hddesata_free_percent_colorlow#')) && (parseInt('#syno_hddesata_free_percent#') <= parseInt('#syno_hddesata_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else if ((parseInt('#syno_hddesata_free_percent#') > parseInt('#syno_hddesata_free_percent_colorhigh#')) && '#syno_hddesata_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state">#syno_hddesata_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state">#syno_hddesata_free_percent#</span><span>%</span>)';
 					}
 				}
 			}
