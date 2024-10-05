@@ -1379,7 +1379,7 @@ class Monitoring extends eqLogic {
 
 		$memory_available_percent = $this->getCmd(null,'memory_available_percent');
 		$replace['#memory_available_percent#'] = is_object($memory_available_percent) ? $memory_available_percent->execCmd() : '';
-		$replace['#memory_available_percent#'] = is_object($memory_available_percent) ? $memory_available_percent->getId() : '';
+		$replace['#memory_available_percent_id#'] = is_object($memory_available_percent) ? $memory_available_percent->getId() : '';
 		
 		$replace['#memory_available_percent_colorhigh#'] = $this->getConfiguration('memory_available_percent_colorhigh');
 		$replace['#memory_available_percent_colorlow#'] = $this->getConfiguration('memory_available_percent_colorlow');
