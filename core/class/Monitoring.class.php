@@ -1377,14 +1377,14 @@ class Monitoring extends eqLogic {
 		$replace['#memory_collect#'] = (is_object($memory) && $memory->getIsVisible()) ? $memory->getCollectDate() : "-";
         $replace['#memory_value#'] = (is_object($memory) && $memory->getIsVisible()) ? $memory->getValueDate() : "-";
 
-		$memory_free_percent = $this->getCmd(null,'memory_free_percent');
-		$replace['#memory_free_percent#'] = is_object($memory_free_percent) ? $memory_free_percent->execCmd() : '';
-		$replace['#memory_free_percent_id#'] = is_object($memory_free_percent) ? $memory_free_percent->getId() : '';
+		$memory_available_percent = $this->getCmd(null,'memory_available_percent');
+		$replace['#memory_available_percent#'] = is_object($memory_available_percent) ? $memory_available_percent->execCmd() : '';
+		$replace['#memory_available_percent#'] = is_object($memory_available_percent) ? $memory_available_percent->getId() : '';
 		
-		$replace['#memory_free_percent_colorhigh#'] = $this->getConfiguration('memory_free_percent_colorhigh');
-		$replace['#memory_free_percent_colorlow#'] = $this->getConfiguration('memory_free_percent_colorlow');
+		$replace['#memory_available_percent_colorhigh#'] = $this->getConfiguration('memory_available_percent_colorhigh');
+		$replace['#memory_available_percent_colorlow#'] = $this->getConfiguration('memory_available_percent_colorlow');
 
-		$this->getStats($memory_free_percent, 'memory_free_percent', $replace, 0);
+		$this->getStats($memory_available_percent, 'memory_available_percent', $replace, 0);
 
 		// Swap
 		$swap = $this->getCmd(null,'swap');
@@ -2889,8 +2889,8 @@ class Monitoring extends eqLogic {
 							
 							// CPUFreq
 							if ((floatval($cpu_freq) / 1000) > 1000) {
-								$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);
 								$cpu_freq_txt = round(floatval($cpu_freq) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
+								$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);
 							} else {
 								$cpu_freq_txt = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP) . " MHz";
 								$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);
@@ -2917,8 +2917,9 @@ class Monitoring extends eqLogic {
 								
 								// CPUFreq
 								if ((floatval($cpu_freq) / 1000) > 1000) {
+									$cpu_freq_txt = round(floatval($cpu_freq) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
 									$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);
-									$cpu_freq = round(floatval($cpu_freq) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
+									
 								} else {
 									$cpu_freq_txt = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP) . " MHz";
 									$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);

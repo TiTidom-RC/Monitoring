@@ -141,21 +141,21 @@
 			}
 		</script>
 		<div class="tooltips" style="margin-left:5px;display: #memory_display#;">
-			<span title="Mémoire Vive (% Libre)<br><i>Date de valeur : #memory_value#<br>Date de collecte : #memory_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
-			<span id="memory_free_percent#id#"></span>
+			<span title="Mémoire Vive (% Disponible)<br><i>Date de valeur : #memory_value#<br>Date de collecte : #memory_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
+			<span id="memory_available_percent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#memory_free_percent#' === '') {
-					document.getElementById('memory_free_percent#id#').innerHTML = '<span>#memory#</span>';
-				} else if ((parseInt('#memory_free_percent#') > parseInt('#memory_free_percent_colorhigh#')) && '#memory_free_percent_colorhigh#' !== '') {
-					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #memory_free_percent_minHistory# | Moy : #memory_free_percent_averageHistory# | Max : #memory_free_percent_maxHistory#" data-cmd_id="#memory_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#memory_free_percent#</span><span>%#memory_free_percent_tendance#</span>)';
-				} else if ((parseInt('#memory_free_percent#') >= parseInt('#memory_free_percent_colorlow#')) && (parseInt('#memory_free_percent#') <= parseInt('#memory_free_percent_colorhigh#'))) {
-					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #memory_free_percent_minHistory# | Moy : #memory_free_percent_averageHistory# | Max : #memory_free_percent_maxHistory#" data-cmd_id="#memory_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#memory_free_percent#</span><span>%#memory_free_percent_tendance#</span>)';
-				} else if (parseInt('#memory_free_percent#') < parseInt('#memory_free_percent_colorlow#')) {
-					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #memory_free_percent_minHistory# | Moy : #memory_free_percent_averageHistory# | Max : #memory_free_percent_maxHistory#" data-cmd_id="#memory_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#memory_free_percent#</span><span>%#memory_free_percent_tendance#</span>)';
+				if ('#memory_available_percent#' === '') {
+					document.getElementById('memory_available_percent#id#').innerHTML = '<span>#memory#</span>';
+				} else if ((parseInt('#memory_available_percent#') > parseInt('#memory_available_percent_colorhigh#')) && '#memory_available_percent_colorhigh#' !== '') {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#memory_available_percent#</span><span>%#memory_available_percent_tendance#</span>)';
+				} else if ((parseInt('#memory_available_percent#') >= parseInt('#memory_available_percent_colorlow#')) && (parseInt('#memory_available_percent#') <= parseInt('#memory_available_percent_colorhigh#'))) {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#memory_available_percent#</span><span>%#memory_available_percent_tendance#</span>)';
+				} else if (parseInt('#memory_available_percent#') < parseInt('#memory_available_percent_colorlow#')) {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#memory_available_percent#</span><span>%#memory_available_percent_tendance#</span>)';
 				} else {
-					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Libre)<br>Min: #memory_free_percent_minHistory# | Moy : #memory_free_percent_averageHistory# | Max : #memory_free_percent_maxHistory#" data-cmd_id="#memory_free_percent_id#" class="value history cursor tooltips">#memory_free_percent#</span><span>%#memory_free_percent_tendance#</span>)';
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips">#memory_available_percent#</span><span>%#memory_available_percent_tendance#</span>)';
 				}
 			}
 		</script>

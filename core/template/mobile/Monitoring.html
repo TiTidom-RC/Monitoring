@@ -138,21 +138,21 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #memory_display#;">
-			<span title="Mémoire Vive (% Libre) || Date valeur : #memory_value# || Date collecte : #memory_collect#" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
-			<span id="memory_free_percent#id#"></span>
+			<span title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
+			<span id="memory_available_percent#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#memory_free_percent#' === '') {
-					document.getElementById('memory_free_percent#id#').innerHTML = '<span>#memory#</span>';
-				} else if ((parseInt('#memory_free_percent#') > parseInt('#memory_free_percent_colorhigh#')) && '#memory_free_percent_colorhigh#' !== '') {
-					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-success-color) !important;">#memory_free_percent#</span><span>%</span>)';
-				} else if ((parseInt('#memory_free_percent#') >= parseInt('#memory_free_percent_colorlow#')) && (parseInt('#memory_free_percent#') <= parseInt('#memory_free_percent_colorhigh#'))) {
-					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-warning-color) !important;">#memory_free_percent#</span><span>%</span>)';
-				} else if (parseInt('#memory_free_percent#') < parseInt('#memory_free_percent_colorlow#')) {
-					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-danger-color) !important;">#memory_free_percent#</span><span>%</span>)';
+				if ('#memory_available_percent#' === '') {
+					document.getElementById('memory_available_percent#id#').innerHTML = '<span>#memory#</span>';
+				} else if ((parseInt('#memory_available_percent#') > parseInt('#memory_available_percent_colorhigh#')) && '#memory_available_percent_colorhigh#' !== '') {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-success-color) !important;">#memory_available_percent#</span><span>%</span>)';
+				} else if ((parseInt('#memory_available_percent#') >= parseInt('#memory_available_percent_colorlow#')) && (parseInt('#memory_available_percent#') <= parseInt('#memory_available_percent_colorhigh#'))) {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-warning-color) !important;">#memory_available_percent#</span><span>%</span>)';
+				} else if (parseInt('#memory_available_percent#') < parseInt('#memory_available_percent_colorlow#')) {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-danger-color) !important;">#memory_available_percent#</span><span>%</span>)';
 				} else {
-					document.getElementById('memory_free_percent#id#').innerHTML = '#memory# (<span class="state">#memory_free_percent#</span><span>%</span>)';
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state">#memory_available_percent#</span><span>%</span>)';
 				}
 			}
 		</script>
