@@ -2536,8 +2536,7 @@ class Monitoring extends eqLogic {
 									log::add('Monitoring', 'debug', '['. $equipement .'][HDDv2] Syno HDDv2 Used % :: ' . $syno_hddv2_used_percent);
 									log::add('Monitoring', 'debug', '['. $equipement .'][HDDv2] Syno HDDv2 Free % :: ' . $syno_hddv2_free_percent);
 
-									$syno_hddv2 = '{{Total}} : ' . $this->formatSize($syno_hddv2_total, 'Ko') . ' - {{Utilisé}} : ' . $this->formatSize($syno_hddv2_used, 'Ko') . ' - {{Libre}} : ' . $this->formatSize($syno_hddv2_free, 'Ko');
-
+									$syno_hddv2 = __('Total', __FILE__) . ' : ' . $this->formatSize($syno_hddv2_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($syno_hddv2_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($syno_hddv2_free, 'Ko');
 								} else {
 									$syno_hddv2_total = 0;
 									$syno_hddv2_used = 0;
@@ -2577,7 +2576,7 @@ class Monitoring extends eqLogic {
 									log::add('Monitoring', 'debug', '['. $equipement .'][HDDUSB] Syno HDDUSB Used % :: ' . $syno_hddusb_used_percent);
 									log::add('Monitoring', 'debug', '['. $equipement .'][HDDUSB] Syno HDDUSB Free % :: ' . $syno_hddusb_free_percent);
 
-									$syno_hddusb = '{{Total}} : ' . $this->formatSize($syno_hddusb_total, 'Ko') . ' - {{Utilisé}} : ' . $this->formatSize($syno_hddusb_used, 'Ko') . ' - {{Libre}} : ' . $this->formatSize($syno_hddusb_free, 'Ko');
+									$syno_hddusb = __('Total', __FILE__) . ' : ' . $this->formatSize($syno_hddusb_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($syno_hddusb_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($syno_hddusb_free, 'Ko');
 								} else {
 									$syno_hddusb_total = 0;
 									$syno_hddusb_used = 0;
@@ -2617,7 +2616,7 @@ class Monitoring extends eqLogic {
 									log::add('Monitoring', 'debug', '['. $equipement .'][HDDeSATA] Syno HDDeSATA Used % :: ' . $syno_hddesata_used_percent);
 									log::add('Monitoring', 'debug', '['. $equipement .'][HDDeSATA] Syno HDDeSATA Free % :: ' . $syno_hddesata_free_percent);
 
-									$syno_hddesata = '{{Total}} : ' . $this->formatSize($syno_hddesata_total, 'Ko') . ' - {{Utilisé}} : ' . $this->formatSize($syno_hddesata_used, 'Ko') . ' - {{Libre}} : ' . $this->formatSize($syno_hddesata_free, 'Ko');
+									$syno_hddesata = __('Total', __FILE__) . ' : ' . $this->formatSize($syno_hddesata_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($syno_hddesata_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($syno_hddesata_free, 'Ko');
 								} else {
 									$syno_hddesata_total = 0;
 									$syno_hddesata_used = 0;
@@ -2702,7 +2701,7 @@ class Monitoring extends eqLogic {
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used % :: ' . $memory_used_percent);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Available % :: ' . $memory_available_percent);
 
-								$memory = '{{Total}} : '. $this->formatSize($memory_total, 'Ko') . ' - {{Utilisée}} : ' . $this->formatSize($memory_used, 'Ko') . ' - {{Disponible}} : ' . $this->formatSize($memory_available, 'Ko');
+								$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Disponible', __FILE__) . ' : ' . $this->formatSize($memory_available, 'Ko');
 							} else {
 								$memory_total = 0;
 								$memory_used = 0;
@@ -2735,7 +2734,7 @@ class Monitoring extends eqLogic {
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free % :: ' . $memory_free_percent);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used % :: ' . $memory_used_percent);
 
-								$memory = '{{Total}} : '. $this->formatSize($memory_total, 'Ko') . ' - {{Utilisée}} : ' . $this->formatSize($memory_used, 'Ko') . ' - {{Libre}} : ' . $this->formatSize($memory_free, 'Ko');
+								$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($memory_free, 'Ko');
 
 							} else {
 								$memory_free = 0;
@@ -2772,7 +2771,7 @@ class Monitoring extends eqLogic {
 							$swap_total = intval($swap[0]);
 							$swap_used = intval($swap[1]);
 							$swap_free = intval($swap[2]);
-							$swap_display = '{{Total}} : ' . $this->formatSize($swap[0], 'Ko') . ' - {{Utilisé}} : ' . $this->formatSize($swap[1], 'Ko') . ' - {{Libre}} : ' . $this->formatSize($swap[2], 'Ko');
+							$swap_display = __('Total', __FILE__) . ' : ' . $this->formatSize($swap[0], 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap[1], 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap[2], 'Ko');
 
 						} else {
 							$swap_free_percent = 0.0;
@@ -2844,7 +2843,7 @@ class Monitoring extends eqLogic {
 							log::add('Monitoring', 'debug', '['. $equipement .'][HDD] HDD Used % :: ' . $hdd_used_percent);
 							log::add('Monitoring', 'debug', '['. $equipement .'][HDD] HDD Free % :: ' . $hdd_free_percent);
 							
-							$hdd = '{{Total}} : '. $this->formatSize($hdd_total, 'Ko') . ' - {{Utilisé}} : ' . $this->formatSize($hdd_used, 'Ko') . ' - {{Libre}} : ' . $this->formatSize($hdd_free, 'Ko');
+							$hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($hdd_free, 'Ko');
 
 						} else {
 							$hdd_total = 0;
