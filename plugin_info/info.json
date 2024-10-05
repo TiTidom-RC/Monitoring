@@ -15,21 +15,24 @@
     "hasDependency": true,
     "category": "monitoring",
     "language": [
-        "fr_FR",
-        "en_US",
-        "es_ES",
-        "de_DE"
-    ],
+		"de_DE",
+		"en_US",
+		"es_ES",
+		"fr_FR",
+		"it_IT",
+		"pt_PT"
+	],
     "compatibility": [
-        "jeedomboard",
         "smart",
-        "miniplus",
         "rpi",
         "docker",
         "diy",
         "v4",
         "atlas"
     ],
+    "os": {
+		"min": 11
+	},
     "link": {
         "forum": "https://community.jeedom.com/tag/plugin-monitoring",
         "video": ""
