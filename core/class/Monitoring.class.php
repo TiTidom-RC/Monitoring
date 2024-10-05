@@ -984,7 +984,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd = new MonitoringCmd();
 					$MonitoringCmd->setName(__('Syno Volume USB Utilisé (Pourcent)', __FILE__));
 					$MonitoringCmd->setEqLogic_id($this->getId());
-					$MonitoringCmd->setLogicalId('syno_hddusb_percent');
+					$MonitoringCmd->setLogicalId('syno_hddusb_used_percent');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('%');
@@ -1359,14 +1359,14 @@ class Monitoring extends eqLogic {
 		$replace['#hdd_id#'] = is_object($hdd) ? $hdd->getId() : '';
 		$replace['#hdd#'] = is_object($hdd) ? $hdd->execCmd() : '';
 
-		$hdd_used_percent = $this->getCmd(null,'hdd_used_percent');
-		$replace['#hdd_used_percent#'] = is_object($hdd_used_percent) ? $hdd_used_percent->execCmd() : '';
-		$replace['#hdd_used_percent_id#'] = is_object($hdd_used_percent) ? $hdd_used_percent->getId() : '';
+		$hdd_free_percent = $this->getCmd(null,'hdd_free_percent');
+		$replace['#hdd_free_percent#'] = is_object($hdd_free_percent) ? $hdd_free_percent->execCmd() : '';
+		$replace['#hdd_free_percent_id#'] = is_object($hdd_free_percent) ? $hdd_free_percent->getId() : '';
 		
-		$replace['#hdd_used_percent_colorlow#'] = $this->getConfiguration('hdd_used_percent_colorlow');
-		$replace['#hdd_used_percent_colorhigh#'] = $this->getConfiguration('hdd_used_percent_colorhigh');
+		$replace['#hdd_free_percent_colorlow#'] = $this->getConfiguration('hdd_free_percent_colorlow');
+		$replace['#hdd_free_percent_colorhigh#'] = $this->getConfiguration('hdd_free_percent_colorhigh');
 
-		$this->getStats($hdd_used_percent, 'hdd_used_percent', $replace, 0);
+		$this->getStats($hdd_free_percent, 'hdd_free_percent', $replace, 0);
 		
 		// Mémoire
 		$memory = $this->getCmd(null,'memory');
@@ -1456,13 +1456,13 @@ class Monitoring extends eqLogic {
 			$replace['#syno_hddv2#'] = is_object($syno_hddv2) ? $syno_hddv2->execCmd() : '';
 			$replace['#syno_hddv2_id#'] = is_object($syno_hddv2) ? $syno_hddv2->getId() : '';
 
-			$syno_hddv2_used_percent = $this->getCmd(null,'syno_hddv2_used_percent');
-			$replace['#syno_hddv2_used_percent#'] = is_object($syno_hddv2_used_percent) ? $syno_hddv2_used_percent->execCmd() : '';
-			$replace['#syno_hddv2_used_percent_id#'] = is_object($syno_hddv2_used_percent) ? $syno_hddv2_used_percent->getId() : '';
-			$replace['#syno_hddv2_used_percent_colorlow#'] = $this->getConfiguration('syno_hddv2_used_percent_colorlow');
-			$replace['#syno_hddv2_used_percent_colorhigh#'] = $this->getConfiguration('syno_hddv2_used_percent_colorhigh');
+			$syno_hddv2_free_percent = $this->getCmd(null,'syno_hddv2_free_percent');
+			$replace['#syno_hddv2_free_percent#'] = is_object($syno_hddv2_free_percent) ? $syno_hddv2_free_percent->execCmd() : '';
+			$replace['#syno_hddv2_free_percent_id#'] = is_object($syno_hddv2_free_percent) ? $syno_hddv2_free_percent->getId() : '';
+			$replace['#syno_hddv2_free_percent_colorlow#'] = $this->getConfiguration('syno_hddv2_free_percent_colorlow');
+			$replace['#syno_hddv2_free_percent_colorhigh#'] = $this->getConfiguration('syno_hddv2_free_percent_colorhigh');
 
-			$this->getStats($syno_hddv2_used_percent, 'syno_hddv2_used_percent', $replace, 0);
+			$this->getStats($syno_hddv2_free_percent, 'syno_hddv2_free_percent', $replace, 0);
 		}
 
 		// Syno Volume USB
@@ -1479,14 +1479,14 @@ class Monitoring extends eqLogic {
 			$replace['#syno_hddusb#'] = is_object($syno_hddusb) ? $syno_hddusb->execCmd() : '';
 			$replace['#syno_hddusb_id#'] = is_object($syno_hddusb) ? $syno_hddusb->getId() : '';
 
-			$syno_hddusb_used_percent = $this->getCmd(null,'syno_hddusb_used_percent');
-			$replace['#syno_hddusb_used_percent#'] = is_object($syno_hddusb_used_percent) ? $syno_hddusb_used_percent->execCmd() : '';
-			$replace['#syno_hddusb_used_percent_id#'] = is_object($syno_hddusb_used_percent) ? $syno_hddusb_used_percent->getId() : '';
+			$syno_hddusb_free_percent = $this->getCmd(null,'syno_hddusb_free_percent');
+			$replace['#syno_hddusb_free_percent#'] = is_object($syno_hddusb_free_percent) ? $syno_hddusb_free_percent->execCmd() : '';
+			$replace['#syno_hddusb_free_percent_id#'] = is_object($syno_hddusb_free_percent) ? $syno_hddusb_free_percent->getId() : '';
 			
-			$replace['#syno_hddusb_used_percent_colorlow#'] = $this->getConfiguration('syno_hddusb_used_percent_colorlow');
-			$replace['#syno_hddusb_used_percent_colorhigh#'] = $this->getConfiguration('syno_hddusb_used_percent_colorhigh');
+			$replace['#syno_hddusb_free_percent_colorlow#'] = $this->getConfiguration('syno_hddusb_free_percent_colorlow');
+			$replace['#syno_hddusb_free_percent_colorhigh#'] = $this->getConfiguration('syno_hddusb_free_percent_colorhigh');
 
-			$this->getStats($syno_hddusb_used_percent, 'syno_hddusb_used_percent', $replace, 0);
+			$this->getStats($syno_hddusb_free_percent, 'syno_hddusb_free_percent', $replace, 0);
 		}
 
 		// Syno Volume eSATA
@@ -1503,14 +1503,14 @@ class Monitoring extends eqLogic {
 			$replace['#syno_hddesata#'] = is_object($syno_hddesata) ? $syno_hddesata->execCmd() : '';
 			$replace['#syno_hddesata_id#'] = is_object($syno_hddesata) ? $syno_hddesata->getId() : '';
 
-			$syno_hddesata_used_percent = $this->getCmd(null,'syno_hddesata_used_percent');
-			$replace['#syno_hddesata_used_percent#'] = is_object($syno_hddesata_used_percent) ? $syno_hddesata_used_percent->execCmd() : '';
-			$replace['#syno_hddesata_used_percent_id#'] = is_object($syno_hddesata_used_percent) ? $syno_hddesata_used_percent->getId() : '';
+			$syno_hddesata_free_percent = $this->getCmd(null,'syno_hddesata_free_percent');
+			$replace['#syno_hddesata_free_percent#'] = is_object($syno_hddesata_free_percent) ? $syno_hddesata_free_percent->execCmd() : '';
+			$replace['#syno_hddesata_free_percent_id#'] = is_object($syno_hddesata_free_percent) ? $syno_hddesata_free_percent->getId() : '';
 			
-			$replace['#syno_hddesata_used_percent_colorlow#'] = $this->getConfiguration('syno_hddesata_used_percent_colorlow');
-			$replace['#syno_hddesata_used_percent_colorhigh#'] = $this->getConfiguration('syno_hddesata_used_percent_colorhigh');
+			$replace['#syno_hddesata_free_percent_colorlow#'] = $this->getConfiguration('syno_hddesata_free_percent_colorlow');
+			$replace['#syno_hddesata_free_percent_colorhigh#'] = $this->getConfiguration('syno_hddesata_free_percent_colorhigh');
 
-			$this->getStats($syno_hddesata_used_percent, 'syno_hddesata_used_percent', $replace, 0);
+			$this->getStats($syno_hddesata_free_percent, 'syno_hddesata_free_percent', $replace, 0);
 		}
 
 		// Perso1

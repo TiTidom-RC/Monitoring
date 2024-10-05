@@ -185,21 +185,21 @@
 			}
 		</script>
 		<div class="cmd tooltips" style="margin-left:5px;display: #hdd_display#;">
-			<span title="Espace disque (% utilisé) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
+			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#hdd_used_percent#' === '') {
+				if ('#hdd_free_percent#' === '') {
 					document.getElementById('hdd#id#').innerHTML = '<span></span>';
-				} else if (parseInt('#hdd_used_percent#') < parseInt('#hdd_used_percent_colorlow#')) {
-					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hdd_used_percent#</span><span>%</span>)';
-				} else if ((parseInt('#hdd_used_percent#') >= parseInt('#hdd_used_percent_colorlow#')) && (parseInt('#hdd_used_percent#') <= parseInt('#hdd_used_percent_colorhigh#'))) {
-					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hdd_used_percent#</span><span>%</span>)';
-				} else if ((parseInt('#hdd_used_percent#') > parseInt('#hdd_used_percent_colorhigh#')) && '#hdd_used_percent_colorhigh#' !== '') {
-					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hdd_used_percent#</span><span>%</span>)';
+				} else if (parseInt('#hdd_free_percent#') < parseInt('#hdd_free_percent_colorlow#')) {
+					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#hdd_free_percent#</span><span>%</span>)';
+				} else if ((parseInt('#hdd_free_percent#') >= parseInt('#hdd_free_percent_colorlow#')) && (parseInt('#hdd_free_percent#') <= parseInt('#hdd_free_percent_colorhigh#'))) {
+					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#hdd_free_percent#</span><span>%</span>)';
+				} else if ((parseInt('#hdd_free_percent#') > parseInt('#hdd_free_percent_colorhigh#')) && '#hdd_free_percent_colorhigh#' !== '') {
+					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#hdd_free_percent#</span><span>%</span>)';
 				} else {
-					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state">#hdd_used_percent#</span><span>%</span>)';
+					document.getElementById('hdd#id#').innerHTML = 'Total : <span class="state">#hdd_total#</span> - Utilisé : <span class="state">#hdd_used#</span> (<span class="state">#hdd_free_percent#</span><span>%</span>)';
 				}
 			}
 		</script>
@@ -207,17 +207,17 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolume2_display#' == 'OK') {
-					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% utilisé) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_used_percent#id#"></span></div>';
-					if ('#syno_hddv2_used_percent#' === '') {
-						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#syno_hddv2_used_percent#') < parseInt('#syno_hddv2_used_percent_colorlow#')) {
-						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv2_used_percent#</span><span>%</span>)';
-					} else if ((parseInt('#syno_hddv2_used_percent#') >= parseInt('#syno_hddv2_used_percent_colorlow#')) && (parseInt('#syno_hddv2_used_percent#') <= parseInt('#syno_hddv2_used_percent_colorhigh#'))) {
-						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv2_used_percent#</span><span>%</span>)';
-					} else if ((parseInt('#syno_hddv2_used_percent#') > parseInt('#syno_hddv2_used_percent_colorhigh#')) && '#syno_hddv2_used_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv2_used_percent#</span><span>%</span>)';
+					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
+					if ('#syno_hddv2_free_percent#' === '') {
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddv2_free_percent#') < parseInt('#syno_hddv2_free_percent_colorlow#')) {
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddv2_free_percent#') >= parseInt('#syno_hddv2_free_percent_colorlow#')) && (parseInt('#syno_hddv2_free_percent#') <= parseInt('#syno_hddv2_free_percent_colorhigh#'))) {
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddv2_free_percent#') > parseInt('#syno_hddv2_free_percent_colorhigh#')) && '#syno_hddv2_free_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('syno_hddv2_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state">#syno_hddv2_used_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddv2_total#</span> - Utilisé : <span class="state">#syno_hddv2_used#</span> (<span class="state">#syno_hddv2_free_percent#</span><span>%</span>)';
 					}
 				}
 			}
@@ -226,17 +226,17 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeusb_display#' == 'OK') {
-					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddusb_display#;"><span title="Syno Volume USB (% utilisé) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_used_percent#id#"></span></div>';
-					if ('#syno_hddusb_used_percent#' === '') {
-						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#syno_hddusb_used_percent#') < parseInt('#syno_hddusb_used_percent_colorlow#')) {
-						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddusb_used_percent#</span><span>%</span>)';
-					} else if ((parseInt('#syno_hddusb_used_percent#') >= parseInt('#syno_hddusb_used_percent_colorlow#')) && (parseInt('#syno_hddusb_used_percent#') <= parseInt('#syno_hddusb_used_percent_colorhigh#'))) {
-						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddusb_used_percent#</span><span>%</span>)';
-					} else if ((parseInt('#syno_hddusb_used_percent#') > parseInt('#syno_hddusb_used_percent_colorhigh#')) && '#syno_hddusb_used_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddusb_used_percent#</span><span>%</span>)';
+					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
+					if ('#syno_hddusb_free_percent#' === '') {
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddusb_free_percent#') < parseInt('#syno_hddusb_free_percent_colorlow#')) {
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddusb_free_percent#') >= parseInt('#syno_hddusb_free_percent_colorlow#')) && (parseInt('#syno_hddusb_free_percent#') <= parseInt('#syno_hddusb_free_percent_colorhigh#'))) {
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddusb_free_percent#') > parseInt('#syno_hddusb_free_percent_colorhigh#')) && '#syno_hddusb_free_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('syno_hddusb_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state">#syno_hddusb_used_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddusb_total#</span> - Utilisé : <span class="state">#syno_hddusb_used#</span> (<span class="state">#syno_hddusb_free_percent#</span><span>%</span>)';
 					}
 				}
 			}
@@ -245,17 +245,17 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#synovolumeesata_display#' == 'OK') {
-					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% utilisé) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_used_percent#id#"></span></div>';
-					if ('#syno_hddesata_used_percent#' === '') {
-						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = '<span></span>';
-					} else if (parseInt('#syno_hddesata_used_percent#') < parseInt('#syno_hddesata_used_percent_colorlow#')) {
-						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_used_percent#</span><span>%</span>)';
-					} else if ((parseInt('#syno_hddesata_used_percent#') >= parseInt('#syno_hddesata_used_percent_colorlow#')) && (parseInt('#syno_hddesata_used_percent#') <= parseInt('#syno_hddesata_used_percent_colorhigh#'))) {
-						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_used_percent#</span><span>%</span>)';
-					} else if ((parseInt('#syno_hddesata_used_percent#') > parseInt('#syno_hddesata_used_percent_colorhigh#')) && '#syno_hddesata_used_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_used_percent#</span><span>%</span>)';
+					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
+					if ('#syno_hddesata_free_percent#' === '') {
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddesata_free_percent#') < parseInt('#syno_hddesata_free_percent_colorlow#')) {
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddesata_free_percent#') >= parseInt('#syno_hddesata_free_percent_colorlow#')) && (parseInt('#syno_hddesata_free_percent#') <= parseInt('#syno_hddesata_free_percent_colorhigh#'))) {
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddesata_free_percent#') > parseInt('#syno_hddesata_free_percent_colorhigh#')) && '#syno_hddesata_free_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('syno_hddesata_used_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state">#syno_hddesata_used_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = 'Total : <span class="state">#syno_hddesata_total#</span> - Utilisé : <span class="state">#syno_hddesata_used#</span> (<span class="state">#syno_hddesata_free_percent#</span><span>%</span>)';
 					}
 				}
 			}
