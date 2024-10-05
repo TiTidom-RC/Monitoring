@@ -47,7 +47,7 @@ function addCmdToTable(_cmd) {
 	}
 	tr += '</td>';
 	tr += '<td>';
-	if (['load_avg_1mn', 'load_avg_5mn', 'load_avg_15mn', 'cpu_temp', 'hdd_used_percent', 'syno_hddv2_used_percent', 'syno_hddusb_used_percent', 'syno_hddesata_used_percent'].includes(_cmd.logicalId)) {
+	if (['load_avg_1mn', 'load_avg_5mn', 'load_avg_15mn', 'memory_used_percent', 'swap_used_percent', 'cpu_temp', 'hdd_used_percent', 'syno_hddv2_used_percent', 'syno_hddusb_used_percent', 'syno_hddesata_used_percent'].includes(_cmd.logicalId)) {
 		tr += '<span class="cmdAttr" style="color: green;font-weight: bold;">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red;font-weight: bold;"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	}
 	if (['memory_free_percent', 'swap_free_percent', 'memory_available_percent', 'hdd_free_percent', 'syno_hddv2_free_percent', 'syno_hddusb_free_percent', 'syno_hddesata_free_percent'].includes(_cmd.logicalId)) {
