@@ -1098,7 +1098,7 @@ class Monitoring extends eqLogic {
 						$cpufreq0ARM_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
 						$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0');
 
-						$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
 						$versionsyno_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
@@ -1118,17 +1118,17 @@ class Monitoring extends eqLogic {
 						}
 					
 						if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyv2') == '1') {
-							$hddv2cmd = "LC_ALL=C df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$hddv2cmd = "LC_ALL=C df -hl 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 							$hddv2 = $this->execSSH($sshconnection, $hddv2cmd, 'HDDv2');
 						}
 
 						if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyusb') == '1') {
-							$hddusbcmd = "LC_ALL=C df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$hddusbcmd = "LC_ALL=C df -hl 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 							$hddusb = $this->execSSH($sshconnection, $hddusbcmd, 'HDDusb');
 						}
 
 						if ($this->getConfiguration('synology') == '1' && $this->getConfiguration('synologyesata') == '1') {
-							$hddesatacmd = "LC_ALL=C df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$hddesatacmd = "LC_ALL=C df -hl 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'"; // DSM 5.x / 6.x / 7.x
 							$hddesata = $this->execSSH($sshconnection, $hddesatacmd, 'HDDesata');
 						}
 
@@ -1138,7 +1138,7 @@ class Monitoring extends eqLogic {
 
 						$uname = '.';
 
-						$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
 						$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null";
@@ -1181,7 +1181,7 @@ class Monitoring extends eqLogic {
 							$cpufreq0 = $this->execSSH($sshconnection, $cpufreq0ARM_cmd, 'cpufreq0-2');
 						}
 
-						$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
 						$cputemp_cmd = $this->getCmd(null,'cpu_temp');
@@ -1215,7 +1215,7 @@ class Monitoring extends eqLogic {
 						$nbcpu = preg_replace("/[^0-9]/", "", $nbcpu);
 						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][X86] NbCPU :: ' . $nbcpu);
 
-						$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
 						// $cpufreqVM_cmd = "lscpu 2>/dev/null | grep 'Vitesse du processeur en MHz' | awk '{print \$NF}'"; // OK pour Debian/Ubuntu, mais pas Ubuntu 22.04
@@ -1288,7 +1288,7 @@ class Monitoring extends eqLogic {
 							// TODO faut il ajouter le preg_match pour les autres distri ARM ?
 							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][ARM] NbCPU :: ' . $nbcpu);
 
-							$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -1316,7 +1316,7 @@ class Monitoring extends eqLogic {
 							$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 							$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
 
-							$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -1347,7 +1347,7 @@ class Monitoring extends eqLogic {
 							$nbcpuARM_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 							$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
 
-							$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
+							$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$5 }'";
 							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
 							$cpufreq0ARM_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -1387,7 +1387,7 @@ class Monitoring extends eqLogic {
 							$nbcpuARM_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
 							$nbcpu = $this->execSSH($sshconnection, $nbcpuARM_cmd, 'NbCPU');
 
-							$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 							$hdd = $this->execSSH($sshconnection, $hdd_cmd, 'HDD');
 
 							$cpufreq0ARM_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
@@ -1419,7 +1419,7 @@ class Monitoring extends eqLogic {
 							$namedistri_cmd = "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'";
 							$VersionID_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
 							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
-							$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
+							$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$5 }'";
 							
 							$namedistri = $this->execSSH($sshconnection, $namedistri_cmd, 'NameDistri');
 							$VersionID = $this->execSSH($sshconnection, $VersionID_cmd, 'VersionID');
@@ -1473,7 +1473,7 @@ class Monitoring extends eqLogic {
 						$namedistri_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
 					}
 					$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | -v ORS=\"\" awk '{ gsub(/\"/, \"\"); print }'";
-					$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
+					$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$5 }'";
 				} else {
 					$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 					$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
@@ -1483,7 +1483,7 @@ class Monitoring extends eqLogic {
 
 					$namedistri_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 					$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-					$hdd_cmd = "LC_ALL=C df -h 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
+					$hdd_cmd = "LC_ALL=C df -hl 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$5 }'";
 				}
 
 				$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
@@ -1541,17 +1541,17 @@ class Monitoring extends eqLogic {
 					}
 
 					if ($this->getConfiguration('synology') == '1' /* && $SynoV2Visible == 'OK' */ && $this->getConfiguration('synologyv2') == '1') {
-						$hddv2cmd = "LC_ALL=C df -h 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hddv2cmd = "LC_ALL=C df -hl 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hddv2 = $this->execSRV($hddv2cmd, 'HDDv2');
 					}
 
 					if ($this->getConfiguration('synology') == '1' /* && $SynoUSBVisible == 'OK' */ && $this->getConfiguration('synologyusb') == '1') {
-						$hddusbcmd = "LC_ALL=C df -h 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hddusbcmd = "LC_ALL=C df -hl 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hddusb = $this->execSRV($hddusbcmd, 'HDDUSB');
 					}
 
 					if ($this->getConfiguration('synology') == '1' /* && $SynoeSATAVisible == 'OK' */ && $this->getConfiguration('synologyesata') == '1') {
-						$hddesatacmd = "LC_ALL=C df -h 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'";
+						$hddesatacmd = "LC_ALL=C df -hl 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$5 }'";
 						$hddesata = $this->execSRV($hddesatacmd, 'HDDeSATA');
 					}
 				} elseif ($ARMv == 'armv6l') {
