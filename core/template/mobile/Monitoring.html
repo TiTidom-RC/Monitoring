@@ -203,11 +203,11 @@
 				}
 			}
 		</script>
-		<div id="synovol2#id#"></div>
+		<div id="syno_hddv2#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#synovolume2_display#' == 'OK') {
-					document.getElementById('synovol2#id#').innerHTML = '<div id="synovol2#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
+				if ('#syno_hddv2_display#' === 'block') {
+					document.getElementById('syno_hddv2#id#').innerHTML = '<div id="syno_hddv2#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
 					if ('#syno_hddv2_free_percent#' === '') {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddv2_free_percent#') < parseInt('#syno_hddv2_free_percent_colorlow#')) {
@@ -222,11 +222,11 @@
 				}
 			}
 		</script>
-		<div id="synovolusb#id#"></div>
+		<div id="syno_hddusb#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#synovolumeusb_display#' == 'OK') {
-					document.getElementById('synovolusb#id#').innerHTML = '<div id="synovolusb#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
+				if ('#syno_hddusb_display#' === 'block') {
+					document.getElementById('syno_hddusb#id#').innerHTML = '<div id="syno_hddusb#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
 					if ('#syno_hddusb_free_percent#' === '') {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddusb_free_percent#') < parseInt('#syno_hddusb_free_percent_colorlow#')) {
@@ -241,11 +241,11 @@
 				}
 			}
 		</script>
-		<div id="synovolesata#id#"></div>
+		<div id="syno_hddesata#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#synovolumeesata_display#' == 'OK') {
-					document.getElementById('synovolesata#id#').innerHTML = '<div id="synovolesata#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
+				if ('#syno_hddesata_display#' === 'block') {
+					document.getElementById('syno_hddesata#id#').innerHTML = '<div id="syno_hddesata#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
 					if ('#syno_hddesata_free_percent#' === '') {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddesata_free_percent#') < parseInt('#syno_hddesata_free_percent_colorlow#')) {
@@ -266,7 +266,7 @@
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' == 'OK') {
+				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' === 'block') {
 					document.getElementById('cpu#id#').innerHTML = '<span>#cpu# </span>';
 					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
 						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state" style="color: var(--al-success-color) !important;">#cpu_temp#</span><span>°C</span>)';
