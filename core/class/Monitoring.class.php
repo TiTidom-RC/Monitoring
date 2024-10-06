@@ -1418,7 +1418,7 @@ class Monitoring extends eqLogic {
 			'network_ip' => array('exec', 'id'),
 			
 			'cpu' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'cpu_temp' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
+			'cpu_temp' => array('exec', 'id', 'display', 'colorlow', 'colorhigh', 'stats_0'),
 
 			'perso1' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats_2'),
 			'perso2' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats_2')
@@ -1609,7 +1609,7 @@ class Monitoring extends eqLogic {
 			$freq /= 1000;
 			$unitIndex++;
 		}
-		
+
 		return [$freq_result, round($freq, 1, PHP_ROUND_HALF_UP) . ' ' . $units[$unitIndex]];
 	}
 
@@ -2720,19 +2720,10 @@ class Monitoring extends eqLogic {
 							if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $distri_name) || preg_match("#piCorePlayer|medion#", $uname)) {
 								
 								// CPUFreq
-								if ((floatval($cpu_freq) / 1000) > 1000) {
-									$cpu_freq_txt = round(floatval($cpu_freq) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
-									$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);
-									
-								} else {
-									$cpu_freq_txt = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP) . " MHz";
-									$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);
-								}
+								[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'KHz');
 
 								// CPU Temp
-								if (floatval($cpu_temp) > 200) {
-									$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
-								}
+								$cpu_temp = $this->formatTemp($cpu_temp);
 
 								$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
 							}
