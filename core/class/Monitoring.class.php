@@ -1618,7 +1618,7 @@ class Monitoring extends eqLogic {
 		if ($tempNum > 200) {
 			$tempNum = $tempNum / 1000;
 		}
-		return round($tempNum, 1, PHP_ROUND_HALF_UP);
+		return round($tempNum, 1);
 	}
 
 	public function formatUptime($uptime) {
