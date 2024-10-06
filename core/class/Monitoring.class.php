@@ -1346,10 +1346,10 @@ class Monitoring extends eqLogic {
 					$replace['#' . $cmdName . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
 					break;
 				case 'collect': // TODO Vérifier si nécessaire le getIsVisible
-					$replace['#' . $cmdName . '_collect#'] = (is_object($cmd) && $cmd->getIsVisible()) ? $cmd->getCollectDate() : "-";
+					$replace['#' . $cmdName . '_collect#'] = is_object($cmd) ? $cmd->getCollectDate() : "-";
 					break;
 				case 'value': // TODO Vérifier si nécessaire le getIsVisible
-					$replace['#' . $cmdName . '_value#'] = (is_object($cmd) && $cmd->getIsVisible()) ? $cmd->execCmd() : "-";
+					$replace['#' . $cmdName . '_value#'] = is_object($cmd) ? $cmd->getValueDate() : "-";
 					break;
 				case 'pull_use_custom': // OK
 					$replace['#' . $cmdName . '_custom#'] = $this->getConfiguration('pull_use_custom', '0');
