@@ -2676,7 +2676,6 @@ class Monitoring extends eqLogic {
 							}
 
 							// CPU Temp
-								}
 							if (floatval($cpu_temp) > 200) {
 								$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
 							}
