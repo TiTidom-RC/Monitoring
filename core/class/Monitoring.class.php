@@ -1593,6 +1593,34 @@ class Monitoring extends eqLogic {
 		return round($size, 2) . ' ' . $units[$unitIndex];
 	}
 
+	public function formatFreq($freq, string $start = 'MHz') {
+		$units = array('KHz', 'MHz', 'GHz');
+		$unitIndex = ($unitIndex = array_search($start, $units)) === false ? 0 : $unitIndex;
+		$freq = floatval($freq);
+
+		if ($start == 'KHz') {
+			// Le résultat est toujours renvoyé en MHz
+			$freq_result = round($freq / 1000, 1, PHP_ROUND_HALF_UP);
+		} else {
+			$freq_result = round($freq, 1, PHP_ROUND_HALF_UP);
+		}
+
+		while ($freq >= 1000 && $unitIndex < count($units) - 1) {
+			$freq /= 1000;
+			$unitIndex++;
+		}
+		
+		return [$freq_result, round($freq, 1, PHP_ROUND_HALF_UP) . ' ' . $units[$unitIndex]];
+	}
+
+	public function formatTemp($temp) {
+		$tempNum = floatval($temp);
+		if ($tempNum > 200) {
+			$tempNum = $tempNum / 1000;
+		}
+		return round($tempNum, 1, PHP_ROUND_HALF_UP);
+	}
+
 	public function formatUptime($uptime) {
 		$uptimeNum = floatval($uptime);
 		$days = sprintf('%0.0f', floor($uptimeNum / 86400));
@@ -1614,6 +1642,27 @@ class Monitoring extends eqLogic {
 			$uptimeFormated .= $seconds . 's';
 		}
 		return $uptimeFormated;
+	}
+
+	public function getSynoVersion(string $_version, string $_syno_model, string $_equipement) {
+		$result = '';
+
+		parse_str($_version, $syno_version_array);
+		log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Parse version :: OK');
+		
+		if (isset($syno_version_array['productversion'], $syno_version_array['buildnumber'], $syno_version_array['smallfixnumber'])) {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Version :: DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'].' Update '.$syno_version_array['smallfixnumber']);
+			$syno_version_TXT = 'DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'].' Update '.$syno_version_array['smallfixnumber'];
+		} elseif (isset($syno_version_array['productversion'], $syno_version_array['buildnumber'])) {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Version (Version-Build) :: DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber']);
+			$syno_version_TXT = 'DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'];
+		} else {
+			log::add('Monitoring', 'error', '['. $_equipement .'][DSM/SRM] Version :: KO');
+			$syno_version_TXT = 'DSM';
+		}
+		
+		$result = $syno_version_TXT . ' (' . trim($_syno_model) . ')';
+		return $result;
 	}
 
 	public function getInformations() {
@@ -2278,44 +2327,20 @@ class Monitoring extends eqLogic {
 					// Synology (New)
 					if ($this->getConfiguration('synology') == '1') {
 						// Syno DistriName
-						if (isset($syno_version_file)) {
-							parse_str($syno_version_file, $syno_version_array);
-							log::add('Monitoring', 'debug', '['. $equipement .'][DSM/SRM] Parse version :: OK');
-	
-							if (isset($syno_version_array['productversion'], $syno_version_array['buildnumber'], $syno_version_array['smallfixnumber'])) {
-								log::add('Monitoring', 'debug', '['. $equipement .'][DSM/SRM] Version :: DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'].' Update '.$syno_version_array['smallfixnumber']);
-								$syno_version_TXT = 'DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'].' Update '.$syno_version_array['smallfixnumber'];
-							} elseif (isset($syno_version_array['productversion'], $syno_version_array['buildnumber'])) {
-								log::add('Monitoring', 'debug', '['. $equipement .'][DSM/SRM] Version (Version-Build) :: DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber']);
-								$syno_version_TXT = 'DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'];
-							} else {
-								log::add('Monitoring', 'error', '['. $equipement .'][DSM/SRM] Version :: KO');
-								$syno_version_TXT = '';
-							}
-	
-							if (isset($syno_model, $syno_version_TXT)) {
-								$distri_name = $syno_version_TXT . ' (' . trim($syno_model) . ')';
-							} else {
-								$distri_name = '';
-							}
+						if (isset($syno_version_file, $syno_model)) {
+							$distri_name = $this->getSynoVersion($syno_version_file, $syno_model, $equipement);
 						} else {
 							$distri_name = '';
 						}
 
 						// Syno CPUFreq
-						if ((floatval($cpu_freq) / 1000) > 1) {
-							$cpu_freq_txt = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP) . " GHz";
-						} else {
-							$cpu_freq_txt = $cpu_freq . " MHz";
-						}
-
-						// Syno CPU Temp
-						if (floatval($cpu_temp) > 200) {
-							$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
-						}
+						[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'MHz');
 
 						// Syno CPU
 						$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
+
+						// Syno CPU Temp
+						$cpu_temp = $this->formatTemp($cpu_temp);
 
 						// Syno Volume 2
 						if ($this->getConfiguration('synologyv2') == '1') {
@@ -2667,48 +2692,32 @@ class Monitoring extends eqLogic {
 					// ARMv (New)
 					if (isset($ARMv)) {
 						if ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-							
 							// CPUFreq
-							if ((floatval($cpu_freq) / 1000) > 1) {
-								$cpu_freq_txt = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP) . " GHz";
-							} else {
-								$cpu_freq_txt = $cpu_freq . " MHz";
-							}
+							[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'MHz');
 
 							// CPU Temp
-							if (floatval($cpu_temp) > 200) {
-								$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
-							}
+							$cpu_temp = $this->formatTemp($cpu_temp);
 
 							// CPU
 							$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
 
 						} elseif ($ARMv == 'armv6l' || $ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
-							
 							// CPUFreq
-							if ((floatval($cpu_freq) / 1000) > 1000) {
-								$cpu_freq_txt = round(floatval($cpu_freq) / 1000000, 1, PHP_ROUND_HALF_UP) . " GHz";
-								$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);
-							} else {
-								$cpu_freq_txt = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP) . " MHz";
-								$cpu_freq = round(floatval($cpu_freq) / 1000, 1, PHP_ROUND_HALF_UP);
-							}
+							[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'KHz');
 							
 							// CPU Temp
-							if (floatval($cpu_temp) > 200) {
-								$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
-							}
+							$cpu_temp = $this->formatTemp($cpu_temp);
 
 							// CPU
 							if (floatval($cpu_freq) == 0) {
-								$cpu = $cpu_nb . ' Socket(s) ';
+								$cpu = $cpu_nb . ' Socket(s)';
 								$cpu_freq = 0.0;
 							} else {
 								$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
 							}
 
 						} elseif ($ARMv == 'arm') {
-							if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $distri_name) || preg_match("#piCorePlayer#", $uname) || preg_match("#medion#", $uname)) {
+							if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $distri_name) || preg_match("#piCorePlayer|medion#", $uname)) {
 								
 								// CPUFreq
 								if ((floatval($cpu_freq) / 1000) > 1000) {
