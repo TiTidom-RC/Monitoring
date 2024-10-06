@@ -1328,56 +1328,61 @@ class Monitoring extends eqLogic {
 
 	public function getCmdReplace(string $cmdName, array $cmdOptions, &$replace) {
 		$cmd = $this->getCmd(null, $cmdName);
+		$isCmdObject = is_object($cmd);
+		$cmdNamePrefix = '#' . $cmdName;
+
+		$optionActions = [
+			'exec' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '#'] = $isCmdObject ? $cmd->execCmd() : '';
+			},
+			'id' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_id#'] = $isCmdObject ? $cmd->getId() : '';
+			},
+			'icon' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
+				$replace[$cmdNamePrefix . '_icon#'] = $isCmdObject ? (!empty($cmd->getDisplay('icon')) ? $cmd->getDisplay('icon') : $this->getDefaultIcon($cmdName)) : '';
+			},
+			'display' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_display#'] = ($isCmdObject && $cmd->getIsVisible()) ? "block" : "none";
+			},
+			'display_inline' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_display#'] = ($isCmdObject && $cmd->getIsVisible()) ? "inline-block" : "none";
+			},
+			'collect' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_collect#'] = $isCmdObject ? $cmd->getCollectDate() : "-";
+			},
+			'value' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_value#'] = $isCmdObject ? $cmd->getValueDate() : "-";
+			},
+			'pull_use_custom' => function() use ($cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_custom#'] = $this->getConfiguration('pull_use_custom', '0');
+			},
+			'name' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_name#'] = $isCmdObject ? $cmd->getName() : '';
+			},
+			'unite' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
+				$replace[$cmdNamePrefix . '_unite#'] = $isCmdObject ? $this->getConfiguration($cmdName . '_unite') : '';
+			},
+			'colorlow' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
+				$replace[$cmdNamePrefix . '_colorlow#'] = $isCmdObject ? $this->getConfiguration($cmdName . '_colorlow') : '';
+			},
+			'colorhigh' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
+				$replace[$cmdNamePrefix . '_colorhigh#'] = $isCmdObject ? $this->getConfiguration($cmdName . '_colorhigh') : '';
+			},
+			'stats_0' => function() use ($cmd, $cmdName, &$replace) {
+				$this->getStats($cmd, $cmdName, $replace, 0);
+			},
+			'stats_2' => function() use ($cmd, $cmdName, &$replace) {
+				$this->getStats($cmd, $cmdName, $replace, 2);
+			}
+		];
+
 		foreach ($cmdOptions as $option) {
-			switch ($option) {
-				case 'exec': // OK
-					$replace['#' . $cmdName . '#'] = is_object($cmd) ? $cmd->execCmd() : '';
-					break;
-				case 'id': // OK
-					$replace['#' . $cmdName . '_id#'] = is_object($cmd) ? $cmd->getId() : '';
-					break;
-				case 'icon': // OK
-					$replace['#' . $cmdName . '_icon#'] = is_object($cmd) ? (!empty($cmd->getDisplay('icon')) ? $cmd->getDisplay('icon') : $this->getDefaultIcon($cmdName)) : '';
-					break;
-				case 'display': // OK
-					$replace['#' . $cmdName . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "block" : "none";
-					break;
-				case 'display_inline': // OK
-					$replace['#' . $cmdName . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
-					break;
-				case 'collect': // TODO Vérifier si nécessaire le getIsVisible
-					$replace['#' . $cmdName . '_collect#'] = is_object($cmd) ? $cmd->getCollectDate() : "-";
-					break;
-				case 'value': // TODO Vérifier si nécessaire le getIsVisible
-					$replace['#' . $cmdName . '_value#'] = is_object($cmd) ? $cmd->getValueDate() : "-";
-					break;
-				case 'pull_use_custom': // OK
-					$replace['#' . $cmdName . '_custom#'] = $this->getConfiguration('pull_use_custom', '0');
-					break;
-				case 'name': // OK
-					$replace['#' . $cmdName . '_name#'] = is_object($cmd) ? $cmd->getName() : '';
-					break;
-				case 'unite': // OK
-					$replace['#' . $cmdName . '_unite#'] = is_object($cmd) ? $this->getConfiguration($cmdName . '_unite') : '';
-					break;
-				case 'colorlow': // OK
-					$replace['#' . $cmdName . '_colorlow#'] = is_object($cmd) ? $this->getConfiguration($cmdName . '_colorlow') : '';
-					break;
-				case 'colorhigh': // OK
-					$replace['#' . $cmdName . '_colorhigh#'] = is_object($cmd) ? $this->getConfiguration($cmdName . '_colorhigh') : '';
-					break;
-				case 'stats_0': // OK
-					$this->getStats($cmd, $cmdName, $replace, 0);
-					break;
-				case 'stats_2': // OK
-					$this->getStats($cmd, $cmdName, $replace, 2);
-					break;
-				default:
-					log::add('Monitoring', 'error', '[' . $this->getName() . '][CmdReplace] Option inconnue :: ' . $option);
-					break;
+			if (isset($optionActions[$option])) {
+				$optionActions[$option]();
+			} else {
+				log::add('Monitoring', 'error', '[' . $this->getName() . '][CmdReplace] Option inconnue :: ' . $option);
 			}
 		}
-		
 	}
 
 	public function toHtml($_version = 'dashboard') {
