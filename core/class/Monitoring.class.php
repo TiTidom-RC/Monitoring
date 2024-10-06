@@ -2676,11 +2676,9 @@ class Monitoring extends eqLogic {
 							}
 
 							// CPU Temp
-							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd)) {
-								if (floatval($cpu_temp) > 200) {
-									$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
 								}
+							if (floatval($cpu_temp) > 200) {
+								$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
 							}
 
 							// CPU
@@ -2698,11 +2696,8 @@ class Monitoring extends eqLogic {
 							}
 							
 							// CPU Temp
-							$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-							if (is_object($cputemp_cmd)) {
-								if (floatval($cpu_temp) > 200) {
-									$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
-								}
+							if (floatval($cpu_temp) > 200) {
+								$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
 							}
 
 							// CPU
@@ -2727,11 +2722,8 @@ class Monitoring extends eqLogic {
 								}
 
 								// CPU Temp
-								$cputemp_cmd = $this->getCmd(null,'cpu_temp');
-								if (is_object($cputemp_cmd)) {
-									if (floatval($cpu_temp) > 200) {
-										$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
-									}
+								if (floatval($cpu_temp) > 200) {
+									$cpu_temp = round(floatval($cpu_temp) / 1000, 1);
 								}
 
 								$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
