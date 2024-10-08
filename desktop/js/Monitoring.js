@@ -60,9 +60,8 @@ function addCmdToTable(_cmd) {
 	}
 	tr += '</td>';
 	tr += '<td>';
-	if (['reboot', 'poweroff', 'distri_name', 'uptime', 'load_avg', 'memory', 'swap', 'network', 'hdd', 'cpu_temp', 'syno_hddv2', 'syno_hddusb', 'syno_hddesata', 'cpu', 'perso1', 'perso2', 'cron_status'].includes(_cmd.logicalId)) {
-		tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked /> {{Afficher}}<br/></label>';
-	}
+	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked /> {{Afficher}}<br/></label>';
+	
 	if (['cron_status', 'uptime_sec', 'load_avg_1mn', 'load_avg_5mn', 'load_avg_15mn', 'memory_total', 'memory_used', 'memory_free', 'memory_buffcache', 'memory_available', 'memory_free_percent', 'memory_used_percent', 'memory_available_percent', 'swap_free_percent', 'swap_used_percent', 'swap_total', 'swap_used', 'swap_free', 'network_tx', 'network_rx', 'hdd_total', 'hdd_used', 'hdd_free', 'hdd_used_percent', 'hdd_free_percent', 'cpu_temp', 'perso1', 'perso2', 'syno_hddv2_total', 'syno_hddv2_used', 'syno_hddv2_free', 'syno_hddv2_used_percent', 'syno_hddv2_free_percent', 'syno_hddusb_total', 'syno_hddusb_used', 'syno_hddusb_used_percent', 'syno_hddusb_free', 'syno_hddusb_free_percent', 'syno_hddesata_total', 'syno_hddesata_used', 'syno_hddesata_used_percent', 'syno_hddesata_free', 'syno_hddesata_free_percent'].includes(_cmd.logicalId)) {
 		tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isHistorized" /> {{Historiser}}</label>';
 	}
