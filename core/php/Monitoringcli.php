@@ -103,7 +103,8 @@ switch ($argv[1]) {
 					}
 				}
 			}
-		}	
+		}
+        log::add($_logName, 'info', __('[DEP-INSTALL] >>>> Fin des dépendances <<<<', __FILE__));
         break;
     default:
         help();
