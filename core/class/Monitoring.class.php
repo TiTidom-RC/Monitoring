@@ -1828,32 +1828,24 @@ class Monitoring extends eqLogic {
 					$ReseauIP = $this->execSSH($hostId, $ReseauIP_cmd, 'ReseauIP');
 
 					// Perso1 Command
-					try {
-						$perso1_fullcmd = $this->getCmd(null, 'perso1');
-						if (is_object($perso1_fullcmd)) {
-							$perso1_cmd = $perso1_fullcmd->execCmd();
-							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO1] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
-						} else {
-							$perso1_cmd = '';
-						}
-						$perso1 = trim($perso1_cmd) !== '' ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
-					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD][PERSO1] Exception :: ' . $e->getMessage());
+					$perso1_fullcmd = $this->getCmd(null, 'perso1');
+					if (is_object($perso1_fullcmd)) {
+						$perso1_cmd = $perso1_fullcmd->execCmd();
+						log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO1] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
+					} else {
+						$perso1_cmd = '';
 					}
+					$perso1 = trim($perso1_cmd) !== '' ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
 
 					// Perso2 Command
-					try {
-						$perso2_fullcmd	= $this->getCmd(null, 'perso2');
-						if (is_object($perso2_fullcmd)) {
-							$perso2_cmd = $perso2_fullcmd->execCmd();
-							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO2] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
-						} else {
-							$perso2_cmd = '';
-						}
-						$perso2 = trim($perso2_cmd) !== '' ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
-					} catch (Exception $e) {
-						log::add('Monitoring', 'error', '['. $equipement .'][SSH-CMD][PERSO2] Exception :: ' . $e->getMessage());
+					$perso2_fullcmd	= $this->getCmd(null, 'perso2');
+					if (is_object($perso2_fullcmd)) {
+						$perso2_cmd = $perso2_fullcmd->execCmd();
+						log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO2] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
+					} else {
+						$perso2_cmd = '';
 					}
+					$perso2 = trim($perso2_cmd) !== '' ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
 					
 					if ($this->getConfiguration('synology') == '1') {
 						// Synology uname & BitDistri Init
@@ -2301,7 +2293,7 @@ class Monitoring extends eqLogic {
 				$perso1_fullcmd = $this->getCmd(null, 'perso1');
 				if (is_object($perso1_fullcmd)) {
 					$perso1_cmd = $perso1_fullcmd->execCmd();
-					log:add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso1 :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
+					log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso1 :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
 				} else {
 					$perso1_cmd = '';
 				}
@@ -2311,7 +2303,7 @@ class Monitoring extends eqLogic {
 				$perso2_fullcmd = $this->getCmd(null, 'perso2');
 				if (is_object($perso2_fullcmd)) {
 					$perso2_cmd = $perso2_fullcmd->execCmd();
-					log:add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso2 :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
+					log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso2 :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
 				} else {
 					$perso2_cmd = '';
 				}
