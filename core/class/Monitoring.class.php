@@ -40,7 +40,7 @@ class Monitoring extends eqLogic {
 
 		log::add($_logName, 'info', __('[DEP-INSTALL] >>>> Début des dépendances <<<<', __FILE__));
 		try {
-			$result = shell_exec('php ' . __DIR__ . '/../php/Monitoringcli.php' . ' depinstall ' . $_logName . ' 2>&1');
+			$result = shell_exec('php ' . __DIR__ . '/../php/Monitoringcli.php' . ' depinstall ' . $_logName . ' 2>&1 &');
 			if (!empty($result)) {
 				log::add($_logName, 'info', __('[DEP-INSTALL] Résultat :: ', __FILE__) . $result);
 			}
