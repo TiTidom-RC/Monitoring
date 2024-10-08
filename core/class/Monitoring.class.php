@@ -1350,39 +1350,37 @@ class Monitoring extends eqLogic {
 
 	public function getStats($cmd, $cmdName, &$replace, int $precision = 2) {
 		try {
-			if (is_object($cmd)) {
-				if ($cmd->getIsHistorized() == 1) {
-					$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
-					$historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
-					if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
-						$replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
-						$replace['#' . $cmdName . '_minHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
-						$replace['#' . $cmdName . '_maxHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+			if ($cmd->getIsHistorized() == 1) {
+				$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
+				$historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
+				if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
+					$replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+					$replace['#' . $cmdName . '_minHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+					$replace['#' . $cmdName . '_maxHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+				} else {
+					$replace['#' . $cmdName . '_averageHistory#'] = round($historyStatistique['avg'], $precision);
+					$replace['#' . $cmdName . '_minHistory#'] = round($historyStatistique['min'], $precision);
+					$replace['#' . $cmdName . '_maxHistory#'] = round($historyStatistique['max'], $precision);
+				}
+				// Tendance
+				if ($this->getConfiguration('stats_tendance', '0') == '1') {
+					$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
+					log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
+					if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
+						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
+					} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
+						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"></i>';
 					} else {
-						$replace['#' . $cmdName . '_averageHistory#'] = round($historyStatistique['avg'], $precision);
-						$replace['#' . $cmdName . '_minHistory#'] = round($historyStatistique['min'], $precision);
-						$replace['#' . $cmdName . '_maxHistory#'] = round($historyStatistique['max'], $precision);
-					}
-					// Tendance
-					if ($this->getConfiguration('stats_tendance', '0') == '1') {
-						$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
-						log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
-						if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
-							$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
-						} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
-							$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"></i>';
-						} else {
-							$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
-						}
-					} else {
-						$replace['#' . $cmdName . '_tendance#'] = '';
+						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
 					}
 				} else {
-					$replace['#' . $cmdName . '_averageHistory#'] = '-';
-					$replace['#' . $cmdName . '_minHistory#'] = '-';
-					$replace['#' . $cmdName . '_maxHistory#'] = '-';
 					$replace['#' . $cmdName . '_tendance#'] = '';
 				}
+			} else {
+				$replace['#' . $cmdName . '_averageHistory#'] = '-';
+				$replace['#' . $cmdName . '_minHistory#'] = '-';
+				$replace['#' . $cmdName . '_maxHistory#'] = '-';
+				$replace['#' . $cmdName . '_tendance#'] = '';
 			}
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[' . $this->getName() . '][getStats] ' . $e->getMessage());
@@ -1477,11 +1475,11 @@ class Monitoring extends eqLogic {
 			'colorhigh' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
 				$replace[$cmdNamePrefix . '_colorhigh#'] = $isCmdObject ? $this->getConfiguration($cmdName . '_colorhigh') : '';
 			},
-			'stats_0' => function() use ($cmd, $cmdName, &$replace) {
-				$this->getStats($cmd, $cmdName, $replace, 0);
+			'stats_0' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
+				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 0); }
 			},
-			'stats_2' => function() use ($cmd, $cmdName, &$replace) {
-				$this->getStats($cmd, $cmdName, $replace, 2);
+			'stats_2' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
+				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 2); }
 			}
 		];
 
