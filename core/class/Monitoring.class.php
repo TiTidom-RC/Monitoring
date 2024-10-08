@@ -1828,23 +1828,13 @@ class Monitoring extends eqLogic {
 					$ReseauIP = $this->execSSH($hostId, $ReseauIP_cmd, 'ReseauIP');
 
 					// Perso1 Command
-					$perso1_fullcmd = $this->getCmd(null, 'perso1');
-					if (is_object($perso1_fullcmd)) {
-						$perso1_cmd = $perso1_fullcmd->getConfiguration('perso1');
-						log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO1] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
-					} else {
-						$perso1_cmd = '';
-					}
+					$perso1_cmd = $this->getConfiguration('perso1', '');
+					log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO1] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
 					$perso1 = trim($perso1_cmd) !== '' ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
 
 					// Perso2 Command
-					$perso2_fullcmd	= $this->getCmd(null, 'perso2');
-					if (is_object($perso2_fullcmd)) {
-						$perso2_cmd = $perso2_fullcmd->getConfiguration('perso2');
-						log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO2] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
-					} else {
-						$perso2_cmd = '';
-					}
+					$perso2_cmd = $this->getConfiguration('perso2', '');
+					log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO2] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
 					$perso2 = trim($perso2_cmd) !== '' ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
 					
 					if ($this->getConfiguration('synology') == '1') {
@@ -2290,23 +2280,13 @@ class Monitoring extends eqLogic {
 				$ReseauIP = $this->execSRV($ReseauIP_cmd, 'ReseauIP');
 				
 				// Perso1 Command
-				$perso1_fullcmd = $this->getCmd(null, 'perso1');
-				if (is_object($perso1_fullcmd)) {
-					$perso1_cmd = $perso1_fullcmd->getConfiguration('perso1');
-					log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso1 :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
-				} else {
-					$perso1_cmd = '';
-				}
+				$perso1_cmd = $this->getConfiguration('perso1', '');
+				log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso1 :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
 				$perso1 = trim($perso1_cmd) !== '' ? $this->execSRV($perso1_cmd, 'Perso1') : '';
 
 				// Perso2 Command
-				$perso2_fullcmd = $this->getCmd(null, 'perso2');
-				if (is_object($perso2_fullcmd)) {
-					$perso2_cmd = $perso2_fullcmd->getConfiguration('perso2');
-					log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso2 :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
-				} else {
-					$perso2_cmd = '';
-				}
+				$perso2_cmd = $this->getConfiguration('perso2', '');
+				log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso2 :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
 				$perso2 = trim($perso2_cmd) !== '' ? $this->execSRV($perso2_cmd, 'Perso2') : '';
 	
 				if ($ARMv == 'armv6l') {
