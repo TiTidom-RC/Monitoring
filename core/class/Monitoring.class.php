@@ -1442,9 +1442,14 @@ class Monitoring extends eqLogic {
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
 	public function getCPUTemp($tempArray) {
+		$equipement = $this->getName();
 		$result = ['cpu_temp' => '', 'cpu_temp_cmd' => ''];
-		if (is_array($tempArray)) {
-			$cpu_temp_cmd = '';
+
+		if ($this->getConfiguration('linux_use_temp_cmd')) {
+			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
+			log::add('Monitoring','debug', '['. $equipement .'][LOCAL][XXX] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
+			$cpu_temp = trim($cpu_temp_cmd) != '' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : '';
+		} elseif (is_array($tempArray)) {
 			foreach ($tempArray as $type => $command) {
 				if ($type == 'file' && file_exists($command)) {
 					$cpu_temp_cmd = "cat " . $command;
@@ -1455,7 +1460,7 @@ class Monitoring extends eqLogic {
 				}
 				$cpu_temp = trim($cpu_temp_cmd) != '' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp') : '';
 				if ($cpu_temp != '') {
-					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_cmd' => $cpu_temp_cmd];
+					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_cmd' => trim($cpu_temp_cmd)];
 					break;
 				}
 			}
