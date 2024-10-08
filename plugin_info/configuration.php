@@ -43,7 +43,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
         <div>
             <legend><i class="fas fa-info"></i> {{Plugin}}</legend>
             <div class="form-group">
-                <label class="col-md-4 control-label">{{Version}}
+                <label class="col-md-3 control-label">{{Version}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin à indiquer sur Community}}"></i></sup>
                 </label>
                 <div class="col-md-1">
@@ -52,35 +52,35 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
             </div>
             <legend><i class="fas fa-tasks"></i> {{Mises à jour Automatiques}} :</legend>
             <div class="form-group">
-                <label class="col-md-4 control-label">{{Equipement Local (1 min)}}
+                <label class="col-md-3 control-label">{{Equipement Local (1 min)}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les minutes) de l'équipement local}}"></i></sup>
                 </label>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <input type="checkbox" class="configKey form-control" data-l1key="configPullLocal" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label">{{Equipements Distants (15 min)}}
+                <label class="col-md-3 control-label">{{Equipements Distants (15 min)}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver les MàJ auto (toutes les 15 minutes) des équipements distants}}"></i></sup>
                 </label>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />
                 </div>
             </div>
             <legend><i class="fas fa-clipboard-check"></i> {{Migration (Monitoring -> SSH-Manager)}}</legend>
             <div class="form-group">
-                <label class="col-lg-3 control-label">{{Statut Migration}}
+                <label class="col-md-3 control-label">{{Statut Migration}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Si ce paramètre est coché, alors la migration a déjà été effectuée}}"></i></sup>
                 </label>
-                <div class="col-lg-1">
+                <div class="col-md-3">
                     <input type="checkbox" class="configKey" data-l1key="isMigrated" disabled />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-lg-3 control-label">{{Migrer les paramètres SSH des équipements}}
+                <label class="col-md-3 control-label">{{Migrer les paramètres SSH des équipements}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Migrer les paramètres des hôtes distants de vos équipements vers SSH-Manager}}"></i></sup>
                 </label>
-                <div class="col-lg-1">
+                <div class="col-md-3">
                     <a class="btn btn-warning customclass-migrate"><i class="fas fa-play-circle"></i> {{Migrer}}</a>
                 </div>
             </div>
