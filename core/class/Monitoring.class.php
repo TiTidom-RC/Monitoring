@@ -36,13 +36,14 @@ class Monitoring extends eqLogic {
 
 	public static function dependancy_install() {
 
-		$php_file = __DIR__ . '/../ajax/Monitoring.ajax.php';
+		$php_file = 'plugins/ttscast/core/ajax/ttscast.ajax.php';
 
 		// Vérification de l'existence du fichier PHP
 		if (!file_exists($php_file)) {
-			throw new Exception(__('Le fichier PHP n\'existe pas', __FILE__));
+			log::add('Monitoring', 'error', __('[DEP-INSTALL] Le fichier PHP n\'existe pas', __FILE__));
 		} else {
 			$result = exec('php ' . $php_file . ' ' . escapeshellarg(json_encode(array('action' => 'installDep'))));
+			log::add('Monitoring', 'info', __('[DEP-INSTALL] Résultat :: ', __FILE__) . $result);
 		}
 
 		$_logName = __CLASS__ . '_update';

@@ -32,7 +32,7 @@ try {
 
     if (init('action') == 'installDep') {
         log::add('Monitoring', 'debug', 'Installation des dépendances');
-        ajax::success();
+        ajax::success('OK');
     }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
