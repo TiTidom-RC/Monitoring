@@ -19,6 +19,40 @@
 /* * *************************** Requires ********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
+class MonitoringCommands {
+	private $commands;
+	
+	public function __construct($key) {
+		$this->initCommands($key);
+	}
+
+	private function initCommands($key) {
+		$commandList = [
+			'x86_64' => [
+
+			],
+			'armv7l' => [
+
+			],
+			'armv6l' => [
+
+			],
+			'synology' => [
+
+			],
+		];
+		if (array_key_exists($key, $commandList)) {
+			$this->commands = $commandList[$key];
+		} else {
+			throw new Exception(__('[Monitoring] Aucune commande disponible pour cette architecture', __FILE__));
+		}
+	}
+
+	public function getCommands() {
+		return $this->commands;
+	}
+}
+
 class Monitoring extends eqLogic {
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
@@ -1785,19 +1819,34 @@ class Monitoring extends eqLogic {
 				[$cnx_ssh, $hostId] = $this->connectSSH();
 				
 				if ($cnx_ssh == 'OK') {
+
+					// New Method
+					$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+					$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
+
+					if ($this->getConfiguration('synology') == '1') {
+						$cmdValues = new MonitoringCommands('synology');
+					} elseif ($ARMv !== '') {
+						$cmdValues = new MonitoringCommands($ARMv);
+					} else {
+						$cmdValues = new MonitoringCommands('arm');
+					}
+
+
+					// Old Method
 					if ($this->getConfiguration('synology') != '1') {
 
 						// DistriName Command
 						$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-						$distri_name = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+						$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 	
-						// VersionID Command
-						$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-						$VersionID = $this->execSSH($hostId, $VersionID_cmd, 'VersionID');
+						// OsVersion Command
+						$os_version_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+						$os_version_value = $this->execSSH($hostId, $os_version_cmd, 'OsVersion');
 						
-						// BitDistri Command
-						$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
-						$bitdistri = $this->execSSH($hostId, $bitdistri_cmd, 'BitDistri');
+						// DistriBits Command
+						$distri_bits_cmd = "getconf LONG_BIT 2>/dev/null";
+						$distri_bits = $this->execSSH($hostId, $distri_bits_cmd, 'DistriBits');
 					}
 
 					// ARMv Command
@@ -1806,26 +1855,26 @@ class Monitoring extends eqLogic {
 
 					// Uptime Command
 					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-					$uptime = $this->execSSH($hostId, $uptime_cmd, 'Uptime');
+					$uptime_value = $this->execSSH($hostId, $uptime_cmd, 'Uptime');
 					
 					// LoadAverage Command
-					$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
-					$loadav = $this->execSSH($hostId, $loadavg_cmd, 'LoadAverage');
+					$load_avg_cmd = "cat /proc/loadavg 2>/dev/null";
+					$load_avg_value = $this->execSSH($hostId, $load_avg_cmd, 'LoadAverage');
 
 					// Memory Command
 					$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
-					$memory = $this->execSSH($hostId, $memory_cmd, 'Memory');
+					$memory_value = $this->execSSH($hostId, $memory_cmd, 'Memory');
 
 					// Swap Command
 					$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 					$swap = $this->execSSH($hostId, $swap_cmd, 'Swap');
 
 					// Network Command
-					$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
-					$ReseauRXTX = $this->execSSH($hostId, $ReseauRXTX_cmd, 'ReseauRXTX');
+					$network_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
+					$network_value = $this->execSSH($hostId, $network_cmd, 'ReseauRXTX');
 
-					$ReseauIP_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
-					$ReseauIP = $this->execSSH($hostId, $ReseauIP_cmd, 'ReseauIP');
+					$network_ip_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+					$network_ip_value = $this->execSSH($hostId, $network_ip_cmd, 'ReseauIP');
 
 					// Perso1 Command
 					$perso1_cmd = $this->getCmd(null, 'perso1');
@@ -1846,13 +1895,13 @@ class Monitoring extends eqLogic {
 					$perso2 = trim($perso2_command) !== '' ? $this->execSSH($hostId, $perso2_command, 'Perso2') : '';
 					
 					if ($this->getConfiguration('synology') == '1') {
-						// Synology uname & BitDistri Init
+						// Synology uname & DistriBits Init
 						$uname = '.';
-						$bitdistri = '';
+						$distri_bits = '';
 
-						// Synology VersionID Command
-						$VersionID_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-						$VersionID = $this->execSSH($hostId, $VersionID_cmd, 'VersionID');
+						// Synology OsVersion Command
+						$os_version_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+						$os_version_value = $this->execSSH($hostId, $os_version_cmd, 'OsVersion');
 
 						// Synology Model Command
 						if ($this->getConfiguration('syno_alt_name') == '1') {
@@ -1869,7 +1918,7 @@ class Monitoring extends eqLogic {
 
 						// Synology NbCPU Command
 						$cpu_nb_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
-						$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
+						$cpu_nb_value = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
 						
 						// Synology CPUFreq Command
 						$cpu_freq_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
@@ -1912,8 +1961,8 @@ class Monitoring extends eqLogic {
 						$uname = '.';
 
 						// ARMv6L NbCPU Command
-						$nbcpuARM_cmd = "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
-						$cpu_nb = $this->execSSH($hostId, $nbcpuARM_cmd, 'NbCPU');
+						$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
+						$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
 
 						// ARMv6L CPUFreq Command
 						$cpu_freq_cmds = array(
@@ -1995,10 +2044,9 @@ class Monitoring extends eqLogic {
 						$uname = '.';
 
 						// x86_64 NbCPU Command
-						$nbcpuVM_cmd = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'";
-						$cpu_nb = $this->execSSH($hostId, $nbcpuVM_cmd, 'NbCPU');
+						$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'";
+						$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
 						$cpu_nb = preg_replace("/[^0-9]/", "", $cpu_nb);
-						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][X86] NbCPU :: ' . $cpu_nb);
 	
 						// x86_64 CPUFreq Command
 						$cpu_freq = '';
@@ -2050,15 +2098,14 @@ class Monitoring extends eqLogic {
 						$uname_cmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
 						$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
 	
-						if (preg_match("#RasPlex|OpenELEC|LibreELEC#", $distri_name)) {
-							// ARM & BitDistri Init
+						if (preg_match("#RasPlex|OpenELEC|LibreELEC#", $distri_name_value)) {
+							// ARM & DistriBits Init
 							$ARMv = 'arm';
-							$bitdistri = '32';
+							$distri_bits = '32';
 							
 							// NbCPU Command
 							$cpu_nb_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 							$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][ARM] NbCPU :: ' . $cpu_nb);
 	
 							// CPUFreq Command
 							$cpu_freq_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
@@ -2078,11 +2125,11 @@ class Monitoring extends eqLogic {
 							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 							$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 
-						} elseif (preg_match("#osmc#", $distri_name)) {
+						} elseif (preg_match("#osmc#", $distri_name_value)) {
 							
-							// ARM & BitDistri Init
+							// ARM & DistriBits Init
 							$ARMv = 'arm';
-							$bitdistri = '32';
+							$distri_bits = '32';
 	
 							// NbCPU Command
 							$cpu_nb_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
@@ -2108,13 +2155,13 @@ class Monitoring extends eqLogic {
 
 						} elseif (preg_match("#piCorePlayer#", $uname)) {
 							
-							// ARM & BitDistri Init
+							// ARM & DistriBits Init
 							$ARMv = 'arm';
-							$bitdistri = '32';
+							$distri_bits = '32';
 							
 							// DistriName Command
 							$distri_name_cmd = "uname -a 2>/dev/null | awk '{print $2,$3}'";
-							$distri_name = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 	
 							// NbCPU Command
 							$cpu_nb_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
@@ -2144,21 +2191,21 @@ class Monitoring extends eqLogic {
 							$ARMv_cmd = "sysctl hw.machine | awk '{ print $2}'";
 							$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
 	
-							// BitDistri Command
-							$bitdistri_cmd = "sysctl kern.smp.maxcpus | awk '{ print $2}'";
-							$bitdistri = $this->execSSH($hostId, $bitdistri_cmd, 'BitDistri');
+							// DistriBits Command
+							$distri_bits_cmd = "sysctl kern.smp.maxcpus | awk '{ print $2}'";
+							$distri_bits = $this->execSSH($hostId, $distri_bits_cmd, 'DistriBits');
 
 							// DistriName Command
 							$distri_name_cmd = "uname -a 2>/dev/null | awk '{ print $1,$3}'";
-							$distri_name = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
 							// LoadAverage Command
 							$load_avg_cmd = "LC_ALL=C uptime | awk '{print $8,$9,$10}'";
-							$loadav = $this->execSSH($hostId, $load_avg_cmd, 'LoadAverage');
+							$load_avg_value = $this->execSSH($hostId, $load_avg_cmd, 'LoadAverage');
 	
 							// Memory Command
 							$memory_cmd = "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'";
-							$memory = $this->execSSH($hostId, $memory_cmd, 'Memory');
+							$memory_value = $this->execSSH($hostId, $memory_cmd, 'Memory');
 	
 							// NbCPU Command
 							$cpu_nb_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
@@ -2187,26 +2234,26 @@ class Monitoring extends eqLogic {
 							// ARMv Init
 							$ARMv = "arm";
 	
-							// BitDistri Command
-							$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
-							$bitdistri = $this->execSSH($hostId, $bitdistri_cmd, 'BitDistri');
+							// DistriBits Command
+							$distri_bits_cmd = "getconf LONG_BIT 2>/dev/null";
+							$distri_bits = $this->execSSH($hostId, $distri_bits_cmd, 'DistriBits');
 
 							// DistriName Command
 							$distri_name_cmd = "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'";
-							$distri_name = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
-							// VersionID Command
-							$VersionID_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
-							$VersionID = $this->execSSH($hostId, $VersionID_cmd, 'VersionID');
+							// OsVersion Command
+							$os_version_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
+							$os_version_value = $this->execSSH($hostId, $os_version_cmd, 'OsVersion');
 
-							if (isset($distri_name, $VersionID)) {
-								$distri_name = "Medion/Linux " . $VersionID . " (" . $distri_name . ")";
+							if (isset($distri_name_value, $os_version_value)) {
+								$distri_name = "Medion/Linux " . $os_version_value . " (" . $distri_name_value . ")";
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][MEDION] Distribution :: ' . $distri_name);
 							}							
 
 							// NbCPU Command
-							$nbcpuARM_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
-							$cpu_nb = $this->execSSH($hostId, $nbcpuARM_cmd, 'NbCPU');
+							$cpu_nb_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
+							$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
 	
 							// CPUFreq Command
 							$cpu_freq = '';
@@ -2248,44 +2295,44 @@ class Monitoring extends eqLogic {
 				$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 				$ARMv = $this->execSRV($ARMv_cmd, 'ARMv');
 				
-				// BitDistri Command
-				$bitdistri_cmd = "getconf LONG_BIT 2>/dev/null";
-				$bitdistri = $this->execSRV($bitdistri_cmd, 'BitDistri');
+				// DistriBits Command
+				$distri_bits_cmd = "getconf LONG_BIT 2>/dev/null";
+				$distri_bits = $this->execSRV($distri_bits_cmd, 'DistriBits');
 
 				// DitriName Command
 				$distri_name_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-				$distri_name = $this->execSRV($distri_name_cmd, 'DistriName');
+				$distri_name_value = $this->execSRV($distri_name_cmd, 'DistriName');
 
-				// VersionID Command
-				$VersionID_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-				$VersionID = $this->execSRV($VersionID_cmd, 'VersionID');
-
-				// HDD Command
-				$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-				$hdd = $this->execSRV($hdd_cmd, 'HDD');
+				// OsVersion Command
+				$os_version_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+				$os_version_value = $this->execSRV($os_version_cmd, 'OsVersion');
 
 				// UpTime Command
 				$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-				$uptime = $this->execSRV($uptime_cmd, 'Uptime');
+				$uptime_value = $this->execSRV($uptime_cmd, 'Uptime');
 
 				// LoadAverage Command
-				$loadavg_cmd = "cat /proc/loadavg 2>/dev/null";
-				$loadav = $this->execSRV($loadavg_cmd, 'LoadAverage');
+				$load_avg_cmd = "cat /proc/loadavg 2>/dev/null";
+				$load_avg_value = $this->execSRV($load_avg_cmd, 'LoadAverage');
 
 				// Memory Command
 				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
-				$memory = $this->execSRV($memory_cmd, 'Memory');
+				$memory_value = $this->execSRV($memory_cmd, 'Memory');
 
 				// Swap Command
 				$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 				$swap = $this->execSRV($swap_cmd, 'Swap');
 
-				// Network Command
-				$ReseauRXTX_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
-				$ReseauRXTX = $this->execSRV($ReseauRXTX_cmd, 'ReseauRXTX');
+				// HDD Command
+				$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+				$hdd = $this->execSRV($hdd_cmd, 'HDD');
 
-				$ReseauIP_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
-				$ReseauIP = $this->execSRV($ReseauIP_cmd, 'ReseauIP');
+				// Network Command
+				$network_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
+				$network_value = $this->execSRV($network_cmd, 'ReseauRXTX');
+
+				$network_ip_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+				$network_ip_value = $this->execSRV($network_ip_cmd, 'ReseauIP');
 				
 				// Perso1 Command
 				$perso1_cmd = $this->getCmd(null, 'perso1');
@@ -2391,10 +2438,9 @@ class Monitoring extends eqLogic {
 					$uname = '.';
 
 					// NbCPU Command
-					$nbcpuVM_cmd = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'"; // OK pour LXC Linux/Ubuntu
-					$cpu_nb = $this->execSRV($nbcpuVM_cmd, 'NbCPU');
+					$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'"; // OK pour LXC Linux/Ubuntu
+					$cpu_nb = $this->execSRV($cpu_nb_cmd, 'NbCPU');
 					$cpu_nb = preg_replace("/[^0-9]/", "", $cpu_nb);
-					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL][X86] NbCPU :: ' . $cpu_nb);
 
 					// CPUFreq Command
 					$cpu_freq = '';
@@ -2591,27 +2637,27 @@ class Monitoring extends eqLogic {
 						}
 					} else {
 						// Distri Name (New)
-						if (isset($distri_name, $bitdistri, $ARMv)) {
-							$distri_name = trim($distri_name) . ' ' . $bitdistri . 'bits (' . $ARMv . ')';
+						if (isset($distri_name_value, $distri_bits, $ARMv)) {
+							$distri_name = trim($distri_name_value) . ' ' . $distri_bits . 'bits (' . $ARMv . ')';
 						}
 					}
 	
 					// Uptime (New)
-					if (isset($uptime)) {
-						$uptime_sec = floatval($uptime);
-						$uptime = $this->formatUptime($uptime);
+					if (isset($uptime_value)) {
+						$uptime_sec = floatval($uptime_value);
+						$uptime = $this->formatUptime($uptime_value);
 					} else {
 						$uptime_sec = 0;
 						$uptime = '';
 					}
 	
 					// LoadAverage (New)
-					if (isset($loadav)) {
-						$loadavg = explode(' ', $loadav);
-						if (count($loadavg) == 5) {
-							$load_avg_1mn = floatval($loadavg[0]);
-							$load_avg_5mn = floatval($loadavg[1]);
-							$load_avg_15mn = floatval($loadavg[2]);
+					if (isset($load_avg_value)) {
+						$load_avg_data = explode(' ', $load_avg_value);
+						if (count($load_avg_data) == 5) {
+							$load_avg_1mn = floatval($load_avg_data[0]);
+							$load_avg_5mn = floatval($load_avg_data[1]);
+							$load_avg_15mn = floatval($load_avg_data[2]);
 							$load_avg = '1 min : ' . $load_avg_1mn . ' - 5 min : ' . $load_avg_5mn . ' - 15 min : ' . $load_avg_15mn;
 						} else {
 							$load_avg_1mn = 0.0;
@@ -2627,16 +2673,16 @@ class Monitoring extends eqLogic {
 					}
 	
 					// Memory (New)
-					if (isset($memory)) {
+					if (isset($memory_value)) {
 						// Cas général
 						if (!preg_match("#FreeBSD#", $uname)) {
-							$memory = explode(' ', $memory);
-							if (count($memory) == 5) {
-								$memory_total = intval($memory[0]);
-								$memory_used = intval($memory[1]);
-								$memory_free = intval($memory[2]);
-								$memory_buffcache = intval($memory[3]);
-								$memory_available = intval($memory[4]);
+							$memory_data = explode(' ', $memory_value);
+							if (count($memory_data) == 5) {
+								$memory_total = intval($memory_data[0]);
+								$memory_used = intval($memory_data[1]);
+								$memory_free = intval($memory_data[2]);
+								$memory_buffcache = intval($memory_data[3]);
+								$memory_available = intval($memory_data[4]);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Total :: ' . $memory_total);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used :: ' . $memory_used);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free :: ' . $memory_free);
@@ -2670,10 +2716,10 @@ class Monitoring extends eqLogic {
 							}
 						// Cas spécifique FreeBSD
 						} elseif (preg_match("#FreeBSD#", $uname)) {
-							$memory = explode(' ', $memory);
-							if (count($memory) == 2) {	
-								$memory_free = intval($memory[1]);
-								$memory_total = intval($memory[0]);
+							$memory_data = explode(' ', $memory_value);
+							if (count($memory_data) == 2) {	
+								$memory_free = intval($memory_data[1]);
+								$memory_total = intval($memory_data[0]);
 								$memory_used = $memory_total - $memory_free;
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Total :: ' . $memory_total);
 								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used :: ' . $memory_used);
@@ -2746,16 +2792,17 @@ class Monitoring extends eqLogic {
 					}
 	
 					// Réseau (New)
-					if (isset($ReseauRXTX)) {
-						$ReseauRXTX = explode(' ', $ReseauRXTX);
-						if (count($ReseauRXTX) == 3) {
-							$network_tx = intval($ReseauRXTX[2]);
-							$network_rx = intval($ReseauRXTX[1]);
+					if (isset($network_value)) {
+						$network_data = explode(' ', $network_value);
+						if (count($network_data) == 3) {
+							$network_tx = intval($network_data[2]);
+							$network_rx = intval($network_data[1]);
 							$network = 'TX : '. $this->formatSize($network_tx) .' - RX : '. $this->formatSize($network_rx);
-							$network_name = $ReseauRXTX[0];
 							
-							if (isset($ReseauIP)) {
-								$network_ip = $ReseauIP;
+							$network_name = $network_data[0];
+							
+							if (isset($network_ip_value)) {
+								$network_ip = $network_ip_value;
 							} else {
 								$network_ip = '';
 							}
@@ -2836,7 +2883,7 @@ class Monitoring extends eqLogic {
 							// CPU Temp
 							$cpu_temp = $this->formatTemp($cpu_temp);
 
-							// CPU
+							// CPU (Nb + Freq)
 							if (floatval($cpu_freq) == 0) {
 								$cpu = $cpu_nb . ' Socket(s)';
 								$cpu_freq = 0.0;
@@ -2845,7 +2892,7 @@ class Monitoring extends eqLogic {
 							}
 
 						} elseif ($ARMv == 'arm') {
-							if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $distri_name) || preg_match("#piCorePlayer|medion#", $uname)) {
+							if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $distri_name_value) || preg_match("#piCorePlayer|medion#", $uname)) {
 								
 								// CPUFreq
 								[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'KHz');
@@ -2853,6 +2900,7 @@ class Monitoring extends eqLogic {
 								// CPU Temp
 								$cpu_temp = $this->formatTemp($cpu_temp);
 
+								// CPU (Nb + Freq)
 								$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
 							}
 						}
