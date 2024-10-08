@@ -67,6 +67,23 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                     <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />
                 </div>
             </div>
+            <legend><i class="fas fa-clipboard-check"></i> {{Migration (Conf Monitoring => SSH-Manager)}}</legend>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">{{Statut Migration}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Si ce paramètre est coché, alors la migration a déjà été effectuée}}"></i></sup>
+                </label>
+                <div class="col-lg-1">
+                    <input type="checkbox" class="configKey" data-l1key="isMigrated" readonly />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">{{Migrer la configuration des hôtes}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegardez bien votre configuration AVANT d'utiliser le bouton (GENERER + DIFFUSER)}}"></i></sup>
+                </label>
+                <div class="col-lg-1">
+                    <a class="btn btn-warning customclass-migrate"><i class="fas fa-play-circle"></i> {{Générer + Diffuser}}</a>
+                </div>
+            </div>
         </div>
     </fieldset>
 </form>
