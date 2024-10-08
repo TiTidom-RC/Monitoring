@@ -1467,7 +1467,7 @@ class Monitoring extends eqLogic {
 				$replace[$cmdNamePrefix . '_name#'] = $isCmdObject ? $cmd->getName() : '';
 			},
 			'unite' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
-				$replace[$cmdNamePrefix . '_unite#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_unite') : '';
+				$replace[$cmdNamePrefix . '_unite#'] = $isCmdObject ? $cmd->getUnite() : '';
 			},
 			'colorlow' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
 				$replace[$cmdNamePrefix . '_colorlow#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_colorlow') : '';
