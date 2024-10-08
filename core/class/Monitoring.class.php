@@ -1828,12 +1828,22 @@ class Monitoring extends eqLogic {
 					$ReseauIP = $this->execSSH($hostId, $ReseauIP_cmd, 'ReseauIP');
 
 					// Perso1 Command
-					$perso1_cmd = $this->getConfiguration('perso1', '');
-					$perso1 = trim($perso1_cmd) !== '' ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
+					$perso1_cmd = $this->getCmd(null, 'perso1');
+					if (is_object($perso1_cmd)) {
+						$perso1_command = $perso1_cmd->getConfiguration('perso1', '');
+					} else {
+						$perso1_command = '';
+					}
+					$perso1 = trim($perso1_command) !== '' ? $this->execSSH($hostId, $perso1_command, 'Perso1') : '';
 
 					// Perso2 Command
-					$perso2_cmd = $this->getConfiguration('perso2', '');
-					$perso2 = trim($perso2_cmd) !== '' ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
+					$perso2_cmd = $this->getCmd(null, 'perso2');
+					if (is_object($perso2_cmd)) {
+						$perso2_command = $perso2_cmd->getConfiguration('perso2', '');
+					} else {
+						$perso2_command = '';
+					}
+					$perso2 = trim($perso2_command) !== '' ? $this->execSSH($hostId, $perso2_command, 'Perso2') : '';
 					
 					if ($this->getConfiguration('synology') == '1') {
 						// Synology uname & BitDistri Init
@@ -2278,12 +2288,22 @@ class Monitoring extends eqLogic {
 				$ReseauIP = $this->execSRV($ReseauIP_cmd, 'ReseauIP');
 				
 				// Perso1 Command
-				$perso1_cmd = $this->getConfiguration('perso1', '');
-				$perso1 = trim($perso1_cmd) !== '' ? $this->execSRV($perso1_cmd, 'Perso1') : '';
+				$perso1_cmd = $this->getCmd(null, 'perso1');
+				if (is_object($perso1_cmd)) {
+					$perso1_command = $perso1_cmd->getConfiguration('perso1');
+				} else {
+					$perso1_command = '';
+				}
+				$perso1 = trim($perso1_command) !== '' ? $this->execSRV($perso1_command, 'Perso1') : '';
 
 				// Perso2 Command
-				$perso2_cmd = $this->getConfiguration('perso2', '');
-				$perso2 = trim($perso2_cmd) !== '' ? $this->execSRV($perso2_cmd, 'Perso2') : '';
+				$perso2_cmd = $this->getCmd(null, 'perso2');
+				if (is_object($perso2_cmd)) {
+					$perso2_command = $perso2_cmd->getConfiguration('perso2');
+				} else {
+					$perso2_command = '';
+				}
+				$perso2 = trim($perso2_command) !== '' ? $this->execSRV($perso2_command, 'Perso2') : '';
 	
 				if ($ARMv == 'armv6l') {
 					$uname = '.';
