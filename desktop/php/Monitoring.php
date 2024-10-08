@@ -356,7 +356,13 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 </div><!-- /.row row-overflow -->
 
 <!-- Inclusion du fichier javascript du plugin SSHManager (Helper) -->
-<?php include_file('desktop', 'sshmanager.helper', 'js', 'sshmanager'); ?>
+<?php 
+    if (class_exists('sshmanager')) {
+        include_file('desktop', 'sshmanager.helper', 'js', 'sshmanager'); 
+    } else {
+        log::add('Monitoring', 'error', __('Impossible de charger le fichier sshmanager.helper.js', __FILE__));
+    }
+?>
 <!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 <?php include_file('desktop', 'Monitoring', 'js', 'Monitoring'); ?>
 <!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
