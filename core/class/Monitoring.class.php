@@ -1225,7 +1225,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setUnite('°C');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
