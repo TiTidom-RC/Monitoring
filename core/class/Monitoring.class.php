@@ -36,19 +36,19 @@ class Monitoring extends eqLogic {
 
 	public static function dependancy_install() {
 		$_logName = __CLASS__ . '_update';
-		log::add($_logName, 'info', '[DEP-INSTALL] Début des dépendances');
 		config::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), plugin::byId('Monitoring')->getId());
 
+		log::add($_logName, 'info', __('[DEP-INSTALL] >>>> Début des dépendances <<<<', __FILE__));
 		try {
-			log::add('Monitoring', 'warning', __('[DEP-INSTALL] Lancement de l\'installation des dépendances', __FILE__));
 			$result = shell_exec('php ' . __DIR__ . '/../php/Monitoringcli.php' . ' depinstall ' . $_logName . ' 2>&1');
 			if (!empty($result)) {
-				log::add('Monitoring', 'warning', __('[DEP-INSTALL] Résultat :: ', __FILE__) . $result);
+				log::add('Monitoring', 'info', __('[DEP-INSTALL] Résultat :: ', __FILE__) . $result);
 			}
 		} catch (Exception $e) {
-			log::add('Monitoring', 'error', __('[DEP-INSTALL] Erreur lors de l\'installation des dépendances :: ', __FILE__) . $e->getMessage());
+			log::add($_logName, 'error', __('[DEP-INSTALL] Erreur lors de l\'installation des dépendances :: ', __FILE__) . $e->getMessage());
 		}
-        return array('log' => log::getPathToLog(__CLASS__ . '_update'));
+		log::add($_logName, 'info', __('[DEP-INSTALL] >>>> Fin des dépendances <<<<', __FILE__));
+        return array('log' => log::getPathToLog($_logName));
     }
 
 	public static function dependancy_info() {

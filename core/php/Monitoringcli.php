@@ -42,7 +42,6 @@ switch ($argv[1]) {
 			} else {
 				log::add($_logName, 'info', __('[DEP-INSTALL] Plugin SSHManager :: actif', __FILE__));
 			}
-			log::add($_logName, 'info', '[DEP-INSTALL] Fin des dépendances');
 		} catch (Exception $e) {
 			log::add($_logName, 'warning', '[DEP-INSTALL] ' . $e->getMessage());
 			log::add($_logName, 'info', __('[DEP-INSTALL] Lancement de l\'installation du plugin SSHManager', __FILE__));
@@ -97,7 +96,7 @@ switch ($argv[1]) {
 						$_plugin->setIsEnable(1, true, true);
 						log::add($_logName, 'info', '[DEP-INSTALL] Le plugin SSHManager est maintenant activé');
 						jeedom::cleanFileSystemRight();
-						log::add($_logName, 'info', '[DEP-INSTALL] Fin des dépendances');
+						
 					} catch (Exception $e) {
 						log::add($_logName, 'warning', '[DEP-INSTALL] Exception :: ' . $e->getMessage());
 						log::add($_logName, 'error', '[DEP-INSTALL] Le plugin SSHManager n\'a pas pu être installé !');
