@@ -547,7 +547,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setUnite('%');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -655,7 +655,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setUnite('%');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -726,7 +726,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -743,7 +743,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -851,7 +851,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setUnite('%');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -963,7 +963,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setUnite('%');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setIsVisible(1);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -1075,7 +1075,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setUnite('%');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setIsVisible(1);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -1187,7 +1187,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setUnite('%');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setIsVisible(1);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
