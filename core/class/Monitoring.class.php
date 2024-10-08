@@ -1467,13 +1467,13 @@ class Monitoring extends eqLogic {
 				$replace[$cmdNamePrefix . '_name#'] = $isCmdObject ? $cmd->getName() : '';
 			},
 			'unite' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
-				$replace[$cmdNamePrefix . '_unite#'] = $isCmdObject ? $this->getConfiguration($cmdName . '_unite') : '';
+				$replace[$cmdNamePrefix . '_unite#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_unite') : '';
 			},
 			'colorlow' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
-				$replace[$cmdNamePrefix . '_colorlow#'] = $isCmdObject ? $this->getConfiguration($cmdName . '_colorlow') : '';
+				$replace[$cmdNamePrefix . '_colorlow#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_colorlow') : '';
 			},
 			'colorhigh' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
-				$replace[$cmdNamePrefix . '_colorhigh#'] = $isCmdObject ? $this->getConfiguration($cmdName . '_colorhigh') : '';
+				$replace[$cmdNamePrefix . '_colorhigh#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_colorhigh') : '';
 			},
 			'stats_0' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
 				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 0); }
@@ -1827,11 +1827,24 @@ class Monitoring extends eqLogic {
 					$ReseauIP_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 					$ReseauIP = $this->execSSH($hostId, $ReseauIP_cmd, 'ReseauIP');
 
-					// Perso1 et Perso2 Commands
-					$perso1_cmd = $this->getConfiguration('perso1');
+					// Perso1 Command
+					$perso1_fullcmd = $this->getCmd(null, 'perso1');
+					if (is_object($perso1_fullcmd)) {
+						$perso1_cmd = $perso1_fullcmd->execCmd();
+						log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO1] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
+					} else {
+						$perso1_cmd = '';
+					}
 					$perso1 = trim($perso1_cmd) !== '' ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
 
-					$perso2_cmd = $this->getConfiguration('perso2');
+					// Perso2 Command
+					$perso2_fullcmd	= $this->getCmd(null, 'perso2');
+					if (is_object($perso2_fullcmd)) {
+						$perso2_cmd = $perso2_fullcmd->execCmd();
+						log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][PERSO2] Commande :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
+					} else {
+						$perso2_cmd = '';
+					}
 					$perso2 = trim($perso2_cmd) !== '' ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
 					
 					if ($this->getConfiguration('synology') == '1') {
@@ -2277,11 +2290,23 @@ class Monitoring extends eqLogic {
 				$ReseauIP = $this->execSRV($ReseauIP_cmd, 'ReseauIP');
 				
 				// Perso1 Command
-				$perso1_cmd = $this->getConfiguration('perso1');
+				$perso1_fullcmd = $this->getCmd(null, 'perso1');
+				if (is_object($perso1_fullcmd)) {
+					$perso1_cmd = $perso1_fullcmd->execCmd();
+					log:add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso1 :: ' . str_replace("\r\n", "\\r\\n", $perso1_cmd));
+				} else {
+					$perso1_cmd = '';
+				}
 				$perso1 = trim($perso1_cmd) !== '' ? $this->execSRV($perso1_cmd, 'Perso1') : '';
 
 				// Perso2 Command
-				$perso2_cmd = $this->getConfiguration('perso2');
+				$perso2_fullcmd = $this->getCmd(null, 'perso2');
+				if (is_object($perso2_fullcmd)) {
+					$perso2_cmd = $perso2_fullcmd->execCmd();
+					log:add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Perso2 :: ' . str_replace("\r\n", "\\r\\n", $perso2_cmd));
+				} else {
+					$perso2_cmd = '';
+				}
 				$perso2 = trim($perso2_cmd) !== '' ? $this->execSRV($perso2_cmd, 'Perso2') : '';
 	
 				if ($ARMv == 'armv6l') {
