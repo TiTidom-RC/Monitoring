@@ -36,15 +36,13 @@ class Monitoring extends eqLogic {
 
 	public static function dependancy_install() {
 
-		$php_file = __DIR__ . '/../ajax/Monitoring.ajax.php';
-
-		// Vérification de l'existence du fichier PHP
+		$php_file = __DIR__ . '/../php/Monitoringcli.php';
 		try {
 			if (!file_exists($php_file)) {
 				log::add('Monitoring', 'error', __('[DEP-INSTALL] Le fichier PHP n\'existe pas', __FILE__));
 			} else {
 				log::add('Monitoring', 'info', __('[DEP-INSTALL] Lancement de l\'installation des dépendances', __FILE__));
-				$result = shell_exec('php ' . $php_file . ' ' . escapeshellarg(json_encode(array('action' => 'installDep')) . ' 2>&1'));
+				$result = shell_exec('php ' . $php_file . ' depinstall 2>&1');
 				log::add('Monitoring', 'info', __('[DEP-INSTALL] Résultat :: ', __FILE__) . $result);
 			}
 		} catch (Exception $e) {

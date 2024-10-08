@@ -29,12 +29,7 @@ try {
      En V4 : autoriser l'exécution d'une méthode 'action' en GET en indiquant le(s) nom(s) de(s) action(s) dans un tableau en argument
     */
     ajax::init(array());
-
-    if (init('action') == 'installDep') {
-        log::add('Monitoring', 'debug', 'Installation des dépendances');
-        ajax::success('OK');
-    }
-
+    
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
