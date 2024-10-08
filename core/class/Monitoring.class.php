@@ -176,6 +176,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cnx_ssh');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -243,6 +246,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('reboot');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -257,6 +261,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('poweroff');
 			$MonitoringCmd->setType('action');
 			$MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -272,6 +277,8 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fab fa-linux"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
@@ -288,6 +295,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-hourglass-half"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -303,6 +313,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('sec');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -318,6 +331,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-chart-line"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -332,6 +348,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('load_avg_1mn');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -346,6 +365,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('load_avg_5mn');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -359,6 +381,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('load_avg_15mn');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -374,6 +399,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-database"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -389,6 +417,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -404,6 +435,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -419,6 +453,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -436,6 +473,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -451,6 +491,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -466,6 +509,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -481,6 +527,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -496,6 +545,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -511,6 +563,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-layer-group"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -526,6 +581,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -541,6 +599,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -556,6 +617,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -571,6 +635,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -586,6 +653,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -601,6 +671,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-network-wired"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -616,6 +689,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('octets');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -631,6 +707,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('octets');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -645,6 +724,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_name');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -659,6 +741,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_ip');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -674,6 +759,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-hdd"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -689,6 +777,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -704,6 +795,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -719,6 +813,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -734,6 +831,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -749,6 +849,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('%');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -768,6 +871,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
 					$MonitoringCmd->setDisplay('icon', '<i class="far fa-hdd"></i>');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(1);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -783,6 +889,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -798,6 +907,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -813,6 +925,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -828,6 +943,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -843,6 +961,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -862,6 +983,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
 					$MonitoringCmd->setDisplay('icon', '<i class="fab fa-usb"></i>');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(1);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -877,6 +1001,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -892,6 +1019,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -907,6 +1037,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -922,6 +1055,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -937,6 +1073,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -956,6 +1095,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('string');
 					$MonitoringCmd->setDisplay('icon', '<i class="fab fa-usb"></i>');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(1);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -971,6 +1113,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -986,6 +1131,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -1001,6 +1149,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -1016,6 +1167,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -1031,6 +1185,9 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
 					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
 					$MonitoringCmd->setOrder($orderCmd++);
 					$MonitoringCmd->save();
 				} else {
@@ -1048,6 +1205,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
 			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-microchip"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -1063,6 +1223,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('°C');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -1077,6 +1240,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('cpu_nb');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -1092,6 +1258,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
 			$MonitoringCmd->setUnite('MHz');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -1106,6 +1275,8 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('perso1');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
@@ -1121,6 +1292,8 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('perso2');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
