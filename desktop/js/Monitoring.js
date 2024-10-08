@@ -27,19 +27,13 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
-	if (['distri_name', 'uptime', 'load_avg', 'memory', 'swap', 'network', 'hdd', 'syno_hddv2', 'syno_hddusb', 'syno_hddesata', 'cpu', 'perso1', 'perso2'].includes(init(_cmd.logicalId))) {
-		tr += '<div class="input-group">'
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
-		tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
-		tr += '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>';
-		tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:19px;padding: 0 5px 0 5px!important;"></span>';
-		tr += '</div>';
-	}
-	else
-	{
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
-		tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom de la commande}}" style="margin: 1px auto;">';
-	}
+	tr += '<div class="input-group">'
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
+	tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
+	tr += '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>';
+	tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:19px;padding: 0 5px 0 5px!important;"></span>';
+	tr += '</div>';
+	
 	if (['cron_status', 'cron_on', 'cron_off'].includes(init(_cmd.logicalId))) {
 		tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">';
   		tr += '<option value="">{{Aucune}}</option>';
