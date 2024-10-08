@@ -42,7 +42,7 @@ class Monitoring extends eqLogic {
 		if (!file_exists($php_file)) {
 			throw new Exception(__('Le fichier PHP n\'existe pas', __FILE__));
 		} else {
-			$result = exec('php ' . $php_file . array('action'=> 'installDep'));
+			$result = exec('php ' . $php_file . ' ' . escapeshellarg(json_encode(array('action' => 'installDep'))));
 		}
 
 		$_logName = __CLASS__ . '_update';
