@@ -41,9 +41,9 @@ class Monitoring extends eqLogic {
 			if (!file_exists($php_file)) {
 				log::add('Monitoring', 'error', __('[DEP-INSTALL] Le fichier PHP n\'existe pas', __FILE__));
 			} else {
-				log::add('Monitoring', 'info', __('[DEP-INSTALL] Lancement de l\'installation des dépendances', __FILE__));
+				log::add('Monitoring', 'warning', __('[DEP-INSTALL] Lancement de l\'installation des dépendances', __FILE__));
 				$result = shell_exec('php ' . $php_file . ' depinstall 2>&1');
-				log::add('Monitoring', 'info', __('[DEP-INSTALL] Résultat :: ', __FILE__) . $result);
+				log::add('Monitoring', 'warning', __('[DEP-INSTALL] Résultat :: ', __FILE__) . $result);
 			}
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', __('[DEP-INSTALL] Erreur lors de l\'installation des dépendances :: ', __FILE__) . $e->getMessage());
