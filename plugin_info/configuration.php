@@ -73,7 +73,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                     <sup><i class="fas fa-question-circle tooltips" title="{{Si ce paramètre est coché, alors la migration a déjà été effectuée}}"></i></sup>
                 </label>
                 <div class="col-lg-1">
-                    <input type="checkbox" class="configKey" data-l1key="isMigrated" readonly />
+                    <input type="checkbox" class="configKey" data-l1key="isMigrated" disabled />
                 </div>
             </div>
             <div class="form-group">
