@@ -35,6 +35,16 @@ class Monitoring extends eqLogic {
 	}
 
 	public static function dependancy_install() {
+
+		$php_file = __DIR__ . '/../ajax/Monitoring.ajax.php';
+
+		// Vérification de l'existence du fichier PHP
+		if (!file_exists($php_file)) {
+			throw new Exception(__('Le fichier PHP n\'existe pas', __FILE__));
+		} else {
+			$result = exec('php ' . $php_file . array('action'=> 'installDep'));
+		}
+
 		$_logName = __CLASS__ . '_update';
 		log::add($_logName, 'info', '[DEP-INSTALL] Début des dépendances');
 		config::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), plugin::byId('Monitoring')->getId());
