@@ -19,36 +19,101 @@
 /* * *************************** Requires ********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
-class MonitoringCommands {
+class MonitoringCommandsLocal {
 	private $commands;
 	
-	public function __construct($key) {
-		$this->initCommands($key);
+	public function __construct($key, $cartereseau) {
+		$this->initCommands($key, $cartereseau);
 	}
 
-	private function initCommands($key) {
-		$commandList = [
+	private function initCommands($key, $cartereseau) {
+		$cmdCommon = [
+			'distri_bits' => "getconf LONG_BIT 2>/dev/null",
+			'ditri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+			'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
+			'load_avg' => "cat /proc/loadavg 2>/dev/null",
+			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
+			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
+			'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'",
+			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network_ip' => "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
+		];
+
+		$cmdList = [
 			'x86_64' => [
+				'distri_bits' => $cmdCommon['distri_bits'],
+				'ditri_name' => $cmdCommon['ditri_name'],
+				'os_version' => $cmdCommon['os_version'],
+				'uptime' => $cmdCommon['uptime'],
+				'load_avg' => $cmdCommon['load_avg'],
+				'memory' => $cmdCommon['memory'],
+				'swap' => $cmdCommon['swap'],
+				'hdd' => $cmdCommon['hdd'],
+				'network' => $cmdCommon['network'],
+				'network_ip' => $cmdCommon['network_ip'],
+				'numame' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
+				'cpu_freq' => [
+					"LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'", // OK pour LXC Linux, Proxmox, Debian 10/11
+					"cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'" // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
+				],
+				'cpu_temp' => function () use ($cartereseau) {
 
+				},
 			],
-			'armv7l' => [
+			'aarch64' => [
+				'distri_bits' => $cmdCommon['distri_bits'],
+				'ditri_name' => $cmdCommon['ditri_name'],
+				'os_version' => $cmdCommon['os_version'],
+				'uptime' => $cmdCommon['uptime'],
+				'load_avg' => $cmdCommon['load_avg'],
+				'memory' => $cmdCommon['memory'],
+				'swap' => $cmdCommon['swap'],
+				'hdd' => $cmdCommon['hdd'],
+				'network' => $cmdCommon['network'],
+				'network_ip' => $cmdCommon['network_ip'],
+				'numame' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'",
+				'cpu_freq' => [
+					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
+					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+				],
+				'cpu_temp' => function () use ($cartereseau) {
 
+				},	
 			],
 			'armv6l' => [
+				'distri_bits' => $cmdCommon['distri_bits'],
+				'ditri_name' => $cmdCommon['ditri_name'],
+				'os_version' => $cmdCommon['os_version'],
+				'uptime' => $cmdCommon['uptime'],
+				'load_avg' => $cmdCommon['load_avg'],
+				'memory' => $cmdCommon['memory'],
+				'swap' => $cmdCommon['swap'],
+				'hdd' => $cmdCommon['hdd'],
+				'network' => $cmdCommon['network'],
+				'network_ip' => $cmdCommon['network_ip'],
+				'numame' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
+				'cpu_freq' => [
+					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
+					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+				],
+				'cpu_temp' => function () use ($cartereseau) {
 
+				},
 			],
-			'synology' => [
 
-			],
 		];
-		if (array_key_exists($key, $commandList)) {
-			$this->commands = $commandList[$key];
+		if (array_key_exists($key, $cmdList)) {
+			$this->commands = $cmdList[$key];
 		} else {
 			throw new Exception(__('[Monitoring] Aucune commande disponible pour cette architecture', __FILE__));
 		}
 	}
 
-	public function getCommands() {
+	public function getValues() {
 		return $this->commands;
 	}
 }
@@ -1825,13 +1890,12 @@ class Monitoring extends eqLogic {
 					$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
 
 					if ($this->getConfiguration('synology') == '1') {
-						$cmdValues = new MonitoringCommands('synology');
+						
 					} elseif ($ARMv !== '') {
-						$cmdValues = new MonitoringCommands($ARMv);
+						
 					} else {
-						$cmdValues = new MonitoringCommands('arm');
+						
 					}
-
 
 					// Old Method
 					if ($this->getConfiguration('synology') != '1') {
@@ -1867,7 +1931,7 @@ class Monitoring extends eqLogic {
 
 					// Swap Command
 					$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
-					$swap = $this->execSSH($hostId, $swap_cmd, 'Swap');
+					$swap_value = $this->execSSH($hostId, $swap_cmd, 'Swap');
 
 					// Network Command
 					$network_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
@@ -1936,24 +2000,24 @@ class Monitoring extends eqLogic {
 
 						// Synology HDD Command
 						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-						$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 
 						// Synology HDDv2 Command
 						if ($this->getConfiguration('synologyv2') == '1') {
 							$hddv2cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$hddv2 = $this->execSSH($hostId, $hddv2cmd, 'HDDv2');
+							$hddv2_value = $this->execSSH($hostId, $hddv2cmd, 'HDDv2');
 						}
 	
 						// Synology HDDusb Command
 						if ($this->getConfiguration('synologyusb') == '1') {
 							$hddusbcmd = "LC_ALL=C df -l 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$hddusb = $this->execSSH($hostId, $hddusbcmd, 'HDDusb');
+							$hddusb_value = $this->execSSH($hostId, $hddusbcmd, 'HDDusb');
 						}
 						
 						// Synology HDDesata Command
 						if ($this->getConfiguration('synologyesata') == '1') {
 							$hddesatacmd = "LC_ALL=C df -l 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$hddesata = $this->execSSH($hostId, $hddesatacmd, 'HDDesata');
+							$hddesata_value = $this->execSSH($hostId, $hddesatacmd, 'HDDesata');
 						}
 	
 					} elseif ($ARMv == 'armv6l') {
@@ -1990,7 +2054,7 @@ class Monitoring extends eqLogic {
 						
 						// ARMv6L HDD Command
 						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-						$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 	
 					} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
 						// aarch64 uname Init
@@ -2036,7 +2100,7 @@ class Monitoring extends eqLogic {
 
 						// aarch64 HDD Command
 						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-						$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 
 					} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
 						
@@ -2090,7 +2154,7 @@ class Monitoring extends eqLogic {
 
 						// x86_64 HDD Command
 						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-						$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 
 					} elseif ($ARMv == '' && $this->getConfiguration('synology') != '1') {
 
@@ -2123,7 +2187,7 @@ class Monitoring extends eqLogic {
 
 							// HDD Command
 							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-							$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 
 						} elseif (preg_match("#osmc#", $distri_name_value)) {
 							
@@ -2151,7 +2215,7 @@ class Monitoring extends eqLogic {
 
 							// HDD Command
 							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-							$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 
 						} elseif (preg_match("#piCorePlayer#", $uname)) {
 							
@@ -2183,7 +2247,7 @@ class Monitoring extends eqLogic {
 
 							// HDD Command
 							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$4,$5 }'";
-							$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 
 						} elseif (preg_match("#FreeBSD#", $uname)) {
 							
@@ -2213,7 +2277,7 @@ class Monitoring extends eqLogic {
 							
 							// HDD Command
 							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-							$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 							
 							// CPUFreq Command
 							$cpu_freq_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
@@ -2281,7 +2345,7 @@ class Monitoring extends eqLogic {
 
 							// HDD Command
 							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-							$hdd = $this->execSSH($hostId, $hdd_cmd, 'HDD');
+							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 						}
 					}
 				}
@@ -2289,12 +2353,29 @@ class Monitoring extends eqLogic {
 			elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 				$cnx_ssh = 'No';
 				
-				// Pas de config Syno en local
-				
 				// ARMv Command
 				$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 				$ARMv = $this->execSRV($ARMv_cmd, 'ARMv');
 				
+				// New Method
+				$commandsLocal = new MonitoringCommandsLocal($ARMv, $cartereseau);
+				$commands = $commandsLocal->getValues();
+
+				// TODO : Continuer l'implémentation des commandes par classe
+
+				$distri_bits = $commands['DistriBits'];
+				$distri_name_value = $commands['DistriName'];
+				$os_version_value = $commands['OsVersion'];
+				$uptime_value = $commands['Uptime'];
+				$load_avg_value = $commands['LoadAverage'];
+				$memory_value = $commands['Memory'];
+				$swap_value = $commands['Swap'];
+				$hdd_value = $commands['HDD'];
+				$network_value = $commands['network'];
+				$network_ip_value = $commands['network_ip'];
+
+
+
 				// DistriBits Command
 				$distri_bits_cmd = "getconf LONG_BIT 2>/dev/null";
 				$distri_bits = $this->execSRV($distri_bits_cmd, 'DistriBits');
@@ -2321,11 +2402,11 @@ class Monitoring extends eqLogic {
 
 				// Swap Command
 				$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
-				$swap = $this->execSRV($swap_cmd, 'Swap');
+				$swap_value = $this->execSRV($swap_cmd, 'Swap');
 
 				// HDD Command
 				$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-				$hdd = $this->execSRV($hdd_cmd, 'HDD');
+				$hdd_value = $this->execSRV($hdd_cmd, 'HDD');
 
 				// Network Command
 				$network_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
@@ -2518,8 +2599,8 @@ class Monitoring extends eqLogic {
 
 						// Syno Volume 2
 						if ($this->getConfiguration('synologyv2') == '1') {
-							if (isset($hddv2)) {
-								$hddv2_data = explode(' ', $hddv2);
+							if (isset($hddv2_value)) {
+								$hddv2_data = explode(' ', $hddv2_value);
 								if (count($hddv2_data) == 4) {
 									$syno_hddv2_total = intval($hddv2_data[0]);
 									$syno_hddv2_used = intval($hddv2_data[1]);
@@ -2558,8 +2639,8 @@ class Monitoring extends eqLogic {
 
 						// Syno Volume USB
 						if ($this->getConfiguration('synologyusb') == '1') {
-							if (isset($hddusb)) {
-								$hddusb_data = explode(' ', $hddusb);
+							if (isset($hddusb_value)) {
+								$hddusb_data = explode(' ', $hddusb_value);
 								if (count($hddusb_data) == 4) {
 									$syno_hddusb_total = intval($hddusb_data[0]);
 									$syno_hddusb_used = intval($hddusb_data[1]);
@@ -2598,8 +2679,8 @@ class Monitoring extends eqLogic {
 
 						// Syno Volume eSATA
 						if ($this->getConfiguration('synologyesata') == '1') {
-							if (isset($hddesata)) {
-								$hdddesata_data = explode(' ', $hddesata);
+							if (isset($hddesata_value)) {
+								$hdddesata_data = explode(' ', $hddesata_value);
 								if (count($hdddesata_data) == 4) {
 									$syno_hddesata_total = intval($hdddesata_data[0]);
 									$syno_hddesata_used = intval($hdddesata_data[1]);
@@ -2756,12 +2837,12 @@ class Monitoring extends eqLogic {
 					}
 	
 					// Swap (New)
-					if (isset($swap)) {
-						$swap = explode(' ', $swap);
-						if (count($swap) == 3) {
-							if (intval($swap[0]) != 0) {
-								$swap_free_percent = round(intval($swap[2]) / intval($swap[0]) * 100, 1);
-								$swap_used_percent = round(intval($swap[1]) / intval($swap[0]) * 100, 1);
+					if (isset($swap_value)) {
+						$swap_data = explode(' ', $swap_value);
+						if (count($swap_data) == 3) {
+							if (intval($swap_data[0]) != 0) {
+								$swap_free_percent = round(intval($swap_data[2]) / intval($swap_data[0]) * 100, 1);
+								$swap_used_percent = round(intval($swap_data[1]) / intval($swap_data[0]) * 100, 1);
 							} else {
 								$swap_free_percent = 0.0;
 								$swap_used_percent = 0.0;
@@ -2769,10 +2850,10 @@ class Monitoring extends eqLogic {
 							log::add('Monitoring', 'debug', '['. $equipement .'][SWAP] Swap Free % :: ' . $swap_free_percent);
 							log::add('Monitoring', 'debug', '['. $equipement .'][SWAP] Swap Used % :: ' . $swap_used_percent);
 
-							$swap_total = intval($swap[0]);
-							$swap_used = intval($swap[1]);
-							$swap_free = intval($swap[2]);
-							$swap_display = __('Total', __FILE__) . ' : ' . $this->formatSize($swap[0], 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap[1], 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap[2], 'Ko');
+							$swap_total = intval($swap_data[0]);
+							$swap_used = intval($swap_data[1]);
+							$swap_free = intval($swap_data[2]);
+							$swap_display = __('Total', __FILE__) . ' : ' . $this->formatSize($swap_data[0], 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap_data[1], 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap_data[2], 'Ko');
 
 						} else {
 							$swap_free_percent = 0.0;
@@ -2826,12 +2907,12 @@ class Monitoring extends eqLogic {
 					}
 	
 					// HDD (New)
-					if (isset($hdd)) {
-						$hdddata = explode(' ', $hdd);
-						if (count($hdddata) == 4) {
-							$hdd_total = intval($hdddata[0]);
-							$hdd_used = intval($hdddata[1]);
-							$hdd_free = intval($hdddata[2]);
+					if (isset($hdd_value)) {
+						$hdd_data = explode(' ', $hdd_value);
+						if (count($hdd_data) == 4) {
+							$hdd_total = intval($hdd_data[0]);
+							$hdd_used = intval($hdd_data[1]);
+							$hdd_free = intval($hdd_data[2]);
 							if ($hdd_total != 0) {
 								$hdd_used_percent = round($hdd_used / $hdd_total * 100, 1);
 								$hdd_free_percent = round($hdd_free / $hdd_total * 100, 1);
