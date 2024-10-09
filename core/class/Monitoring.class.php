@@ -1422,6 +1422,10 @@ class Monitoring extends eqLogic {
 			],
 		];
 
+		$cmdLocalSpecific['armv7l'] = &$cmdLocalSpecific['aarch64'];
+		$cmdLocalSpecific['i686'] = &$cmdLocalSpecific['x86_64'];
+		$cmdLocalSpecific['i386'] = &$cmdLocalSpecific['x86_64'];
+
 		// Distant
 		$cmdRemoteCommon = [
 
