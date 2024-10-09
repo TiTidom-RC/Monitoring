@@ -52,7 +52,7 @@ function addCmdToTable(_cmd) {
 	}
 	if (['perso1', 'perso2'].includes(init(_cmd.logicalId))) {
 		tr += '<span><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '" style="margin: 1px auto;width: 70%;display: inherit" ></input></span>';
-		tr += '<span> Unité : <input class="cmdAttr form-control input-sm" data-l1key="unite" style="margin: 1px auto;width: 10%;display: inherit" ></input></span>';
+		tr += '<span> {{Unité}} : <input class="cmdAttr form-control input-sm" placeholder="Unité" title="{{Unité}}" data-l1key="unite" style="margin: 1px auto;width: 10%;display: inherit" ></input></span>';
         tr += '<br/><span style="color: green;font-weight: bold;">[Vert] \< <input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span style="color: red;font-weight: bold;"><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	}
 	tr += '</td>';

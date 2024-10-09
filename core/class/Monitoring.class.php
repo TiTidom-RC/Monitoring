@@ -24,22 +24,7 @@ class MonitoringCommandsLocal {
 
 	public function __construct($key, $cartereseau) {
 		$this->initCommands($key, $cartereseau);
-	}
-
-
-	private function getCPUTemp() {
-		$cpu_temp = '';
-		if ($this->getConfiguration('linux_temp_cpu')) {
-			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-			log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-		} elseif (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
-			$cpu_temp_cmd = "cat /sys/class/thermal/thermal_zone0/temp";
-			log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-		} else {
-			$cpu_temp_cmd = '';
-		}
-		return trim($cpu_temp_cmd) != '' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp') : '';
-	}
+	}	
 
 	private function initCommands($key, $cartereseau) {
 		$cmdCommon = [
@@ -96,12 +81,7 @@ class MonitoringCommandsLocal {
 		];
 
 		if (array_key_exists($key, $this->$cmdSpecific)) {
-			$this->commands = array_merge($cmdCommon, $this->$cmdSpecific[$key]);
-			
-
-
-			
-			
+			$this->commands = array_merge($cmdCommon, $this->$cmdSpecific[$key]);		
 		} else {
 			throw new Exception(__('[Monitoring] Aucune commande disponible pour cette architecture', __FILE__));
 		}
