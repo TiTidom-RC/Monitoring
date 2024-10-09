@@ -184,6 +184,21 @@ class Monitoring extends eqLogic {
 	public function postSave() {
 		$orderCmd = 1;
 
+		$MonitoringCmd = $this->getCmd(null, 'refresh');
+        if (!is_object($MonitoringCmd)) {
+            $MonitoringCmd = new sshmanagerCmd();
+			$MonitoringCmd->setName(__('Rafraichir', __FILE__));
+            $MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('refresh');
+            $MonitoringCmd->setType('action');
+            $MonitoringCmd->setSubType('other');
+			$MonitoringCmd->setIsVisible(1);
+			$MonitoringCmd->setOrder($orderCmd++);
+            $MonitoringCmd->save();
+        } else {
+			$orderCmd++;
+		}
+
 		$MonitoringCmd = $this->getCmd(null, 'cnx_ssh');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -2992,13 +3007,20 @@ class MonitoringCmd extends cmd {
 	public static $_widgetPossibility = array('custom' => false);
 
 	/* * *********************Methode d'instance************************* */
+
+	public function dontRemoveCmd() {
+        return ($this->getLogicalId() == 'refresh');
+    }
+
 	public function execute($_options = null) {
 		$eqLogic = $this->getEqLogic();
 		$paramaction = $this->getLogicalId();
 
 		if ($this->getType() == "action") {
-			// $eqLogic->getCmd();
 			switch ($paramaction) {
+				case "refresh":
+					$eqLogic->getInformations();
+					break;
 				case "reboot":
 				case "poweroff":
 					$eqLogic->getCaseAction($paramaction);
