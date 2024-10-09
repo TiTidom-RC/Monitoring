@@ -247,7 +247,6 @@ class Monitoring extends eqLogic {
             $MonitoringCmd->setTemplate('mobile', 'core::toggle');
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
-			$MonitoringCmd->execCmd();
 		} else {
 			$orderCmd++;
 		}
