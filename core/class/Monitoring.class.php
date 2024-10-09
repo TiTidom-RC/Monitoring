@@ -302,6 +302,23 @@ class Monitoring extends eqLogic {
 			$orderCmd++;
 		}
 
+		$MonitoringCmd = $this->getCmd(null, 'os_version');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Version OS', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('os_version');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
 		$MonitoringCmd = $this->getCmd(null, 'uptime');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -1450,6 +1467,43 @@ class Monitoring extends eqLogic {
 		
 	}
 
+	public function formatLoadAvg() {
+
+	}
+
+	public function getSynoHDD($hdd_value, $hdd_name, $equipement) {
+		if (!empty($hdd_value)) {
+			$hdd_data = explode(' ', $hdd_value);
+			if (count($hdd_data) == 4) {
+				$syno_hdd_total = intval($hdd_data[0]);
+				$syno_hdd_used = intval($hdd_data[1]);
+				$syno_hdd_free = intval($hdd_data[2]);
+				if ($syno_hdd_total != 0) {
+					$syno_hdd_used_percent = round(($syno_hdd_used / $syno_hdd_total) * 100, 1);
+					$syno_hdd_free_percent = round(($syno_hdd_free / $syno_hdd_total) * 100, 1);
+				} else {
+					$syno_hdd_used_percent = 0.0;
+					$syno_hdd_free_percent = 0.0;
+				}
+				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Total :: ' . $syno_hdd_total);
+				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Used :: ' . $syno_hdd_used);
+				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Free :: ' . $syno_hdd_free);
+				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Used % :: ' . $syno_hdd_used_percent);
+				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Free % :: ' . $syno_hdd_free_percent);
+
+				$syno_hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($syno_hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($syno_hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($syno_hdd_free, 'Ko');
+				
+				// Syno Total, Used, Free, Used %, Free %, Text
+				$result = ['syno_hdd_total' => $syno_hdd_total, 'syno_hdd_used' => $syno_hdd_used, 'syno_hdd_free' => $syno_hdd_free, 'syno_hdd_used_percent' => $syno_hdd_used_percent, 'syno_hdd_free_percent' => $syno_hdd_free_percent, 'syno_hdd' => $syno_hdd];
+			} else {
+				$result = [0, 0, 0, 0.0, 0.0, '']; // Total, Used, Free, Used %, Free %, Text
+			}
+		} else {
+			$result = [0, 0, 0, 0.0, 0.0, '']; // Total, Used, Free, Used %, Free %, Text
+		}
+		return $result;	
+	}
+
 	public function getCmdPerso($perso) {
 		$result = '';
 		$perso_cmd = $this->getCmd(null, $perso);
@@ -1908,7 +1962,7 @@ class Monitoring extends eqLogic {
 		if ($seconds != '0.00') {
 			$uptimeFormated .= $seconds . 's';
 		}
-		return $uptimeFormated;
+		return [$uptimeFormated, $uptimeNum];
 	}
 
 	public function getSynoVersion(string $_version, string $_syno_model, string $_equipement) {
@@ -2474,11 +2528,7 @@ class Monitoring extends eqLogic {
 					// Synology (New)
 					if ($this->getConfiguration('synology') == '1') {
 						// Syno DistriName
-						if (isset($syno_version_file, $syno_model)) {
-							$distri_name = $this->getSynoVersion($syno_version_file, $syno_model, $equipement);
-						} else {
-							$distri_name = '';
-						}
+						$distri_name = isset($syno_version_file, $syno_model) ? $this->getSynoVersion($syno_version_file, $syno_model, $equipement) : '';
 
 						// Syno CPUFreq
 						[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'MHz');
@@ -2491,138 +2541,25 @@ class Monitoring extends eqLogic {
 
 						// Syno Volume 2
 						if ($this->getConfiguration('synologyv2') == '1') {
-							if (isset($hddv2_value)) {
-								$hddv2_data = explode(' ', $hddv2_value);
-								if (count($hddv2_data) == 4) {
-									$syno_hddv2_total = intval($hddv2_data[0]);
-									$syno_hddv2_used = intval($hddv2_data[1]);
-									$syno_hddv2_free = intval($hddv2_data[2]);
-									if ($syno_hddv2_total != 0) {
-										$syno_hddv2_used_percent = round(($syno_hddv2_used / $syno_hddv2_total) * 100, 1);
-										$syno_hddv2_free_percent = round(($syno_hddv2_free / $syno_hddv2_total) * 100, 1);
-									} else {
-										$syno_hddv2_used_percent = 0.0;
-										$syno_hddv2_free_percent = 0.0;
-									}
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDv2] Syno HDDv2 Total :: ' . $syno_hddv2_total);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDv2] Syno HDDv2 Used :: ' . $syno_hddv2_used);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDv2] Syno HDDv2 Free :: ' . $syno_hddv2_free);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDv2] Syno HDDv2 Used % :: ' . $syno_hddv2_used_percent);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDv2] Syno HDDv2 Free % :: ' . $syno_hddv2_free_percent);
-
-									$syno_hddv2 = __('Total', __FILE__) . ' : ' . $this->formatSize($syno_hddv2_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($syno_hddv2_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($syno_hddv2_free, 'Ko');
-								} else {
-									$syno_hddv2_total = 0;
-									$syno_hddv2_used = 0;
-									$syno_hddv2_free = 0;
-									$syno_hddv2_used_percent = 0.0;
-									$syno_hddv2_free_percent = 0.0;
-									$syno_hddv2 = '';
-								}
-							} else {
-								$syno_hddv2_total = 0;
-								$syno_hddv2_used = 0;
-								$syno_hddv2_free = 0;
-								$syno_hddv2_used_percent = 0.0;
-								$syno_hddv2_free_percent = 0.0;
-								$syno_hddv2 = '';
-							}
+							[$syno_hddv2_total, $syno_hddv2_used, $syno_hddv2_free, $syno_hddv2_used_percent, $syno_hddv2_free_percent, $syno_hddv2] = isset($hddv2_value) ? $this->getSynoHDD($hddv2_value, 'HDDv2', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 
 						// Syno Volume USB
 						if ($this->getConfiguration('synologyusb') == '1') {
-							if (isset($hddusb_value)) {
-								$hddusb_data = explode(' ', $hddusb_value);
-								if (count($hddusb_data) == 4) {
-									$syno_hddusb_total = intval($hddusb_data[0]);
-									$syno_hddusb_used = intval($hddusb_data[1]);
-									$syno_hddusb_free = intval($hddusb_data[2]);
-									if ($syno_hddusb_total != 0) {
-										$syno_hddusb_used_percent = round(($syno_hddusb_used / $syno_hddusb_total) * 100, 1);
-										$syno_hddusb_free_percent = round(($syno_hddusb_free / $syno_hddusb_total) * 100, 1);
-									} else {
-										$syno_hddusb_used_percent = 0.0;
-										$syno_hddusb_free_percent = 0.0;
-									}
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDUSB] Syno HDDUSB Total :: ' . $syno_hddusb_total);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDUSB] Syno HDDUSB Used :: ' . $syno_hddusb_used);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDUSB] Syno HDDUSB Free :: ' . $syno_hddusb_free);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDUSB] Syno HDDUSB Used % :: ' . $syno_hddusb_used_percent);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDUSB] Syno HDDUSB Free % :: ' . $syno_hddusb_free_percent);
-
-									$syno_hddusb = __('Total', __FILE__) . ' : ' . $this->formatSize($syno_hddusb_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($syno_hddusb_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($syno_hddusb_free, 'Ko');
-								} else {
-									$syno_hddusb_total = 0;
-									$syno_hddusb_used = 0;
-									$syno_hddusb_free = 0;
-									$syno_hddusb_used_percent = 0.0;
-									$syno_hddusb_free_percent = 0.0;
-									$syno_hddusb = '';
-								}
-							} else {
-								$syno_hddusb_total = 0;
-								$syno_hddusb_used = 0;
-								$syno_hddusb_free = 0;
-								$syno_hddusb_used_percent = 0.0;
-								$syno_hddusb_free_percent = 0.0;
-								$syno_hddusb = '';
-							}
+							[$syno_hddusb_total, $syno_hddusb_used, $syno_hddusb_free, $syno_hddusb_used_percent, $syno_hddusb_free_percent, $syno_hddusb] = isset($hddusb_value) ? $this->getSynoHDD($hddusb_value, 'HDDUSB', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 
 						// Syno Volume eSATA
 						if ($this->getConfiguration('synologyesata') == '1') {
-							if (isset($hddesata_value)) {
-								$hdddesata_data = explode(' ', $hddesata_value);
-								if (count($hdddesata_data) == 4) {
-									$syno_hddesata_total = intval($hdddesata_data[0]);
-									$syno_hddesata_used = intval($hdddesata_data[1]);
-									$syno_hddesata_free = intval($hdddesata_data[2]);
-									if ($syno_hddesata_total != 0) {
-										$syno_hddesata_used_percent = round(($syno_hddesata_used / $syno_hddesata_total) * 100, 1);
-										$syno_hddesata_free_percent = round(($syno_hddesata_free / $syno_hddesata_total) * 100, 1);
-									} else {
-										$syno_hddesata_used_percent = 0.0;
-										$syno_hddesata_free_percent = 0.0;
-									}
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDeSATA] Syno HDDeSATA Total :: ' . $syno_hddesata_total);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDeSATA] Syno HDDeSATA Used :: ' . $syno_hddesata_used);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDeSATA] Syno HDDeSATA Free :: ' . $syno_hddesata_free);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDeSATA] Syno HDDeSATA Used % :: ' . $syno_hddesata_used_percent);
-									log::add('Monitoring', 'debug', '['. $equipement .'][HDDeSATA] Syno HDDeSATA Free % :: ' . $syno_hddesata_free_percent);
-
-									$syno_hddesata = __('Total', __FILE__) . ' : ' . $this->formatSize($syno_hddesata_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($syno_hddesata_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($syno_hddesata_free, 'Ko');
-								} else {
-									$syno_hddesata_total = 0;
-									$syno_hddesata_used = 0;
-									$syno_hddesata_free = 0;
-									$syno_hddesata_used_percent = 0.0;
-									$syno_hddesata_free_percent = 0.0;
-									$syno_hddesata = '';
-								}
-							} else {
-								$syno_hddesata_total = 0;
-								$syno_hddesata_used = 0;
-								$syno_hddesata_free = 0;
-								$syno_hddesata_used_percent = 0.0;
-								$syno_hddesata_free_percent = 0.0;
-								$syno_hddesata = '';
-							}
+							[$syno_hddesata_total, $syno_hddesata_used, $syno_hddesata_free, $syno_hddesata_used_percent, $syno_hddesata_free_percent, $syno_hddesata] = isset($hddesata_value) ? $this->getSynoHDD($hddesata_value, 'HDDeSATA', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 					} else {
 						// Distri Name (New)
-						if (isset($distri_name_value, $distri_bits, $ARMv)) {
-							$distri_name = trim($distri_name_value) . ' ' . $distri_bits . 'bits (' . $ARMv . ')';
-						}
+						$distri_name = isset($distri_name_value, $distri_bits, $ARMv) ? trim($distri_name_value) . ' ' . $distri_bits . 'bits (' . $ARMv . ')' : '';
 					}
 	
 					// Uptime (New)
-					if (isset($uptime_value)) {
-						$uptime_sec = floatval($uptime_value);
-						$uptime = $this->formatUptime($uptime_value);
-					} else {
-						$uptime_sec = 0;
-						$uptime = '';
-					}
+					[$uptime, $uptime_sec] = isset($uptime_value) ? $this->formatUptime($uptime_value) : ['', 0];
 	
 					// LoadAverage (New)
 					if (isset($load_avg_value)) {
@@ -2866,7 +2803,6 @@ class Monitoring extends eqLogic {
 
 						} elseif ($ARMv == 'arm') {
 							if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $distri_name_value) || preg_match("#piCorePlayer|medion#", $uname)) {
-								
 								// CPUFreq
 								[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'KHz');
 
@@ -2886,6 +2822,7 @@ class Monitoring extends eqLogic {
 					$dataresult = array(
 						'cnx_ssh' => $cnx_ssh,
 						'distri_name' => $distri_name,
+						'os_version' => $os_version_value,
 						'uptime' => $uptime,
 						'uptime_sec' => $uptime_sec,
 						'load_avg' => $load_avg,
