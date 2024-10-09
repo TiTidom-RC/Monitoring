@@ -23,8 +23,6 @@ function addCmdToTable(_cmd) {
 		_cmd.configuration = {}
 	}
 
-	console.log(_cmd);
-
 	let tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 	tr += '<td class="hidden-xs">';
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
