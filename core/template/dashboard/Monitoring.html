@@ -2,49 +2,49 @@
 	<style>
 		div.eqLogic-widget .cmd.monitorbtn {
 			margin-top: 5px !important;
-		  }
-		  div.eqLogic-widget .cmd.monitorbtn i {
+		}
+		div.eqLogic-widget .cmd.monitorbtn i {
 			color: var(--eqTitle-color) !important;
 			font-size: 12px !important;
-		  }
-		  div.eqLogic-widget .cmd.monitorbtn i:hover {
+		}
+		div.eqLogic-widget .cmd.monitorbtn i:hover {
 			color: var(--linkHoverLight-color) !important;
-		  }
-		
-		  div.eqLogic-widget.editingMode .cmd.monitorbtn {
+		}
+	
+		div.eqLogic-widget.editingMode .cmd.monitorbtn {
 			display: none;
-		  }
+		}
 	</style>
 	<div class="widget-name">
 		<span class="cmd monitorbtn pull-left" style="padding-left: 5px;">
 			<span id="iconSSH#id#"></span>
 			<script>
 				if ('#cnx_ssh#' == 'OK') {
-					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="monitorbtn fas fa-check tooltips" style="padding-left: 1px;color: var(--al-success-color) !important;"></i>';
+					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="cmd monitorbtn fas fa-check tooltips" style="color: var(--al-success-color) !important;"></i>';
 				}
 				if ('#cnx_ssh#' == 'KO') {
-					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="monitorbtn fas fa-times tooltips" style="padding-left: 1px;color: var(--al-danger-color) !important;"></i>';
+					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="cmd monitorbtn fas fa-times tooltips" style="color: var(--al-danger-color) !important;"></i>';
 				}
 			</script>
 			<span id="iconCron#id#"></span>
 			<script>
 				if ('#cron_status#' == '1') {
 					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="fas fa-play-circle tooltips" style="padding-left: 1px;display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="cmd monitorbtn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
 					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="fas fa-play-circle tooltips" style="padding-left: 1px;display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="cmd monitorbtn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
 					}
 				}
 				if ('#cron_status#' == '0') {
 					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="fas fa-pause-circle tooltips" style="padding-left: 1px;display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
 					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="fas fa-pause-circle tooltips" style="padding-left: 1px;display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
 					}
 				}
 			</script>
-			<span title="Redémarrer l'équipement" class="cmd monitorbtn reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
-				<a class="action" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left: 1px;"></i></a>
+			<span title="Redémarrer l'équipement" class="cmd action monitorbtn reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+				<i class="fas fa-redo"></i>
 			</span>
 			<script>
 				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"] .action').addEventListener('click', function () {
@@ -69,8 +69,8 @@
 					});
 				});
 			</script>
-			<span title="Eteindre l'équipement" class="cmd monitorbtn poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
-				<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left: 1px;"></i></a>
+			<span title="Eteindre l'équipement" class="cmd action monitorbtn poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
+				<i class="fas fa-power-off"></i>
 			</span>
 			<script>
 				document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"] .action')?.addEventListener('click', function () {
