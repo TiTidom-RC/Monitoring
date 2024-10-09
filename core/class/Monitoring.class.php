@@ -2113,7 +2113,7 @@ class Monitoring extends eqLogic {
 
 						// Synology NbCPU Command
 						$cpu_nb_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
-						$cpu_nb_value = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
+						$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
 						
 						// Synology CPUFreq Command
 						$cpu_freq_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
