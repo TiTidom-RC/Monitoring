@@ -27,64 +27,7 @@ class MonitoringCommandsLocal {
 	}	
 
 	private function initCommands($key, $cartereseau) {
-		$cmdCommon = [
-			'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-			'ditri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-			'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
-			'load_avg' => "cat /proc/loadavg 2>/dev/null",
-			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
-			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
-			'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'",
-			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
-			'network_ip' => "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
-		];
-	
-		$cmdSpecific = [
-			'x86_64' => [
-				'umame' => ".",
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
-				'cpu_freq' => [
-					"LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'", // OK pour LXC Linux, Proxmox, Debian 10/11
-					"cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'" // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
-				],
-				'cpu_temp' => [
-					['type' => 'file', 'command' => "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Whyse
-					['type' => 'file', 'command' => "/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input"], // OK AOpen DE2700
-					['type' => 'cmd', 'command' => "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"], // OK AMD Ryzen
-					['type' => 'cmd', 'command' =>  "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"], // OK by sensors
-					['type' => 'cmd', 'command' =>  "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"] // OK by sensors MB
-				],
-			],
-			'aarch64' => [
-				'umame' => ".",
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'",
-				'cpu_freq' => [
-					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
-					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-				],
-				'cpu_temp' => [
-					['type' => "file", 'command' => "/sys/class/thermal/thermal_zone0/temp"], // OK RPi2/3, Odroid
-					['type' => 'file', 'command' => "/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"] // OK Banana Pi (Cubie surement un jour...)
-				],
-			],
-			'armv6l' => [
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
-				'cpu_freq' => [
-					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
-					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-				],
-				'cpu_temp' => [
-					['type' => 'file', 'command' => "/sys/class/thermal/thermal_zone0/temp"]
-				]
-			],
-		];
-
-		if (array_key_exists($key, $this->$cmdSpecific)) {
-			$this->commands = array_merge($cmdCommon, $this->$cmdSpecific[$key]);		
-		} else {
-			throw new Exception(__('[Monitoring] Aucune commande disponible pour cette architecture', __FILE__));
-		}
+		
 	}
 
 	public function getValues() {
@@ -1421,16 +1364,130 @@ class Monitoring extends eqLogic {
 
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
-	public function getCPUTemp($tempArray) {
-		$equipement = $this->getName();
-		$result = ['cpu_temp' => '', 'cpu_temp_cmd' => ''];
+	public function getCommands($key, $cartereseau = '', $confLocalorRemote = 'local') {
+		log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key / LocalorRemote :: ' . $key . ' / ' . $confLocalorRemote);
+		
+		$cmdLocalCommon = [
+			'distri_bits' => "getconf LONG_BIT 2>/dev/null",
+			'ditri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+			'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
+			'load_avg' => "cat /proc/loadavg 2>/dev/null",
+			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
+			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
+			'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'",
+			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network_ip' => "ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
+		];
+	
+		// Local
+		$cmdLocalSpecific = [
+			'x86_64' => [
+				'uname' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
+				'cpu_freq' => [
+					"LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'", // OK pour LXC Linux, Proxmox, Debian 10/11
+					"cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'" // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
+				],
+				'cpu_temp' => [
+					1 => ['file', "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Whyse
+					2 => ['file', "/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input"], // OK AOpen DE2700
+					3 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"], // OK AMD Ryzen
+					4 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"], // OK by sensors
+					5 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"] // OK by sensors MB
+				],
+			],
+			'aarch64' => [
+				'uname' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'",
+				'cpu_freq' => [
+					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
+					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+				],
+				'cpu_temp' => [
+					1 => ['file', "/sys/class/thermal/thermal_zone0/temp"], // OK RPi2/3, Odroid
+					2 => ['file', "/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"] // OK Banana Pi (Cubie surement un jour...)
+				],
+			],
+			'armv6l' => [
+				'uname' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
+				'cpu_freq' => [
+					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
+					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+				],
+				'cpu_temp' => [
+					1 => ['file', "/sys/class/thermal/thermal_zone0/temp"]
+				]
+			],
+		];
+
+		// Distant
+		$cmdRemoteCommon = [
+
+		];
+		$cmdRemoteSpecific = [
+
+		];
+
+		if ($confLocalorRemote == 'local') {
+			if (array_key_exists($key, $cmdLocalSpecific)) {
+				return array_merge($cmdLocalCommon, $cmdLocalSpecific[$key]);		
+			} else {
+				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__));
+			}
+		} else {
+			if (array_key_exists($key, $cmdRemoteSpecific)) {
+				return array_merge($cmdRemoteCommon, $cmdRemoteSpecific[$key]);		
+			} else {
+				throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__));
+			}
+		}
+		
+	}
+
+	public function getCmdPerso($perso) {
+		$result = '';
+		$perso_cmd = $this->getCmd(null, $perso);
+		if (is_object($perso_cmd)) {
+			$perso_command = $perso_cmd->getConfiguration($perso);
+			$result = trim($perso_command);
+		} else {
+			$result = '';
+		}
+		return $result;
+	}
+
+	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '') {
+		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
+		foreach ($cpuFreqArray as $id => $cpuFreqPath) {
+			if (file_exists($cpuFreqPath)) {
+				$cpu_freq_cmd = "cat " . $cpuFreqPath;
+				if ($localOrRemote == 'local') {
+					$cpu_freq = $this->execSRV($cpu_freq_cmd, 'CPUFreq-' . $id);
+					$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
+				} else {
+					$cpu_freq = $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq-' . $id);
+					$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
+				}
+				if (!empty($cpu_freq)) {
+					$result = ['cpu_freq' => $cpu_freq, 'cpu_freq_id' => $id];
+					break;
+				}
+			}
+		}
+		return $result;
+	}
+
+	public function getCPUTemp($tempArray, $equipement, $localoudistant = 'local', $hostId = '') {
+		$result = ['cpu_temp' => '', 'cpu_temp_cmd' => '', 'cpu_temp_id' => ''];
 
 		if ($this->getConfiguration('linux_use_temp_cmd')) {
 			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
 			log::add('Monitoring','debug', '['. $equipement .'][LOCAL][XXX] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-			$cpu_temp = trim($cpu_temp_cmd) != '' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : '';
+			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom')) : '';
 		} elseif (is_array($tempArray)) {
-			foreach ($tempArray as $type => $command) {
+			foreach ($tempArray as $id => [$type, $command]) {	
 				if ($type == 'file' && file_exists($command)) {
 					$cpu_temp_cmd = "cat " . $command;
 				} elseif ($type == 'cmd') {
@@ -1438,9 +1495,9 @@ class Monitoring extends eqLogic {
 				} else {
 					$cpu_temp_cmd = '';
 				}
-				$cpu_temp = trim($cpu_temp_cmd) != '' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp') : '';
-				if ($cpu_temp != '') {
-					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_cmd' => trim($cpu_temp_cmd)];
+				$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-' . $id) : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-' . $id)) : '';
+				if (!empty($cpu_temp)) {
+					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_cmd' => trim($cpu_temp_cmd), 'cpu_temp_id' => $id];
 					break;
 				}
 			}
@@ -2358,222 +2415,53 @@ class Monitoring extends eqLogic {
 				$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 				$ARMv = $this->execSRV($ARMv_cmd, 'ARMv');
 				
-				// New Method
-				$commandsLocal = new MonitoringCommandsLocal($ARMv, $cartereseau);
-				$commands = $commandsLocal->getValues();
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ARMv :: ' . $ARMv);
 
-				// TODO : Continuer l'implémentation des commandes par classe
+				$commands = $this->getCommands($ARMv, $cartereseau, 'local');
 
-				$distri_bits = $commands['DistriBits'];
-				$distri_name_value = $commands['DistriName'];
-				$os_version_value = $commands['OsVersion'];
-				$uptime_value = $commands['Uptime'];
-				$load_avg_value = $commands['LoadAverage'];
-				$memory_value = $commands['Memory'];
-				$swap_value = $commands['Swap'];
-				$hdd_value = $commands['HDD'];
-				$network_value = $commands['network'];
-				$network_ip_value = $commands['network_ip'];
 				$uname = $commands['uname'];
-				$cpu_nb = $commands['NbCPU'];
-				$cpu_freq = $commands['CPUFreq'];
-				$cpu_temp = $commands['CPUTemp'];
+				$distri_bits = $this->execSRV($commands['distri_bits'], 'DistriBits');
+				$distri_name_value = $this->execSRV($commands['ditri_name'], 'DistriName');
+				$os_version_value = $this->execSRV($commands['os_version'], 'OsVersion');
+				$uptime_value = $this->execSRV($commands['uptime'], 'Uptime');
+				$load_avg_value = $this->execSRV($commands['load_avg'], 'LoadAverage');
+				$memory_value = $this->execSRV($commands['memory'], 'Memory');
+				$swap_value = $this->execSRV($commands['swap'], 'Swap');
+				$hdd_value = $this->execSRV($commands['hdd'], 'HDD');
+				$network_value = $this->execSRV($commands['network'], 'ReseauRXTX');
+				$network_ip_value = $this->execSRV($commands['network_ip'], 'ReseauIP');
+				$cpu_nb = $this->execSRV($commands['cpu_nb'], 'NbCPU');
 
-				// DistriBits Command
-				$distri_bits_cmd = "getconf LONG_BIT 2>/dev/null";
-				$distri_bits = $this->execSRV($distri_bits_cmd, 'DistriBits');
+				extract($this->getCPUFreq($commands['cpu_freq'], $equipement));
+				extract($this->getCPUTemp($commands['cpu_temp'], $equipement));
 
-				// DitriName Command
-				$distri_name_cmd ="awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-				$distri_name_value = $this->execSRV($distri_name_cmd, 'DistriName');
-
-				// OsVersion Command
-				$os_version_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-				$os_version_value = $this->execSRV($os_version_cmd, 'OsVersion');
-
-				// UpTime Command
-				$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-				$uptime_value = $this->execSRV($uptime_cmd, 'Uptime');
-
-				// LoadAverage Command
-				$load_avg_cmd = "cat /proc/loadavg 2>/dev/null";
-				$load_avg_value = $this->execSRV($load_avg_cmd, 'LoadAverage');
-
-				// Memory Command
-				$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
-				$memory_value = $this->execSRV($memory_cmd, 'Memory');
-
-				// Swap Command
-				$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
-				$swap_value = $this->execSRV($swap_cmd, 'Swap');
-
-				// HDD Command
-				$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-				$hdd_value = $this->execSRV($hdd_cmd, 'HDD');
-
-				// Network Command
-				$network_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'"; // on récupère le nom de la carte en plus pour l'afficher dans les infos
-				$network_value = $this->execSRV($network_cmd, 'ReseauRXTX');
-
-				$network_ip_cmd = "ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
-				$network_ip_value = $this->execSRV($network_ip_cmd, 'ReseauIP');
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Commandes :: ' . json_encode($commands));
 				
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uname :: ' . $uname);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriBits :: ' . $distri_bits);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriName :: ' . $distri_name_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] OsVersion :: ' . $os_version_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uptime :: ' . $uptime_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] LoadAverage :: ' . $load_avg_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Memory :: ' . $memory_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Swap :: ' . $swap_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] HDD :: ' . $hdd_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauRXTX :: ' . $network_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauIP :: ' . $network_ip_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] NbCPU :: ' . $cpu_nb);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUFreq :: ' . $cpu_freq);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUFreq Id :: ' . $cpu_temp_id);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUTemp :: ' . $cpu_temp);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUTemp Id :: ' . $cpu_temp_id);
+
 				// Perso1 Command
-				$perso1_cmd = $this->getCmd(null, 'perso1');
-				if (is_object($perso1_cmd)) {
-					$perso1_command = $perso1_cmd->getConfiguration('perso1');
-				} else {
-					$perso1_command = '';
-				}
-				$perso1 = trim($perso1_command) !== '' ? $this->execSRV($perso1_command, 'Perso1') : '';
+				$perso1_cmd = $this->getCmdPerso('perso1');
+				$perso1 = $perso1_cmd !== '' ? $this->execSRV($perso1_cmd, 'Perso1') : '';
 
 				// Perso2 Command
-				$perso2_cmd = $this->getCmd(null, 'perso2');
-				if (is_object($perso2_cmd)) {
-					$perso2_command = $perso2_cmd->getConfiguration('perso2');
-				} else {
-					$perso2_command = '';
-				}
-				$perso2 = trim($perso2_command) !== '' ? $this->execSRV($perso2_command, 'Perso2') : '';
+				$perso2_cmd = $this->getCmdPerso('perso2');
+				$perso2 = $perso2_cmd !== '' ? $this->execSRV($perso2_cmd, 'Perso2') : '';
 	
-				if ($ARMv == 'armv6l') {
-					$uname = '.';
-					
-					// NbCPU Command
-					$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
-					$cpu_nb = $this->execSRV($cpu_nb_cmd, 'NbCPU');
-					
-					// CPUFreq Command
-					$cpu_freq = '';
-					$cpuFreqPaths = array(
-						"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
-						"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-					);
-					foreach ($cpuFreqPaths as $id => $cpuFreqPath) {
-						if (file_exists($cpuFreqPath)) {
-							$cpu_freq_cmd = "cat " . $cpuFreqPath;
-							$cpu_freq = $this->execSRV($cpu_freq_cmd, 'CPUFreq' . $id);
-							if ($cpu_freq != '') {
-								break;
-							}
-						}
-					}
-					
-					// CPU Temp Command
-					$cpu_temp = '';
-					if ($this->getconfiguration('linux_use_temp_cmd')) {
-						$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-						log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-					} elseif (file_exists('/sys/class/thermal/thermal_zone0/temp')) {
-						$cpu_temp_cmd = "cat /sys/class/thermal/thermal_zone0/temp";
-						log::add('Monitoring','debug', '['. $equipement .'][LOCAL][ARM6L] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-					} else {
-						$cpu_temp_cmd = '';
-					}
-					$cpu_temp = trim($cpu_temp_cmd) != '' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp') : '';
-
-				} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64') {
-					$uname = '.';
-	
-					// NbCPU Command
-					$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
-					$cpu_nb = $this->execSRV($cpu_nb_cmd, 'NbCPU');
-					
-					// CPUFreq Command
-					$cpu_freq = '';
-					$cpuFreqPaths = array(
-						"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
-						"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
-					);
-					foreach ($cpuFreqPaths as $id => $cpuFreqPath) {
-						if (file_exists($cpuFreqPath)) {
-							$cpu_freq_cmd = "cat " . $cpuFreqPath;
-							$cpu_freq = $this->execSRV($cpu_freq_cmd, 'CPUFreq' . $id);
-							if ($cpu_freq != '') {
-								break;
-							}
-						}
-					}
-					
-					// CPU Temp Command
-					$cpu_temp = '';
-					if ($this->getconfiguration('linux_use_temp_cmd')) {
-						$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-						log::add('Monitoring','debug', '['. $equipement .'][LOCAL][AARCH64] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-						$cpu_temp = (trim($cpu_temp_cmd) != '') ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : '';
-					} else {
-						$cpu_temp_paths = array(
-							"/sys/class/thermal/thermal_zone0/temp", // OK RPi2/3, Odroid
-							"/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1" // OK Banana Pi (Cubie surement un jour...)
-						);
-						foreach ($cpu_temp_paths as $id => $cpu_temp_path) {
-							if (file_exists($cpu_temp_path)) {
-								$cpu_temp_cmd = "cat " . $cpu_temp_path;
-								$cpu_temp = $this->execSRV($cpu_temp_cmd, 'CPUTemp-' . $id);
-								if ($cpu_temp != '') {
-									log::add('Monitoring','debug', '['. $equipement .'][LOCAL][AARCH64] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-									break;
-								}
-							}
-						}
-					}
-
-				} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-					$uname = '.';
-
-					// NbCPU Command
-					$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'"; // OK pour LXC Linux/Ubuntu
-					$cpu_nb = $this->execSRV($cpu_nb_cmd, 'NbCPU');
-					$cpu_nb = preg_replace("/[^0-9]/", "", $cpu_nb);
-
-					// CPUFreq Command
-					$cpu_freq = '';
-					$cpuFreqPaths = array(
-						"LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'", // OK pour LXC Linux, Proxmox, Debian 10/11
-						"cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'" // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
-					);
-					foreach ($cpuFreqPaths as $id => $cpuFreqPath) {
-						$cpu_freq = $this->execSRV($cpuFreqPath, 'CPUFreq-' . $id);
-						$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
-						if ($cpu_freq != '') {
-							log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL][X86] CPUFreq :: ' . $cpu_freq);
-							// TODO Stocker la commande qui a fonctionné pour CPUFreq
-							break;
-						}
-					}
-					
-					// CPU Temp Command
-					if ($this->getconfiguration('linux_use_temp_cmd')) {
-						$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-						log::add('Monitoring','debug', '['. $equipement .'][LOCAL][X86] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-						$cpu_temp = $cpu_temp_cmd != '' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : '';
-					} else {
-						$cpu_temp = '';
-						$cpu_temp_paths = array(
-							'1' => "/sys/devices/virtual/thermal/thermal_zone0/temp", // OK Dell Whyse
-							'2' => "/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input", // OK AOpen DE2700
-							'3' => "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null", // OK AMD Ryzen
-							'4' => "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'", // OK by sensors
-							'5' => "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'" // OK by sensors MB
-						);
-						foreach ($cpu_temp_paths as $id => $cpu_temp_path) {
-							if ($id <= 2) {
-								if (file_exists($cpu_temp_path)) {
-									$cpu_temp_cmd = "cat " . $cpu_temp_path;
-								} else {
-									continue;
-								}
-							} else {
-								$cpu_temp_cmd = $cpu_temp_path;
-							}
-							$cpu_temp = $this->execSRV($cpu_temp_path, 'CPUTemp-' . $id);
-							if ($cpu_temp != '') {
-								log::add('Monitoring','debug', '['. $equipement .'][LOCAL][X86] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-								break;
-							}
-						}
-					}
-				}
 			}
 	
 			// Traitement des données récupérées
