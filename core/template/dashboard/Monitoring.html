@@ -1,16 +1,15 @@
 <div class="eqLogic eqLogic-widget text-center allowResize #custom_layout# #eqLogic_class# #class# #category#" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#;">
 	<style>
-		div.eqLogic-widget .cmd.monitor-btn i {
+		div.eqLogic-widget .cmd.monitor-btn {
+			padding-top: 6px;
 			font-size: 12px !important;
 		}
 		div.eqLogic-widget.editingMode .cmd.monitor-btn {
-			display: none;
+			display: none !important;
 		}
-
 		div.monitor-name-flex {
 			display: flex;
 			justify-content: space-between;
-			align-items: center;
 		}
 		div.monitor-name-center {
 			display: flex;
@@ -18,15 +17,14 @@
 			justify-content: center;
 		}
 		div.monitor-name-left {
-			display: flex;
+			display: flex !important;
 			flex: 1;
 			padding-left: 5px;
 			float: left;
-			justify-content: flex-start;
-			align-items: center;
+			justify-content: flex-start;			
 		}
 		div.monitor-name-left span {
-			margin-right: 3px; /* Adjust the value as needed */
+			margin-right: 3px;
 		}
 		div.monitor-name-right {
 			display: flex;
@@ -34,10 +32,6 @@
 			padding-right: 5px;
 			float: right;
 			justify-content: flex-end;
-			align-items: center;
-		}
-		div.monitor-name-right span {
-			margin-top: none !important;
 		}
 
 	</style>
@@ -63,9 +57,9 @@
 				}
 				if ('#cron_status#' == '0') {
 					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="cmd monitor-btn fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
 					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="cmd monitor-btn fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
 					}
 				}
 			</script>
