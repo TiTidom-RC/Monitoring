@@ -228,7 +228,6 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setIsHistorized(0);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
-			$MonitoringCmd->event(1); // Init Cron Status
 		} else {
 			$orderCmd++;
 		}
@@ -248,6 +247,7 @@ class Monitoring extends eqLogic {
             $MonitoringCmd->setTemplate('mobile', 'core::toggle');
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+			$MonitoringCmd->execCmd();
 		} else {
 			$orderCmd++;
 		}
