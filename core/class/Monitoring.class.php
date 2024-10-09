@@ -226,9 +226,9 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setSubType('binary');
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setIsHistorized(0);
-			$MonitoringCmd->event(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
+			$MonitoringCmd->event(1); // Init Cron Status
 		} else {
 			$orderCmd++;
 		}
