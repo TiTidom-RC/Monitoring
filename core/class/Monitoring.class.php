@@ -1386,8 +1386,8 @@ class Monitoring extends eqLogic {
 				'uname' => ".",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
 				'cpu_freq' => [
-					"LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'", // OK pour LXC Linux, Proxmox, Debian 10/11
-					"cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'" // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
+					1 => ['cmd', "LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'"], // OK pour LXC Linux, Proxmox, Debian 10/11
+					2 => ['cmd', "cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'"] // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
 				],
 				'cpu_temp' => [
 					1 => ['file', "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Whyse
@@ -1401,8 +1401,8 @@ class Monitoring extends eqLogic {
 				'uname' => ".",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'",
 				'cpu_freq' => [
-					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
-					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+					1 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"], 
+					2 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"]
 				],
 				'cpu_temp' => [
 					1 => ['file', "/sys/class/thermal/thermal_zone0/temp"], // OK RPi2/3, Odroid
@@ -1413,8 +1413,8 @@ class Monitoring extends eqLogic {
 				'uname' => ".",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
 				'cpu_freq' => [
-					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq", 
-					"/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"
+					1 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"],
+					2 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"]
 				],
 				'cpu_temp' => [
 					1 => ['file', "/sys/class/thermal/thermal_zone0/temp"]
@@ -1460,27 +1460,26 @@ class Monitoring extends eqLogic {
 
 	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '') {
 		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
-		foreach ($cpuFreqArray as $id => $cpuFreqPath) {
-			if (file_exists($cpuFreqPath)) {
-				$cpu_freq_cmd = "cat " . $cpuFreqPath;
-				if ($localOrRemote == 'local') {
-					$cpu_freq = $this->execSRV($cpu_freq_cmd, 'CPUFreq-' . $id);
-					$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
-				} else {
-					$cpu_freq = $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq-' . $id);
-					$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
-				}
-				if (!empty($cpu_freq)) {
-					$result = ['cpu_freq' => $cpu_freq, 'cpu_freq_id' => $id];
-					break;
-				}
+		foreach ($cpuFreqArray as $id => [$type, $command]) {
+			if ($type == 'file' && file_exists($command)) {
+				$cpu_freq_cmd = "cat " . $command;
+			} elseif ($type == 'cmd') {
+				$cpu_freq_cmd = $command;
+			} else {
+				$cpu_freq_cmd = '';
+			}
+			$cpu_freq = trim($cpu_freq_cmd) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($cpu_freq_cmd, 'CPUFreq-' . $id) : $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq-' . $id)) : '';
+			$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
+			if (!empty($cpu_freq)) {
+				$result = ['cpu_freq' => $cpu_freq, 'cpu_freq_id' => $id];
+				break;
 			}
 		}
 		return $result;
 	}
 
 	public function getCPUTemp($tempArray, $equipement, $localoudistant = 'local', $hostId = '') {
-		$result = ['cpu_temp' => '', 'cpu_temp_cmd' => '', 'cpu_temp_id' => ''];
+		$result = ['cpu_temp' => '', 'cpu_temp_id' => ''];
 
 		if ($this->getConfiguration('linux_use_temp_cmd')) {
 			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
@@ -1497,7 +1496,7 @@ class Monitoring extends eqLogic {
 				}
 				$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-' . $id) : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-' . $id)) : '';
 				if (!empty($cpu_temp)) {
-					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_cmd' => trim($cpu_temp_cmd), 'cpu_temp_id' => $id];
+					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => $id];
 					break;
 				}
 			}
@@ -2434,8 +2433,6 @@ class Monitoring extends eqLogic {
 
 				extract($this->getCPUFreq($commands['cpu_freq'], $equipement));
 				extract($this->getCPUTemp($commands['cpu_temp'], $equipement));
-
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Commandes :: ' . json_encode($commands));
 				
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uname :: ' . $uname);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriBits :: ' . $distri_bits);
