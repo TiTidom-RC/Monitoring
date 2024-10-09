@@ -226,6 +226,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setSubType('binary');
 			$MonitoringCmd->setIsVisible(1);
 			$MonitoringCmd->setIsHistorized(0);
+			$MonitoringCmd->setValue(1);
 			$MonitoringCmd->setOrder($orderCmd++);
 			$MonitoringCmd->save();
 		} else {
@@ -3020,6 +3021,7 @@ class MonitoringCmd extends cmd {
 			switch ($paramaction) {
 				case "refresh":
 					$eqLogic->getInformations();
+					$eqLogic->refreshWidget();
 					break;
 				case "reboot":
 				case "poweroff":
