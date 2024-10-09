@@ -1,31 +1,58 @@
 <div class="eqLogic eqLogic-widget text-center allowResize #custom_layout# #eqLogic_class# #class# #category#" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#;">
 	<style>
-		div.eqLogic-widget .cmd.monitorbtn i {
-			padding-top: 7px;
+		div.eqLogic-widget .cmd.monitor-btn i {
 			font-size: 12px !important;
 		}
-		div.eqLogic-widget.editingMode .cmd.monitorbtn {
+		div.eqLogic-widget.editingMode .cmd.monitor-btn {
 			display: none;
 		}
+
+		div.monitor-name-flex {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		div.monitor-name-center {
+			flex: 1;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+		}
+		div.monitor-name-left {
+			flex: 1;
+			padding-left: 5px;
+			float: left;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			align-items: center;
+		}
+
+		div.monitor-name-right {
+			flex: 1;
+			float: right;
+			justify-content: flex-end;
+			align-items: center;
+		}
+
 	</style>
-	<div class="widget-name">
-		<span class="cmd monitorbtn pull-left" style="padding-left: 5px;">
+	<div class="widget-name monitor-name-flex">
+		<div class="monitor-name-left">
 			<span id="iconSSH#id#"></span>
 			<script>
 				if ('#cnx_ssh#' == 'OK') {
-					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="cmd monitorbtn fas fa-check tooltips" style="color: var(--al-success-color) !important;"></i>';
+					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="cmd monitor-btn fas fa-check tooltips" style="color: var(--al-success-color) !important;"></i>';
 				}
 				if ('#cnx_ssh#' == 'KO') {
-					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="cmd monitorbtn fas fa-times tooltips" style="color: var(--al-danger-color) !important;"></i>';
+					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="cmd monitor-btn fas fa-times tooltips" style="color: var(--al-danger-color) !important;"></i>';
 				}
 			</script>
 			<span id="iconCron#id#"></span>
 			<script>
 				if ('#cron_status#' == '1') {
 					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="cmd monitorbtn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="cmd monitor-btn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
 					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="cmd monitorbtn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="cmd monitor-btn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
 					}
 				}
 				if ('#cron_status#' == '0') {
@@ -36,7 +63,7 @@
 					}
 				}
 			</script>
-			<span class="cmd action monitorbtn reboot cursor" title="Redémarrer l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+			<span class="cmd action monitor-btn reboot cursor" title="Redémarrer l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="fas fa-redo"></i>
 			</span>
 			<script>
@@ -62,7 +89,7 @@
 					});
 				});
 			</script>
-			<span class="cmd action monitorbtn poweroff cursor" title="Eteindre l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
+			<span class="cmd action monitor-btn poweroff cursor" title="Eteindre l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
 				<i class="fas fa-power-off"></i>
 			</span>
 			<script>
@@ -88,10 +115,16 @@
 					});
 				});
 			</script>
-		</span>
-		<span class="cmd refresh pull-right cursor" title="Rafraîchir" data-cmd_id="#refresh_id#">
-			<i class="fas fa-sync"></i>
-		</span>
+		</div>
+		<div class="monitor-name-center">
+			<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+			<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
+		</div>
+		<div class="monitor-name-right">	
+			<span class="cmd refresh cursor" title="Rafraîchir" data-cmd_id="#refresh_id#">
+				<i class="fas fa-sync"></i>
+			</span>
+		</div>
 		<script>
 			if ('#refresh_id#' != '') {
 				document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.addEventListener('click', function() {
@@ -101,8 +134,7 @@
 				document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.remove()
 			}
 		</script>
-		<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
-		<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
+		
 	</div>
 	<div class="cmds text-left" style="display:block;">
 		<div class="tooltips" style="margin-left:5px;display: #distri_name_display#;">
