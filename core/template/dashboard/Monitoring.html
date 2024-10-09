@@ -47,7 +47,7 @@
 				<i class="fas fa-redo"></i>
 			</span>
 			<script>
-				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"] .action').addEventListener('click', function () {
+				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]').addEventListener('click', function () {
 					jeeDialog.confirm({
 						title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
 						message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
@@ -73,7 +73,7 @@
 				<i class="fas fa-power-off"></i>
 			</span>
 			<script>
-				document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"] .action')?.addEventListener('click', function () {
+				document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')?.addEventListener('click', function () {
 					jeeDialog.confirm({
 						title: '<i class="danger fas fa-question-circle"></i> Eteindre l\'équipement',
 						message: 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?',
@@ -107,7 +107,7 @@
 			} else {
 				document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.remove()
 			}
-		  </script>
+		</script>
 		<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
 		<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
 	</div>
