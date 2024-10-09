@@ -104,12 +104,12 @@ class Monitoring extends eqLogic {
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
 						$Monitoring->getInformations();
-						$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+						/* $mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
 						$mc->remove();
 						$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
 						$mc->remove();
 						$Monitoring->toHtml('mobile');
-						$Monitoring->toHtml('dashboard');
+						$Monitoring->toHtml('dashboard'); */
 						$Monitoring->refreshWidget();
 					}
 				}
@@ -128,12 +128,12 @@ class Monitoring extends eqLogic {
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Lancement (1min)');
 						$Monitoring->getInformations();
-						$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+						/* $mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
 						$mc->remove();
 						$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
 						$mc->remove();
 						$Monitoring->toHtml('mobile');
-						$Monitoring->toHtml('dashboard');
+						$Monitoring->toHtml('dashboard'); */
 						$Monitoring->refreshWidget();
 					}
 				}
@@ -150,12 +150,12 @@ class Monitoring extends eqLogic {
 			} else {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
 				$Monitoring->getInformations();
-				$mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
+				/* $mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
 				$mc->remove();
 				$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
 				$mc->remove();
 				$Monitoring->toHtml('mobile');
-				$Monitoring->toHtml('dashboard');
+				$Monitoring->toHtml('dashboard'); */
 				$Monitoring->refreshWidget();
 			}
 		}
