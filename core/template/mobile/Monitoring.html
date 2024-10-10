@@ -1,61 +1,73 @@
-<div class="eqLogic eqLogic-widget col2" data-eqLogic_id="#id#" data-eqType="#eqType#" data-version="#version#" data-eqLogic_uid="#uid#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="#style#;">
-	<span class="cmd refresh pull-right">
-		<span id="iconCron#id#"></span>
-		<script>
-			if ('#cron_status#' == '1') {
-				if ('#cron_status_custom#' == '1') {
-					document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
-				} else {
-					document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
-				}
-			}
-			if ('#cron_status#' == '0') {
-				if ('#cron_status_custom#' == '1') {
-					document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
-				} else {
-					document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
-				}
-			}
-		</script>
-		<span id="iconSSH#id#"></span>
-		<script>
-			if ('#cnx_ssh#' == 'OK') {
-				document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="fas fa-check tooltips" style="color: var(--al-success-color) !important;" ></i>';
-			}
-			if ('#cnx_ssh#' == 'KO') {
-				document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="fas fa-times tooltips" style="color: var(--al-danger-color) !important;"></i>';
-			}
-		</script>
-		<span title="Eteindre l'équipement" class="poweroff tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#;">
-			<a class="action" style="cursor: pointer;"><i class="fas fa-power-off" style="padding-left:5px;"></i></a>
+<div class="eqLogic eqLogic-widget #class# #category#" data-eqLogic_id="#id#" data-eqType="#eqType#" data-version="#version#" data-eqLogic_uid="#uid#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="#style#">
+	<style>
+		div.eqLogic-widget .cmd.monitor-btn {
+			padding-top: 6px;
+			font-size: 12px !important;
+		}
+		div.eqLogic-widget.editingMode .cmd.monitor-btn {
+			display: none !important;
+		}
+		div.monitor-name-flex {
+			display: flex;
+			justify-content: space-between;
+		}
+		div.monitor-name-center {
+			display: flex;
+			flex: 1;
+			justify-content: center;
+		}
+		div.monitor-name-left {
+			display: flex !important;
+			flex: 1;
+			padding-left: 5px;
+			float: left;
+			justify-content: flex-start;			
+		}
+		div.monitor-name-left span {
+			margin-right: 3px;
+		}
+		div.monitor-name-right {
+			display: flex;
+			flex: 1;
+			padding-right: 5px;
+			float: right;
+			justify-content: flex-end;
+		}
+
+	</style>
+	<div class="widget-name monitor-name-flex">
+		<div class="monitor-name-left">
+			<span id="iconSSH#id#"></span>
 			<script>
-				document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"] .action').addEventListener('click', function () {
-					jeeDialog.confirm({
-						title: '<i class="danger fas fa-question-circle"></i> Eteindre l\'équipement',
-						message: 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?',
-						buttons: {
-							confirm: {
-								label: 'Eteindre',
-								className: 'danger'
-							},
-							cancel: {
-								label: 'Annuler',
-								className: 'info'
-							}
-						},
-						callback: function (result) {
-							if (result) {
-								jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
-							}
-						}
-					});
-				});
+				if ('#cnx_ssh#' == 'OK') {
+					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="cmd monitor-btn fas fa-check tooltips" style="color: var(--al-success-color) !important;" ></i>';
+				}
+				if ('#cnx_ssh#' == 'KO') {
+					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="cmd monitor-btn fas fa-times tooltips" style="color: var(--al-danger-color) !important;"></i>';
+				}
 			</script>
-		</span>
-		<span title="Redémarrer l'équipement" class="reboot tooltips" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="float: right;display: #cmd_reboot_display#;">
-			<a class="action" style="cursor: pointer;"><i class="fas fa-redo" style="padding-left:5px;"></i></a>
+			<span id="iconCron#id#"></span>
 			<script>
-				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"] .action').addEventListener('click', function () {
+				if ('#cron_status#' == '1') {
+					if ('#cron_status_custom#' == '1') {
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="cmd monitor-btn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
+					} else {
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="cmd monitor-btn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
+					}
+				}
+				if ('#cron_status#' == '0') {
+					if ('#cron_status_custom#' == '1') {
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="cmd monitor-btn fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
+					} else {
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="cmd monitor-btn fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
+					}
+				}
+			</script>
+			<span class="cmd action monitor-btn reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+				<i class="fas fa-redo"></i>
+			</span>	
+			<script>
+				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]').addEventListener('click', function () {
 					jeeDialog.confirm({
 						title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
 						message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
@@ -77,17 +89,58 @@
 					});
 				});
 			</script>
-		</span>
-	</span>
-	<center>
-		<span class="widget-name" style="#hideEqLogicName#;">#name_display# <span class="object_name" style="font-size: 0.85em;position: relative;top:-2px;display:none;">#object_name#</span></span>
-	</center>
-	<div style="padding: 5px;">
-		<div class="cmd tooltips" style="margin-left:5px;display: #distri_name_display#;">
+			<span class="cmd action monitor-btn poweroff cursor" title="Eteindre l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#;">
+				<i class="fas fa-power-off"></i>
+				<script>
+					document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]').addEventListener('click', function () {
+						jeeDialog.confirm({
+							title: '<i class="danger fas fa-question-circle"></i> Eteindre l\'équipement',
+							message: 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?',
+							buttons: {
+								confirm: {
+									label: 'Eteindre',
+									className: 'danger'
+								},
+								cancel: {
+									label: 'Annuler',
+									className: 'info'
+								}
+							},
+							callback: function (result) {
+								if (result) {
+									jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
+								}
+							}
+						});
+					});
+				</script>
+			</span>
+		</div>
+		<div class="monitor-name-center">
+			<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
+			<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
+		</div>
+		<div class="monitor-name-right">
+			<span class="cmd refresh cursor" title="Rafraîchir" data-cmd_id="#refresh_id#">
+				<i class="fas fa-sync"></i>
+			</span>
+		</div>
+		<script>
+			if ('#refresh_id#' != '') {
+				document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.addEventListener('click', function() {
+					jeedom.cmd.execute({ id: '#refresh_id#' })
+				})
+			} else {
+				document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.remove()
+			}
+		</script>
+	</div>
+	<div class="cmds text-left" style="display: block;">
+		<div class="tooltips" style="margin-left:5px;display: #distri_name_display#;">
 			<span title="Distribution Linux || Date valeur : #distri_name_value# || Date collecte : #distri_name_collect#" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
 			<span>#distri_name#</span>
 		</div>
-		<div class="cmd tooltips" style="margin-left:5px;display: #uptime_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #uptime_display#;">
 			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
 			<span id="uptime#id#"></span>
 		</div>
@@ -96,7 +149,7 @@
 				document.getElementById('uptime#id#').innerHTML = '<span>#uptime#</span>';
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #load_avg_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #load_avg_display#;">
 			<span title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
 			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
@@ -137,7 +190,7 @@
 				}
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #memory_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #memory_display#;">
 			<span title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
 			<span id="memory_available_percent#id#"></span>
 		</div>
@@ -156,7 +209,7 @@
 				}
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #swap_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #swap_display#;">
 			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
 			<span id="swap_free_percent#id#"></span>
 		</div>
@@ -175,7 +228,7 @@
 				}
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #network_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #network_display#;">
 			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
 			<span id="network#id#"></span>
 		</div>
@@ -184,7 +237,7 @@
 				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #hdd_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #hdd_display#;">
 			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
 		</div>
@@ -207,7 +260,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#syno_hddv2_display#' === 'block') {
-					document.getElementById('syno_hddv2#id#').innerHTML = '<div id="syno_hddv2#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
+					document.getElementById('syno_hddv2#id#').innerHTML = '<div id="syno_hddv2#id#" class="tooltips" style="margin-left:5px;display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
 					if ('#syno_hddv2_free_percent#' === '') {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddv2_free_percent#') < parseInt('#syno_hddv2_free_percent_colorlow#')) {
@@ -226,7 +279,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#syno_hddusb_display#' === 'block') {
-					document.getElementById('syno_hddusb#id#').innerHTML = '<div id="syno_hddusb#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
+					document.getElementById('syno_hddusb#id#').innerHTML = '<div id="syno_hddusb#id#" class="tooltips" style="margin-left:5px;display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
 					if ('#syno_hddusb_free_percent#' === '') {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddusb_free_percent#') < parseInt('#syno_hddusb_free_percent_colorlow#')) {
@@ -245,7 +298,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#syno_hddesata_display#' === 'block') {
-					document.getElementById('syno_hddesata#id#').innerHTML = '<div id="syno_hddesata#id#" class="cmd tooltips" style="margin-left:5px;display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
+					document.getElementById('syno_hddesata#id#').innerHTML = '<div id="syno_hddesata#id#" class="tooltips" style="margin-left:5px;display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
 					if ('#syno_hddesata_free_percent#' === '') {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddesata_free_percent#') < parseInt('#syno_hddesata_free_percent_colorlow#')) {
@@ -260,7 +313,7 @@
 				}
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #cpu_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #cpu_display#;">
 			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
@@ -282,7 +335,7 @@
 				}
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #perso1_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #perso1_display#;">
 			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
@@ -303,7 +356,7 @@
 				}
 			}
 		</script>
-		<div class="cmd tooltips" style="margin-left:5px;display: #perso2_display#;">
+		<div class="tooltips" style="margin-left:5px;display: #perso2_display#;">
 			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
