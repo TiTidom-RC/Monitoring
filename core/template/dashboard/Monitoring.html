@@ -33,6 +33,13 @@
 			float: right;
 			justify-content: flex-end;
 		}
+		div.monitor-cmds {
+			display: block;
+			text-align: left;
+			padding-left: 5px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	</style>
 	<div class="widget-name monitor-name-flex">
 		<div class="monitor-name-left">
@@ -134,12 +141,12 @@
 			}
 		</script>
 	</div>
-	<div class="cmds text-left" style="display:block;">
-		<div class="tooltips" style="margin-left:5px;display: #distri_name_display#;">
+	<div class="cmds monitor-cmds">
+		<div class="tooltips" style="display: #distri_name_display#;">
 			<span title="Distribution Linux<br><i>Date de valeur : #distri_name_value#<br>Date de collecte : #distri_name_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
 			<span>#distri_name#</span>
 		</div>
-		<div class="tooltips" style="margin-left:5px;display: #uptime_display#;">
+		<div class="tooltips" style="display: #uptime_display#;">
 			<span title="Temps d'Activité (UpTime)<br><i>Date de valeur : #uptime_value#<br>Date de collecte : #uptime_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
 			<span id="uptime#id#"></span>
 		</div>
@@ -148,7 +155,7 @@
 				document.getElementById('uptime#id#').innerHTML = '<span>#uptime#</span>';
 			}
 		</script>
-		<div class="tooltips" style="margin-left:5px;display: #load_avg_display#;">
+		<div class="tooltips" style="display: #load_avg_display#;">
 			<span title="Charge Système (Load Average)<br><i>Date de valeur : #load_avg_value#<br>Date de collecte : #load_avg_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
 			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
@@ -191,7 +198,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" style="margin-left:5px;display: #memory_display#;">
+		<div class="tooltips" style="display: #memory_display#;">
 			<span title="Mémoire Vive (% Disponible)<br><i>Date de valeur : #memory_value#<br>Date de collecte : #memory_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
 			<span id="memory_available_percent#id#"></span>
 		</div>
@@ -210,7 +217,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" style="margin-left:5px;display: #swap_display#;">
+		<div class="tooltips" style="display: #swap_display#;">
 			<span title="Mémoire Swap (% Libre)<br><i>Date de valeur : #swap_value#<br>Date de collecte : #swap_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
 			<span id="swap_free_percent#id#"></span>
 		</div>
@@ -229,7 +236,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" style="margin-left:5px;display: #network_display#;">
+		<div class="tooltips" style="display: #network_display#;">
 			<span title="Trafic Réseau (#network_name# / #network_ip#)<br><i>Date de valeur : #network_value#<br>Date de collecte : #network_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
 			<span id="network#id#"></span>
 		</div>
@@ -238,7 +245,7 @@
 				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
 			}
 		</script>
-		<div class="tooltips" style="margin-left:5px;display: #hdd_display#;">
+		<div class="tooltips" style="display: #hdd_display#;">
 			<span title="Espace Disque (% Libre)<br><i>Date de valeur : #hdd_value#<br>Date de collecte : #hdd_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
 		</div>
@@ -261,7 +268,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#syno_hddv2_display#' === 'block') {
-					document.getElementById('syno_hddv2#id#').innerHTML = '<div id="syno_hddv2#id#" class="tooltips" style="margin-left:5px;display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre)<br><i>Date de valeur : #syno_hddv2_value#<br>Date de collecte : #syno_hddv2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
+					document.getElementById('syno_hddv2#id#').innerHTML = '<div id="syno_hddv2#id#" class="tooltips" style="display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre)<br><i>Date de valeur : #syno_hddv2_value#<br>Date de collecte : #syno_hddv2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
 					if ('#syno_hddv2_free_percent#' === '') {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddv2_free_percent#') < parseInt('#syno_hddv2_free_percent_colorlow#')) {
@@ -280,7 +287,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#syno_hddusb_display#' === 'block') {
-					document.getElementById('syno_hddusb#id#').innerHTML = '<div id="syno_hddusb#id#" class="tooltips" style="margin-left:5px;display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre)<br><i>Date de valeur : #syno_hddusb_value#<br>Date de collecte : #syno_hddusb_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
+					document.getElementById('syno_hddusb#id#').innerHTML = '<div id="syno_hddusb#id#" class="tooltips" style="display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre)<br><i>Date de valeur : #syno_hddusb_value#<br>Date de collecte : #syno_hddusb_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
 					if ('#syno_hddusb_free_percent#' === '') {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddusb_free_percent#') < parseInt('#syno_hddusb_free_percent_colorlow#')) {
@@ -299,7 +306,7 @@
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#syno_hddesata_display#' === 'block') {
-					document.getElementById('syno_hddesata#id#').innerHTML = '<div id="syno_hddesata#id#" class="tooltips" style="margin-left:5px;display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre)<br><i>Date de valeur : #syno_hddesata_value#<br>Date de collecte : #syno_hddesata_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
+					document.getElementById('syno_hddesata#id#').innerHTML = '<div id="syno_hddesata#id#" class="tooltips" style="display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre)<br><i>Date de valeur : #syno_hddesata_value#<br>Date de collecte : #syno_hddesata_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
 					if ('#syno_hddesata_free_percent#' === '') {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
 					} else if (parseInt('#syno_hddesata_free_percent#') < parseInt('#syno_hddesata_free_percent_colorlow#')) {
@@ -314,7 +321,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" style="margin-left:5px;display: #cpu_display#;">
+		<div class="tooltips" style="display: #cpu_display#;">
 			<span title="Nombre CPU - Fréquence (Température)<br><i>Date de valeur : #cpu_value#<br>Date de collecte : #cpu_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
@@ -336,7 +343,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" style="margin-left:5px;display: #perso1_display#;">
+		<div class="tooltips" style="display: #perso1_display#;">
 			<span title="#perso1_name#<br><i>Date de valeur : #perso1_value#<br>Date de collecte : #perso1_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
@@ -357,7 +364,7 @@
 				}
 			}
 		</script>
-		<div class="tooltips" style="margin-left:5px;display: #perso2_display#;">
+		<div class="tooltips" style="display: #perso2_display#;">
 			<span title="#perso2_name#<br><i>Date de valeur : #perso2_value#<br>Date de collecte : #perso2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
