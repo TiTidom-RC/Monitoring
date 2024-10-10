@@ -33,7 +33,6 @@
 			float: right;
 			justify-content: flex-end;
 		}
-
 	</style>
 	<div class="widget-name monitor-name-flex">
 		<div class="monitor-name-left">
@@ -63,8 +62,8 @@
 					}
 				}
 			</script>
-			<span class="cmd action monitor-btn reboot cursor" title="Redémarrer l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
-				<i class="fas fa-redo"></i>
+			<span class="cmd action reboot cursor" title="Redémarrer l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+				<i class="cmd monitor-btn fas fa-redo"></i>
 			</span>
 			<script>
 				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]').addEventListener('click', function () {
@@ -89,8 +88,8 @@
 					});
 				});
 			</script>
-			<span class="cmd action monitor-btn poweroff cursor" title="Eteindre l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
-				<i class="fas fa-power-off"></i>
+			<span class="cmd action poweroff cursor" title="Eteindre l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
+				<i class="cmd monitor-btn fas fa-power-off"></i>
 			</span>
 			<script>
 				document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')?.addEventListener('click', function () {

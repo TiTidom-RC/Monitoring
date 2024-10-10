@@ -33,7 +33,6 @@
 			float: right;
 			justify-content: flex-end;
 		}
-
 	</style>
 	<div class="widget-name monitor-name-flex">
 		<div class="monitor-name-left">
@@ -63,11 +62,11 @@
 					}
 				}
 			</script>
-			<span class="cmd action monitor-btn reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
-				<i class="fas fa-redo"></i>
+			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+				<i class="cmd monitor-btn fas fa-redo"></i>
 			</span>	
 			<script>
-				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]').addEventListener('click', function () {
+				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]' .cmd)?.addEventListener('click', function () {
 					jeeDialog.confirm({
 						title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
 						message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
@@ -89,10 +88,10 @@
 					});
 				});
 			</script>
-			<span class="cmd action monitor-btn poweroff cursor" title="Eteindre l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#;">
-				<i class="fas fa-power-off"></i>
+			<span class="cmd action poweroff cursor" title="Eteindre l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="float: right;display: #cmd_poweroff_display#;">
+				<i class="cmd monitor-btn fas fa-power-off"></i>
 				<script>
-					document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]').addEventListener('click', function () {
+					document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')?.addEventListener('click', function () {
 						jeeDialog.confirm({
 							title: '<i class="danger fas fa-question-circle"></i> Eteindre l\'équipement',
 							message: 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?',
