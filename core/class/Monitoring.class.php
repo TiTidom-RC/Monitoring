@@ -1482,40 +1482,227 @@ class Monitoring extends eqLogic {
 		
 	}
 
-	public function formatLoadAvg() {
+	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
+		$unitCPUFreq = [
+			'syno' => 'Mhz',
+			'arm' => 'KHz',
+			'x86_64' => 'MHz',
+			'i686' => 'MHz',
+			'i386' => 'MHz',
+			'aarch64' => 'KHz',
+			'armv6l' => 'KHz',
+			'armv7l' => 'KHz',
+			'mips64' => 'KHz',
+		];
+
+		// CPUFreq
+		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS]);
+
+		// CPU Temp
+		$cpu_temp = $this->formatTemp($_cpu_temp);
+
+		// CPU
+		$cpu = (floatval($cpu_freq) == 0) ? $_cpu_nb . ' Socket(s)' : $_cpu_nb . ' - ' . $cpu_freq_txt;
+
+		// CPU, CPUFreq, CPU Temp
+		return [$cpu, $cpu_freq, $cpu_temp];
 
 	}
 
-	public function getSynoHDD($hdd_value, $hdd_name, $equipement) {
-		if (!empty($hdd_value)) {
-			$hdd_data = explode(' ', $hdd_value);
-			if (count($hdd_data) == 4) {
-				$syno_hdd_total = intval($hdd_data[0]);
-				$syno_hdd_used = intval($hdd_data[1]);
-				$syno_hdd_free = intval($hdd_data[2]);
-				if ($syno_hdd_total != 0) {
-					$syno_hdd_used_percent = round(($syno_hdd_used / $syno_hdd_total) * 100, 1);
-					$syno_hdd_free_percent = round(($syno_hdd_free / $syno_hdd_total) * 100, 1);
-				} else {
-					$syno_hdd_used_percent = 0.0;
-					$syno_hdd_free_percent = 0.0;
-				}
-				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Total :: ' . $syno_hdd_total);
-				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Used :: ' . $syno_hdd_used);
-				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Free :: ' . $syno_hdd_free);
-				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Used % :: ' . $syno_hdd_used_percent);
-				log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] Syno ' . $hdd_name . ' Free % :: ' . $syno_hdd_free_percent);
+	public function formatNetwork($_network_txrx, $_network_ip, $_equipement) {
+		// Network TX, Network RX, Network Name, Network Ip, Text
+		$network_ip = isset($_network_ip) ? $_network_ip : '';
+		$result = [0, 0, '', $network_ip, ''];
 
-				$syno_hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($syno_hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($syno_hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($syno_hdd_free, 'Ko');
-				
-				// Syno Total, Used, Free, Used %, Free %, Text
-				$result = ['syno_hdd_total' => $syno_hdd_total, 'syno_hdd_used' => $syno_hdd_used, 'syno_hdd_free' => $syno_hdd_free, 'syno_hdd_used_percent' => $syno_hdd_used_percent, 'syno_hdd_free_percent' => $syno_hdd_free_percent, 'syno_hdd' => $syno_hdd];
-			} else {
-				$result = [0, 0, 0, 0.0, 0.0, '']; // Total, Used, Free, Used %, Free %, Text
-			}
-		} else {
-			$result = [0, 0, 0, 0.0, 0.0, '']; // Total, Used, Free, Used %, Free %, Text
+		if (empty($_network_txrx)) {
+			return $result;
 		}
+
+		$network_data = explode(' ', $_network_txrx);
+		if (count($network_data) != 3) {
+			return $result;
+		}
+
+		// TX, RX, Name, Text
+		$network_tx = intval($network_data[2]);
+		$network_rx = intval($network_data[1]);
+		$network_name = $network_data[0];
+
+		$network = __('TX', __FILE__) . ' : ' . $this->formatSize($network_tx) . ' - ' . __('RX', __FILE__) . ' : ' . $this->formatSize($network_rx);
+		
+		log::add('Monitoring', 'debug', '['. $_equipement .'][RESEAU] Carte Réseau / IP (TX - RX) :: ' . $network_name . ' / IP : ' . $network_ip . ' (' . $network .')');
+		
+		$result = [$network_tx, $network_rx, $network_name, $network_ip, $network];
+		return $result;
+	}
+
+	public function formatSwap($_swap, $_equipement) {
+		// Total, Used, Free, Used %, Free %, Text
+		$result = [0, 0, 0, 0.0, 0.0, ''];
+
+		if (empty($_swap)) {
+			return $result;
+		}
+
+		$swap_data = explode(' ', $_swap);
+		if (count($swap_data) != 3) {
+			return $result;
+		}
+
+		// Total, Used, Free, Used %, Free %, Text
+		$swap_total = intval($swap_data[0]);
+		$swap_used = intval($swap_data[1]);
+		$swap_free = intval($swap_data[2]);
+
+		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Total :: ' . $swap_total);
+		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Used :: ' . $swap_used);
+		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Free :: ' . $swap_free);
+
+		if ($swap_total != 0) {
+			$swap_used_percent = round($swap_used / $swap_total * 100, 1);
+			$swap_free_percent = round($swap_free / $swap_total * 100, 1);
+		} else {
+			$swap_used_percent = 0.0;
+			$swap_free_percent = 0.0;
+		}
+
+		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Used % :: ' . $swap_used_percent);
+		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Free % :: ' . $swap_free_percent);
+
+		$swap = __('Total', __FILE__) . ' : ' . $this->formatSize($swap_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap_free, 'Ko');
+		
+		$result = [$swap_total, $swap_used, $swap_free, $swap_used_percent, $swap_free_percent, $swap];
+		return $result;
+	}
+
+	public function formatMemory($_memory, $_uname, $_equipement) {
+		$result = [0, 0, 0, 0, 0, 0.0, 0.0, 0.0, ''];
+
+		if (empty($_memory)) {
+			return $result;
+		}
+
+		if (!preg_match("#FreeBSD#", $_uname)) {		
+			$memory_data = explode(' ', $_memory);
+			if (count($memory_data) != 5) {
+				return $result;
+			}
+
+			// Total, Used, Free, Buff/Cache, Available, Used %, Free %, Buff/Cache %, Text
+			$memory_total = intval($memory_data[0]);
+			$memory_used = intval($memory_data[1]);
+			$memory_free = intval($memory_data[2]);
+			$memory_buffcache = intval($memory_data[3]);
+			$memory_available = intval($memory_data[4]);
+
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Total :: ' . $memory_total);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used :: ' . $memory_used);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Free :: ' . $memory_free);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Buff/Cache :: ' . $memory_buffcache);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Available :: ' . $memory_available);
+
+			if ($memory_total != 0) {
+				$memory_used_percent = round(($memory_used + $memory_buffcache) / $memory_total * 100, 1);
+				$memory_free_percent = round($memory_free / $memory_total * 100, 1);
+				$memory_available_percent = round($memory_available / $memory_total * 100, 1);
+			} else {
+				$memory_used_percent = 0.0;
+				$memory_free_percent = 0.0;
+				$memory_available_percent = 0.0;
+			}
+
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used % :: ' . $memory_used_percent);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Free % :: ' . $memory_free_percent);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Available % :: ' . $memory_available_percent);
+
+			$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Disponible', __FILE__) . ' : ' . $this->formatSize($memory_available, 'Ko');
+			$result = [$memory_total, $memory_used, $memory_free, $memory_buffcache, $memory_available, $memory_used_percent, $memory_free_percent, $memory_available_percent, $memory];
+
+		} else {
+			// FreeBSD
+			$memory_data = explode(' ', $_memory);
+			if (count($memory_data) != 2) {
+				return $result;
+			}
+
+			// Total, Used*, Free, Buff/Cache = N/A, Availabe = N/A, Free %, Used %, Text
+			$memory_total = intval($memory_data[0]);
+			$memory_free = intval($memory_data[1]);
+			$memory_used = $memory_total - $memory_free;
+
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Total :: ' . $memory_total);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Free :: ' . $memory_free);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used :: ' . $memory_used);
+
+			if ($memory_total != 0) {
+				$memory_free_percent = round($memory_free / $memory_total * 100, 1);
+				$memory_used_percent = round($memory_used / $memory_total * 100, 1);
+			} else {
+				$memory_free_percent = 0.0;
+				$memory_used_percent = 0.0;
+			}
+
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Free % :: ' . $memory_free_percent);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used % :: ' . $memory_used_percent);
+
+			$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($memory_free, 'Ko');
+			$result = [$memory_total, $memory_used, $memory_free, 0, 0, $memory_used_percent, $memory_free_percent, 0.0, $memory];
+		}
+		return $result;
+	}
+
+	public function formatLoadAvg($load) {
+		$result = [0.0, 0.0, 0.0, ''];
+		if (empty($load)) {
+			return $result;
+		}
+		$load_data = explode(' ', $load);
+		if (count($load_data) != 5) {
+			return $result;
+		}
+		// Load 1, 5, 15
+		$load_1 = floatval($load_data[0]);
+		$load_5 = floatval($load_data[1]);
+		$load_15 = floatval($load_data[2]);
+
+		$load_txt =  '1 min : ' . $load_1 . ' - 5 min : ' . $load_5 . ' - 15 min : ' . $load_15;
+
+		$result = [$load_1, $load_5, $load_15, $load_txt];
+		return $result;
+	}
+
+	public function formatHDD($hdd_value, $hdd_name, $equipement) {
+		$result = [0, 0, 0, 0.0, 0.0, '']; // Total, Used, Free, Used %, Free %, Text
+
+		if (empty($hdd_value)) {
+			return $result;
+		}
+
+		$hdd_data = explode(' ', $hdd_value);
+		if (count($hdd_data) != 4) {
+			return $result;
+		}
+
+		$hdd_total = intval($hdd_data[0]);
+		$hdd_used = intval($hdd_data[1]);
+		$hdd_free = intval($hdd_data[2]);
+		if ($hdd_total != 0) {
+			$hdd_used_percent = round($hdd_used / $hdd_total * 100, 1);
+			$hdd_free_percent = round($hdd_free / $hdd_total * 100, 1);
+		} else {
+			$hdd_used_percent = 0.0;
+			$hdd_free_percent = 0.0;
+		}
+		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Total :: ' . $hdd_total);
+		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Used :: ' . $hdd_used);
+		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Free :: ' . $hdd_free);
+		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Used % :: ' . $hdd_used_percent);
+		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Free % :: ' . $hdd_free_percent);
+
+		$hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($hdd_free, 'Ko');
+		
+		// HDD Total, Used, Free, Used %, Free %, Text
+		$result = [$hdd_total, $hdd_used, $hdd_free, $hdd_used_percent, $hdd_free_percent, $hdd];			
 		return $result;	
 	}
 
@@ -2019,16 +2206,13 @@ class Monitoring extends eqLogic {
 					$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 					$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
 
-					if ($this->getConfiguration('synology') == '1') {
-						
-					} elseif ($ARMv !== '') {
-						
-					} else {
-						
-					}
+					// TODO $ARMv est vide si Synology
 
 					// Old Method
 					if ($this->getConfiguration('synology') != '1') {
+
+						// TODO Mettre une valeur ARMv pour synology, et vérifier ensuite tout le code !
+						//$ARMv = 'syno';
 
 						// DistriName Command
 						$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
@@ -2042,10 +2226,6 @@ class Monitoring extends eqLogic {
 						$distri_bits_cmd = "getconf LONG_BIT 2>/dev/null";
 						$distri_bits = $this->execSSH($hostId, $distri_bits_cmd, 'DistriBits');
 					}
-
-					// ARMv Command
-					$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-					$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
 
 					// Uptime Command
 					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
@@ -2545,28 +2725,22 @@ class Monitoring extends eqLogic {
 						// Syno DistriName
 						$distri_name = isset($syno_version_file, $syno_model) ? $this->getSynoVersion($syno_version_file, $syno_model, $equipement) : '';
 
-						// Syno CPUFreq
-						[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'MHz');
-
-						// Syno CPU
-						$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
-
-						// Syno CPU Temp
-						$cpu_temp = $this->formatTemp($cpu_temp);
+						// ARMv Syno
+						$ARMv = 'syno';
 
 						// Syno Volume 2
 						if ($this->getConfiguration('synologyv2') == '1') {
-							[$syno_hddv2_total, $syno_hddv2_used, $syno_hddv2_free, $syno_hddv2_used_percent, $syno_hddv2_free_percent, $syno_hddv2] = isset($hddv2_value) ? $this->getSynoHDD($hddv2_value, 'HDDv2', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
+							[$syno_hddv2_total, $syno_hddv2_used, $syno_hddv2_free, $syno_hddv2_used_percent, $syno_hddv2_free_percent, $syno_hddv2] = isset($hddv2_value) ? $this->formatHDD($hddv2_value, 'Syno HDDv2', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 
 						// Syno Volume USB
 						if ($this->getConfiguration('synologyusb') == '1') {
-							[$syno_hddusb_total, $syno_hddusb_used, $syno_hddusb_free, $syno_hddusb_used_percent, $syno_hddusb_free_percent, $syno_hddusb] = isset($hddusb_value) ? $this->getSynoHDD($hddusb_value, 'HDDUSB', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
+							[$syno_hddusb_total, $syno_hddusb_used, $syno_hddusb_free, $syno_hddusb_used_percent, $syno_hddusb_free_percent, $syno_hddusb] = isset($hddusb_value) ? $this->formatHDD($hddusb_value, 'Syno HDDUSB', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 
 						// Syno Volume eSATA
 						if ($this->getConfiguration('synologyesata') == '1') {
-							[$syno_hddesata_total, $syno_hddesata_used, $syno_hddesata_free, $syno_hddesata_used_percent, $syno_hddesata_free_percent, $syno_hddesata] = isset($hddesata_value) ? $this->getSynoHDD($hddesata_value, 'HDDeSATA', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
+							[$syno_hddesata_total, $syno_hddesata_used, $syno_hddesata_free, $syno_hddesata_used_percent, $syno_hddesata_free_percent, $syno_hddesata] = isset($hddesata_value) ? $this->formatHDD($hddesata_value, 'Syno HDDeSATA', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 					} else {
 						// Distri Name (New)
@@ -2577,259 +2751,23 @@ class Monitoring extends eqLogic {
 					[$uptime, $uptime_sec] = isset($uptime_value) ? $this->formatUptime($uptime_value) : ['', 0];
 	
 					// LoadAverage (New)
-					if (isset($load_avg_value)) {
-						$load_avg_data = explode(' ', $load_avg_value);
-						if (count($load_avg_data) == 5) {
-							$load_avg_1mn = floatval($load_avg_data[0]);
-							$load_avg_5mn = floatval($load_avg_data[1]);
-							$load_avg_15mn = floatval($load_avg_data[2]);
-							$load_avg = '1 min : ' . $load_avg_1mn . ' - 5 min : ' . $load_avg_5mn . ' - 15 min : ' . $load_avg_15mn;
-						} else {
-							$load_avg_1mn = 0.0;
-							$load_avg_5mn = 0.0;
-							$load_avg_15mn = 0.0;
-							$load_avg = '';
-						}
-					} else {
-						$load_avg_1mn = 0.0;
-						$load_avg_5mn = 0.0;
-						$load_avg_15mn = 0.0;
-						$load_avg = '';
-					}
+					[$load_avg_1mn, $load_avg_5mn, $load_avg_15mn, $load_avg] = isset($load_avg_value) ? $this->formatLoadAvg($load_avg_value) : [0.0, 0.0, 0.0, ''];
 	
 					// Memory (New)
-					if (isset($memory_value)) {
-						// Cas général
-						if (!preg_match("#FreeBSD#", $uname)) {
-							$memory_data = explode(' ', $memory_value);
-							if (count($memory_data) == 5) {
-								$memory_total = intval($memory_data[0]);
-								$memory_used = intval($memory_data[1]);
-								$memory_free = intval($memory_data[2]);
-								$memory_buffcache = intval($memory_data[3]);
-								$memory_available = intval($memory_data[4]);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Total :: ' . $memory_total);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used :: ' . $memory_used);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free :: ' . $memory_free);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Cache :: ' . $memory_buffcache);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Available :: ' . $memory_available);	
-
-								if ($memory_total != 0) {
-									$memory_free_percent = round($memory_free / $memory_total * 100, 1);
-									$memory_used_percent = round(($memory_used + $memory_buffcache) / $memory_total * 100, 1);
-									$memory_available_percent = round($memory_available / $memory_total * 100, 1);
-								} else {
-									$memory_free_percent = 0.0;
-									$memory_used_percent = 0.0;
-									$memory_available_percent = 0.0;
-								}
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free % :: ' . $memory_free_percent);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used % :: ' . $memory_used_percent);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Available % :: ' . $memory_available_percent);
-
-								$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Disponible', __FILE__) . ' : ' . $this->formatSize($memory_available, 'Ko');
-							} else {
-								$memory_total = 0;
-								$memory_used = 0;
-								$memory_free = 0;
-								$memory_buffcache = 0;
-								$memory_available = 0;
-								$memory_free_percent = 0.0;
-								$memory_used_percent = 0.0;
-								$memory_available_percent = 0.0;
-								$memory = '';
-							}
-						// Cas spécifique FreeBSD
-						} elseif (preg_match("#FreeBSD#", $uname)) {
-							$memory_data = explode(' ', $memory_value);
-							if (count($memory_data) == 2) {	
-								$memory_free = intval($memory_data[1]);
-								$memory_total = intval($memory_data[0]);
-								$memory_used = $memory_total - $memory_free;
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Total :: ' . $memory_total);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used :: ' . $memory_used);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free :: ' . $memory_free);
-
-								if ($memory_total != 0) {
-									$memory_free_percent = round($memory_free / $memory_total * 100, 1);
-									$memory_used_percent = round($memory_used / $memory_total * 100, 1);
-								} else {
-									$memory_free_percent = 0.0;
-									$memory_used_percent = 0.0;
-								}
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Free % :: ' . $memory_free_percent);
-								log::add('Monitoring', 'debug', '['. $equipement .'][MEMORY] Memory Used % :: ' . $memory_used_percent);
-
-								$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($memory_free, 'Ko');
-
-							} else {
-								$memory_free = 0;
-								$memory_total = 0;
-								$memory_used = 0;
-								$memory_free_percent = 0.0;
-								$memory_used_percent = 0.0;
-								$memory = '';
-							}
-						}
-					} else {
-						$memory_free = 0;
-						$memory_total = 0;
-						$memory_used = 0;
-						$memory_free_percent = 0.0;
-						$memory_used_percent = 0.0;
-						$memory = '';
-					}
+					[$memory_total, $memory_used, $memory_free, $memory_buffcache, $memory_available, $memory_used_percent, $memory_free_percent, $memory_available_percent, $memory] = isset($memory_value) ? $this->formatMemory($memory_value, $uname, $equipement) : [0, 0, 0, 0, 0, 0.0, 0.0, 0.0, ''];
 	
 					// Swap (New)
-					if (isset($swap_value)) {
-						$swap_data = explode(' ', $swap_value);
-						if (count($swap_data) == 3) {
-							if (intval($swap_data[0]) != 0) {
-								$swap_free_percent = round(intval($swap_data[2]) / intval($swap_data[0]) * 100, 1);
-								$swap_used_percent = round(intval($swap_data[1]) / intval($swap_data[0]) * 100, 1);
-							} else {
-								$swap_free_percent = 0.0;
-								$swap_used_percent = 0.0;
-							}
-							log::add('Monitoring', 'debug', '['. $equipement .'][SWAP] Swap Free % :: ' . $swap_free_percent);
-							log::add('Monitoring', 'debug', '['. $equipement .'][SWAP] Swap Used % :: ' . $swap_used_percent);
-
-							$swap_total = intval($swap_data[0]);
-							$swap_used = intval($swap_data[1]);
-							$swap_free = intval($swap_data[2]);
-							$swap_display = __('Total', __FILE__) . ' : ' . $this->formatSize($swap_data[0], 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap_data[1], 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap_data[2], 'Ko');
-
-						} else {
-							$swap_free_percent = 0.0;
-							$swap_used_percent = 0.0;
-							$swap_total = 0;
-							$swap_used = 0;
-							$swap_free = 0;
-							$swap_display = '';
-						}
-					} else {
-						$swap_free_percent = 0.0;
-						$swap_used_percent = 0.0;
-						$swap_total = 0;
-						$swap_used = 0;
-						$swap_free = 0;
-						$swap_display = '';
-					}
+					[$swap_total, $swap_used, $swap_free, $swap_used_percent, $swap_free_percent, $swap_display] = isset($swap_value) ? $this->formatSwap($swap_value, $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 	
 					// Réseau (New)
-					if (isset($network_value)) {
-						$network_data = explode(' ', $network_value);
-						if (count($network_data) == 3) {
-							$network_tx = intval($network_data[2]);
-							$network_rx = intval($network_data[1]);
-							$network = 'TX : '. $this->formatSize($network_tx) .' - RX : '. $this->formatSize($network_rx);
-							
-							$network_name = $network_data[0];
-							
-							if (isset($network_ip_value)) {
-								$network_ip = $network_ip_value;
-							} else {
-								$network_ip = '';
-							}
-							
-							log::add('Monitoring', 'debug', '['. $equipement .'][RESEAU] Nom de la carte réseau / IP (RX / TX) :: ' .$network_name.' / IP= ' . $network_ip . ' (RX= '. $this->formatSize($network_rx) .' / TX= '. $this->formatSize($network_tx) .')');
-						} else {
-							$network_tx = 0;
-							$network_rx = 0;
-							$network = '';
-							$network_name = '';
-							$network_ip = '';
-							log::add('Monitoring', 'error', '['. $equipement .'][RESEAU] Carte Réseau NON détectée :: KO');
-						}
-					} else {
-						$network_tx = 0;
-						$network_rx = 0;
-						$network = '';
-						$network_name = '';
-						$network_ip = '';
-						log::add('Monitoring', 'error', '['. $equipement .'][RESEAU] Carte Réseau NON détectée :: KO');
-					}
+					[$network_tx, $network_rx, $network_name, $network_ip, $network] = isset($network_value) ? $this->formatNetwork($network_value, $network_ip_value, $equipement) : [0, 0, '', '', ''];
 	
 					// HDD (New)
-					if (isset($hdd_value)) {
-						$hdd_data = explode(' ', $hdd_value);
-						if (count($hdd_data) == 4) {
-							$hdd_total = intval($hdd_data[0]);
-							$hdd_used = intval($hdd_data[1]);
-							$hdd_free = intval($hdd_data[2]);
-							if ($hdd_total != 0) {
-								$hdd_used_percent = round($hdd_used / $hdd_total * 100, 1);
-								$hdd_free_percent = round($hdd_free / $hdd_total * 100, 1);
-							} else {
-								$hdd_used_percent = 0.0;
-								$hdd_free_percent = 0.0;
-							}
-							log::add('Monitoring', 'debug', '['. $equipement .'][HDD] HDD Total :: ' . $hdd_total);
-							log::add('Monitoring', 'debug', '['. $equipement .'][HDD] HDD Used :: ' . $hdd_used);
-							log::add('Monitoring', 'debug', '['. $equipement .'][HDD] HDD Free :: ' . $hdd_free);
-							log::add('Monitoring', 'debug', '['. $equipement .'][HDD] HDD Used % :: ' . $hdd_used_percent);
-							log::add('Monitoring', 'debug', '['. $equipement .'][HDD] HDD Free % :: ' . $hdd_free_percent);
-							
-							$hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($hdd_free, 'Ko');
-
-						} else {
-							$hdd_total = 0;
-							$hdd_used = 0;
-							$hdd_free = 0;
-							$hdd_used_percent = 0.0;
-							$hdd_free_percent = 0.0;
-							$hdd = '';
-						}
-					} else {
-						$hdd_total = 0;
-						$hdd_used = 0;
-						$hdd_free = 0;
-						$hdd_used_percent = 0.0;
-						$hdd_free_percent = 0.0;
-						$hdd = '';
-					}
-
-					// ARMv (New)
-					if (isset($ARMv)) {
-						if ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-							// CPUFreq
-							[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'MHz');
-
-							// CPU Temp
-							$cpu_temp = $this->formatTemp($cpu_temp);
-
-							// CPU
-							$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
-
-						} elseif ($ARMv == 'armv6l' || $ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
-							// CPUFreq
-							[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'KHz');
-							
-							// CPU Temp
-							$cpu_temp = $this->formatTemp($cpu_temp);
-
-							// CPU (Nb + Freq)
-							if (floatval($cpu_freq) == 0) {
-								$cpu = $cpu_nb . ' Socket(s)';
-								$cpu_freq = 0.0;
-							} else {
-								$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
-							}
-
-						} elseif ($ARMv == 'arm') {
-							if (preg_match("#RasPlex|OpenELEC|osmc|LibreELEC#", $distri_name_value) || preg_match("#piCorePlayer|medion#", $uname)) {
-								// CPUFreq
-								[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($cpu_freq, 'KHz');
-
-								// CPU Temp
-								$cpu_temp = $this->formatTemp($cpu_temp);
-
-								// CPU (Nb + Freq)
-								$cpu = $cpu_nb . ' - ' . $cpu_freq_txt;
-							}
-						}
-					}
+					[$hdd_total, $hdd_used, $hdd_free, $hdd_used_percent, $hdd_free_percent, $hdd] = isset($hdd_value) ? $this->formatHDD($hdd_value, 'HDD', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 					
+					// CPU (New)
+					[$cpu, $cpu_freq, $cpu_temp] = isset($cpu_nb, $cpu_freq, $cpu_temp) ? $this->formatCPU($cpu_nb, $cpu_freq, $cpu_temp, $ARMv, $equipement) : ['', 0, 0];
+
 					// Array des résultats
 					if (!isset($perso1)) {$perso1 = '';}
 					if (!isset($perso2)) {$perso2 = '';}
