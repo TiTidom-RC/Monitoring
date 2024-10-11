@@ -906,7 +906,7 @@ class Monitoring extends eqLogic {
 			$orderCmd++;
 		}
 
-		if ($this->getConfiguration('synology') == '1') {
+		if ($isSynology) {
 			// Synology volume 2
 			if ($this->getConfiguration('synologyv2') == '1') {
 
@@ -1460,7 +1460,16 @@ class Monitoring extends eqLogic {
 
 		// Distant
 		$cmdRemoteCommon = [
-
+			'distri_bits' => "",
+			'ditri_name' => "",
+			'os_version' => "",
+			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
+			'load_avg' => "cat /proc/loadavg 2>/dev/null",
+			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
+			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
+			'hdd' => "",
+			'network' => "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network_ip' => "LC_ALL=C ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
 		];
 		$cmdRemoteSpecific = [
 
@@ -2195,7 +2204,8 @@ class Monitoring extends eqLogic {
 
 			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
-	
+			$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
+
 			// Configuration distante
 			if ($confLocalOrRemote == 'distant' && $this->getIsEnable()) {
 				[$cnx_ssh, $hostId] = $this->connectSSH();
@@ -2203,17 +2213,21 @@ class Monitoring extends eqLogic {
 				if ($cnx_ssh == 'OK') {
 
 					// New Method
-					$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-					$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
+					if ($isSynology) {
+						$ARMv = 'syno';
+					} else {
+						$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+						$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
+					}
 
-					// TODO $ARMv est vide si Synology
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
+
+					$commands = $this->getCommands($ARMv, $cartereseau, 'remote');
 
 					// Old Method
-					if ($this->getConfiguration('synology') != '1') {
 
-						// TODO Mettre une valeur ARMv pour synology, et vérifier ensuite tout le code !
-						//$ARMv = 'syno';
-
+					// Cas général hors Synology
+					if (!$isSynology) {
 						// DistriName Command
 						$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 						$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
@@ -2227,6 +2241,7 @@ class Monitoring extends eqLogic {
 						$distri_bits = $this->execSSH($hostId, $distri_bits_cmd, 'DistriBits');
 					}
 
+					// Commandes Distantes Communes
 					// Uptime Command
 					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 					$uptime_value = $this->execSSH($hostId, $uptime_cmd, 'Uptime');
@@ -2268,7 +2283,7 @@ class Monitoring extends eqLogic {
 					}
 					$perso2 = trim($perso2_command) !== '' ? $this->execSSH($hostId, $perso2_command, 'Perso2') : '';
 					
-					if ($this->getConfiguration('synology') == '1') {
+					if ($isSynology) {
 						// Synology uname & DistriBits Init
 						$uname = '.';
 						$distri_bits = '';
@@ -2314,20 +2329,20 @@ class Monitoring extends eqLogic {
 
 						// Synology HDDv2 Command
 						if ($this->getConfiguration('synologyv2') == '1') {
-							$hddv2cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$hddv2_value = $this->execSSH($hostId, $hddv2cmd, 'HDDv2');
+							$syno_hddv2_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$syno_hddv2_value = $this->execSSH($hostId, $syno_hddv2_cmd, 'HDDv2');
 						}
 	
 						// Synology HDDusb Command
 						if ($this->getConfiguration('synologyusb') == '1') {
-							$hddusbcmd = "LC_ALL=C df -l 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$hddusb_value = $this->execSSH($hostId, $hddusbcmd, 'HDDusb');
+							$syno_hddusb_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$syno_hddusb_value = $this->execSSH($hostId, $syno_hddusb_cmd, 'HDDusb');
 						}
 						
 						// Synology HDDesata Command
 						if ($this->getConfiguration('synologyesata') == '1') {
-							$hddesatacmd = "LC_ALL=C df -l 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$hddesata_value = $this->execSSH($hostId, $hddesatacmd, 'HDDesata');
+							$syno_hddesata_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$syno_hddesata_value = $this->execSSH($hostId, $syno_hddesata_cmd, 'HDDesata');
 						}
 	
 					} elseif ($ARMv == 'armv6l') {
@@ -2466,7 +2481,7 @@ class Monitoring extends eqLogic {
 						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
 
-					} elseif ($ARMv == '' && $this->getConfiguration('synology') != '1') {
+					} elseif (($ARMv == '' || $ARMv == 'syno') && !$isSynology) {
 
 						// Uname Command
 						$uname_cmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
@@ -2620,6 +2635,7 @@ class Monitoring extends eqLogic {
 							$os_version_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
 							$os_version_value = $this->execSSH($hostId, $os_version_cmd, 'OsVersion');
 
+							// DistriName (DistriName Cmd + OsVersion Cmd)
 							if (isset($distri_name_value, $os_version_value)) {
 								$distri_name = "Medion/Linux " . $os_version_value . " (" . $distri_name_value . ")";
 								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][MEDION] Distribution :: ' . $distri_name);
@@ -2706,11 +2722,11 @@ class Monitoring extends eqLogic {
 
 				// Perso1 Command
 				$perso1_cmd = $this->getCmdPerso('perso1');
-				$perso1 = $perso1_cmd !== '' ? $this->execSRV($perso1_cmd, 'Perso1') : '';
+				$perso1 = !empty($perso1_cmd) ? $this->execSRV($perso1_cmd, 'Perso1') : '';
 
 				// Perso2 Command
 				$perso2_cmd = $this->getCmdPerso('perso2');
-				$perso2 = $perso2_cmd !== '' ? $this->execSRV($perso2_cmd, 'Perso2') : '';
+				$perso2 = !empty($perso2_cmd) ? $this->execSRV($perso2_cmd, 'Perso2') : '';
 	
 			}
 	
@@ -2721,7 +2737,7 @@ class Monitoring extends eqLogic {
 				if ($this->getConfiguration('localoudistant') == 'local' || $cnx_ssh == 'OK') {
 
 					// Synology (New)
-					if ($this->getConfiguration('synology') == '1') {
+					if ($isSynology) {
 						// Syno DistriName
 						$distri_name = isset($syno_version_file, $syno_model) ? $this->getSynoVersion($syno_version_file, $syno_model, $equipement) : '';
 
@@ -2730,17 +2746,17 @@ class Monitoring extends eqLogic {
 
 						// Syno Volume 2
 						if ($this->getConfiguration('synologyv2') == '1') {
-							[$syno_hddv2_total, $syno_hddv2_used, $syno_hddv2_free, $syno_hddv2_used_percent, $syno_hddv2_free_percent, $syno_hddv2] = isset($hddv2_value) ? $this->formatHDD($hddv2_value, 'Syno HDDv2', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
+							[$syno_hddv2_total, $syno_hddv2_used, $syno_hddv2_free, $syno_hddv2_used_percent, $syno_hddv2_free_percent, $syno_hddv2] = isset($syno_hddv2_value) ? $this->formatHDD($syno_hddv2_value, 'Syno HDDv2', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 
 						// Syno Volume USB
 						if ($this->getConfiguration('synologyusb') == '1') {
-							[$syno_hddusb_total, $syno_hddusb_used, $syno_hddusb_free, $syno_hddusb_used_percent, $syno_hddusb_free_percent, $syno_hddusb] = isset($hddusb_value) ? $this->formatHDD($hddusb_value, 'Syno HDDUSB', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
+							[$syno_hddusb_total, $syno_hddusb_used, $syno_hddusb_free, $syno_hddusb_used_percent, $syno_hddusb_free_percent, $syno_hddusb] = isset($syno_hddusb_value) ? $this->formatHDD($syno_hddusb_value, 'Syno HDDUSB', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 
 						// Syno Volume eSATA
 						if ($this->getConfiguration('synologyesata') == '1') {
-							[$syno_hddesata_total, $syno_hddesata_used, $syno_hddesata_free, $syno_hddesata_used_percent, $syno_hddesata_free_percent, $syno_hddesata] = isset($hddesata_value) ? $this->formatHDD($hddesata_value, 'Syno HDDeSATA', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
+							[$syno_hddesata_total, $syno_hddesata_used, $syno_hddesata_free, $syno_hddesata_used_percent, $syno_hddesata_free_percent, $syno_hddesata] = isset($syno_hddesata_value) ? $this->formatHDD($syno_hddesata_value, 'Syno HDDeSATA', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 					} else {
 						// Distri Name (New)
@@ -2816,7 +2832,7 @@ class Monitoring extends eqLogic {
 						'perso2' => $perso2,
 					);
 
-					if ($this->getConfiguration('synology') == '1') {
+					if ($isSynology) {
 						if ($this->getConfiguration('synologyv2') == '1') {
 							$dataresult = array_merge($dataresult, [
 								'syno_hddv2' => $syno_hddv2,
@@ -2880,14 +2896,15 @@ class Monitoring extends eqLogic {
 	function getCaseAction($paramaction) {
 		$confLocalOrRemote = $this->getConfiguration('localoudistant');
 		$equipement = $this->getName();
-		
+		$isSynology = $this->getConfiguration('synology') == '1' ? true : false;
+
 		if ($confLocalOrRemote == 'distant' && $this->getIsEnable()) {
 			[$cnx_ssh, $hostId] = $this->connectSSH();
 				
 			if ($cnx_ssh == 'OK') {
 				switch ($paramaction) {
 					case "reboot":
-						if ($this->getConfiguration('synology') == '1') {
+						if ($isSynology) {
 							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
 						} else {
@@ -2897,7 +2914,7 @@ class Monitoring extends eqLogic {
 						$reboot = $this->execSSH($hostId, $rebootcmd, 'Reboot');
 						break;
 					case "poweroff":
-						if ($this->getConfiguration('synology') == '1') {
+						if ($isSynology) {
 							$poweroffcmd = 'timeout 3 sudo -S /sbin/shutdown -h now 2>/dev/null';
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
@@ -2913,7 +2930,7 @@ class Monitoring extends eqLogic {
 		} elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 			switch ($paramaction) {
 				case "reboot":
-					if ($this->getConfiguration('synology') == '1') {
+					if ($isSynology) {
 						$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 						log::add('Monitoring', 'info', '['. $equipement .'][LOCAL][SYNO-REBOOT] Lancement commande locale REBOOT');
 					} else {
@@ -2924,7 +2941,7 @@ class Monitoring extends eqLogic {
 					$reboot = $this->execSRV($rebootcmd, 'Reboot');
 					break;
 				case "poweroff":
-					if ($this->getConfiguration('synology') == '1') {
+					if ($isSynology) {
 						// $poweroffcmd = 'sudo /sbin/shutdown -P now >/dev/null & /sbin/shutdown -P now >/dev/null';
 						$poweroffcmd = 'timeout 3 sudo -S /sbin/shutdown -h now 2>/dev/null';
 						log::add('Monitoring', 'info', '['. $equipement .'][LOCAL][SYNO-POWEROFF] Lancement commande locale POWEROFF');
