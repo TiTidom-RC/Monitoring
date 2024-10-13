@@ -2266,22 +2266,12 @@ class Monitoring extends eqLogic {
 					$network_ip_value = $this->execSSH($hostId, $network_ip_cmd, 'ReseauIP');
 
 					// Perso1 Command
-					$perso1_cmd = $this->getCmd(null, 'perso1');
-					if (is_object($perso1_cmd)) {
-						$perso1_command = $perso1_cmd->getConfiguration('perso1', '');
-					} else {
-						$perso1_command = '';
-					}
-					$perso1 = trim($perso1_command) !== '' ? $this->execSSH($hostId, $perso1_command, 'Perso1') : '';
+					$perso1_cmd = $this->getCmdPerso('perso1');
+					$perso1 = !empty($perso1_cmd) ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
 
 					// Perso2 Command
-					$perso2_cmd = $this->getCmd(null, 'perso2');
-					if (is_object($perso2_cmd)) {
-						$perso2_command = $perso2_cmd->getConfiguration('perso2', '');
-					} else {
-						$perso2_command = '';
-					}
-					$perso2 = trim($perso2_command) !== '' ? $this->execSSH($hostId, $perso2_command, 'Perso2') : '';
+					$perso2_cmd = $this->getCmdPerso('perso2');
+					$perso2 = !empty($perso2_cmd) ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
 					
 					if ($isSynology) {
 						// Synology uname & DistriBits Init
