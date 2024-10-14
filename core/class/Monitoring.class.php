@@ -1460,9 +1460,6 @@ class Monitoring extends eqLogic {
 
 		// Distant
 		$cmdRemoteCommon = [
-			'distri_bits' => "",
-			'ditri_name' => "",
-			'os_version' => "",
 			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
 			'load_avg' => "cat /proc/loadavg 2>/dev/null",
 			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
@@ -1472,7 +1469,143 @@ class Monitoring extends eqLogic {
 			'network_ip' => "LC_ALL=C ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
 		];
 		$cmdRemoteSpecific = [
+			'armv6l' => [
+				'uname' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
+				'cpu_freq' => [
+					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"], // ce sont les mêmes que pour le local mais en cmd ! 
+					2 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"]
+				],
+				'cpu_temp' => [
+					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"]
+				],
+				'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'", // Même commande que le common local !
+			],
+			'aarch64' => [
+				'uname' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'", // même commande que armv6l remote !
+				'cpu_freq' => [
+					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"], // ce sont les mêmes que pour le local et que armv6l remote ! 
+					2 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"]
+				],
+				'cpu_temp' => [				
+					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"], // OK RPi2
+					2 => ['cmd', "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"] // OK Banana Pi (Cubie surement un jour...)
+				],
+				'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+			],
+			'x86_64' => [
+				'uname' => ".",
+				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
+				'cpu_freq' => [
+					1 => ['cmd', "LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'"], // OK pour LXC Linux, Proxmox, Debian 10/11
+					2 => ['cmd', "cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'"] // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
+				],
+				'cpu_temp' => [
+					1 => ['cmd', "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null"], // Default
+					2 => ['cmd', "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"], // Default Zone 1
+					3 => ['cmd', "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null"], // OK AOpen DE2700
+					4 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"], // OK Search temp?_input
+					5 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"], // OK by sensors
+					6 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"] // OK by sensors
+				],
+				'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+			],
+			'' => [
+				'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name) : tout en commun avec osmc et picore sauf le HDD !
+					'ARMv' => "arm",
+					'distri_bits' => "32",
+					'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
+					'cpu_freq' => [
+						1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
+					],
+					'cpu_temp' => [
+						1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
+					],
+					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+				],
+				'osmc' => [
+					'ARMv' => "arm",
+					'distri_bits' => "32",
+					'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
+					'cpu_freq' => [
+						1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
+					],
+					'cpu_temp' => [
+						1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
+					],
+					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+				],
+				'piCorePlayer' => [
+					'ARMv' => "arm",
+					'distri_bits' => "32",
+					'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
+					'cpu_freq' => [
+						1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
+					],
+					'cpu_temp' => [
+						1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
+					],
+					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p' | head -1 | awk '{print $2,$3,$4,$5 }'"
+				],
+				'FreeBSD' => [
+					'ARMv' => "sysctl hw.machine | awk '{ print $2}'",
+					'distri_bits' => "sysctl kern.smp.maxcpus | awk '{ print $2}'",
+					'distri_name' => "uname -a 2>/dev/null | awk '{ print $1,$3}'",
+					'load_avg' => "LC_ALL=C uptime | awk '{print $8,$9,$10}'",
+					'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'",
+					'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
+					'cpu_freq' => [
+						1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'"],
+					],
+					'cpu_temp' => [
+						1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'"],
+					],
+					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+				],
+				'medion' => [
+					'ARMv' => "arm",
+					'distri_bits' => "getconf LONG_BIT 2>/dev/null",
+					'distri_name' => "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'",
+					'os_version' => "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'",
+					'cpu_nb' => "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'",
+					'cpu_freq' => [
+						1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"],
+						2 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"]
+					],
+					'cpu_temp' => [
+						1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'"],
+					],
+					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+				]
+			]
 
+			
+		];
+
+		$cmdRemoteAllExceptSyno = [
+			'distri_bits' => "getconf LONG_BIT 2>/dev/null",
+			'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+			'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"
+		];
+
+		$cmdRemoteOnlySyno = [
+			'uname' => ".",
+			'distri_name' => "",
+			'ditri_bits' => "",
+			'os_version' => "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
+			'syno_model_alt' => "cat /proc/sys/kernel/syno_hw_version 2>/dev/null",
+			'syno_model' =>  "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null",
+			'syno_version' => "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'", // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+			'cpu_nb' => "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null",
+			'cpu_freq' => "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null",
+			'cpu_temp' => "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)",
+			'hdd' => "LC_ALL=C df -l 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$4,$5 }'",
+			'hddv2' => "LC_ALL=C df -l 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$4,$5 }'", // DSM 5.x / 6.x / 7.x
+			'hddv3' => "LC_ALL=C df -l 2>/dev/null | grep 'vg1002\|volume3' | head -1 | awk '{ print $2,$3,$4,$5 }'", // DSM 5.x / 6.x / 7.x
+			'hddv4' => "LC_ALL=C df -l 2>/dev/null | grep 'vg1003\|volume4' | head -1 | awk '{ print $2,$3,$4,$5 }'", // DSM 5.x / 6.x / 7.x
+			'hddusb' => "LC_ALL=C df -l 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$4,$5 }'", // DSM 5.x / 6.x / 7.x
+			'hddesata' => "LC_ALL=C df -l 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$4,$5 }'" // DSM 5.x / 6.x / 7.x
 		];
 
 		if ($confLocalorRemote == 'local') {
@@ -1482,13 +1615,15 @@ class Monitoring extends eqLogic {
 				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__));
 			}
 		} else {
-			if (array_key_exists($key, $cmdRemoteSpecific)) {
+			// Syno
+			if ($key == 'syno') {
+				return array_merge($cmdRemoteCommon, $cmdRemoteOnlySyno);
+			} elseif (array_key_exists($key, $cmdRemoteSpecific)) {
 				return array_merge($cmdRemoteCommon, $cmdRemoteSpecific[$key]);		
 			} else {
 				throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__));
 			}
-		}
-		
+		}	
 	}
 
 	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
