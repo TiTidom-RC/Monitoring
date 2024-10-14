@@ -2347,16 +2347,33 @@ class Monitoring extends eqLogic {
 				
 				if ($cnx_ssh == 'OK') {
 
+					$keycode = '';
+
 					// New Method
 					if ($isSynology) {
-						$ARMv = 'syno';
+						$keycode = 'syno';
 					} else {
 						$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 						$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
-					}
 
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
+						if (!empty($ARMv)) {
+							$keycode = $ARMv;
+						} else {
+							$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
+							if (in_array($distri_name_value, ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc'])) {
+								$keycode = $distri_name_value;
+							} else {
+								// Uname Command
+								$uname_cmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
+								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
+								$keycode = $uname;
+							};
+						};
+					};
+
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] KeyCode :: ' . $keycode);
 					$commands = $this->getCommands($ARMv, $cartereseau, 'remote');
 
 					// Old Method
