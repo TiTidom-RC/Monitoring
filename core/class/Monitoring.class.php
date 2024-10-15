@@ -19,22 +19,6 @@
 /* * *************************** Requires ********************************* */
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
-class MonitoringCommandsLocal {
-	private $commands;
-
-	public function __construct($key, $cartereseau) {
-		$this->initCommands($key, $cartereseau);
-	}	
-
-	private function initCommands($key, $cartereseau) {
-		
-	}
-
-	public function getValues() {
-		return $this->commands;
-	}
-}
-
 class Monitoring extends eqLogic {
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
@@ -906,7 +890,7 @@ class Monitoring extends eqLogic {
 			$orderCmd++;
 		}
 
-		if ($isSynology) {
+		if ($this->getConfiguration('synology') == '1') {
 			// Synology volume 2
 			if ($this->getConfiguration('synologyv2') == '1') {
 
