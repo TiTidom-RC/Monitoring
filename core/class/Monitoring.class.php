@@ -1604,10 +1604,6 @@ class Monitoring extends eqLogic {
 
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
-	public function getArchKey($_equipement) {
-
-	}
-
 	public function getCommands($key, $cartereseau = '', $confLocalorRemote = 'local') {
 		log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key / LocalorRemote :: ' . $key . ' / ' . $confLocalorRemote);
 		
@@ -1684,9 +1680,9 @@ class Monitoring extends eqLogic {
 		];
 		$cmdRemoteSpecific = [
 			'armv6l' => [
-				'uname' => ".",
-				'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-				'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'uname' => ['value', "."],
+				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
+				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
 				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
 				'cpu_freq' => [
@@ -1699,9 +1695,9 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'aarch64' => [
-				'uname' => ".",
-				'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-				'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'uname' => ['value', "."],
+				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
+				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
 				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'", // même commande que armv6l remote !
 				'cpu_freq' => [
@@ -1715,9 +1711,9 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'x86_64' => [
-				'uname' => ".",
-				'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-				'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'uname' => ['value', "."],
+				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
+				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
 				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
 				'cpu_freq' => [
@@ -1735,8 +1731,8 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name) : tout en commun avec osmc et picore sauf le HDD !
-				'ARMv' => "arm",
-				'distri_bits' => "32",
+				'ARMv' => ['value', "arm"],
+				'distri_bits' => ['value', "32"],
 				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
@@ -1747,8 +1743,8 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
 			],
 			'osmc' => [
-				'ARMv' => "arm",
-				'distri_bits' => "32",
+				'ARMv' => ['value', "arm"],
+				'distri_bits' => ['value', "32"],
 				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
@@ -1759,8 +1755,8 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
 			],
 			'piCorePlayer' => [
-				'ARMv' => "arm",
-				'distri_bits' => "32",
+				'ARMv' => ['value', "arm"],
+				'distri_bits' => ['value', "32"],
 				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
@@ -1771,9 +1767,9 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p')
 			],
 			'FreeBSD' => [
-				'ARMv' => "sysctl hw.machine | awk '{ print $2}'",
-				'distri_bits' => "sysctl kern.smp.maxcpus | awk '{ print $2}'",
-				'distri_name' => "uname -a 2>/dev/null | awk '{ print $1,$3}'",
+				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
+				'distri_bits' => ['cmd', "sysctl kern.smp.maxcpus | awk '{ print $2}'"],
+				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3}'"],
 				'load_avg' => "LC_ALL=C uptime | awk '{print $8,$9,$10}'",
 				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'",
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
@@ -1786,9 +1782,9 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'medion' => [
-				'ARMv' => "arm",
-				'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-				'distri_name' => "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'",
+				'ARMv' => ['value', "arm"],
+				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
+				'distri_name' => ['cmd', "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'"],
 				'os_version' => "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'",
 				'cpu_nb' => "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'",
 				'cpu_freq' => [
@@ -1801,9 +1797,10 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/home$')
 			],
 			'syno'=> [
-				'uname' => ".",
-				'distri_name' => "",
-				'ditri_bits' => "",
+				'ARMv' => ['value', ""],
+				'uname' => ['value', "."],
+				'distri_name' => ['value', ""],
+				'ditri_bits' => ['value', ""],
 				'os_version' => "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
 				'syno_model' =>  "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null",
 				'syno_model_alt' => "cat /proc/sys/kernel/syno_hw_version 2>/dev/null",
@@ -2566,8 +2563,6 @@ class Monitoring extends eqLogic {
 	public function getInformations() {
 		$equipement = $this->getName();
 		try {
-			$uname = "Inconnu";
-
 			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 			$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
@@ -2607,8 +2602,56 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey);
 					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
 
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Nb Commands :: ' . count($commands));
 
+					$ARMv = $ARMv ?? $commands['ARMv'];
+					$uname = $uname ?? $commands['uname'];
+					$distri_name_value = $distri_name_value ?? $this->execSSH($hostId, $commands['distri_name'], 'DistriName');
 
+					$distri_bits = $this->execSSH($hostId, $commands['distri_bits'], 'DistriBits');
+					$os_version_value = $this->execSSH($hostId, $commands['os_version'], 'OsVersion');
+					
+					$syno_model_cmd = $this->getConfiguration('syno_alt_name') == '1' ? $commands['syno_model_alt'] : $commands['syno_model'];
+					$syno_model = $this->execSSH($hostId, $syno_model_cmd, 'SynoModel');
+
+					$uptime_value = $this->execSSH($hostId, $commands['uptime'], 'Uptime');
+					$load_avg_value = $this->execSSH($hostId, $commands['load_avg'], 'LoadAverage');
+					$memory_value = $this->execSSH($hostId, $commands['memory'], 'Memory');
+					$swap_value = $this->execSSH($hostId, $commands['swap'], 'Swap');
+					$hdd_value = $this->execSSH($hostId, $commands['hdd'], 'HDD');
+					$network_value = $this->execSSH($hostId, $commands['network'], 'ReseauRXTX');
+					$network_ip_value = $this->execSSH($hostId, $commands['network_ip'], 'ReseauIP');
+					$cpu_nb = $this->execSSH($hostId, $commands['cpu_nb'], 'NbCPU');
+					
+					extract($this->getCPUFreq($commands['cpu_freq'], $equipement, 'remote', $hostId));
+					extract($this->getCPUTemp($commands['cpu_temp'], $equipement, 'remote', $hostId));
+
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uname :: ' . $uname);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriBits :: ' . $distri_bits);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriName :: ' . $distri_name_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsVersion :: ' . $os_version_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoModel :: ' . $syno_model);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] LoadAverage :: ' . $load_avg_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Memory :: ' . $memory_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Swap :: ' . $swap_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] HDD :: ' . $hdd_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauRXTX :: ' . $network_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauIP :: ' . $network_ip_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] NbCPU :: ' . $cpu_nb);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq :: ' . $cpu_freq);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq Id :: ' . $cpu_temp_id);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUTemp :: ' . $cpu_temp);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUTemp Id :: ' . $cpu_temp_id);
+
+					// Perso1 Command
+					$perso1_cmd = $this->getCmdPerso('perso1');
+					$perso1 = !empty($perso1_cmd) ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
+
+					// Perso2 Command
+					$perso2_cmd = $this->getCmdPerso('perso2');
+					$perso2 = !empty($perso2_cmd) ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
+					
 
 					// Old Method
 
