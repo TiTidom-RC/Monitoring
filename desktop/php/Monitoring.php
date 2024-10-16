@@ -243,6 +243,20 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-md-2 control-label" >{{Volume 3}}</label>
+                                        <div class="col-md-8">
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyv3" />
+                                            <span style="font-size: 85%;">({{A cocher si vous avez un 3ème volume disque}})</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label" >{{Volume 4}}</label>
+                                        <div class="col-md-8">
+                                            <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyv4" />
+                                            <span style="font-size: 85%;">({{A cocher si vous avez un 4ème volume disque}})</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-md-2 control-label" >{{HDD USB}}</label>
                                         <div class="col-md-8">
                                             <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synologyusb" />
