@@ -2604,11 +2604,13 @@ class Monitoring extends eqLogic {
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Nb Commands :: ' . count($commands));
 
+					// TODO Pour ARMv, uname, distri_name, distri_bits, il faut checker si c'est une 'value' ou une 'cmd' (sur le modèle des fréquences)
+
 					$ARMv = $ARMv ?? $commands['ARMv'];
 					$uname = $uname ?? $commands['uname'];
 					$distri_name_value = $distri_name_value ?? $this->execSSH($hostId, $commands['distri_name'], 'DistriName');
-
 					$distri_bits = $this->execSSH($hostId, $commands['distri_bits'], 'DistriBits');
+					
 					$os_version_value = $this->execSSH($hostId, $commands['os_version'], 'OsVersion');
 					
 					$syno_model_cmd = $this->getConfiguration('syno_alt_name') == '1' ? $commands['syno_model_alt'] : $commands['syno_model'];
