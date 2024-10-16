@@ -254,6 +254,44 @@
 				}
 			}
 		</script>
+		<div id="syno_hddv3#id#"></div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#syno_hddv3_display#' === 'block') {
+					document.getElementById('syno_hddv3#id#').innerHTML = '<div id="syno_hddv3#id#" class="tooltips" style="display: #syno_hddv3_display#;"><span title="Syno Volume 3 (% Libre) || Date valeur : #syno_hddv3_value# || Date collecte : #syno_hddv3_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv3_icon#</span> <span id="syno_hddv3_free_percent#id#"></span></div>';
+					if ('#syno_hddv3_free_percent#' === '') {
+						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddv3_free_percent#') < parseInt('#syno_hddv3_free_percent_colorlow#')) {
+						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddv3_free_percent#') >= parseInt('#syno_hddv3_free_percent_colorlow#')) && (parseInt('#syno_hddv3_free_percent#') <= parseInt('#syno_hddv3_free_percent_colorhigh#'))) {
+						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddv3_free_percent#') > parseInt('#syno_hddv3_free_percent_colorhigh#')) && '#syno_hddv3_free_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
+					} else {
+						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state">#syno_hddv3_free_percent#</span><span>%</span>)';
+					}
+				}
+			}
+		</script>
+		<div id="syno_hddv4#id#"></div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#syno_hddv4_display#' === 'block') {
+					document.getElementById('syno_hddv4#id#').innerHTML = '<div id="syno_hddv4#id#" class="tooltips" style="display: #syno_hddv4_display#;"><span title="Syno Volume 4 (% Libre) || Date valeur : #syno_hddv4_value# || Date collecte : #syno_hddv4_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv4_icon#</span> <span id="syno_hddv4_free_percent#id#"></span></div>';
+					if ('#syno_hddv4_free_percent#' === '') {
+						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '<span></span>';
+					} else if (parseInt('#syno_hddv4_free_percent#') < parseInt('#syno_hddv4_free_percent_colorlow#')) {
+						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddv4_free_percent#') >= parseInt('#syno_hddv4_free_percent_colorlow#')) && (parseInt('#syno_hddv4_free_percent#') <= parseInt('#syno_hddv4_free_percent_colorhigh#'))) {
+						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
+					} else if ((parseInt('#syno_hddv4_free_percent#') > parseInt('#syno_hddv4_free_percent_colorhigh#')) && '#syno_hddv4_free_percent_colorhigh#' !== '') {
+						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
+					} else {
+						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state">#syno_hddv4_free_percent#</span><span>%</span>)';
+					}
+				}
+			}
+		</script>
 		<div id="syno_hddusb#id#"></div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {

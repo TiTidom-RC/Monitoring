@@ -1002,7 +1002,231 @@ class Monitoring extends eqLogic {
 					$orderCmd++;
 				}
 			}
+
+			// Synology volume 3
+			if ($this->getConfiguration('synologyv3') == '1') {
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv3');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 3', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv3');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('string');
+					$MonitoringCmd->setDisplay('icon', '<i class="far fa-hdd"></i>');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(1);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv3_total');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 3 Total', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv3_total');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv3_used');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 3 Utilisé', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv3_used');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv3_free');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 3 Libre', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv3_free');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv3_used_percent');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 3 Utilisé (Pourcent)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv3_used_percent');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv3_free_percent');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 3 Libre (Pourcent)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv3_free_percent');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(1);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+			}
 			
+			// Synology volume 4
+			if ($this->getConfiguration('synologyv4') == '1') {
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv4');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 4', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv4');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('string');
+					$MonitoringCmd->setDisplay('icon', '<i class="far fa-hdd"></i>');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(1);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv4_total');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 4 Total', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv4_total');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv4_used');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 4 Utilisé', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv4_used');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv4_free');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 4 Libre', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv4_free');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv4_used_percent');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 4 Utilisé (Pourcent)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv4_used_percent');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(0);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+
+				$MonitoringCmd = $this->getCmd(null, 'syno_hddv4_free_percent');
+				if (!is_object($MonitoringCmd)) {
+					$MonitoringCmd = new MonitoringCmd();
+					$MonitoringCmd->setName(__('Syno Volume 4 Libre (Pourcent)', __FILE__));
+					$MonitoringCmd->setEqLogic_id($this->getId());
+					$MonitoringCmd->setLogicalId('syno_hddv4_free_percent');
+					$MonitoringCmd->setType('info');
+					$MonitoringCmd->setSubType('numeric');
+					$MonitoringCmd->setUnite('%');
+					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+					$MonitoringCmd->setIsVisible(1);
+					$MonitoringCmd->setOrder($orderCmd++);
+					$MonitoringCmd->save();
+				} else {
+					$orderCmd++;
+				}
+			}
+
 			// Synology volume USB
 			if ($this->getConfiguration('synologyusb') == '1') {
 
@@ -1380,18 +1604,25 @@ class Monitoring extends eqLogic {
 
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
+	public function getArchKey($_equipement) {
+
+	}
+
 	public function getCommands($key, $cartereseau = '', $confLocalorRemote = 'local') {
 		log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key / LocalorRemote :: ' . $key . ' / ' . $confLocalorRemote);
 		
+		// Cmd Templates
+		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+
 		$cmdLocalCommon = [
 			'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-			'ditri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+			'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 			'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
 			'load_avg' => "cat /proc/loadavg 2>/dev/null",
 			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
 			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
-			'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'",
+			'hdd' => sprintf($hdd_command, '/$'),
 			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
 			'network_ip' => "ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
 		];
@@ -1448,13 +1679,15 @@ class Monitoring extends eqLogic {
 			'load_avg' => "cat /proc/loadavg 2>/dev/null",
 			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
 			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
-			'hdd' => "",
-			'network' => "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
-			'network_ip' => "LC_ALL=C ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
+			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network_ip' => "LC_ALL=C ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
 		];
 		$cmdRemoteSpecific = [
 			'armv6l' => [
 				'uname' => ".",
+				'distri_bits' => "getconf LONG_BIT 2>/dev/null",
+				'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"], // ce sont les mêmes que pour le local mais en cmd ! 
@@ -1463,10 +1696,13 @@ class Monitoring extends eqLogic {
 				'cpu_temp' => [
 					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"]
 				],
-				'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'", // Même commande que le common local !
+				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'aarch64' => [
 				'uname' => ".",
+				'distri_bits' => "getconf LONG_BIT 2>/dev/null",
+				'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'", // même commande que armv6l remote !
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"], // ce sont les mêmes que pour le local et que armv6l remote ! 
@@ -1476,10 +1712,13 @@ class Monitoring extends eqLogic {
 					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"], // OK RPi2
 					2 => ['cmd', "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"] // OK Banana Pi (Cubie surement un jour...)
 				],
-				'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'x86_64' => [
 				'uname' => ".",
+				'distri_bits' => "getconf LONG_BIT 2>/dev/null",
+				'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
 				'cpu_freq' => [
 					1 => ['cmd', "LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'"], // OK pour LXC Linux, Proxmox, Debian 10/11
@@ -1493,103 +1732,96 @@ class Monitoring extends eqLogic {
 					5 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"], // OK by sensors
 					6 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"] // OK by sensors
 				],
-				'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'' => [
-				'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name) : tout en commun avec osmc et picore sauf le HDD !
-					'ARMv' => "arm",
-					'distri_bits' => "32",
-					'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
-					'cpu_freq' => [
-						1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
-					],
-					'cpu_temp' => [
-						1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
-					],
-					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name) : tout en commun avec osmc et picore sauf le HDD !
+				'ARMv' => "arm",
+				'distri_bits' => "32",
+				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
+				'cpu_freq' => [
+					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
 				],
-				'osmc' => [
-					'ARMv' => "arm",
-					'distri_bits' => "32",
-					'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
-					'cpu_freq' => [
-						1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
-					],
-					'cpu_temp' => [
-						1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
-					],
-					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+				'cpu_temp' => [
+					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
 				],
-				'piCorePlayer' => [
-					'ARMv' => "arm",
-					'distri_bits' => "32",
-					'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
-					'cpu_freq' => [
-						1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
-					],
-					'cpu_temp' => [
-						1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
-					],
-					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p' | head -1 | awk '{print $2,$3,$4,$5 }'"
+				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
+			],
+			'osmc' => [
+				'ARMv' => "arm",
+				'distri_bits' => "32",
+				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
+				'cpu_freq' => [
+					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
 				],
-				'FreeBSD' => [
-					'ARMv' => "sysctl hw.machine | awk '{ print $2}'",
-					'distri_bits' => "sysctl kern.smp.maxcpus | awk '{ print $2}'",
-					'distri_name' => "uname -a 2>/dev/null | awk '{ print $1,$3}'",
-					'load_avg' => "LC_ALL=C uptime | awk '{print $8,$9,$10}'",
-					'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'",
-					'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
-					'cpu_freq' => [
-						1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'"],
-					],
-					'cpu_temp' => [
-						1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'"],
-					],
-					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'"
+				'cpu_temp' => [
+					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
 				],
-				'medion' => [
-					'ARMv' => "arm",
-					'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-					'distri_name' => "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'",
-					'os_version' => "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'",
-					'cpu_nb' => "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'",
-					'cpu_freq' => [
-						1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"],
-						2 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"]
-					],
-					'cpu_temp' => [
-						1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'"],
-					],
-					'hdd' => "LC_ALL=C df -l 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$4,$5 }'"
-				]
+				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
+			],
+			'piCorePlayer' => [
+				'ARMv' => "arm",
+				'distri_bits' => "32",
+				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
+				'cpu_freq' => [
+					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
+				],
+				'cpu_temp' => [
+					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
+				],
+				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p')
+			],
+			'FreeBSD' => [
+				'ARMv' => "sysctl hw.machine | awk '{ print $2}'",
+				'distri_bits' => "sysctl kern.smp.maxcpus | awk '{ print $2}'",
+				'distri_name' => "uname -a 2>/dev/null | awk '{ print $1,$3}'",
+				'load_avg' => "LC_ALL=C uptime | awk '{print $8,$9,$10}'",
+				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'",
+				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
+				'cpu_freq' => [
+					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'"],
+				],
+				'cpu_temp' => [
+					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'"],
+				],
+				'hdd' => sprintf($hdd_command, '/$')
+			],
+			'medion' => [
+				'ARMv' => "arm",
+				'distri_bits' => "getconf LONG_BIT 2>/dev/null",
+				'distri_name' => "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'",
+				'os_version' => "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'",
+				'cpu_nb' => "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'",
+				'cpu_freq' => [
+					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"],
+					2 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"]
+				],
+				'cpu_temp' => [
+					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'"],
+				],
+				'hdd' => sprintf($hdd_command, '/home$')
+			],
+			'syno'=> [
+				'uname' => ".",
+				'distri_name' => "",
+				'ditri_bits' => "",
+				'os_version' => "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
+				'syno_model' =>  "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null",
+				'syno_model_alt' => "cat /proc/sys/kernel/syno_hw_version 2>/dev/null",
+				'syno_version' => "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'", // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
+				'cpu_nb' => "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null",
+				'cpu_freq' => [
+					1 => ['cmd', "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null"]
+				],
+				'cpu_temp' => [
+					1 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)"]
+				],
+				'hdd' => sprintf($hdd_command, 'vg1000\|volume1'),
+				'hddv2' => sprintf($hdd_command, 'vg1001\|volume2'), // DSM 5.x / 6.x / 7.x
+				'hddv3' => sprintf($hdd_command, 'vg1002\|volume3'), // DSM 5.x / 6.x / 7.x
+				'hddv4' => sprintf($hdd_command, 'vg1003\|volume4'), // DSM 5.x / 6.x / 7.x
+				'hddusb' => sprintf($hdd_command, 'usb1p1\|volumeUSB1'), // DSM 5.x / 6.x / 7.x
+				'hddesata' => sprintf($hdd_command, 'sdf1\|volumeSATA') // DSM 5.x / 6.x / 7.x
 			]
-
-			
-		];
-
-		$cmdRemoteAllExceptSyno = [
-			'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-			'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-			'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"
-		];
-
-		$cmdRemoteOnlySyno = [
-			'uname' => ".",
-			'distri_name' => "",
-			'ditri_bits' => "",
-			'os_version' => "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
-			'syno_model_alt' => "cat /proc/sys/kernel/syno_hw_version 2>/dev/null",
-			'syno_model' =>  "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null",
-			'syno_version' => "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'", // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
-			'cpu_nb' => "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null",
-			'cpu_freq' => "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null",
-			'cpu_temp' => "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)",
-			'hdd' => "LC_ALL=C df -l 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$4,$5 }'",
-			'hddv2' => "LC_ALL=C df -l 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$4,$5 }'", // DSM 5.x / 6.x / 7.x
-			'hddv3' => "LC_ALL=C df -l 2>/dev/null | grep 'vg1002\|volume3' | head -1 | awk '{ print $2,$3,$4,$5 }'", // DSM 5.x / 6.x / 7.x
-			'hddv4' => "LC_ALL=C df -l 2>/dev/null | grep 'vg1003\|volume4' | head -1 | awk '{ print $2,$3,$4,$5 }'", // DSM 5.x / 6.x / 7.x
-			'hddusb' => "LC_ALL=C df -l 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$4,$5 }'", // DSM 5.x / 6.x / 7.x
-			'hddesata' => "LC_ALL=C df -l 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$4,$5 }'" // DSM 5.x / 6.x / 7.x
 		];
 
 		if ($confLocalorRemote == 'local') {
@@ -1599,10 +1831,7 @@ class Monitoring extends eqLogic {
 				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__));
 			}
 		} else {
-			// Syno
-			if ($key == 'syno') {
-				return array_merge($cmdRemoteCommon, $cmdRemoteOnlySyno);
-			} elseif (array_key_exists($key, $cmdRemoteSpecific)) {
+			if (array_key_exists($key, $cmdRemoteSpecific)) {
 				return array_merge($cmdRemoteCommon, $cmdRemoteSpecific[$key]);		
 			} else {
 				throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__));
@@ -1960,6 +2189,8 @@ class Monitoring extends eqLogic {
 				$icon = '<i class="fas fa-microchip"></i>';
 				break;
 			case 'syno_hddv2':
+			case 'syno_hddv3':
+			case 'syno_hddv4':
 				$icon = '<i class="far fa-hdd"></i>';
 				break;
 			case 'syno_hddusb':
@@ -2081,6 +2312,16 @@ class Monitoring extends eqLogic {
 			'syno_hddv2_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
 		);
 
+		$syno_hddv3_array = array(
+			'syno_hddv3' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'syno_hddv3_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+		);
+
+		$syno_hddv4_array = array(
+			'syno_hddv4' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'syno_hddv4_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+		);
+
 		$syno_hddusb_array = array(
 			'syno_hddusb' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
 			'syno_hddusb_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
@@ -2095,6 +2336,12 @@ class Monitoring extends eqLogic {
 		if ($this->getConfiguration('synology') == '1') {
 			if ($this->getConfiguration('synologyv2') == '1') {
 				array_merge($cmdToReplace, $syno_hddv2_array);
+			}
+			if ($this->getConfiguration('synologyv3') == '1') {
+				array_merge($cmdToReplace, $syno_hddv3_array);
+			}
+			if ($this->getConfiguration('synologyv4') == '1') {
+				array_merge($cmdToReplace, $syno_hddv4_array);
 			}
 			if ($this->getConfiguration('synologyusb') == '1') {
 				array_merge($cmdToReplace, $syno_hddusb_array);
@@ -2331,34 +2578,37 @@ class Monitoring extends eqLogic {
 				
 				if ($cnx_ssh == 'OK') {
 
-					$keycode = '';
-
 					// New Method
+					$archKey = '';
+
 					if ($isSynology) {
-						$keycode = 'syno';
+						$archKey = 'syno';
 					} else {
 						$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 						$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
 
 						if (!empty($ARMv)) {
-							$keycode = $ARMv;
+							$archKey = $ARMv;
 						} else {
 							$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
 							if (in_array($distri_name_value, ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc'])) {
-								$keycode = $distri_name_value;
+								$archKey = $distri_name_value;
 							} else {
 								// Uname Command
 								$uname_cmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
 								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
-								$keycode = $uname;
-							};
-						};
-					};
+								$archKey = $uname;
+							}
+						}
+					}
 
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] KeyCode :: ' . $keycode);
-					$commands = $this->getCommands($ARMv, $cartereseau, 'remote');
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey);
+					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
+
+
+
 
 					// Old Method
 
@@ -2457,6 +2707,18 @@ class Monitoring extends eqLogic {
 						if ($this->getConfiguration('synologyv2') == '1') {
 							$syno_hddv2_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
 							$syno_hddv2_value = $this->execSSH($hostId, $syno_hddv2_cmd, 'HDDv2');
+						}
+
+						// Synology HDDv3 Command
+						if ($this->getConfiguration('synologyv3') == '1') {
+							$syno_hddv3_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1002\|volume3' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$syno_hddv3_value = $this->execSSH($hostId, $syno_hddv3_cmd, 'HDDv3');
+						}
+
+						// Synology HDDv4 Command
+						if ($this->getConfiguration('synologyv4') == '1') {
+							$syno_hddv4_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1003\|volume4' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
+							$syno_hddv4_value = $this->execSSH($hostId, $syno_hddv4_cmd, 'HDDv4');
 						}
 	
 						// Synology HDDusb Command
@@ -2815,7 +3077,7 @@ class Monitoring extends eqLogic {
 
 				$uname = $commands['uname'];
 				$distri_bits = $this->execSRV($commands['distri_bits'], 'DistriBits');
-				$distri_name_value = $this->execSRV($commands['ditri_name'], 'DistriName');
+				$distri_name_value = $this->execSRV($commands['distri_name'], 'DistriName');
 				$os_version_value = $this->execSRV($commands['os_version'], 'OsVersion');
 				$uptime_value = $this->execSRV($commands['uptime'], 'Uptime');
 				$load_avg_value = $this->execSRV($commands['load_avg'], 'LoadAverage');
@@ -2868,6 +3130,7 @@ class Monitoring extends eqLogic {
 						$distri_name = isset($syno_version_file, $syno_model) ? $this->getSynoVersion($syno_version_file, $syno_model, $equipement) : '';
 
 						// ARMv Syno
+						// TODO vérifier pourquoi mettre ARMv à syno dans le traitement des données
 						$ARMv = 'syno';
 
 						// Syno Volume 2
@@ -2875,6 +3138,16 @@ class Monitoring extends eqLogic {
 							[$syno_hddv2_total, $syno_hddv2_used, $syno_hddv2_free, $syno_hddv2_used_percent, $syno_hddv2_free_percent, $syno_hddv2] = isset($syno_hddv2_value) ? $this->formatHDD($syno_hddv2_value, 'Syno HDDv2', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
 
+						// Syno Volume 3
+						if ($this->getConfiguration('synologyv3') == '1') {
+							[$syno_hddv3_total, $syno_hddv3_used, $syno_hddv3_free, $syno_hddv3_used_percent, $syno_hddv3_free_percent, $syno_hddv3] = isset($syno_hddv3_value) ? $this->formatHDD($syno_hddv3_value, 'Syno HDDv3', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
+						}
+
+						// Syno Volume 4
+						if ($this->getConfiguration('synologyv4') == '1') {
+							[$syno_hddv4_total, $syno_hddv4_used, $syno_hddv4_free, $syno_hddv4_used_percent, $syno_hddv4_free_percent, $syno_hddv4] = isset($syno_hddv4_value) ? $this->formatHDD($syno_hddv4_value, 'Syno HDDv4', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
+						}
+						
 						// Syno Volume USB
 						if ($this->getConfiguration('synologyusb') == '1') {
 							[$syno_hddusb_total, $syno_hddusb_used, $syno_hddusb_free, $syno_hddusb_used_percent, $syno_hddusb_free_percent, $syno_hddusb] = isset($syno_hddusb_value) ? $this->formatHDD($syno_hddusb_value, 'Syno HDDUSB', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
@@ -2970,6 +3243,29 @@ class Monitoring extends eqLogic {
 								
 							]);
 						}
+						if ($this->getConfiguration('synologyv3') == '1') {
+							$dataresult = array_merge($dataresult, [
+								'syno_hddv3' => $syno_hddv3,
+								'syno_hddv3_total' => $syno_hddv3_total,
+								'syno_hddv3_used' => $syno_hddv3_used,
+								'syno_hddv3_free' => $syno_hddv3_free,
+								'syno_hddv3_used_percent' => $syno_hddv3_used_percent,
+								'syno_hddv3_free_percent' => $syno_hddv3_free_percent,
+								
+							]);
+						}
+						if ($this->getConfiguration('synologyv4') == '1') {
+							$dataresult = array_merge($dataresult, [
+								'syno_hddv4' => $syno_hddv4,
+								'syno_hddv4_total' => $syno_hddv4_total,
+								'syno_hddv4_used' => $syno_hddv4_used,
+								'syno_hddv4_free' => $syno_hddv4_free,
+								'syno_hddv4_used_percent' => $syno_hddv4_used_percent,
+								'syno_hddv4_free_percent' => $syno_hddv4_free_percent,
+								
+							]);
+						}
+
 						if ($this->getConfiguration('synologyusb') == '1') {
 							$dataresult = array_merge($dataresult, [
 								'syno_hddusb' => $syno_hddusb,
