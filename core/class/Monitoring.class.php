@@ -1822,6 +1822,11 @@ class Monitoring extends eqLogic {
 			]
 		];
 
+		$cmdRemoteSpecific['armv7l'] = &$cmdRemoteSpecific['aarch64'];
+		$cmdRemoteSpecific['mips64'] = &$cmdRemoteSpecific['aarch64'];
+		$cmdRemoteSpecific['i686'] = &$cmdRemoteSpecific['x86_64'];
+		$cmdRemoteSpecific['i386'] = &$cmdRemoteSpecific['x86_64'];
+
 		if ($confLocalorRemote == 'local') {
 			if (array_key_exists($key, $cmdLocalSpecific)) {
 				return array_merge($cmdLocalCommon, $cmdLocalSpecific[$key]);		
