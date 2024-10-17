@@ -47,6 +47,7 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'info', __('[MIGRATION] Equipement Distant :: ', __FILE__) . $eqLogic->getName() . ' :: Migration en cours');
 					try {
 						$sshManager = new sshmanager();
+						$sshManager->setEqType_name('sshmanager');
 						$sshManager->setName($eqLogic->getName() . ' - SSH');
 						$sshManager->setIsEnable($eqLogic->getIsEnable());
 						$sshManager->setIsVisible(false);
