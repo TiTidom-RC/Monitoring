@@ -120,7 +120,7 @@ function Monitoring_update() {
         }
     }
 
-    /* Ménage dans les répertoires du plugin suite au changement de nom du répertoire "ressources" -> "resources" */
+    /* Ménage dans les répertoires du plugin */
     try {
         $dirToDelete = array(
             __DIR__ . '/../ressources',
