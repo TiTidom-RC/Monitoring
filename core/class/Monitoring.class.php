@@ -1855,6 +1855,8 @@ class Monitoring extends eqLogic {
 			'mips64' => 'KHz',
 		];
 
+		log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
+
 		// CPUFreq
 		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS]);
 
