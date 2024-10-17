@@ -1609,29 +1609,51 @@ class Monitoring extends eqLogic {
 		
 		// Cmd Templates
 		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
+		$memory_command = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
+		$swap_command = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
+		$network_command = "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
+		$network_ip_command = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+		$load_avg_command = "cat /proc/loadavg 2>/dev/null";
+		$uptime_command = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+		$release_command = "awk -F'=' '/%s/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+		
+		$cpu_freq_x86_array = [
+			1 => ['cmd', "LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'"], // OK pour LXC Linux, Proxmox, Debian 10/11
+			2 => ['cmd', "cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'"] // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
+		];
+		$cpu_freq_arm_array = [
+			1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
+		];
+
+		$cpu_temp_zone0_array = [
+			1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"]
+		];
+
+		$cpu_nb_x86_command = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'";
+		$cpu_nb_aarch64_command = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
+		$cpu_nb_arm6l_command = "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
+		$cpu_nb_arm_command = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 
 		$cmdLocalCommon = [
-			'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-			'distri_name' => "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-			'os_version' => "awk -F'=' '/VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
-			'load_avg' => "cat /proc/loadavg 2>/dev/null",
-			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
-			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
+			'distri_bits' => $distri_bits_command,
+			'distri_name' => sprintf($release_command, '^PRETTY_NAME'),
+			'os_version' => sprintf($release_command, 'VERSION_ID'),
+			'uptime' => $uptime_command,
+			'load_avg' => $load_avg_command,
+			'memory' => $memory_command,
+			'swap' => $swap_command,
 			'hdd' => sprintf($hdd_command, '/$'),
-			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
-			'network_ip' => "ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
+			'network' => $network_command, // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network_ip' => $network_ip_command,
 		];
 	
 		// Local
 		$cmdLocalSpecific = [
 			'x86_64' => [
 				'uname' => ".",
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
-				'cpu_freq' => [
-					1 => ['cmd', "LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'"], // OK pour LXC Linux, Proxmox, Debian 10/11
-					2 => ['cmd', "cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'"] // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
-				],
+				'cpu_nb' => $cpu_nb_x86_command,
+				'cpu_freq' => $cpu_freq_x86_array,
 				'cpu_temp' => [
 					1 => ['file', "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Whyse
 					2 => ['file', "/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input"], // OK AOpen DE2700
@@ -1642,7 +1664,7 @@ class Monitoring extends eqLogic {
 			],
 			'aarch64' => [
 				'uname' => ".",
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'",
+				'cpu_nb' => $cpu_nb_aarch64_command,
 				'cpu_freq' => [
 					1 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"], 
 					2 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"]
@@ -1654,7 +1676,7 @@ class Monitoring extends eqLogic {
 			],
 			'armv6l' => [
 				'uname' => ".",
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
+				'cpu_nb' => $cpu_nb_arm6l_command,
 				'cpu_freq' => [
 					1 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"],
 					2 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"]
@@ -1671,37 +1693,35 @@ class Monitoring extends eqLogic {
 
 		// Distant
 		$cmdRemoteCommon = [
-			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
-			'load_avg' => "cat /proc/loadavg 2>/dev/null",
-			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
-			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
-			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
-			'network_ip' => "LC_ALL=C ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
+			'uptime' => $uptime_command,
+			'load_avg' => $load_avg_command,
+			'memory' => $memory_command,
+			'swap' => $swap_command,
+			'network' => $network_command, // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network_ip' => $network_ip_command,
 		];
 		$cmdRemoteSpecific = [
 			'armv6l' => [ // ARMv
 				'uname' => ['value', "."],
-				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
-				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
-				'os_version' => "awk -F'=' '/VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
+				'distri_bits' => ['cmd', $distri_bits_command],
+				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
+				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'cpu_nb' => $cpu_nb_arm6l_command,
 				'cpu_freq' => [
-					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"], // ce sont les mêmes que pour le local mais en cmd ! 
+					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"],
 					2 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"]
 				],
-				'cpu_temp' => [
-					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"]
-				],
+				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'aarch64' => [ // ARMv
 				'uname' => ['value', "."],
-				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
-				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
-				'os_version' => "awk -F'=' '/VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'", // même commande que armv6l remote !
+				'distri_bits' => ['cmd', $distri_bits_command],
+				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
+				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'cpu_nb' => $cpu_nb_aarch64_command,
 				'cpu_freq' => [
-					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"], // ce sont les mêmes que pour le local et que armv6l remote ! 
+					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"],
 					2 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"]
 				],
 				'cpu_temp' => [				
@@ -1712,14 +1732,11 @@ class Monitoring extends eqLogic {
 			],
 			'x86_64' => [ // ARMv
 				'uname' => ['value', "."],
-				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
-				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
-				'os_version' => "awk -F'=' '/VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
-				'cpu_freq' => [
-					1 => ['cmd', "LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'"], // OK pour LXC Linux, Proxmox, Debian 10/11
-					2 => ['cmd', "cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'"] // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
-				],
+				'distri_bits' => ['cmd', $distri_bits_command],
+				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
+				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'cpu_nb' => $cpu_nb_x86_command,
+				'cpu_freq' => $cpu_freq_x86_array,
 				'cpu_temp' => [
 					1 => ['cmd', "cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null"], // Default
 					2 => ['cmd', "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"], // Default Zone 1
@@ -1730,41 +1747,29 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name) : tout en commun avec osmc et picore sauf le HDD !
+			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name)
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
-				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
-				'cpu_freq' => [
-					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
-				],
-				'cpu_temp' => [
-					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
-				],
+				'cpu_nb' => $cpu_nb_arm_command,
+				'cpu_freq' => $cpu_freq_arm_array,
+				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
 			],
 			'osmc' => [ // distri_name
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
-				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
-				'cpu_freq' => [
-					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
-				],
-				'cpu_temp' => [
-					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
-				],
+				'cpu_nb' => $cpu_nb_arm_command,
+				'cpu_freq' => $cpu_freq_arm_array,
+				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
 			],
 			'piCorePlayer' => [ // uname
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
-				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
-				'cpu_freq' => [
-					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
-				],
-				'cpu_temp' => [
-					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
-				],
+				'cpu_nb' => $cpu_nb_arm_command,
+				'cpu_freq' => $cpu_freq_arm_array,
+				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p')
 			],
 			'FreeBSD' => [ // uname
@@ -1784,9 +1789,9 @@ class Monitoring extends eqLogic {
 			],
 			'medion' => [ // uname
 				'ARMv' => ['value', "arm"],
-				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
-				'distri_name' => ['cmd', "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'"],
-				'os_version' => "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'",
+				'distri_bits' => ['cmd', $distri_bits_command],
+				'distri_name' => ['cmd', "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'"], // TODO A revoir avec la syntaxe des autres distri_name
+				'os_version' => "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'", // TODO A revoir avec la syntaxe des autres os_version
 				'cpu_nb' => "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'",
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"],
