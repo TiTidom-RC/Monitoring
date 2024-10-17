@@ -2630,7 +2630,9 @@ class Monitoring extends eqLogic {
 
 					if ($isSynology) {
 						$syno_model_cmd = $this->getConfiguration('syno_alt_name') == '1' ? $commands['syno_model_alt'] : $commands['syno_model'];
-						$syno_model = $this->execSSH($hostId, $syno_model_cmd, 'SynoModel');	
+						$syno_model = $this->execSSH($hostId, $syno_model_cmd, 'SynoModel');
+
+						$syno_version_file = $this->execSSH($hostId, $commands['syno_version'], 'SynoVersion');
 						
 						$syno_hddv2 = $this->getConfiguration('synologyv2') == '1' ? $this->execSSH($hostId, $commands['syno_hddv2'], 'SynoHDDv2') : '';
 						$syno_hddv3 = $this->getConfiguration('synologyv3') == '1' ? $this->execSSH($hostId, $commands['syno_hddv3'], 'SynoHDDv3') : '';
@@ -2646,6 +2648,7 @@ class Monitoring extends eqLogic {
 					
 					if ($isSynology) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoModel :: ' . $syno_model);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoVersion :: ' . $syno_version_file);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
