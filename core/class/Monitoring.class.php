@@ -1801,7 +1801,7 @@ class Monitoring extends eqLogic {
 				'ARMv' => ['value', "syno"],
 				'uname' => ['value', "."],
 				'distri_name' => ['value', ""],
-				'ditri_bits' => ['value', ""],
+				'distri_bits' => ['value', ""],
 				'os_version' => "awk -F'=' '/productversion/ { print $2 }' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
 				'syno_model' =>  "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null",
 				'syno_model_alt' => "cat /proc/sys/kernel/syno_hw_version 2>/dev/null",
