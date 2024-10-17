@@ -2571,6 +2571,10 @@ class Monitoring extends eqLogic {
 	public function getInformations() {
 		$equipement = $this->getName();
 		try {
+
+			// Architecture Key
+			$archKey = '';
+
 			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 			$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
@@ -2580,9 +2584,6 @@ class Monitoring extends eqLogic {
 				[$cnx_ssh, $hostId] = $this->connectSSH();
 				
 				if ($cnx_ssh == 'OK') {
-
-					// Architecture Key
-					$archKey = '';
 
 					if ($isSynology) {
 						$archKey = 'syno';
