@@ -1844,7 +1844,7 @@ class Monitoring extends eqLogic {
 
 	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
 		$unitCPUFreq = [
-			'syno' => 'Mhz',
+			'syno' => 'MHz',
 			'arm' => 'KHz',
 			'x86_64' => 'MHz',
 			'i686' => 'MHz',
