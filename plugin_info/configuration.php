@@ -67,7 +67,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                     <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />
                 </div>
             </div>
-            <legend><i class="fas fa-clipboard-check"></i> {{Migration v2.5 -> v3.0 (Hôtes Monitoring -> SSH-Manager)}}</legend>
+            <legend><i class="fas fa-clipboard-check"></i> {{Migration v2.5 -> v3.0}}</legend>
             <div class="form-group">
                 <label class="col-md-3 control-label">{{Statut Migration}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Si ce paramètre est coché, alors la migration de la version 2.5 vers 3.0 a déjà été effectuée}}"></i></sup>
