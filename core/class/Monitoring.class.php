@@ -52,9 +52,9 @@ class Monitoring extends eqLogic {
 						$sshManager->setIsEnable($eqLogic->getIsEnable());
 						$sshManager->setIsVisible(false);
 						$sshManager->setObject_id($eqLogic->getObject_id());
-						$sshManager->setConfiguration('host', $eqLogic->getConfiguration('adressip'));
+						$sshManager->setConfiguration('host', $eqLogic->getConfiguration('addressip'));
 						$sshManager->setConfiguration('port', $eqLogic->getConfiguration('portssh'));
-						$sshManager->setConfiguration('user', $eqLogic->getConfiguration('user'));
+						$sshManager->setConfiguration('username', $eqLogic->getConfiguration('user'));
 						$sshManager->setConfiguration('password', $eqLogic->getConfiguration('password'));
 						$sshManager->setConfiguration('ssh-key', $eqLogic->getConfiguration('ssh-key'));
 						$sshManager->setConfiguration('ssh-passphrase', $eqLogic->getConfiguration('ssh-passphrase'));
