@@ -1782,7 +1782,7 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'medion' => [
+			'medion' => [ // uname
 				'ARMv' => ['value', "arm"],
 				'distri_name' => ['cmd', "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'"],
 				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
@@ -1798,7 +1798,7 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/home$')
 			],
 			'syno'=> [
-				'ARMv' => ['value', ""],
+				'ARMv' => ['value', "syno"],
 				'uname' => ['value', "."],
 				'distri_name' => ['value', ""],
 				'ditri_bits' => ['value', ""],
@@ -2614,10 +2614,10 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey);
 					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
 
-					$ARMv = $ARMv ?? (is_array($commands['ARMv']) && $commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
-					$uname = $uname ?? (is_array($commands['uname']) && $commands['uname'][0] === 'cmd' ? $this->execSSH($hostId, $commands['uname'][1], 'uname') : $commands['uname'][1]);
-					$distri_name_value = $distri_name_value ?? (is_array($commands['distri_name']) && $commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1]);
-					$distri_bits = is_array($commands['distri_bits']) && $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits') : $commands['distri_bits'][1];
+					$ARMv = $ARMv ?? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
+					$uname = $uname ?? ($commands['uname'][0] === 'cmd' ? $this->execSSH($hostId, $commands['uname'][1], 'uname') : $commands['uname'][1]);
+					$distri_name_value = $distri_name_value ?? ($commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1]);
+					$distri_bits = $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits') : $commands['distri_bits'][1];
 					
 					$os_version_value = $this->execSSH($hostId, $commands['os_version'], 'OsVersion');
 
@@ -2747,10 +2747,6 @@ class Monitoring extends eqLogic {
 					if ($isSynology) {
 						// Syno DistriName
 						$distri_name = isset($syno_version_file, $syno_model) ? $this->getSynoVersion($syno_version_file, $syno_model, $equipement) : '';
-
-						// ARMv Syno
-						// TODO vérifier pourquoi mettre ARMv à syno dans le traitement des données
-						$ARMv = 'syno';
 
 						// Syno Volume 2
 						if ($this->getConfiguration('synologyv2') == '1') {
