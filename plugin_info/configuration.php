@@ -67,10 +67,10 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                     <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />
                 </div>
             </div>
-            <legend><i class="fas fa-clipboard-check"></i> {{Migration (Monitoring -> SSH-Manager)}}</legend>
+            <legend><i class="fas fa-clipboard-check"></i> {{Migration v2.5 -> v3.0 (Hôtes Monitoring -> SSH-Manager)}}</legend>
             <div class="form-group">
                 <label class="col-md-3 control-label">{{Statut Migration}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Si ce paramètre est coché, alors la migration a déjà été effectuée}}"></i></sup>
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Si ce paramètre est coché, alors la migration de la version 2.5 vers 3.0 a déjà été effectuée}}"></i></sup>
                 </label>
                 <div class="col-md-3">
                     <input type="checkbox" class="configKey" data-l1key="isMigrated" disabled />
@@ -78,10 +78,10 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
             </div>
             <div class="form-group">
                 <label class="col-md-3 control-label">{{Migrer les paramètres SSH des équipements}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Migrer les paramètres des hôtes distants de vos équipements vers SSH-Manager}}"></i></sup>
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Migrer les paramètres des hôtes distants de vos équipements (v2.5) vers SSH-Manager}}"></i></sup>
                 </label>
                 <div class="col-md-3">
-                    <a class="btn btn-warning customclass-migrate"><i class="fas fa-play-circle"></i> {{Migrer}}</a>
+                    <a class="btn btn-warning customclass-migrate"><i class="fas fa-play-circle"></i> {{Migrer (v2.5 -> v3.0)}}</a>
                 </div>
             </div>
         </div>
