@@ -35,8 +35,22 @@ class Monitoring extends eqLogic {
 	}
 
 	public static function doMigrationToV3() {
-		log::add('Monitoring', 'info', __('[MIGRATION] Début de la migration vers la V3', __FILE__));
-		return ('[MIGRATION] Migration vers la V3 terminée');
+		if (class_exists('sshmanager')) {
+			log::add('Monitoring', 'info', __('[MIGRATION] Début de la migration vers la V3', __FILE__));
+		
+			// Récupération de tous les équipements de type Monitoring
+			$eqLogics = eqLogic::byType('Monitoring');
+			foreach ($eqLogics as $eqLogic) {
+				
+				$oldConfLocalOrRemote = $eqLogic->getConfiguration('maitreesclave');
+				if ($oldConfLocalOrRemote == 'deporte' || $oldConfLocalOrRemote == 'deporte-key') {
+					log::add('Monitoring', 'info', __('[MIGRATION] Migration de l\'équipement : ', __FILE__) . $eqLogic->getName());
+				}
+			}
+			return ('[MIGRATION] Migration vers la v3.0 terminée');
+		} else {
+			throw new Exception(__('Le plugin SSH-Manager n\'est pas actif !', __FILE__));
+		}
 	}
 
 	public static function dependancy_install() {
