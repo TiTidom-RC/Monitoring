@@ -40,6 +40,7 @@ class Monitoring extends eqLogic {
 		
 			// Récupération de tous les équipements de type Monitoring
 			$eqLogics = eqLogic::byType('Monitoring');
+			$nbMigrated = 0;
 			foreach ($eqLogics as $eqLogic) {
 				log::add('Monitoring', 'debug', __('[MIGRATION] Equipement :: ', __FILE__) . $eqLogic->getName());
 				$oldConfLocalOrRemote = $eqLogic->getConfiguration('maitreesclave');
@@ -61,14 +62,15 @@ class Monitoring extends eqLogic {
 						$sshManager->setConfiguration('timeout', $eqLogic->getConfiguration('timeoutssh'));
 						$sshManager->setConfiguration('auth-method', $eqLogic->getConfiguration('maitreesclave') == 'deporte' ? 'password' : 'ssh-key');
 						$sshManager->save();
+						$nbMigrated++;
 						log::add('Monitoring', 'info', __('[MIGRATION] Equipement Distant :: ', __FILE__) . $eqLogic->getName() . ' :: Migration OK');
-					} catch (\Exception $e) {
+					} catch (Exception $e) {
 						log::add('Monitoring', 'error', __('[MIGRATION] Erreur lors de la migration de l\'équipement :: ', __FILE__) . $eqLogic->getName() . ' :: ' . $e->getMessage());
 					}
 				}
 			}
-			log::add('Monitoring', 'info', __('[MIGRATION] Fin de la migration vers la v3.0', __FILE__));
-			return ('[MIGRATION] Migration vers la v3.0 terminée');
+			log::add('Monitoring', 'info', __('[MIGRATION] Fin de la migration vers la v3.0', __FILE__) . ' :: ' . $nbMigrated . ' équipement(s) migré(s)');
+			return ('[MIGRATION] Migration vers la v3.0 terminée :: ' . $nbMigrated . ' équipement(s) migré(s)');
 		} else {
 			throw new Exception(__('Le plugin SSH-Manager n\'est pas actif !', __FILE__));
 		}

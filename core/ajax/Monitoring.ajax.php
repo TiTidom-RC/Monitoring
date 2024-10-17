@@ -33,6 +33,7 @@ try {
     if (init('action') == 'doMigration') {
         try {
             $resultMigration = Monitoring::doMigrationToV3();
+            config::save('isMigrated', '1', 'Monitoring');
             ajax::success($resultMigration);
         } catch (Exception $e) {
             ajax::error(displayException($e), $e->getCode());
