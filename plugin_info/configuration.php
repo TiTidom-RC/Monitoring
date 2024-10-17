@@ -87,3 +87,57 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
         </div>
     </fieldset>
 </form>
+
+<script>
+    document.querySelector('.customclass-migrate').addEventListener('click', function() {
+        jeeDialog.confirm({
+            title: '<i class="warning fas fa-question-circle"></i> Migration v2.5 -> v3.0',
+            message: 'Etes-vous sûr de vouloir lancer la migration de la configuration des équipements distants vers SSH-Manager ?',
+            buttons: {
+                confirm: {
+                    label: 'Migrer',
+                    className: 'warning'
+                },
+                cancel: {
+                    label: 'Annuler',
+                    className: 'info'
+                }
+            },
+            callback: function (result) {
+                if (result) {
+                    domUtils.ajax({
+                        type: 'POST',
+                        url: 'plugins/Monitoring/core/ajax/Monitoring.ajax.php',
+                        data: {
+                            action: "doMigration",
+                        },
+                        dataType: 'json',
+                        async: true,
+                        global: false,
+                        error: function (request, status, error) {
+                            handleAjaxError(request, status, error);
+                        },
+                        success: function (data) {
+                            if (data.state != 'ok') {
+                                jeedomUtils.showAlert({
+                                    title: "Monitoring - Migration v2.5 -> v3.0",
+                                    message: data.result,
+                                    level: 'danger',
+                                    emptyBefore: false
+                                });
+                                return;
+                            } else {
+                                jeedomUtils.showAlert({
+                                    title: "Monitoring - Migration v2.5 -> v3.0",
+                                    message: data.result,
+                                    level: 'success',
+                                    emptyBefore: false
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>

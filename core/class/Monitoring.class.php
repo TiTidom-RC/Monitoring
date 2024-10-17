@@ -34,6 +34,11 @@ class Monitoring extends eqLogic {
 		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
 	}
 
+	public static function doMigrationToV3() {
+		log::add('Monitoring', 'info', __('[MIGRATION] Début de la migration vers la V3', __FILE__));
+		return ('[MIGRATION] Migration vers la V3 terminée');
+	}
+
 	public static function dependancy_install() {
 		$_logName = __CLASS__ . '_update';
 		config::save('lastDependancyInstallTime', date('Y-m-d H:i:s'), plugin::byId('Monitoring')->getId());
