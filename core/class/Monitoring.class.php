@@ -36,17 +36,20 @@ class Monitoring extends eqLogic {
 
 	public static function doMigrationToV3() {
 		if (class_exists('sshmanager')) {
-			log::add('Monitoring', 'info', __('[MIGRATION] Début de la migration vers la V3', __FILE__));
+			log::add('Monitoring', 'info', __('[MIGRATION] Début de la migration vers la v3.0', __FILE__));
 		
 			// Récupération de tous les équipements de type Monitoring
 			$eqLogics = eqLogic::byType('Monitoring');
 			foreach ($eqLogics as $eqLogic) {
-				
+				log::add('Monitoring', 'debug', __('[MIGRATION] Equipement :: ', __FILE__) . $eqLogic->getName());
 				$oldConfLocalOrRemote = $eqLogic->getConfiguration('maitreesclave');
 				if ($oldConfLocalOrRemote == 'deporte' || $oldConfLocalOrRemote == 'deporte-key') {
-					log::add('Monitoring', 'info', __('[MIGRATION] Migration de l\'équipement : ', __FILE__) . $eqLogic->getName());
+					log::add('Monitoring', 'info', __('[MIGRATION] Equipement Distant :: ', __FILE__) . $eqLogic->getName());
+					// Migration
+					
 				}
 			}
+			log::add('Monitoring', 'info', __('[MIGRATION] Fin de la migration vers la v3.0', __FILE__));
 			return ('[MIGRATION] Migration vers la v3.0 terminée');
 		} else {
 			throw new Exception(__('Le plugin SSH-Manager n\'est pas actif !', __FILE__));
