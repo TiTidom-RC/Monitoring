@@ -1612,14 +1612,14 @@ class Monitoring extends eqLogic {
 
 		$cmdLocalCommon = [
 			'distri_bits' => "getconf LONG_BIT 2>/dev/null",
-			'distri_name' => "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
-			'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+			'distri_name' => "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+			'os_version' => "awk -F'=' '/VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 			'uptime' => "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'",
 			'load_avg' => "cat /proc/loadavg 2>/dev/null",
 			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
 			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
 			'hdd' => sprintf($hdd_command, '/$'),
-			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
 			'network_ip' => "ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
 		];
 	
@@ -1636,8 +1636,8 @@ class Monitoring extends eqLogic {
 					1 => ['file', "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Whyse
 					2 => ['file', "/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input"], // OK AOpen DE2700
 					3 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"], // OK AMD Ryzen
-					4 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"], // OK by sensors
-					5 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"] // OK by sensors MB
+					4 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) { printf(\"%f\",$4);} }'"], // OK by sensors
+					5 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) { printf(\"%f\",$3);} }'"] // OK by sensors MB
 				],
 			],
 			'aarch64' => [
@@ -1675,15 +1675,15 @@ class Monitoring extends eqLogic {
 			'load_avg' => "cat /proc/loadavg 2>/dev/null",
 			'memory' => "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'",
 			'swap' => "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'",
-			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network' => "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
 			'network_ip' => "LC_ALL=C ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'",
 		];
 		$cmdRemoteSpecific = [
-			'armv6l' => [
+			'armv6l' => [ // ARMv
 				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
-				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
-				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
+				'os_version' => "awk -F'=' '/VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'",
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"], // ce sont les mêmes que pour le local mais en cmd ! 
@@ -1694,11 +1694,11 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'aarch64' => [
+			'aarch64' => [ // ARMv
 				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
-				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
-				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
+				'os_version' => "awk -F'=' '/VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'", // même commande que armv6l remote !
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"], // ce sont les mêmes que pour le local et que armv6l remote ! 
@@ -1710,11 +1710,11 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'x86_64' => [
+			'x86_64' => [ // ARMv
 				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
-				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
-				'os_version' => "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
+				'os_version' => "awk -F'=' '/VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'cpu_nb' => "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'",
 				'cpu_freq' => [
 					1 => ['cmd', "LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'"], // OK pour LXC Linux, Proxmox, Debian 10/11
@@ -1725,8 +1725,8 @@ class Monitoring extends eqLogic {
 					2 => ['cmd', "cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null"], // Default Zone 1
 					3 => ['cmd', "cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null"], // OK AOpen DE2700
 					4 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"], // OK Search temp?_input
-					5 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'"], // OK by sensors
-					6 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'"] // OK by sensors
+					5 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) { printf(\"%f\",$4);} }'"], // OK by sensors
+					6 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) { printf(\"%f\",$3);} }'"] // OK by sensors
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
@@ -1742,7 +1742,7 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
 			],
-			'osmc' => [
+			'osmc' => [ // distri_name
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
 				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
@@ -1754,8 +1754,9 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
 			],
-			'piCorePlayer' => [
+			'piCorePlayer' => [ // uname
 				'ARMv' => ['value', "arm"],
+				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
 				'distri_bits' => ['value', "32"],
 				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
@@ -1766,25 +1767,25 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p')
 			],
-			'FreeBSD' => [
+			'FreeBSD' => [ // uname
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
-				'distri_bits' => ['cmd', "sysctl kern.smp.maxcpus | awk '{ print $2}'"],
-				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3}'"],
-				'load_avg' => "LC_ALL=C uptime | awk '{print $8,$9,$10}'",
-				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'",
+				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
+				'distri_bits' => ['cmd', "sysctl kern.smp.maxcpus | awk '{ print $2 }'"],
+				'load_avg' => "LC_ALL=C uptime | awk '{ print $8,$9,$10 }'",
+				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'",
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
 				'cpu_freq' => [
-					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'"],
+					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2 }'"],
 				],
 				'cpu_temp' => [
-					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'"],
+					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'"],
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'medion' => [
 				'ARMv' => ['value', "arm"],
-				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
 				'distri_name' => ['cmd', "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'"],
+				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
 				'os_version' => "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'",
 				'cpu_nb' => "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'",
 				'cpu_freq' => [
@@ -1801,7 +1802,7 @@ class Monitoring extends eqLogic {
 				'uname' => ['value', "."],
 				'distri_name' => ['value', ""],
 				'ditri_bits' => ['value', ""],
-				'os_version' => "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
+				'os_version' => "awk -F'=' '/productversion/ { print $2 }' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
 				'syno_model' =>  "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null",
 				'syno_model_alt' => "cat /proc/sys/kernel/syno_hw_version 2>/dev/null",
 				'syno_version' => "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'", // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
@@ -2573,7 +2574,7 @@ class Monitoring extends eqLogic {
 				
 				if ($cnx_ssh == 'OK') {
 
-					// New Method
+					// Architecture Key
 					$archKey = '';
 
 					if ($isSynology) {
@@ -2585,14 +2586,20 @@ class Monitoring extends eqLogic {
 						if (!empty($ARMv)) {
 							$archKey = $ARMv;
 						} else {
-							$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+							// Unset $ARMv
+							unset($ARMv);
+
+							$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
 							if (in_array($distri_name_value, ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc'])) {
 								$archKey = $distri_name_value;
 							} else {
+								// unset $distri_name_value
+								unset($distri_name_value);
+
 								// Uname Command
-								$uname_cmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
+								$uname_cmd = "uname -a 2>/dev/null | awk '{ print $2,$1 }'";
 								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
 								$archKey = $uname;
 							}
@@ -2602,19 +2609,12 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey);
 					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
 
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Nb Commands :: ' . count($commands));
-
-					// TODO Pour ARMv, uname, distri_name, distri_bits, il faut checker si c'est une 'value' ou une 'cmd' (sur le modèle des fréquences)
-
 					$ARMv = $ARMv ?? (is_array($commands['ARMv']) && $commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv']);
 					$uname = $uname ?? (is_array($commands['uname']) && $commands['uname'][0] === 'cmd' ? $this->execSSH($hostId, $commands['uname'][1], 'uname') : $commands['uname']);
 					$distri_name_value = $distri_name_value ?? (is_array($commands['distri_name']) && $commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name']);
 					$distri_bits = is_array($commands['distri_bits']) && $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits') : $commands['distri_bits'];
 					
 					$os_version_value = $this->execSSH($hostId, $commands['os_version'], 'OsVersion');
-					
-					$syno_model_cmd = $this->getConfiguration('syno_alt_name') == '1' ? $commands['syno_model_alt'] : $commands['syno_model'];
-					$syno_model = $this->execSSH($hostId, $syno_model_cmd, 'SynoModel');
 
 					$uptime_value = $this->execSSH($hostId, $commands['uptime'], 'Uptime');
 					$load_avg_value = $this->execSSH($hostId, $commands['load_avg'], 'LoadAverage');
@@ -2628,18 +2628,37 @@ class Monitoring extends eqLogic {
 					extract($this->getCPUFreq($commands['cpu_freq'], $equipement, 'remote', $hostId));
 					extract($this->getCPUTemp($commands['cpu_temp'], $equipement, 'remote', $hostId));
 
+					if ($isSynology) {
+						$syno_model_cmd = $this->getConfiguration('syno_alt_name') == '1' ? $commands['syno_model_alt'] : $commands['syno_model'];
+						$syno_model = $this->execSSH($hostId, $syno_model_cmd, 'SynoModel');	
+						
+						$syno_hddv2 = $this->getConfiguration('synologyv2') == '1' ? $this->execSSH($hostId, $commands['syno_hddv2'], 'SynoHDDv2') : '';
+						$syno_hddv3 = $this->getConfiguration('synologyv3') == '1' ? $this->execSSH($hostId, $commands['syno_hddv3'], 'SynoHDDv3') : '';
+						$syno_hddv4 = $this->getConfiguration('synologyv4') == '1' ? $this->execSSH($hostId, $commands['syno_hddv4'], 'SynoHDDv4') : '';
+						$syno_hddusb = $this->getConfiguration('synologyusb') == '1' ? $this->execSSH($hostId, $commands['syno_hddusb'], 'SynoHDDUSB') : '';
+						$syno_hddesata = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA') : '';
+					}
+
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uname :: ' . $uname);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriBits :: ' . $distri_bits);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriName :: ' . $distri_name_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsVersion :: ' . $os_version_value);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoModel :: ' . $syno_model);
+					
+					if ($isSynology) {
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoModel :: ' . $syno_model);
+					}
+					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] LoadAverage :: ' . $load_avg_value);
+					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Memory :: ' . $memory_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Swap :: ' . $swap_value);
+					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] HDD :: ' . $hdd_value);
+					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauRXTX :: ' . $network_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauIP :: ' . $network_ip_value);
+					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] NbCPU :: ' . $cpu_nb);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq :: ' . $cpu_freq);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq Id :: ' . $cpu_temp_id);
@@ -2653,460 +2672,7 @@ class Monitoring extends eqLogic {
 					// Perso2 Command
 					$perso2_cmd = $this->getCmdPerso('perso2');
 					$perso2 = !empty($perso2_cmd) ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
-					
 
-					// Old Method
-
-					// Cas général hors Synology
-					if (!$isSynology) {
-						// DistriName Command
-						$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-						$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
-	
-						// OsVersion Command
-						$os_version_cmd = "awk -F'=' '/VERSION_ID/ {print $2}' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-						$os_version_value = $this->execSSH($hostId, $os_version_cmd, 'OsVersion');
-						
-						// DistriBits Command
-						$distri_bits_cmd = "getconf LONG_BIT 2>/dev/null";
-						$distri_bits = $this->execSSH($hostId, $distri_bits_cmd, 'DistriBits');
-					}
-
-					// Commandes Distantes Communes
-					// Uptime Command
-					$uptime_cmd = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-					$uptime_value = $this->execSSH($hostId, $uptime_cmd, 'Uptime');
-					
-					// LoadAverage Command
-					$load_avg_cmd = "cat /proc/loadavg 2>/dev/null";
-					$load_avg_value = $this->execSSH($hostId, $load_avg_cmd, 'LoadAverage');
-
-					// Memory Command
-					$memory_cmd = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
-					$memory_value = $this->execSSH($hostId, $memory_cmd, 'Memory');
-
-					// Swap Command
-					$swap_cmd = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
-					$swap_value = $this->execSSH($hostId, $swap_cmd, 'Swap');
-
-					// Network Command
-					$network_cmd = "cat /proc/net/dev 2>/dev/null | grep ".$cartereseau." | awk '{print $1,$2,$10}' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
-					$network_value = $this->execSSH($hostId, $network_cmd, 'ReseauRXTX');
-
-					$network_ip_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep ".$cartereseau." | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
-					$network_ip_value = $this->execSSH($hostId, $network_ip_cmd, 'ReseauIP');
-
-					// Perso1 Command
-					$perso1_cmd = $this->getCmdPerso('perso1');
-					$perso1 = !empty($perso1_cmd) ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
-
-					// Perso2 Command
-					$perso2_cmd = $this->getCmdPerso('perso2');
-					$perso2 = !empty($perso2_cmd) ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
-					
-					if ($isSynology) {
-						// Synology uname & DistriBits Init
-						$uname = '.';
-						$distri_bits = '';
-
-						// Synology OsVersion Command
-						$os_version_cmd = "awk -F'=' '/productversion/ {print $2}' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-						$os_version_value = $this->execSSH($hostId, $os_version_cmd, 'OsVersion');
-
-						// Synology Model Command
-						if ($this->getConfiguration('syno_alt_name') == '1') {
-							$syno_model_cmd = "cat /proc/sys/kernel/syno_hw_version 2>/dev/null";
-						}
-						else {
-							$syno_model_cmd = "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null";
-						}
-						$syno_model = $this->execSSH($hostId, $syno_model_cmd, 'SynoModel');
-
-						// Synology Version Command
-						$syno_version_cmd = "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'"; // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
-						$syno_version_file = $this->execSSH($hostId, $syno_version_cmd, 'VersionSyno');
-
-						// Synology NbCPU Command
-						$cpu_nb_cmd = "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null";
-						$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-						
-						// Synology CPUFreq Command
-						$cpu_freq_cmd = "cat /proc/sys/kernel/syno_CPU_info_clock 2>/dev/null";
-						$cpu_freq = $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq');
-	
-						// Synology CPU Temp Command
-						if ($this->getconfiguration('syno_use_temp_path')) {
-							$cpu_temp_cmd = $this->getconfiguration('syno_temp_path');
-							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-						} else {
-							$cpu_temp_cmd = "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)";
-							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][SYNO] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-						}
-						$cpu_temp = trim($cpu_temp_cmd) !== '' ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp') : '';
-
-						// Synology HDD Command
-						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1000\|volume1' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-
-						// Synology HDDv2 Command
-						if ($this->getConfiguration('synologyv2') == '1') {
-							$syno_hddv2_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1001\|volume2' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$syno_hddv2_value = $this->execSSH($hostId, $syno_hddv2_cmd, 'HDDv2');
-						}
-
-						// Synology HDDv3 Command
-						if ($this->getConfiguration('synologyv3') == '1') {
-							$syno_hddv3_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1002\|volume3' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$syno_hddv3_value = $this->execSSH($hostId, $syno_hddv3_cmd, 'HDDv3');
-						}
-
-						// Synology HDDv4 Command
-						if ($this->getConfiguration('synologyv4') == '1') {
-							$syno_hddv4_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'vg1003\|volume4' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$syno_hddv4_value = $this->execSSH($hostId, $syno_hddv4_cmd, 'HDDv4');
-						}
-	
-						// Synology HDDusb Command
-						if ($this->getConfiguration('synologyusb') == '1') {
-							$syno_hddusb_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'usb1p1\|volumeUSB1' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$syno_hddusb_value = $this->execSSH($hostId, $syno_hddusb_cmd, 'HDDusb');
-						}
-						
-						// Synology HDDesata Command
-						if ($this->getConfiguration('synologyesata') == '1') {
-							$syno_hddesata_cmd = "LC_ALL=C df -l 2>/dev/null | grep 'sdf1\|volumeSATA' | head -1 | awk '{ print $2,$3,$4,$5 }'"; // DSM 5.x / 6.x / 7.x
-							$syno_hddesata_value = $this->execSSH($hostId, $syno_hddesata_cmd, 'HDDesata');
-						}
-	
-					} elseif ($ARMv == 'armv6l') {
-						// ARMv6L uname Init
-						$uname = '.';
-
-						// ARMv6L NbCPU Command
-						$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
-						$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-
-						// ARMv6L CPUFreq Command
-						$cpu_freq_cmds = array(
-							"cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null",
-							"cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"
-						);
-						$cpu_freq = '';
-						foreach ($cpu_freq_cmds as $id => $cmd) {
-							$cpu_freq = $this->execSSH($hostId, $cmd, 'CPUFreq-' . $id);
-							if ($cpu_freq != '') {
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][ARM6L] Commande CPUFreq :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-								break;
-							}
-						}
-	
-						// ARMv6L CPU Temp Command
-						if ($this->getconfiguration('linux_use_temp_cmd')) {
-							$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][ARM6L] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-						} else {
-							$cpu_temp_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-							log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][ARM6L] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-						}
-						$cpu_temp = trim($cpu_temp_cmd) ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp') : '';
-						
-						// ARMv6L HDD Command
-						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-	
-					} elseif ($ARMv == 'armv7l' || $ARMv == 'aarch64' || $ARMv == 'mips64') {
-						// aarch64 uname Init
-						$uname = '.';
-
-						// aarch64 NbCPU Command
-						$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print $2 }'";
-						$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-	
-						// aarch64 CPUFreq Command
-						$cpu_freq = '';
-						$cpu_freq_cmds = array(
-							"cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null",
-							"cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"
-						);
-						foreach ($cpu_freq_cmds as $id => $cmd) {
-							$cpu_freq = $this->execSSH($hostId, $cmd, 'CPUFreq-' . $id);
-							if ($cpu_freq != '') {
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][AARCH64] Commande CPUFreq :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-								break;
-							}
-						}
-	
-						// aarch64 CPU Temp Command
-						if ($this->getconfiguration('linux_use_temp_cmd')) {	
-							$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][AARCH64] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							$cpu_temp = trim($cpu_temp_cmd) !== '' ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom') : '';
-						} else {
-							$cpu_temp_cmds = array(
-								"cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null", // OK RPi2
-								"cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null" // OK Banana Pi (Cubie surement un jour...)
-							);
-							$cpu_temp = '';
-							foreach ($cpu_temp_cmds as $id => $cmd) {
-								$cpu_temp = $this->execSSH($hostId, $cmd, 'CPUTemp-' . $id);
-								if ($cpu_temp != '') {
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][AARCH64] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-									break;
-								}
-							}
-						}
-
-						// aarch64 HDD Command
-						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-
-					} elseif ($ARMv == 'i686' || $ARMv == 'x86_64' || $ARMv == 'i386') {
-						
-						// x86_64 uname Init
-						$uname = '.';
-
-						// x86_64 NbCPU Command
-						$cpu_nb_cmd = "LC_ALL=C lscpu 2>/dev/null | grep '^CPU(s):' | awk '{ print \$NF }'";
-						$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-						$cpu_nb = preg_replace("/[^0-9]/", "", $cpu_nb);
-	
-						// x86_64 CPUFreq Command
-						$cpu_freq = '';
-						$cpu_freq_cmds = array(
-							"LC_ALL=C lscpu 2>/dev/null | grep -Ei '^CPU( max)? MHz' | awk '{ print \$NF }'", // OK pour LXC Linux, Proxmox, Debian 10/11
-							"cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'" // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
-						);
-						foreach ($cpu_freq_cmds as $id => $cmd) {
-							$cpu_freq = $this->execSSH($hostId, $cmd, 'CPUFreq-' . $id);
-							$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
-							if ($cpu_freq != '') {
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][X86] CPUFreq :: ' . $cpu_freq);
-								break;
-							}
-						}
-	
-						// x86_64 CPU Temp Command
-						if ($this->getconfiguration('linux_use_temp_cmd')) {
-							$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-							log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][X86] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-							$cpu_temp = trim($cpu_temp_cmd) !== '' ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom') : '';
-						} else {
-							$cpu_temp = '';
-							$cpu_temp_cmds = array(
-								"cat /sys/devices/virtual/thermal/thermal_zone0/temp 2>/dev/null", // Default
-								"cat /sys/devices/virtual/thermal/thermal_zone1/temp 2>/dev/null", // Default Zone 1
-								"cat /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input 2>/dev/null", // OK AOpen DE2700
-								"timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null", // OK Search temp?_input
-								"LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) {printf(\"%f\",$4);} }'", // OK by sensors
-								"LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) {printf(\"%f\",$3);} }'" // OK by sensors
-							);
-							foreach ($cpu_temp_cmds as $id => $cmd) {
-								$cpu_temp = $this->execSSH($hostId, $cmd, 'CPUTemp-' . $id);
-								$cpu_temp = preg_replace("/[^0-9.,]/", "", $cpu_temp);
-								if ($cpu_temp != '') {
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][X86] CPU Temp :: ' . $cpu_temp);
-									break;
-								}
-							}
-						}
-
-						// x86_64 HDD Command
-						$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-						$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-
-					} elseif (($ARMv == '' || $ARMv == 'syno') && !$isSynology) {
-
-						// Uname Command
-						$uname_cmd = "uname -a 2>/dev/null | awk '{print $2,$1}'";
-						$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
-	
-						if (preg_match("#RasPlex|OpenELEC|LibreELEC#", $distri_name_value)) {
-							// ARM & DistriBits Init
-							$ARMv = 'arm';
-							$distri_bits = '32';
-							
-							// NbCPU Command
-							$cpu_nb_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-							$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-	
-							// CPUFreq Command
-							$cpu_freq_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-							$cpu_freq = $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq');
-	
-							// CPU Temp Command
-							if ($this->getconfiguration('linux_use_temp_cmd')) {
-								$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							} else {
-								$cpu_temp_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							}
-							$cpu_temp = trim($cpu_temp_cmd) !== '' ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp') : '';
-
-							// HDD Command
-							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/dev/mmcblk0p2' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-
-						} elseif (preg_match("#osmc#", $distri_name_value)) {
-							
-							// ARM & DistriBits Init
-							$ARMv = 'arm';
-							$distri_bits = '32';
-	
-							// NbCPU Command
-							$cpu_nb_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-							$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-							
-							// CPUFreq Command
-							$cpu_freq_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-							$cpu_freq = $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq');
-	
-							// CPU Temp Command
-							if ($this->getconfiguration('linux_use_temp_cmd')) {
-								$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							} else {
-								$cpu_temp_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							}
-							$cpu_temp = trim($cpu_temp_cmd) !== '' ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp') : '';
-
-							// HDD Command
-							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-
-						} elseif (preg_match("#piCorePlayer#", $uname)) {
-							
-							// ARM & DistriBits Init
-							$ARMv = 'arm';
-							$distri_bits = '32';
-							
-							// DistriName Command
-							$distri_name_cmd = "uname -a 2>/dev/null | awk '{print $2,$3}'";
-							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
-	
-							// NbCPU Command
-							$cpu_nb_cmd = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
-							$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-	
-							// CPUFreq Command
-							$cpu_freq_cmd = "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null";
-							$cpu_freq = $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq');
-	
-							// CPU Temp Command
-							if ($this->getconfiguration('linux_use_temp_cmd')) {
-								$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							} else {
-								$cpu_temp_cmd = "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null";
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][ARM] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							}
-							$cpu_temp = trim($cpu_temp_cmd) !== '' ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp') : '';
-
-							// HDD Command
-							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep /dev/mmcblk0p | head -1 | awk '{print $2,$3,$4,$5 }'";
-							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-
-						} elseif (preg_match("#FreeBSD#", $uname)) {
-							
-							// ARMv Command
-							$ARMv_cmd = "sysctl hw.machine | awk '{ print $2}'";
-							$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
-	
-							// DistriBits Command
-							$distri_bits_cmd = "sysctl kern.smp.maxcpus | awk '{ print $2}'";
-							$distri_bits = $this->execSSH($hostId, $distri_bits_cmd, 'DistriBits');
-
-							// DistriName Command
-							$distri_name_cmd = "uname -a 2>/dev/null | awk '{ print $1,$3}'";
-							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
-
-							// LoadAverage Command
-							$load_avg_cmd = "LC_ALL=C uptime | awk '{print $8,$9,$10}'";
-							$load_avg_value = $this->execSSH($hostId, $load_avg_cmd, 'LoadAverage');
-	
-							// Memory Command
-							$memory_cmd = "dmesg | grep Mem | tr '\n' ' ' | awk '{print $4,$10}'";
-							$memory_value = $this->execSSH($hostId, $memory_cmd, 'Memory');
-	
-							// NbCPU Command
-							$cpu_nb_cmd = "sysctl hw.ncpu | awk '{ print $2}'";
-							$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-							
-							// HDD Command
-							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-							
-							// CPUFreq Command
-							$cpu_freq_cmd = "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2}'";
-							$cpu_freq = $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq');
-	
-							// CPU Temp Command
-							if ($this->getconfiguration('linux_use_temp_cmd')) {
-								$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][FreeBSD] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							} else {
-								$cpu_temp_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2}'";
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][FreeBSD] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							}
-							$cpu_temp = trim($cpu_temp_cmd) !== '' ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp') : '';
-
-						} elseif (preg_match("#medion#", $uname)) {
-
-							// ARMv Init
-							$ARMv = "arm";
-	
-							// DistriBits Command
-							$distri_bits_cmd = "getconf LONG_BIT 2>/dev/null";
-							$distri_bits = $this->execSSH($hostId, $distri_bits_cmd, 'DistriBits');
-
-							// DistriName Command
-							$distri_name_cmd = "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'";
-							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
-
-							// OsVersion Command
-							$os_version_cmd = "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'";
-							$os_version_value = $this->execSSH($hostId, $os_version_cmd, 'OsVersion');
-
-							// DistriName (DistriName Cmd + OsVersion Cmd)
-							if (isset($distri_name_value, $os_version_value)) {
-								$distri_name = "Medion/Linux " . $os_version_value . " (" . $distri_name_value . ")";
-								log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][MEDION] Distribution :: ' . $distri_name);
-							}							
-
-							// NbCPU Command
-							$cpu_nb_cmd = "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'";
-							$cpu_nb = $this->execSSH($hostId, $cpu_nb_cmd, 'NbCPU');
-	
-							// CPUFreq Command
-							$cpu_freq = '';
-							$cpu_freq_cmds = array(
-								"cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null",
-								"cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"
-							);
-							foreach ($cpu_freq_cmds as $id => $cmd) {
-								$cpu_freq = $this->execSSH($hostId, $cmd, 'CPUFreq-' . $id);
-								if ($cpu_freq != '') {
-									log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CMD][MEDION] Commande CPUFreq :: ' . str_replace("\r\n", "\\r\\n", $cmd));
-									break;
-								}
-							}
-	
-							// CPU Temp Command
-							if ($this->getconfiguration('linux_use_temp_cmd')) {
-								$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							} else {
-								$cpu_temp_cmd = "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'";
-								log::add('Monitoring','debug', '['. $equipement .'][SSH-CMD][MEDION] Commande Température :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));
-							}
-							$cpu_temp = trim($cpu_temp_cmd) !== '' ? $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp') : '';
-
-							// HDD Command
-							$hdd_cmd = "LC_ALL=C df -l 2>/dev/null | grep '/home$' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-							$hdd_value = $this->execSSH($hostId, $hdd_cmd, 'HDD');
-						}
-					}
 				}
 			}
 			elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
