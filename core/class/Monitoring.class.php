@@ -214,7 +214,6 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->save();
 		} else {
 			$orderCmd++;
-			log::add('Monitoring', 'debug', '[POSTSAVE] Commande Cron Status :: ' . $MonitoringCmd->getValue());
 		}
 		$cron_status_cmd = $MonitoringCmd->getId();
 
