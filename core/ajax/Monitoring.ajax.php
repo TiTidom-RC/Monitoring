@@ -36,6 +36,7 @@ try {
             config::save('isMigrated', '1', 'Monitoring');
             ajax::success($resultMigration);
         } catch (Exception $e) {
+            config::save('isMigrated', '0', 'Monitoring');
             ajax::error(displayException($e), $e->getCode());
         }
     }
