@@ -2609,10 +2609,10 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey);
 					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
 
-					$ARMv = $ARMv ?? (is_array($commands['ARMv']) && $commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv']);
-					$uname = $uname ?? (is_array($commands['uname']) && $commands['uname'][0] === 'cmd' ? $this->execSSH($hostId, $commands['uname'][1], 'uname') : $commands['uname']);
-					$distri_name_value = $distri_name_value ?? (is_array($commands['distri_name']) && $commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name']);
-					$distri_bits = is_array($commands['distri_bits']) && $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits') : $commands['distri_bits'];
+					$ARMv = $ARMv ?? (is_array($commands['ARMv']) && $commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
+					$uname = $uname ?? (is_array($commands['uname']) && $commands['uname'][0] === 'cmd' ? $this->execSSH($hostId, $commands['uname'][1], 'uname') : $commands['uname'][1]);
+					$distri_name_value = $distri_name_value ?? (is_array($commands['distri_name']) && $commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1]);
+					$distri_bits = is_array($commands['distri_bits']) && $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits') : $commands['distri_bits'][1];
 					
 					$os_version_value = $this->execSSH($hostId, $commands['os_version'], 'OsVersion');
 
