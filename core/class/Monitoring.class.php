@@ -62,7 +62,7 @@ class Monitoring extends eqLogic {
 						$sshManager->setConfiguration('auth-method', $eqLogic->getConfiguration('maitreesclave') == 'deporte' ? 'password' : 'ssh-key');
 						$sshManager->save();
 						log::add('Monitoring', 'info', __('[MIGRATION] Equipement Distant :: ', __FILE__) . $eqLogic->getName() . ' :: Migration OK');
-					} catch (Exception $e) {
+					} catch (\Exception $e) {
 						log::add('Monitoring', 'error', __('[MIGRATION] Erreur lors de la migration de l\'équipement :: ', __FILE__) . $eqLogic->getName() . ' :: ' . $e->getMessage());
 					}
 				}
