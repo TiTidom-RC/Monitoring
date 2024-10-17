@@ -44,9 +44,26 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', __('[MIGRATION] Equipement :: ', __FILE__) . $eqLogic->getName());
 				$oldConfLocalOrRemote = $eqLogic->getConfiguration('maitreesclave');
 				if ($oldConfLocalOrRemote == 'deporte' || $oldConfLocalOrRemote == 'deporte-key') {
-					log::add('Monitoring', 'info', __('[MIGRATION] Equipement Distant :: ', __FILE__) . $eqLogic->getName());
-					// Migration
-					
+					log::add('Monitoring', 'info', __('[MIGRATION] Equipement Distant :: ', __FILE__) . $eqLogic->getName() . ' :: Migration en cours');
+					try {
+						$sshManager = new sshmanager();
+						$sshManager->setName($eqLogic->getName() . ' - SSH');
+						$sshManager->setIsEnable($eqLogic->getIsEnable());
+						$sshManager->setIsVisible(false);
+						$sshManager->setObject_id($eqLogic->getObject_id());
+						$sshManager->setConfiguration('host', $eqLogic->getConfiguration('host'));
+						$sshManager->setConfiguration('port', $eqLogic->getConfiguration('port'));
+						$sshManager->setConfiguration('user', $eqLogic->getConfiguration('user'));
+						$sshManager->setConfiguration('password', $eqLogic->getConfiguration('password'));
+						$sshManager->setConfiguration('ssh-key', $eqLogic->getConfiguration('ssh-key'));
+						$sshManager->setConfiguration('ssh-passphrase', $eqLogic->getConfiguration('ssh-passphrase'));
+						$sshManager->setConfiguration('timeout', $eqLogic->getConfiguration('timeout'));
+						$sshManager->setConfiguration('auth-method', $eqLogic->getConfiguration('maitreesclave') == 'deporte' ? 'password' : 'ssh-key');
+						$sshManager->save();
+						log::add('Monitoring', 'info', __('[MIGRATION] Equipement Distant :: ', __FILE__) . $eqLogic->getName() . ' :: Migration OK');
+					} catch (Exception $e) {
+						log::add('Monitoring', 'error', __('[MIGRATION] Erreur lors de la migration de l\'équipement :: ', __FILE__) . $eqLogic->getName() . ' :: ' . $e->getMessage());
+					}
 				}
 			}
 			log::add('Monitoring', 'info', __('[MIGRATION] Fin de la migration vers la v3.0', __FILE__));
