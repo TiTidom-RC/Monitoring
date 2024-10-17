@@ -2747,7 +2747,7 @@ class Monitoring extends eqLogic {
 
 					// Synology (New)
 					if ($isSynology) {
-						// Syno DistriName
+						// Syno DistriName (New)
 						$distri_name = isset($syno_version_file, $syno_model) ? $this->getSynoVersion($syno_version_file, $syno_model, $equipement) : '';
 
 						// Syno Volume 2
@@ -2774,8 +2774,11 @@ class Monitoring extends eqLogic {
 						if ($this->getConfiguration('synologyesata') == '1') {
 							[$syno_hddesata_total, $syno_hddesata_used, $syno_hddesata_free, $syno_hddesata_used_percent, $syno_hddesata_free_percent, $syno_hddesata] = isset($syno_hddesata_value) ? $this->formatHDD($syno_hddesata_value, 'Syno HDDeSATA', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
+					} elseif ($archKey == 'medion') {
+						// Medion DistriName (New)
+						$distri_name = isset($distri_name_value, $os_version_value) ? 'Medion/Linux ' . $os_version_value . ' (' . trim($distri_name_value) . ')' : ''; 
 					} else {
-						// Distri Name (New)
+						// General DistriName (New)
 						$distri_name = isset($distri_name_value, $distri_bits, $ARMv) ? trim($distri_name_value) . ' ' . $distri_bits . 'bits (' . $ARMv . ')' : '';
 					}
 	
