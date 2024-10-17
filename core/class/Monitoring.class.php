@@ -1604,6 +1604,354 @@ class Monitoring extends eqLogic {
 
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
+	public function toHtml($_version = 'dashboard') {
+		$replace = $this->preToHtml($_version);
+		if (!is_array($replace)) {
+			return $replace;
+		}
+		$_version = jeedom::versionAlias($_version);
+
+		$cmdToReplace = array(
+			'cnx_ssh' => array('exec', 'id'),
+			'cron_status' => array('exec', 'id', 'display_inline', 'pull_use_custom'),
+			'distri_name' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			
+			'load_avg' => array('icon', 'id', 'display', 'collect', 'value'),
+			'load_avg_1mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
+			'load_avg_5mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
+			'load_avg_15mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
+			
+			'uptime' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			
+			'hdd' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'hdd_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
+			
+			'memory' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'memory_available_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
+			
+			'swap' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'swap_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
+			
+			'network' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'network_name' => array('exec', 'id'),
+			'network_ip' => array('exec', 'id'),
+			
+			'cpu' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'cpu_temp' => array('exec', 'id', 'display', 'colorlow', 'colorhigh', 'stats_0'),
+
+			'perso1' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats_2'),
+			'perso2' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats_2')
+		);
+
+		// Synology
+		$syno_hddv2_array = array(
+			'syno_hddv2' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'syno_hddv2_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+		);
+
+		$syno_hddv3_array = array(
+			'syno_hddv3' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'syno_hddv3_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+		);
+
+		$syno_hddv4_array = array(
+			'syno_hddv4' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'syno_hddv4_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+		);
+
+		$syno_hddusb_array = array(
+			'syno_hddusb' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'syno_hddusb_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+		);
+
+		$syno_hddesata_array = array(
+			'syno_hddesata' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'syno_hddesata_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+		);
+	
+
+		if ($this->getConfiguration('synology') == '1') {
+			if ($this->getConfiguration('synologyv2') == '1') {
+				array_merge($cmdToReplace, $syno_hddv2_array);
+			}
+			if ($this->getConfiguration('synologyv3') == '1') {
+				array_merge($cmdToReplace, $syno_hddv3_array);
+			}
+			if ($this->getConfiguration('synologyv4') == '1') {
+				array_merge($cmdToReplace, $syno_hddv4_array);
+			}
+			if ($this->getConfiguration('synologyusb') == '1') {
+				array_merge($cmdToReplace, $syno_hddusb_array);
+			}
+			if ($this->getConfiguration('synologyesata') == '1') {
+				array_merge($cmdToReplace, $syno_hddesata_array);
+			}
+		}
+
+		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
+			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
+		}
+
+		// Commandes Actions
+		foreach ($this->getCmd('action') as $cmd) {
+			$replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
+		}
+
+		$html = template_replace($replace, getTemplate('core', $_version, 'Monitoring', 'Monitoring'));
+		cache::set('MonitoringWidget' . $_version . $this->getId(), $html, 0);
+		
+		return $html;
+	}
+
+	public static function getPluginVersion() {
+        $pluginVersion = '0.0.0';
+		try {
+			if (!file_exists(dirname(__FILE__) . '/../../plugin_info/info.json')) {
+				log::add('Monitoring', 'warning', '[VERSION] fichier info.json manquant');
+			}
+			$data = json_decode(file_get_contents(dirname(__FILE__) . '/../../plugin_info/info.json'), true);
+			if (!is_array($data)) {
+				log::add('Monitoring', 'warning', '[VERSION] Impossible de décoder le fichier info.json');
+			}
+			try {
+				$pluginVersion = $data['pluginVersion'];
+			} catch (\Exception $e) {
+				log::add('Monitoring', 'warning', '[VERSION] Impossible de récupérer la version du plugin');
+			}
+		}
+		catch (\Exception $e) {
+			log::add('Monitoring', 'warning', '[VERSION] Get ERROR :: ' . $e->getMessage());
+		}
+		log::add('Monitoring', 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
+        return $pluginVersion;
+    }
+
+	public function getCmdPerso($perso) {
+		$result = '';
+		$perso_cmd = $this->getCmd(null, $perso);
+		if (is_object($perso_cmd)) {
+			$perso_command = $perso_cmd->getConfiguration($perso);
+			$result = trim($perso_command);
+		} else {
+			$result = '';
+		}
+		return $result;
+	}
+
+	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '') {
+		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
+		foreach ($cpuFreqArray as $id => [$type, $command]) {
+			if ($type == 'file' && file_exists($command)) {
+				$cpu_freq_cmd = "cat " . $command;
+			} elseif ($type == 'cmd') {
+				$cpu_freq_cmd = $command;
+			} else {
+				$cpu_freq_cmd = '';
+			}
+			$cpu_freq = trim($cpu_freq_cmd) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($cpu_freq_cmd, 'CPUFreq-' . $id) : $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq-' . $id)) : '';
+			$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
+			if (!empty($cpu_freq)) {
+				$result = ['cpu_freq' => $cpu_freq, 'cpu_freq_id' => $id];
+				break;
+			}
+		}
+		return $result;
+	}
+
+	public function getCPUTemp($tempArray, $equipement, $localoudistant = 'local', $hostId = '') {
+		$result = ['cpu_temp' => '', 'cpu_temp_id' => ''];
+
+		if ($this->getConfiguration('linux_use_temp_cmd')) {
+			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
+			log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
+			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom')) : '';
+		} elseif (is_array($tempArray)) {
+			foreach ($tempArray as $id => [$type, $command]) {	
+				if ($type == 'file' && file_exists($command)) {
+					$cpu_temp_cmd = "cat " . $command;
+				} elseif ($type == 'cmd') {
+					$cpu_temp_cmd = $command;
+				} else {
+					$cpu_temp_cmd = '';
+				}
+				$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-' . $id) : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-' . $id)) : '';
+				if (!empty($cpu_temp)) {
+					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => $id];
+					break;
+				}
+			}
+		}
+		return $result;
+	}
+	
+	public function getSynoVersion(string $_version, string $_syno_model, string $_equipement) {
+		$result = '';
+
+		parse_str($_version, $syno_version_array);
+		log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Parse version :: OK');
+		
+		if (isset($syno_version_array['productversion'], $syno_version_array['buildnumber'], $syno_version_array['smallfixnumber'])) {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Version :: DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'].' Update '.$syno_version_array['smallfixnumber']);
+			$syno_version_TXT = 'DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'].' Update '.$syno_version_array['smallfixnumber'];
+		} elseif (isset($syno_version_array['productversion'], $syno_version_array['buildnumber'])) {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Version (Version-Build) :: DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber']);
+			$syno_version_TXT = 'DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'];
+		} else {
+			log::add('Monitoring', 'error', '['. $_equipement .'][DSM/SRM] Version :: KO');
+			$syno_version_TXT = 'DSM';
+		}
+		
+		$result = $syno_version_TXT . ' (' . trim($_syno_model) . ')';
+		return $result;
+	}
+
+	public function getStats($cmd, $cmdName, &$replace, int $precision = 2) {
+		try {
+			if ($cmd->getIsHistorized() == 1) {
+				$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
+				$historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
+				if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
+					$replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+					$replace['#' . $cmdName . '_minHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+					$replace['#' . $cmdName . '_maxHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+				} else {
+					$replace['#' . $cmdName . '_averageHistory#'] = round($historyStatistique['avg'], $precision);
+					$replace['#' . $cmdName . '_minHistory#'] = round($historyStatistique['min'], $precision);
+					$replace['#' . $cmdName . '_maxHistory#'] = round($historyStatistique['max'], $precision);
+				}
+				// Tendance
+				if ($this->getConfiguration('stats_tendance', '0') == '1') {
+					$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
+					log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
+					if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
+						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
+					} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
+						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"></i>';
+					} else {
+						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
+					}
+				} else {
+					$replace['#' . $cmdName . '_tendance#'] = '';
+				}
+			} else {
+				$replace['#' . $cmdName . '_averageHistory#'] = '-';
+				$replace['#' . $cmdName . '_minHistory#'] = '-';
+				$replace['#' . $cmdName . '_maxHistory#'] = '-';
+				$replace['#' . $cmdName . '_tendance#'] = '';
+			}
+		} catch (Exception $e) {
+			log::add('Monitoring', 'error', '[' . $this->getName() . '][getStats] ' . $e->getMessage());
+		}
+	}
+
+	public function getDefaultIcon(string $cmdName) {
+		$icon = '';
+		switch ($cmdName) {
+			case 'distri_name':
+				$icon = '<i class="fab fa-linux"></i>';
+				break;
+			case 'load_avg':
+				$icon = '<i class="fas fa-chart-line"></i>';
+				break;
+			case 'uptime':
+				$icon = '<i class="fas fa-hourglass-half"></i>';
+				break;
+			case 'hdd':
+				$icon = '<i class="fas fa-hdd"></i>';
+				break;
+			case 'memory':
+				$icon = '<i class="fas fa-database"></i>';
+				break;
+			case 'swap':
+				// $icon = '<i class="fas fa-exchange-alt"></i>';
+				$icon = '<i class="fas fa-layer-group"></i>';
+				break;
+			case 'network':
+				$icon = '<i class="fas fa-network-wired"></i>';
+				break;
+			case 'cpu':
+				$icon = '<i class="fas fa-microchip"></i>';
+				break;
+			case 'syno_hddv2':
+			case 'syno_hddv3':
+			case 'syno_hddv4':
+				$icon = '<i class="far fa-hdd"></i>';
+				break;
+			case 'syno_hddusb':
+			case 'syno_hddesata':
+				$icon = '<i class="fab fa-usb"></i>';
+				break;
+			case 'perso1':
+			case 'perso2':
+				$icon = '<i class="fas fa-cogs"></i>';
+				break;
+			default:
+				$icon = '';
+				break;
+		}
+		return $icon;
+	}
+
+	public function getCmdReplace(string $cmdName, array $cmdOptions, &$replace) {
+		$cmd = $this->getCmd(null, $cmdName);
+		$isCmdObject = is_object($cmd);
+		$cmdNamePrefix = '#' . $cmdName;
+
+		$optionActions = [
+			'exec' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '#'] = $isCmdObject ? $cmd->execCmd() : '';
+			},
+			'id' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_id#'] = $isCmdObject ? $cmd->getId() : '';
+			},
+			'icon' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
+				$replace[$cmdNamePrefix . '_icon#'] = $isCmdObject ? (!empty($cmd->getDisplay('icon')) ? $cmd->getDisplay('icon') : $this->getDefaultIcon($cmdName)) : '';
+			},
+			'display' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_display#'] = ($isCmdObject && $cmd->getIsVisible()) ? "block" : "none";
+			},
+			'display_inline' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_display#'] = ($isCmdObject && $cmd->getIsVisible()) ? "inline-block" : "none";
+			},
+			'collect' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_collect#'] = $isCmdObject ? $cmd->getCollectDate() : "-";
+			},
+			'value' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_value#'] = $isCmdObject ? $cmd->getValueDate() : "-";
+			},
+			'pull_use_custom' => function() use ($cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_custom#'] = $this->getConfiguration('pull_use_custom', '0');
+			},
+			'name' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
+				$replace[$cmdNamePrefix . '_name#'] = $isCmdObject ? $cmd->getName() : '';
+			},
+			'unite' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
+				$replace[$cmdNamePrefix . '_unite#'] = $isCmdObject ? $cmd->getUnite() : '';
+			},
+			'colorlow' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
+				$replace[$cmdNamePrefix . '_colorlow#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_colorlow') : '';
+			},
+			'colorhigh' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
+				$replace[$cmdNamePrefix . '_colorhigh#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_colorhigh') : '';
+			},
+			'stats_0' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
+				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 0); }
+			},
+			'stats_2' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
+				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 2); }
+			}
+		];
+
+		foreach ($cmdOptions as $option) {
+			if (isset($optionActions[$option])) {
+				$optionActions[$option]();
+			} else {
+				log::add('Monitoring', 'error', '[' . $this->getName() . '][CmdReplace] Option inconnue :: ' . $option);
+			}
+		}
+	}
+
 	public function getCommands($key, $cartereseau = '', $confLocalorRemote = 'local') {
 		log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key / LocalorRemote :: ' . $key . ' / ' . $confLocalorRemote);
 		
@@ -1847,6 +2195,95 @@ class Monitoring extends eqLogic {
 		}	
 	}
 
+	public function getNetworkCard($_networkCard = '') {
+		$networkCard = '';
+		if ($_networkCard == 'netautre') {
+			$networkCard = $this->getConfiguration('cartereseauautre');
+		} elseif ($_networkCard == 'netauto') {
+			$networkCard = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+		} else {
+			$networkCard = $_networkCard;
+		}
+		return $networkCard;
+	}
+
+	public function connectSSH() {
+		$hostId = $this->getConfiguration('SSHHostId');
+		$cnx_ssh = '';
+	
+		if (class_exists('sshmanager')) {
+			try {
+				$cnx_ssh = sshmanager::checkSSHConnection($hostId) ? 'OK' : 'KO';
+				log::add('Monitoring', ($cnx_ssh == 'KO' ? 'error': 'debug'), '['. $this->getName() .'][SSH-CNX] Connection :: ' . $cnx_ssh);
+			} catch (Exception $e) {
+				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection Exception :: '. $e->getMessage());
+				$cnx_ssh = 'KO';
+			}
+			return [$cnx_ssh, $hostId];
+		} else {
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection :: Class SSHManager not found');
+			return ['KO', $hostId];
+		}
+	}
+
+	public function execSRV($cmd_srv = '', $cmdName_srv = '', $timeout_srv = true) {
+		$conf_timeoutSrv = $this->getConfiguration('timeoutsrv', 30);
+		$cmdResult_srv = '';
+	
+		try {
+			$_cmd = trim($cmd_srv);
+			if ($timeout_srv && $conf_timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $_cmd)) {
+				if (preg_match('/LC_ALL=C/', $_cmd)) {
+					$_cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $conf_timeoutSrv, $_cmd, 1);
+				}
+				else {
+					$_cmd = 'timeout ' . $conf_timeoutSrv . ' ' . $_cmd;
+				}
+			}
+	
+			$cmdResult_srv = exec($_cmd, $output_srv, $returnCode_srv);
+			if ($returnCode_srv !== 0) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
+				log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' ReturnCode :: ' . $returnCode_srv);
+				$cmdResult_srv = '';
+			}
+			if (!empty($cmdResult_srv)) {
+				$cmdResult_srv = trim($cmdResult_srv);
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Result :: ' . $cmdResult_srv);
+			}
+			
+		} catch (Exception $e) {
+			$cmdResult_srv = '';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
+			log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Exception :: ' . $e->getMessage());
+	
+		}
+		return $cmdResult_srv;
+	}
+
+	public function execSSH($hostId, $cmd_ssh = '', $cmdName_ssh = '') {
+		$cmdResult_ssh = '';
+		try {
+			$cmdResult_ssh = sshmanager::executeCmds($hostId, $cmd_ssh, $cmdName_ssh);
+			if (!empty($cmdResult_ssh)) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Result :: ' . $cmdResult_ssh);
+			}
+		} catch (SSHException $ex) {
+			$cmdResult_ssh = '';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException :: ' . $ex->getMessage());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException LastError :: ' . $ex->getLastError());
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException Logs ::' . "\r\n" . $ex->getLog());
+		} catch (Exception $e) {
+			$cmdResult_ssh = '';
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
+			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Cmd Exception :: ' . $e->getMessage());
+		}
+		return $cmdResult_ssh;
+	}
+
 	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
 		$unitCPUFreq = [
 			'syno' => 'MHz',
@@ -1860,7 +2297,7 @@ class Monitoring extends eqLogic {
 			'mips64' => 'KHz',
 		];
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
+		// log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
 
 		// CPUFreq
 		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS]);
@@ -2073,422 +2510,6 @@ class Monitoring extends eqLogic {
 		return $result;	
 	}
 
-	public function getCmdPerso($perso) {
-		$result = '';
-		$perso_cmd = $this->getCmd(null, $perso);
-		if (is_object($perso_cmd)) {
-			$perso_command = $perso_cmd->getConfiguration($perso);
-			$result = trim($perso_command);
-		} else {
-			$result = '';
-		}
-		return $result;
-	}
-
-	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '') {
-		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
-		foreach ($cpuFreqArray as $id => [$type, $command]) {
-			if ($type == 'file' && file_exists($command)) {
-				$cpu_freq_cmd = "cat " . $command;
-			} elseif ($type == 'cmd') {
-				$cpu_freq_cmd = $command;
-			} else {
-				$cpu_freq_cmd = '';
-			}
-			$cpu_freq = trim($cpu_freq_cmd) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($cpu_freq_cmd, 'CPUFreq-' . $id) : $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq-' . $id)) : '';
-			$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
-			if (!empty($cpu_freq)) {
-				$result = ['cpu_freq' => $cpu_freq, 'cpu_freq_id' => $id];
-				break;
-			}
-		}
-		return $result;
-	}
-
-	public function getCPUTemp($tempArray, $equipement, $localoudistant = 'local', $hostId = '') {
-		$result = ['cpu_temp' => '', 'cpu_temp_id' => ''];
-
-		if ($this->getConfiguration('linux_use_temp_cmd')) {
-			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-			log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom')) : '';
-		} elseif (is_array($tempArray)) {
-			foreach ($tempArray as $id => [$type, $command]) {	
-				if ($type == 'file' && file_exists($command)) {
-					$cpu_temp_cmd = "cat " . $command;
-				} elseif ($type == 'cmd') {
-					$cpu_temp_cmd = $command;
-				} else {
-					$cpu_temp_cmd = '';
-				}
-				$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-' . $id) : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-' . $id)) : '';
-				if (!empty($cpu_temp)) {
-					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => $id];
-					break;
-				}
-			}
-		}
-		return $result;
-	}
-	
-	public function getStats($cmd, $cmdName, &$replace, int $precision = 2) {
-		try {
-			if ($cmd->getIsHistorized() == 1) {
-				$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
-				$historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
-				if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
-					$replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
-					$replace['#' . $cmdName . '_minHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
-					$replace['#' . $cmdName . '_maxHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
-				} else {
-					$replace['#' . $cmdName . '_averageHistory#'] = round($historyStatistique['avg'], $precision);
-					$replace['#' . $cmdName . '_minHistory#'] = round($historyStatistique['min'], $precision);
-					$replace['#' . $cmdName . '_maxHistory#'] = round($historyStatistique['max'], $precision);
-				}
-				// Tendance
-				if ($this->getConfiguration('stats_tendance', '0') == '1') {
-					$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
-					log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
-					if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
-						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
-					} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
-						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"></i>';
-					} else {
-						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
-					}
-				} else {
-					$replace['#' . $cmdName . '_tendance#'] = '';
-				}
-			} else {
-				$replace['#' . $cmdName . '_averageHistory#'] = '-';
-				$replace['#' . $cmdName . '_minHistory#'] = '-';
-				$replace['#' . $cmdName . '_maxHistory#'] = '-';
-				$replace['#' . $cmdName . '_tendance#'] = '';
-			}
-		} catch (Exception $e) {
-			log::add('Monitoring', 'error', '[' . $this->getName() . '][getStats] ' . $e->getMessage());
-		}
-	}
-
-	public function getDefaultIcon(string $cmdName) {
-		$icon = '';
-		switch ($cmdName) {
-			case 'distri_name':
-				$icon = '<i class="fab fa-linux"></i>';
-				break;
-			case 'load_avg':
-				$icon = '<i class="fas fa-chart-line"></i>';
-				break;
-			case 'uptime':
-				$icon = '<i class="fas fa-hourglass-half"></i>';
-				break;
-			case 'hdd':
-				$icon = '<i class="fas fa-hdd"></i>';
-				break;
-			case 'memory':
-				$icon = '<i class="fas fa-database"></i>';
-				break;
-			case 'swap':
-				// $icon = '<i class="fas fa-exchange-alt"></i>';
-				$icon = '<i class="fas fa-layer-group"></i>';
-				break;
-			case 'network':
-				$icon = '<i class="fas fa-network-wired"></i>';
-				break;
-			case 'cpu':
-				$icon = '<i class="fas fa-microchip"></i>';
-				break;
-			case 'syno_hddv2':
-			case 'syno_hddv3':
-			case 'syno_hddv4':
-				$icon = '<i class="far fa-hdd"></i>';
-				break;
-			case 'syno_hddusb':
-			case 'syno_hddesata':
-				$icon = '<i class="fab fa-usb"></i>';
-				break;
-			case 'perso1':
-			case 'perso2':
-				$icon = '<i class="fas fa-cogs"></i>';
-				break;
-			default:
-				$icon = '';
-				break;
-		}
-		return $icon;
-	}
-
-	public function getCmdReplace(string $cmdName, array $cmdOptions, &$replace) {
-		$cmd = $this->getCmd(null, $cmdName);
-		$isCmdObject = is_object($cmd);
-		$cmdNamePrefix = '#' . $cmdName;
-
-		$optionActions = [
-			'exec' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
-				$replace[$cmdNamePrefix . '#'] = $isCmdObject ? $cmd->execCmd() : '';
-			},
-			'id' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
-				$replace[$cmdNamePrefix . '_id#'] = $isCmdObject ? $cmd->getId() : '';
-			},
-			'icon' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
-				$replace[$cmdNamePrefix . '_icon#'] = $isCmdObject ? (!empty($cmd->getDisplay('icon')) ? $cmd->getDisplay('icon') : $this->getDefaultIcon($cmdName)) : '';
-			},
-			'display' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
-				$replace[$cmdNamePrefix . '_display#'] = ($isCmdObject && $cmd->getIsVisible()) ? "block" : "none";
-			},
-			'display_inline' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
-				$replace[$cmdNamePrefix . '_display#'] = ($isCmdObject && $cmd->getIsVisible()) ? "inline-block" : "none";
-			},
-			'collect' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
-				$replace[$cmdNamePrefix . '_collect#'] = $isCmdObject ? $cmd->getCollectDate() : "-";
-			},
-			'value' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
-				$replace[$cmdNamePrefix . '_value#'] = $isCmdObject ? $cmd->getValueDate() : "-";
-			},
-			'pull_use_custom' => function() use ($cmdNamePrefix, &$replace) {
-				$replace[$cmdNamePrefix . '_custom#'] = $this->getConfiguration('pull_use_custom', '0');
-			},
-			'name' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace) {
-				$replace[$cmdNamePrefix . '_name#'] = $isCmdObject ? $cmd->getName() : '';
-			},
-			'unite' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
-				$replace[$cmdNamePrefix . '_unite#'] = $isCmdObject ? $cmd->getUnite() : '';
-			},
-			'colorlow' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
-				$replace[$cmdNamePrefix . '_colorlow#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_colorlow') : '';
-			},
-			'colorhigh' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
-				$replace[$cmdNamePrefix . '_colorhigh#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_colorhigh') : '';
-			},
-			'stats_0' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
-				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 0); }
-			},
-			'stats_2' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
-				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 2); }
-			}
-		];
-
-		foreach ($cmdOptions as $option) {
-			if (isset($optionActions[$option])) {
-				$optionActions[$option]();
-			} else {
-				log::add('Monitoring', 'error', '[' . $this->getName() . '][CmdReplace] Option inconnue :: ' . $option);
-			}
-		}
-	}
-
-	public function toHtml($_version = 'dashboard') {
-		$replace = $this->preToHtml($_version);
-		if (!is_array($replace)) {
-			return $replace;
-		}
-		$_version = jeedom::versionAlias($_version);
-
-		$cmdToReplace = array(
-			'cnx_ssh' => array('exec', 'id'),
-			'cron_status' => array('exec', 'id', 'display_inline', 'pull_use_custom'),
-			'distri_name' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			
-			'load_avg' => array('icon', 'id', 'display', 'collect', 'value'),
-			'load_avg_1mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
-			'load_avg_5mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
-			'load_avg_15mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
-			
-			'uptime' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			
-			'hdd' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'hdd_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
-			
-			'memory' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'memory_available_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
-			
-			'swap' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'swap_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
-			
-			'network' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'network_name' => array('exec', 'id'),
-			'network_ip' => array('exec', 'id'),
-			
-			'cpu' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'cpu_temp' => array('exec', 'id', 'display', 'colorlow', 'colorhigh', 'stats_0'),
-
-			'perso1' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats_2'),
-			'perso2' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats_2')
-		);
-
-		// Synology
-		$syno_hddv2_array = array(
-			'syno_hddv2' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv2_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
-		);
-
-		$syno_hddv3_array = array(
-			'syno_hddv3' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv3_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
-		);
-
-		$syno_hddv4_array = array(
-			'syno_hddv4' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv4_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
-		);
-
-		$syno_hddusb_array = array(
-			'syno_hddusb' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddusb_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
-		);
-
-		$syno_hddesata_array = array(
-			'syno_hddesata' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddesata_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
-		);
-	
-
-		if ($this->getConfiguration('synology') == '1') {
-			if ($this->getConfiguration('synologyv2') == '1') {
-				array_merge($cmdToReplace, $syno_hddv2_array);
-			}
-			if ($this->getConfiguration('synologyv3') == '1') {
-				array_merge($cmdToReplace, $syno_hddv3_array);
-			}
-			if ($this->getConfiguration('synologyv4') == '1') {
-				array_merge($cmdToReplace, $syno_hddv4_array);
-			}
-			if ($this->getConfiguration('synologyusb') == '1') {
-				array_merge($cmdToReplace, $syno_hddusb_array);
-			}
-			if ($this->getConfiguration('synologyesata') == '1') {
-				array_merge($cmdToReplace, $syno_hddesata_array);
-			}
-		}
-
-		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
-			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
-		}
-
-		// Commandes Actions
-		foreach ($this->getCmd('action') as $cmd) {
-			$replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
-			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
-		}
-
-		$html = template_replace($replace, getTemplate('core', $_version, 'Monitoring', 'Monitoring'));
-		cache::set('MonitoringWidget' . $_version . $this->getId(), $html, 0);
-		
-		return $html;
-	}
-
-	public static function getPluginVersion() {
-        $pluginVersion = '0.0.0';
-		try {
-			if (!file_exists(dirname(__FILE__) . '/../../plugin_info/info.json')) {
-				log::add('Monitoring', 'warning', '[VERSION] fichier info.json manquant');
-			}
-			$data = json_decode(file_get_contents(dirname(__FILE__) . '/../../plugin_info/info.json'), true);
-			if (!is_array($data)) {
-				log::add('Monitoring', 'warning', '[VERSION] Impossible de décoder le fichier info.json');
-			}
-			try {
-				$pluginVersion = $data['pluginVersion'];
-			} catch (\Exception $e) {
-				log::add('Monitoring', 'warning', '[VERSION] Impossible de récupérer la version du plugin');
-			}
-		}
-		catch (\Exception $e) {
-			log::add('Monitoring', 'warning', '[VERSION] Get ERROR :: ' . $e->getMessage());
-		}
-		log::add('Monitoring', 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
-        return $pluginVersion;
-    }
-
-	public function getNetworkCard($_networkCard = '') {
-		$networkCard = '';
-		if ($_networkCard == 'netautre') {
-			$networkCard = $this->getConfiguration('cartereseauautre');
-		} elseif ($_networkCard == 'netauto') {
-			$networkCard = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
-		} else {
-			$networkCard = $_networkCard;
-		}
-		return $networkCard;
-	}
-
-	public function connectSSH() {
-		$hostId = $this->getConfiguration('SSHHostId');
-		$cnx_ssh = '';
-	
-		if (class_exists('sshmanager')) {
-			try {
-				$cnx_ssh = sshmanager::checkSSHConnection($hostId) ? 'OK' : 'KO';
-				log::add('Monitoring', ($cnx_ssh == 'KO' ? 'error': 'debug'), '['. $this->getName() .'][SSH-CNX] Connection :: ' . $cnx_ssh);
-			} catch (Exception $e) {
-				log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection Exception :: '. $e->getMessage());
-				$cnx_ssh = 'KO';
-			}
-			return [$cnx_ssh, $hostId];
-		} else {
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-CNX] Connection :: Class SSHManager not found');
-			return ['KO', $hostId];
-		}
-	}
-
-	public function execSRV($cmd_srv = '', $cmdName_srv = '', $timeout_srv = true) {
-		$conf_timeoutSrv = $this->getConfiguration('timeoutsrv', 30);
-		$cmdResult_srv = '';
-	
-		try {
-			$_cmd = trim($cmd_srv);
-			if ($timeout_srv && $conf_timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $_cmd)) {
-				if (preg_match('/LC_ALL=C/', $_cmd)) {
-					$_cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $conf_timeoutSrv, $_cmd, 1);
-				}
-				else {
-					$_cmd = 'timeout ' . $conf_timeoutSrv . ' ' . $_cmd;
-				}
-			}
-	
-			$cmdResult_srv = exec($_cmd, $output_srv, $returnCode_srv);
-			if ($returnCode_srv !== 0) {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
-				log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' ReturnCode :: ' . $returnCode_srv);
-				$cmdResult_srv = '';
-			}
-			if (!empty($cmdResult_srv)) {
-				$cmdResult_srv = trim($cmdResult_srv);
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Result :: ' . $cmdResult_srv);
-			}
-			
-		} catch (Exception $e) {
-			$cmdResult_srv = '';
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
-			log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Exception :: ' . $e->getMessage());
-	
-		}
-		return $cmdResult_srv;
-	}
-
-	public function execSSH($hostId, $cmd_ssh = '', $cmdName_ssh = '') {
-		$cmdResult_ssh = '';
-		try {
-			$cmdResult_ssh = sshmanager::executeCmds($hostId, $cmd_ssh, $cmdName_ssh);
-			if (!empty($cmdResult_ssh)) {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Result :: ' . $cmdResult_ssh);
-			}
-		} catch (SSHException $ex) {
-			$cmdResult_ssh = '';
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException :: ' . $ex->getMessage());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException LastError :: ' . $ex->getLastError());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' SSHException Logs ::' . "\r\n" . $ex->getLog());
-		} catch (Exception $e) {
-			$cmdResult_ssh = '';
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
-			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Cmd Exception :: ' . $e->getMessage());
-		}
-		return $cmdResult_ssh;
-	}
-
 	public function formatSize($size, string $start = 'o') {
 		$units = array('o', 'Ko', 'Mo', 'Go', 'To');
 		$unitIndex = ($unitIndex = array_search($start, $units)) === false ? 0 : $unitIndex;
@@ -2550,27 +2571,6 @@ class Monitoring extends eqLogic {
 			$uptimeFormated .= $seconds . 's';
 		}
 		return [$uptimeFormated, $uptimeNum];
-	}
-
-	public function getSynoVersion(string $_version, string $_syno_model, string $_equipement) {
-		$result = '';
-
-		parse_str($_version, $syno_version_array);
-		log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Parse version :: OK');
-		
-		if (isset($syno_version_array['productversion'], $syno_version_array['buildnumber'], $syno_version_array['smallfixnumber'])) {
-			log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Version :: DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'].' Update '.$syno_version_array['smallfixnumber']);
-			$syno_version_TXT = 'DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'].' Update '.$syno_version_array['smallfixnumber'];
-		} elseif (isset($syno_version_array['productversion'], $syno_version_array['buildnumber'])) {
-			log::add('Monitoring', 'debug', '['. $_equipement .'][DSM/SRM] Version (Version-Build) :: DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber']);
-			$syno_version_TXT = 'DSM '.$syno_version_array['productversion'].'-'.$syno_version_array['buildnumber'];
-		} else {
-			log::add('Monitoring', 'error', '['. $_equipement .'][DSM/SRM] Version :: KO');
-			$syno_version_TXT = 'DSM';
-		}
-		
-		$result = $syno_version_TXT . ' (' . trim($_syno_model) . ')';
-		return $result;
 	}
 
 	public function getInformations() {
