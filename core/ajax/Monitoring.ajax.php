@@ -31,8 +31,12 @@ try {
     ajax::init(array());
     
     if (init('action') == 'doMigration') {
-        $resultMigration = Monitoring::doMigrationToV3();
-        ajax::success($resultMigration);
+        try {
+            $resultMigration = Monitoring::doMigrationToV3();
+            ajax::success($resultMigration);
+        } catch (Exception $e) {
+            ajax::error(displayException($e), $e->getCode());
+        }
     }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
