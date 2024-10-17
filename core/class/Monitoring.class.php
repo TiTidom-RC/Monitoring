@@ -1756,8 +1756,8 @@ class Monitoring extends eqLogic {
 			],
 			'piCorePlayer' => [ // uname
 				'ARMv' => ['value', "arm"],
-				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
 				'distri_bits' => ['value', "32"],
+				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
 				'cpu_nb' => "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
@@ -1769,8 +1769,8 @@ class Monitoring extends eqLogic {
 			],
 			'FreeBSD' => [ // uname
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
-				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
 				'distri_bits' => ['cmd', "sysctl kern.smp.maxcpus | awk '{ print $2 }'"],
+				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
 				'load_avg' => "LC_ALL=C uptime | awk '{ print $8,$9,$10 }'",
 				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'",
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
@@ -1784,8 +1784,8 @@ class Monitoring extends eqLogic {
 			],
 			'medion' => [ // uname
 				'ARMv' => ['value', "arm"],
-				'distri_name' => ['cmd', "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'"],
 				'distri_bits' => ['cmd', "getconf LONG_BIT 2>/dev/null"],
+				'distri_name' => ['cmd', "cat /etc/*-release 2>/dev/null | awk '/^DistName/ { print $2 }'"],
 				'os_version' => "cat /etc/*-release 2>/dev/null | awk '/^VersionName/ { print $2 }'",
 				'cpu_nb' => "cat /proc/cpuinfo 2>/dev/null | awk -F':' '/^Processor/ { print $2}'",
 				'cpu_freq' => [
@@ -1800,8 +1800,8 @@ class Monitoring extends eqLogic {
 			'syno'=> [
 				'ARMv' => ['value', "syno"],
 				'uname' => ['value', "."],
-				'distri_name' => ['value', ""],
 				'distri_bits' => ['value', ""],
+				'distri_name' => ['value', ""],
 				'os_version' => "awk -F'=' '/productversion/ { print $2 }' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
 				'syno_model' =>  "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null",
 				'syno_model_alt' => "cat /proc/sys/kernel/syno_hw_version 2>/dev/null",
@@ -2105,7 +2105,7 @@ class Monitoring extends eqLogic {
 
 		if ($this->getConfiguration('linux_use_temp_cmd')) {
 			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-			log::add('Monitoring','debug', '['. $equipement .'][LOCAL][XXX] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
+			log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
 			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom')) : '';
 		} elseif (is_array($tempArray)) {
 			foreach ($tempArray as $id => [$type, $command]) {	
