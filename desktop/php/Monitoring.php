@@ -302,6 +302,16 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                 </div>
                             </fieldset>
                             <fieldset>
+                                <legend>{{Statistiques}} :</legend>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" >{{Tendance}}</label>
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="stats_tendance" />
+                                        <span style="font-size: 85%;">({{A cocher pour afficher les tendances (statistiques) sur le widget du dashboard}})</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
                                 <legend>{{Auto-Actualisation (Cron)}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Activer}}
@@ -327,17 +337,6 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         </div>
                                     </div>
                                 </div>
-                            </fieldset>
-                            <fieldset>
-                                <legend>{{Statistiques}} :</legend>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label" >{{Tendance}}</label>
-                                    <div class="col-md-8">
-                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration"  data-l2key="stats_tendance" />
-                                        <span style="font-size: 85%;">({{A cocher pour afficher les tendances (statistiques) sur le widget du dashboard}})</span>
-                                    </div>
-                                </div>
-                                
                             </fieldset>
                         </form>
                     </div>
