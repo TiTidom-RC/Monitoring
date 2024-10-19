@@ -2720,7 +2720,7 @@ class Monitoring extends eqLogic {
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] NbCPU :: ' . $cpu_nb);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq :: ' . $cpu_freq);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq Id :: ' . $cpu_temp_id);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq Id :: ' . $cpu_freq_id);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUTemp :: ' . $cpu_temp);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUTemp Id :: ' . $cpu_temp_id);
 
@@ -2774,7 +2774,7 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauIP :: ' . $network_ip_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] NbCPU :: ' . $cpu_nb);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUFreq :: ' . $cpu_freq);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUFreq Id :: ' . $cpu_temp_id);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUFreq Id :: ' . $cpu_freq_id);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUTemp :: ' . $cpu_temp);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUTemp Id :: ' . $cpu_temp_id);
 
