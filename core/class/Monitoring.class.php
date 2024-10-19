@@ -2210,11 +2210,11 @@ class Monitoring extends eqLogic {
 					1 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)"]
 				],
 				'hdd' => sprintf($hdd_command, 'vg1000\|volume1'),
-				'hddv2' => sprintf($hdd_command, 'vg1001\|volume2'), // DSM 5.x / 6.x / 7.x
-				'hddv3' => sprintf($hdd_command, 'vg1002\|volume3'), // DSM 5.x / 6.x / 7.x
-				'hddv4' => sprintf($hdd_command, 'vg1003\|volume4'), // DSM 5.x / 6.x / 7.x
-				'hddusb' => sprintf($hdd_command, 'usb1p1\|volumeUSB1'), // DSM 5.x / 6.x / 7.x
-				'hddesata' => sprintf($hdd_command, 'sdf1\|volumeSATA') // DSM 5.x / 6.x / 7.x
+				'syno_hddv2' => sprintf($hdd_command, 'vg1001\|volume2'), // DSM 5.x / 6.x / 7.x
+				'syno_hddv3' => sprintf($hdd_command, 'vg1002\|volume3'), // DSM 5.x / 6.x / 7.x
+				'syno_hddv4' => sprintf($hdd_command, 'vg1003\|volume4'), // DSM 5.x / 6.x / 7.x
+				'syno_hddusb' => sprintf($hdd_command, 'usb1p1\|volumeUSB1'), // DSM 5.x / 6.x / 7.x
+				'syno_hddesata' => sprintf($hdd_command, 'sdf1\|volumeSATA') // DSM 5.x / 6.x / 7.x
 			]
 		];
 
@@ -2690,11 +2690,11 @@ class Monitoring extends eqLogic {
 
 						$syno_version_file = $this->execSSH($hostId, $commands['syno_version'], 'SynoVersion');
 						
-						$syno_hddv2 = $this->getConfiguration('synologyv2') == '1' ? $this->execSSH($hostId, $commands['syno_hddv2'], 'SynoHDDv2') : '';
-						$syno_hddv3 = $this->getConfiguration('synologyv3') == '1' ? $this->execSSH($hostId, $commands['syno_hddv3'], 'SynoHDDv3') : '';
-						$syno_hddv4 = $this->getConfiguration('synologyv4') == '1' ? $this->execSSH($hostId, $commands['syno_hddv4'], 'SynoHDDv4') : '';
-						$syno_hddusb = $this->getConfiguration('synologyusb') == '1' ? $this->execSSH($hostId, $commands['syno_hddusb'], 'SynoHDDUSB') : '';
-						$syno_hddesata = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA') : '';
+						$syno_hddv2_value = $this->getConfiguration('synologyv2') == '1' ? $this->execSSH($hostId, $commands['syno_hddv2'], 'SynoHDDv2') : '';
+						$syno_hddv3_value = $this->getConfiguration('synologyv3') == '1' ? $this->execSSH($hostId, $commands['syno_hddv3'], 'SynoHDDv3') : '';
+						$syno_hddv4_value = $this->getConfiguration('synologyv4') == '1' ? $this->execSSH($hostId, $commands['syno_hddv4'], 'SynoHDDv4') : '';
+						$syno_hddusb_value = $this->getConfiguration('synologyusb') == '1' ? $this->execSSH($hostId, $commands['syno_hddusb'], 'SynoHDDUSB') : '';
+						$syno_hddesata_value = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA') : '';
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uname :: ' . $uname);
@@ -2714,6 +2714,14 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Swap :: ' . $swap_value);
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] HDD :: ' . $hdd_value);
+
+					if ($isSynology) {
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv2 :: ' . $syno_hddv2_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv3 :: ' . $syno_hddv3_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv4 :: ' . $syno_hddv4_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDUSB :: ' . $syno_hddusb_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDeSATA :: ' . $syno_hddesata_value);
+					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauRXTX :: ' . $network_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauIP :: ' . $network_ip_value);
