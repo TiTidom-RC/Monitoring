@@ -43,21 +43,21 @@ $_branchSSHManager = config::byKey('pluginBranch', 'sshmanager', 'N/A');
 $_branchMonitoring = config::byKey('pluginBranch', 'Monitoring', 'N/A');
 
 if (strpos($_branchMonitoring, 'stable') !== false) {
-    $_labelBranchMon = '<span class="label label-success">Stable</span>';
+    $_labelBranchMon = '<span class="label label-success text-capitalize">$_branchMonitoring</span>';
 } elseif (strpos($_branchMonitoring, 'beta') !== false) {
-    $_labelBranchMon = '<span class="label label-warning">Béta</span>';
+    $_labelBranchMon = '<span class="label label-warning text-capitalize">$_branchMonitoring</span>';
 } elseif (strpos($_branchMonitoring, 'dev') !== false) {
-    $_labelBranchMon = '<span class="label label-danger">Dev</span>';
+    $_labelBranchMon = '<span class="label label-danger text-capitalize">$_branchMonitoring</span>';
 } else {
     $_labelBranchMon = '<span class="label label-info">N/A</span>';
 }
 
 if (strpos($_branchSSHManager, 'stable') !== false) {
-    $_labelBranchSSHM = '<span class="label label-success">Stable</span>';
+    $_labelBranchSSHM = '<span class="label label-success text-capitalize">$_branchMonitoring</span>';
 } elseif (strpos($_branchSSHManager, 'beta') !== false) {
-    $_branchSSHM = '<span class="label label-warning">Béta</span>';
+    $_branchSSHM = '<span class="label label-warning text-capitalize">$_branchMonitoring</span>';
 } elseif (strpos($_branchSSHManager, 'dev') !== false) {
-    $_labelBranchSSHM = '<span class="label label-danger">Dev</span>';
+    $_labelBranchSSHM = '<span class="label label-danger text-capitalize">$_branchMonitoring</span>';
 } else {
     $_labelBranchSSHM = '<span class="label label-info">N/A</span>';
 }
