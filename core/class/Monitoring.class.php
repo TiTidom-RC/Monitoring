@@ -1642,6 +1642,9 @@ class Monitoring extends eqLogic {
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
 	public function toHtml($_version = 'dashboard') {
+
+		log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Version: '. $_version);
+
 		$replace = $this->preToHtml($_version);
 		if (!is_array($replace)) {
 			return $replace;
