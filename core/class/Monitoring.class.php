@@ -1715,19 +1715,19 @@ class Monitoring extends eqLogic {
 
 		if ($this->getConfiguration('synology') == '1') {
 			if ($this->getConfiguration('synologyv2') == '1') {
-				array_merge($cmdToReplace, $syno_hddv2_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddv2_array);
 			}
 			if ($this->getConfiguration('synologyv3') == '1') {
-				array_merge($cmdToReplace, $syno_hddv3_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddv3_array);
 			}
 			if ($this->getConfiguration('synologyv4') == '1') {
-				array_merge($cmdToReplace, $syno_hddv4_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddv4_array);
 			}
 			if ($this->getConfiguration('synologyusb') == '1') {
-				array_merge($cmdToReplace, $syno_hddusb_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddusb_array);
 			}
 			if ($this->getConfiguration('synologyesata') == '1') {
-				array_merge($cmdToReplace, $syno_hddesata_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddesata_array);
 			}
 		}
 
