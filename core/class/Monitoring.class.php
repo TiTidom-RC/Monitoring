@@ -1777,6 +1777,19 @@ class Monitoring extends eqLogic {
 		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'Monitoring', 'Monitoring')));
 	}
 
+	public static function getPluginBranch() {
+        $pluginBranch = 'N/A';
+		try {
+			$_updateMonitoring = update::byLogicalId('Monitoring');
+			$pluginBranch = $_updateMonitoring->getConfiguration('version', 'N/A') . ' (' . $_updateMonitoring->getSource() . ')';
+		}
+		catch (\Exception $e) {
+			log::add('Monitoring', 'warning', '[BRANCH] Get ERROR :: ' . $e->getMessage());
+		}
+		log::add('Monitoring', 'info', '[BRANCH] PluginBranch :: ' . $pluginBranch);
+        return $pluginBranch;
+    }
+
 	public static function getPluginVersion() {
         $pluginVersion = '0.0.0';
 		try {
