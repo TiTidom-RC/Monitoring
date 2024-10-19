@@ -1798,6 +1798,9 @@ class Monitoring extends eqLogic {
 			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
 			log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
 			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom')) : '';
+			if (!empty($cpu_temp)) {
+				$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => 'Custom'];
+			}
 		} elseif (is_array($tempArray)) {
 			foreach ($tempArray as $id => [$type, $command]) {	
 				if ($type == 'file' && file_exists($command)) {
