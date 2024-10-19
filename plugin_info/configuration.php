@@ -58,7 +58,7 @@ $_versionSSHManager = config::byKey('pluginVersion', 'sshmanager', 'N/A');
                     <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin SSH-Manager à indiquer sur Community}}"></i></sup>
                 </label>
                 <div class="col-md-1">
-                    <input class="form-control" readonly><?php echo $_versionSSHManager ?></input>
+                    <input class="form-control" value="<?php echo $_versionSSHManager ?>" readonly />
                 </div>
             </div>
             <legend><i class="fas fa-tasks"></i> {{Mises à jour Automatiques}} :</legend>
