@@ -36,18 +36,29 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
         }
     }
 }
+
+$_versionSSHManager = config::byKey('pluginVersion', 'sshmanager', 'N/A');
+
 ?>
 
 <form class="form-horizontal">
     <fieldset>
         <div>
-            <legend><i class="fas fa-info"></i> {{Plugin}}</legend>
+            <legend><i class="fas fa-info"></i> {{Plugin(s)}}</legend>
             <div class="form-group">
-                <label class="col-md-3 control-label">{{Version}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin à indiquer sur Community}}"></i></sup>
+                <label class="col-md-3 control-label">{{Version Monitoring}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin Monitoring à indiquer sur Community}}"></i></sup>
                 </label>
                 <div class="col-md-1">
                     <input class="configKey form-control" data-l1key="pluginVersion" readonly />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{Version SSH-Manager}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin SSH-Manager à indiquer sur Community}}"></i></sup>
+                </label>
+                <div class="col-md-1">
+                    <input class="form-control" readonly><?php echo $_versionSSHManager ?></input>
                 </div>
             </div>
             <legend><i class="fas fa-tasks"></i> {{Mises à jour Automatiques}} :</legend>
