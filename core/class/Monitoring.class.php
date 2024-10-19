@@ -1651,10 +1651,12 @@ class Monitoring extends eqLogic {
 			if (isset($caller['class']) && isset($caller['function'])) {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller = '. $caller['class'] .'::'. $caller['function']);
 			} elseif (isset($caller['function'])) {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller = '. $caller['function']);
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller Function = '. $caller['function']);
 			} else {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller = '. json_encode($caller));
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller Json = '. json_encode($caller));
 			}
+		} else {
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller = NULL :: ' . json_encode($backtrace));
 		}
 
 		$replace = $this->preToHtml($_version);
