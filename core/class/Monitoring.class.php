@@ -137,8 +137,7 @@ class Monitoring extends eqLogic {
 						$mc->remove();
 						$Monitoring->toHtml('mobile');
 						$Monitoring->toHtml('dashboard'); */
-						// $Monitoring->refreshWidget();
-						$Monitoring->setChanged(true);
+						$Monitoring->refreshWidget();
 					}
 				}
 			}
@@ -162,8 +161,7 @@ class Monitoring extends eqLogic {
 						$mc->remove();
 						$Monitoring->toHtml('mobile');
 						$Monitoring->toHtml('dashboard'); */
-						// $Monitoring->refreshWidget();
-						$Monitoring->setChanged(true);
+						$Monitoring->refreshWidget();
 					}
 				}
 			}
@@ -179,8 +177,8 @@ class Monitoring extends eqLogic {
 			} else {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
 				$Monitoring->getInformations();
-				// $Monitoring->refreshWidget();
-				$Monitoring->setChanged(true);
+				$Monitoring->refreshWidget();
+				// $Monitoring->setChanged(true);
 			}
 		}
 	}
@@ -3071,8 +3069,7 @@ class MonitoringCmd extends cmd {
 			switch ($paramaction) {
 				case "refresh":
 					$eqLogic->getInformations();
-					// $eqLogic->refreshWidget();
-					$eqLogic->setChanged(true);
+					$eqLogic->refreshWidget();
 					break;
 				case "reboot":
 				case "poweroff":
@@ -3083,8 +3080,7 @@ class MonitoringCmd extends cmd {
 					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
 					if (is_object($cron_status_cmd)) {
 						$cron_status_cmd->event(1);
-						// $eqLogic->refreshWidget();
-						$eqLogic->setChanged(true);
+						$eqLogic->refreshWidget();
 					}
 					break;
 				case "cron_off":
@@ -3092,8 +3088,7 @@ class MonitoringCmd extends cmd {
 					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
 					if (is_object($cron_status_cmd)) {
 						$cron_status_cmd->event(0);
-						// $eqLogic->refreshWidget();
-						$eqLogic->setChanged(true);
+						$eqLogic->refreshWidget();
 					}
 					break;
 				default:
