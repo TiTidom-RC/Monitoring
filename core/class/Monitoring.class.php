@@ -1643,15 +1643,19 @@ class Monitoring extends eqLogic {
 
 	public function toHtml($_version = 'dashboard') {
 
+		log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Version: '. $_version);
+
 		$backtrace = debug_backtrace();
 		if (isset($backtrace[1])) {
 			$caller = $backtrace[1];
 			if (isset($caller['class']) && isset($caller['function'])) {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller: '. $caller['class'] .'::'. $caller['function']);
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller = '. $caller['class'] .'::'. $caller['function']);
+			} elseif (isset($caller['function'])) {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller = '. $caller['function']);
+			} else {
+				log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller = '. json_encode($caller));
 			}
 		}
-
-		log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Version: '. $_version);
 
 		$replace = $this->preToHtml($_version);
 		if (!is_array($replace)) {
