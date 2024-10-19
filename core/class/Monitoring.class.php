@@ -40,20 +40,9 @@ class Monitoring extends eqLogic {
 
 		$CommunityInfo = "```\n";
 		$CommunityInfo .= 'Debian :: ' . system::getOsVersion() . "\n";
-		$CommunityInfo .= 'Plugin Monitoring (Version) : ' . config::byKey('pluginVersion', 'Monitoring', 'N/A') . "\n";
-		$CommunityInfo .= 'Plugin SSH Manager (Version) : ' . config::byKey('pluginVersion', 'sshmanager', 'N/A') . "\n";
+		$CommunityInfo .= 'Plugin Monitoring (Version / Branche) : ' . config::byKey('pluginVersion', 'Monitoring', 'N/A') . ' / ' . config::byKey('pluginBranch', 'Monitoring', 'N/A') . "\n";
+		$CommunityInfo .= 'Plugin SSH Manager (Version / Branche) : ' . config::byKey('pluginVersion', 'sshmanager', 'N/A') . ' / ' . config::byKey('pluginBranch', 'sshmanager', 'N/A') . "\n";
 		
-		$CommunityInfo .= "\n";
-		
-		if ($isSSHMExist) {
-			$_updateMonitoring = update::byLogicalId('Monitoring');
-			$_updateSSHManager = update::byLogicalId('sshmanager');
-
-			$CommunityInfo .= 'Plugin Monitoring (Version) : ' . $_updateMonitoring->getConfiguration('version', 'N/A') . ' (' . $_updateMonitoring->getLocalVersion() . ' - ' . $_updateMonitoring->getSource() . ')' . "\n";
-			$CommunityInfo .= 'Plugin SSH Manager (Version) : ' . $_updateSSHManager->getConfiguration('version', 'N/A') . ' (' . $_updateSSHManager->getLocalVersion() . ' - ' . $_updateSSHManager->getSource() . ')' . "\n";
-		}
-
-
 		$CommunityInfo .= "\n";
 		$CommunityInfo .= 'Liste des équipements Monitoring : ' . "\n";
 		foreach (eqLogic::byType('Monitoring') as $Monitoring) {
@@ -68,7 +57,7 @@ class Monitoring extends eqLogic {
 			}
 		} else {
 			$CommunityInfo .= "\n";
-			$CommunityInfo .= 'Plugin SSH Manager non actif.' . "\n";
+			$CommunityInfo .= 'Plugin SSH Manager non actif !' . "\n";
 		}
 
 		$CommunityInfo .= "```";
