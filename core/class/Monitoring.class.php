@@ -137,7 +137,7 @@ class Monitoring extends eqLogic {
 						$mc->remove();
 						$Monitoring->toHtml('mobile');
 						$Monitoring->toHtml('dashboard'); */
-						$Monitoring->refreshWidget();
+						// $Monitoring->refreshWidget();
 					}
 				}
 			}
@@ -161,7 +161,7 @@ class Monitoring extends eqLogic {
 						$mc->remove();
 						$Monitoring->toHtml('mobile');
 						$Monitoring->toHtml('dashboard'); */
-						$Monitoring->refreshWidget();
+						// $Monitoring->refreshWidget();
 					}
 				}
 			}
@@ -183,7 +183,7 @@ class Monitoring extends eqLogic {
 				$mc->remove();
 				$Monitoring->toHtml('mobile');
 				$Monitoring->toHtml('dashboard'); */
-				$Monitoring->refreshWidget();
+				// $Monitoring->refreshWidget();
 			}
 		}
 	}
