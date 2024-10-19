@@ -34,6 +34,36 @@ class Monitoring extends eqLogic {
 		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
 	}
 
+	public static function getConfigForCommunity() {
+
+		$isSSHMExist = class_exists('sshmanager');
+
+		$CommunityInfo = "```\n";
+		$CommunityInfo .= 'Debian :: ' . system::getOsVersion() . "\n";
+		$CommunityInfo .= 'Plugin Monitoring (Version / Branche) : ' . config::byKey('pluginVersion', 'Monitoring', 'N/A') . ' / ' . config::byKey('pluginBranch', 'Monitoring', 'N/A') . "\n";
+		$CommunityInfo .= 'Plugin SSH Manager (Version / Branche) : ' . config::byKey('pluginVersion', 'sshmanager', 'N/A') . ' / ' . config::byKey('pluginBranch', 'sshmanager', 'N/A') . "\n";
+		
+		/* $CommunityInfo .= "\n";
+		$CommunityInfo .= 'Liste des équipements Monitoring : ' . "\n";
+		foreach (eqLogic::byType('Monitoring') as $Monitoring) {
+			$CommunityInfo .= '  - ' . $Monitoring->getName() . ' (' . $Monitoring->getConfiguration('localoudistant') . ')' . "\n";
+		} */
+
+		if (!$isSSHMExist) {
+			$CommunityInfo .= "\n";
+			$CommunityInfo .= 'Plugin SSH Manager non activé !' . "\n";
+		} else {
+			/* $CommunityInfo .= "\n";
+			$CommunityInfo .= 'Liste des équipements SSH Manager : ' . "\n";
+			foreach (eqLogic::byType('sshmanager') as $sshManager) {
+				$CommunityInfo .= '  - ' . $sshManager->getName() . ' (' . $sshManager->getConfiguration('auth-method') . ')' . "\n";
+			} */
+		}
+
+		$CommunityInfo .= "```";
+		return $CommunityInfo;
+	}
+
 	public static function doMigrationToV3() {
 		if (class_exists('sshmanager')) {
 			log::add('Monitoring', 'info', __('[MIGRATION] Début de la migration vers la v3.0', __FILE__));
@@ -73,7 +103,7 @@ class Monitoring extends eqLogic {
 			log::add('Monitoring', 'info', __('[MIGRATION] Fin de la migration vers la v3.0', __FILE__) . ' :: ' . $nbMigrated . ' équipement(s) migré(s)');
 			return ('Migration vers la v3.0 terminée :: ' . $nbMigrated . ' équipement(s) migré(s)');
 		} else {
-			throw new Exception(__('Le plugin SSH-Manager n\'est pas actif !', __FILE__));
+			throw new Exception(__('Le plugin SSH Manager n\'est pas actif !', __FILE__));
 		}
 	}
 
@@ -1735,6 +1765,19 @@ class Monitoring extends eqLogic {
 
 		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'Monitoring', 'Monitoring')));
 	}
+
+	public static function getPluginBranch() {
+        $pluginBranch = 'N/A';
+		try {
+			$_updateMonitoring = update::byLogicalId('Monitoring');
+			$pluginBranch = $_updateMonitoring->getConfiguration('version', 'N/A') . ' (' . $_updateMonitoring->getSource() . ')';
+		}
+		catch (\Exception $e) {
+			log::add('Monitoring', 'warning', '[BRANCH] Get ERROR :: ' . $e->getMessage());
+		}
+		log::add('Monitoring', 'info', '[BRANCH] PluginBranch :: ' . $pluginBranch);
+        return $pluginBranch;
+    }
 
 	public static function getPluginVersion() {
         $pluginVersion = '0.0.0';

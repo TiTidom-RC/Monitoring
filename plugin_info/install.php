@@ -23,6 +23,10 @@ function Monitoring_install() {
     $pluginVersion = Monitoring::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
 
+    // Get Plugin Branch 
+    $pluginBranch = Monitoring::getPluginBranch();
+    config::save('pluginBranch', $pluginBranch, 'Monitoring');
+
     message::removeAll('Monitoring', 'update');
     message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, null, 'update');
 
@@ -61,6 +65,10 @@ function Monitoring_install() {
 function Monitoring_update() {
     $pluginVersion = Monitoring::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'Monitoring');
+
+    // Get Plugin Branch 
+    $pluginBranch = Monitoring::getPluginBranch();
+    config::save('pluginBranch', $pluginBranch, 'Monitoring');
 
     // Check Version of the plugin
     log::add('Monitoring', 'debug', '[UPDATE_CHECK] Vérification des versions :: ' . jeedom::version() . ' vs ' . '4.4' . ' :: ' . version_compare(jeedom::version(), '4.4'));

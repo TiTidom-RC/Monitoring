@@ -36,18 +36,58 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
         }
     }
 }
+
+$_versionSSHManager = config::byKey('pluginVersion', 'sshmanager', 'N/A');
+
+$_branchSSHManager = config::byKey('pluginBranch', 'sshmanager', 'N/A');
+$_branchMonitoring = config::byKey('pluginBranch', 'Monitoring', 'N/A');
+
+if (strpos($_branchMonitoring, 'stable') !== false) {
+    $_labelBranchMon = '<span class="label label-success text-capitalize">' . $_branchMonitoring . '</span>';
+} elseif (strpos($_branchMonitoring, 'beta') !== false) {
+    $_labelBranchMon = '<span class="label label-warning text-capitalize">' . $_branchMonitoring . '</span>';
+} elseif (strpos($_branchMonitoring, 'dev') !== false) {
+    $_labelBranchMon = '<span class="label label-danger text-capitalize">' . $_branchMonitoring . '</span>';
+} else {
+    $_labelBranchMon = '<span class="label label-info">N/A</span>';
+}
+
+if (strpos($_branchSSHManager, 'stable') !== false) {
+    $_labelBranchSSHM = '<span class="label label-success text-capitalize">' . $_branchSSHManager . '</span>';
+} elseif (strpos($_branchSSHManager, 'beta') !== false) {
+    $_branchSSHM = '<span class="label label-warning text-capitalize">' . $_branchSSHManager . '</span>';
+} elseif (strpos($_branchSSHManager, 'dev') !== false) {
+    $_labelBranchSSHM = '<span class="label label-danger text-capitalize">' . $_branchSSHManager . '</span>';
+} else {
+    $_labelBranchSSHM = '<span class="label label-info">N/A</span>';
+}
+
 ?>
 
 <form class="form-horizontal">
     <fieldset>
         <div>
-            <legend><i class="fas fa-info"></i> {{Plugin}}</legend>
+            <legend><i class="fas fa-info"></i> {{Plugin(s)}}</legend>
             <div class="form-group">
-                <label class="col-md-3 control-label">{{Version}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin à indiquer sur Community}}"></i></sup>
+                <label class="col-md-3 control-label">{{Version Monitoring}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin Monitoring à indiquer sur Community}}"></i></sup>
                 </label>
                 <div class="col-md-1">
                     <input class="configKey form-control" data-l1key="pluginVersion" readonly />
+                </div>
+                <div class="col-md-1">
+                    <?php echo $_labelBranchMon ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{Version SSH Manager}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin SSH Manager à indiquer sur Community}}"></i></sup>
+                </label>
+                <div class="col-md-1">
+                    <input class="form-control" value="<?php echo $_versionSSHManager ?>" readonly />
+                </div>
+                <div class="col-md-1">
+                    <?php echo $_labelBranchSSHM ?>
                 </div>
             </div>
             <legend><i class="fas fa-tasks"></i> {{Mises à jour Automatiques}} :</legend>
@@ -78,7 +118,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
             </div>
             <div class="form-group">
                 <label class="col-md-3 control-label">{{Migrer les paramètres SSH des équipements}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Migrer les paramètres des hôtes distants de vos équipements (v2.5) vers SSH-Manager}}"></i></sup>
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Migrer les paramètres des hôtes distants de vos équipements (v2.5) vers SSH Manager}}"></i></sup>
                 </label>
                 <div class="col-md-3">
                     <a class="btn btn-warning customclass-migrate"><i class="fas fa-play-circle"></i> {{Migrer (v2.5 -> v3.0)}}</a>
@@ -92,7 +132,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
     document.querySelector('.customclass-migrate').addEventListener('click', function() {
         jeeDialog.confirm({
             title: '<i class="warning fas fa-question-circle"></i> Migration v2.5 -> v3.0',
-            message: 'Etes-vous sûr de vouloir lancer la migration de la configuration des équipements distants vers SSH-Manager ?',
+            message: 'Etes-vous sûr de vouloir lancer la migration de la configuration des équipements distants vers SSH Manager ?',
             buttons: {
                 confirm: {
                     label: 'Migrer',
