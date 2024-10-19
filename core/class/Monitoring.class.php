@@ -1739,7 +1739,7 @@ class Monitoring extends eqLogic {
 		}
 
 		$html = template_replace($replace, getTemplate('core', $_version, 'Monitoring', 'Monitoring'));
-		cache::set('MonitoringWidget' . $_version . $this->getId(), $html, 0);
+		// cache::set('MonitoringWidget' . $_version . $this->getId(), $html, 0);
 		
 		return $html;
 	}
