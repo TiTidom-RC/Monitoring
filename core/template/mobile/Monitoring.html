@@ -224,11 +224,11 @@
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
 				if ('#hdd_free_percent#' === '') {
 					document.getElementById('hdd#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#hdd_free_percent#') < parseFloat('#hdd_free_percent_colorlow#')) {
+				} else if ((parseFloat('#hdd_free_percent#') > parseFloat('#hdd_free_percent_colorhigh#')) && '#hdd_free_percent_colorhigh#' !== '') {
 					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-success-color) !important;">#hdd_free_percent#</span><span>%</span>)';
 				} else if ((parseFloat('#hdd_free_percent#') >= parseFloat('#hdd_free_percent_colorlow#')) && (parseFloat('#hdd_free_percent#') <= parseFloat('#hdd_free_percent_colorhigh#'))) {
 					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-warning-color) !important;">#hdd_free_percent#</span><span>%</span>)';
-				} else if ((parseFloat('#hdd_free_percent#') > parseFloat('#hdd_free_percent_colorhigh#')) && '#hdd_free_percent_colorhigh#' !== '') {
+				} else if (parseFloat('#hdd_free_percent#') < parseFloat('#hdd_free_percent_colorlow#')) {
 					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-danger-color) !important;">#hdd_free_percent#</span><span>%</span>)';
 				} else {
 					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state">#hdd_free_percent#</span><span>%</span>)';
@@ -242,11 +242,11 @@
 					document.getElementById('syno_hddv2#id#').innerHTML = '<div id="syno_hddv2#id#" class="tooltips" style="display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
 					if ('#syno_hddv2_free_percent#' === '') {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '<span></span>';
-					} else if (parseFloat('#syno_hddv2_free_percent#') < parseFloat('#syno_hddv2_free_percent_colorlow#')) {
+					} else if ((parseFloat('#syno_hddv2_free_percent#') > parseFloat('#syno_hddv2_free_percent_colorhigh#')) && '#syno_hddv2_free_percent_colorhigh#' !== '') {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
 					} else if ((parseFloat('#syno_hddv2_free_percent#') >= parseFloat('#syno_hddv2_free_percent_colorlow#')) && (parseFloat('#syno_hddv2_free_percent#') <= parseFloat('#syno_hddv2_free_percent_colorhigh#'))) {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddv2_free_percent#') > parseFloat('#syno_hddv2_free_percent_colorhigh#')) && '#syno_hddv2_free_percent_colorhigh#' !== '') {
+					} else if (parseFloat('#syno_hddv2_free_percent#') < parseFloat('#syno_hddv2_free_percent_colorlow#')) {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
 					} else {
 						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state">#syno_hddv2_free_percent#</span><span>%</span>)';
@@ -261,11 +261,11 @@
 					document.getElementById('syno_hddv3#id#').innerHTML = '<div id="syno_hddv3#id#" class="tooltips" style="display: #syno_hddv3_display#;"><span title="Syno Volume 3 (% Libre) || Date valeur : #syno_hddv3_value# || Date collecte : #syno_hddv3_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv3_icon#</span> <span id="syno_hddv3_free_percent#id#"></span></div>';
 					if ('#syno_hddv3_free_percent#' === '') {
 						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '<span></span>';
-					} else if (parseFloat('#syno_hddv3_free_percent#') < parseFloat('#syno_hddv3_free_percent_colorlow#')) {
+					} else if ((parseFloat('#syno_hddv3_free_percent#') > parseFloat('#syno_hddv3_free_percent_colorhigh#')) && '#syno_hddv3_free_percent_colorhigh#' !== '') {
 						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
 					} else if ((parseFloat('#syno_hddv3_free_percent#') >= parseFloat('#syno_hddv3_free_percent_colorlow#')) && (parseFloat('#syno_hddv3_free_percent#') <= parseFloat('#syno_hddv3_free_percent_colorhigh#'))) {
 						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddv3_free_percent#') > parseFloat('#syno_hddv3_free_percent_colorhigh#')) && '#syno_hddv3_free_percent_colorhigh#' !== '') {
+					} else if (parseFloat('#syno_hddv3_free_percent#') < parseFloat('#syno_hddv3_free_percent_colorlow#')) {
 						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
 					} else {
 						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state">#syno_hddv3_free_percent#</span><span>%</span>)';
@@ -280,11 +280,11 @@
 					document.getElementById('syno_hddv4#id#').innerHTML = '<div id="syno_hddv4#id#" class="tooltips" style="display: #syno_hddv4_display#;"><span title="Syno Volume 4 (% Libre) || Date valeur : #syno_hddv4_value# || Date collecte : #syno_hddv4_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv4_icon#</span> <span id="syno_hddv4_free_percent#id#"></span></div>';
 					if ('#syno_hddv4_free_percent#' === '') {
 						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '<span></span>';
-					} else if (parseFloat('#syno_hddv4_free_percent#') < parseFloat('#syno_hddv4_free_percent_colorlow#')) {
+					} else if ((parseFloat('#syno_hddv4_free_percent#') > parseFloat('#syno_hddv4_free_percent_colorhigh#')) && '#syno_hddv4_free_percent_colorhigh#' !== '') {
 						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
 					} else if ((parseFloat('#syno_hddv4_free_percent#') >= parseFloat('#syno_hddv4_free_percent_colorlow#')) && (parseFloat('#syno_hddv4_free_percent#') <= parseFloat('#syno_hddv4_free_percent_colorhigh#'))) {
 						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddv4_free_percent#') > parseFloat('#syno_hddv4_free_percent_colorhigh#')) && '#syno_hddv4_free_percent_colorhigh#' !== '') {
+					} else if (parseFloat('#syno_hddv4_free_percent#') < parseFloat('#syno_hddv4_free_percent_colorlow#')) {
 						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
 					} else {
 						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state">#syno_hddv4_free_percent#</span><span>%</span>)';
@@ -299,11 +299,11 @@
 					document.getElementById('syno_hddusb#id#').innerHTML = '<div id="syno_hddusb#id#" class="tooltips" style="display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
 					if ('#syno_hddusb_free_percent#' === '') {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '<span></span>';
-					} else if (parseFloat('#syno_hddusb_free_percent#') < parseFloat('#syno_hddusb_free_percent_colorlow#')) {
+					} else if ((parseFloat('#syno_hddusb_free_percent#') > parseFloat('#syno_hddusb_free_percent_colorhigh#')) && '#syno_hddusb_free_percent_colorhigh#' !== '') {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
 					} else if ((parseFloat('#syno_hddusb_free_percent#') >= parseFloat('#syno_hddusb_free_percent_colorlow#')) && (parseFloat('#syno_hddusb_free_percent#') <= parseFloat('#syno_hddusb_free_percent_colorhigh#'))) {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddusb_free_percent#') > parseFloat('#syno_hddusb_free_percent_colorhigh#')) && '#syno_hddusb_free_percent_colorhigh#' !== '') {
+					} else if (parseFloat('#syno_hddusb_free_percent#') < parseFloat('#syno_hddusb_free_percent_colorlow#')) {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
 					} else {
 						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state">#syno_hddusb_free_percent#</span><span>%</span>)';
@@ -318,11 +318,11 @@
 					document.getElementById('syno_hddesata#id#').innerHTML = '<div id="syno_hddesata#id#" class="tooltips" style="display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
 					if ('#syno_hddesata_free_percent#' === '') {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
-					} else if (parseFloat('#syno_hddesata_free_percent#') < parseFloat('#syno_hddesata_free_percent_colorlow#')) {
+					} else if ((parseFloat('#syno_hddesata_free_percent#') > parseFloat('#syno_hddesata_free_percent_colorhigh#')) && '#syno_hddesata_free_percent_colorhigh#' !== '') {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else if ((parseFloat('#syno_hddesata_free_percent#') >= parseFloat('#syno_hddesata_free_percent_colorlow#')) && (parseFloat('#syno_hddesata_free_percent#') <= parseFloat('#syno_hddesata_free_percent_colorhigh#'))) {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddesata_free_percent#') > parseFloat('#syno_hddesata_free_percent_colorhigh#')) && '#syno_hddesata_free_percent_colorhigh#' !== '') {
+					} else if (parseFloat('#syno_hddesata_free_percent#') < parseFloat('#syno_hddesata_free_percent_colorlow#')) {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state">#syno_hddesata_free_percent#</span><span>%</span>)';
