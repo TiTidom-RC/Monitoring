@@ -63,6 +63,15 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
 }
 
 ?>
+
+<form class="form-horizontal">
+    <fieldset>
+        <div>
+            <legend><i class="fas fa-info"></i> {{Plugin(s)}}</legend>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{Version Monitoring}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin Monitoring à indiquer sur Community}}"></i></sup>
+                </label>
                 <div class="col-md-1">
                     <input class="configKey form-control" data-l1key="pluginVersion" readonly />
                 </div>
