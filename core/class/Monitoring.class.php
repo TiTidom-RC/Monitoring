@@ -131,12 +131,6 @@ class Monitoring extends eqLogic {
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
 						$Monitoring->getInformations();
-						/* $mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-						$mc->remove();
-						$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-						$mc->remove();
-						$Monitoring->toHtml('mobile');
-						$Monitoring->toHtml('dashboard'); */
 						$Monitoring->refreshWidget();
 					}
 				}
@@ -178,7 +172,6 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
 				$Monitoring->getInformations();
 				$Monitoring->refreshWidget();
-				// $Monitoring->setChanged(true);
 			}
 		}
 	}
@@ -1651,7 +1644,7 @@ class Monitoring extends eqLogic {
 		if (!is_array($replace)) {
 			return $replace;
 		}
-		$_version = jeedom::versionAlias($_version);
+		$version = jeedom::versionAlias($_version);
 
 		$cmdToReplace = array(
 			'cnx_ssh' => array('exec', 'id'),
@@ -1730,7 +1723,6 @@ class Monitoring extends eqLogic {
 		}
 
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
-			// log::add('Monitoring', 'debug', '['. $this->getName() .'][getCmdReplace] '. $cmdName . ' (' . $_version . ')');
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
 
@@ -1740,10 +1732,7 @@ class Monitoring extends eqLogic {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
 		}
 
-		$html = template_replace($replace, getTemplate('core', $_version, 'Monitoring', 'Monitoring'));
-		// cache::set('MonitoringWidget' . $_version . $this->getId(), $html, 0);
-		
-		return $html;
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'Monitoring', 'Monitoring')));
 	}
 
 	public static function getPluginVersion() {
