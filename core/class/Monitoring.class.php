@@ -3071,7 +3071,8 @@ class MonitoringCmd extends cmd {
 			switch ($paramaction) {
 				case "refresh":
 					$eqLogic->getInformations();
-					$eqLogic->refreshWidget();
+					// $eqLogic->refreshWidget();
+					$eqLogic->setChanged(true);
 					break;
 				case "reboot":
 				case "poweroff":
@@ -3082,7 +3083,8 @@ class MonitoringCmd extends cmd {
 					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
 					if (is_object($cron_status_cmd)) {
 						$cron_status_cmd->event(1);
-						$eqLogic->refreshWidget();
+						// $eqLogic->refreshWidget();
+						$eqLogic->setChanged(true);
 					}
 					break;
 				case "cron_off":
@@ -3090,7 +3092,8 @@ class MonitoringCmd extends cmd {
 					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
 					if (is_object($cron_status_cmd)) {
 						$cron_status_cmd->event(0);
-						$eqLogic->refreshWidget();
+						// $eqLogic->refreshWidget();
+						$eqLogic->setChanged(true);
 					}
 					break;
 				default:
