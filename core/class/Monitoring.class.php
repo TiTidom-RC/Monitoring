@@ -131,12 +131,6 @@ class Monitoring extends eqLogic {
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
 						$Monitoring->getInformations();
-						/* $mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-						$mc->remove();
-						$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-						$mc->remove();
-						$Monitoring->toHtml('mobile');
-						$Monitoring->toHtml('dashboard'); */
 						$Monitoring->refreshWidget();
 					}
 				}
@@ -177,12 +171,6 @@ class Monitoring extends eqLogic {
 			} else {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
 				$Monitoring->getInformations();
-				/* $mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-				$mc->remove();
-				$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-				$mc->remove();
-				$Monitoring->toHtml('mobile');
-				$Monitoring->toHtml('dashboard'); */
 				$Monitoring->refreshWidget();
 			}
 		}
@@ -1648,11 +1636,15 @@ class Monitoring extends eqLogic {
 	public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
 
 	public function toHtml($_version = 'dashboard') {
+
+		// $backtrace = debug_backtrace();
+		// log::add('Monitoring', 'debug', '['. $this->getName() .'][toHtml] Caller :: ' . json_encode($backtrace));
+
 		$replace = $this->preToHtml($_version);
 		if (!is_array($replace)) {
 			return $replace;
 		}
-		$_version = jeedom::versionAlias($_version);
+		$version = jeedom::versionAlias($_version);
 
 		$cmdToReplace = array(
 			'cnx_ssh' => array('exec', 'id'),
@@ -1712,22 +1704,21 @@ class Monitoring extends eqLogic {
 			'syno_hddesata_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
 		);
 	
-
 		if ($this->getConfiguration('synology') == '1') {
 			if ($this->getConfiguration('synologyv2') == '1') {
-				array_merge($cmdToReplace, $syno_hddv2_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddv2_array);
 			}
 			if ($this->getConfiguration('synologyv3') == '1') {
-				array_merge($cmdToReplace, $syno_hddv3_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddv3_array);
 			}
 			if ($this->getConfiguration('synologyv4') == '1') {
-				array_merge($cmdToReplace, $syno_hddv4_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddv4_array);
 			}
 			if ($this->getConfiguration('synologyusb') == '1') {
-				array_merge($cmdToReplace, $syno_hddusb_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddusb_array);
 			}
 			if ($this->getConfiguration('synologyesata') == '1') {
-				array_merge($cmdToReplace, $syno_hddesata_array);
+				$cmdToReplace = array_merge($cmdToReplace, $syno_hddesata_array);
 			}
 		}
 
@@ -1741,10 +1732,7 @@ class Monitoring extends eqLogic {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
 		}
 
-		$html = template_replace($replace, getTemplate('core', $_version, 'Monitoring', 'Monitoring'));
-		cache::set('MonitoringWidget' . $_version . $this->getId(), $html, 0);
-		
-		return $html;
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'Monitoring', 'Monitoring')));
 	}
 
 	public static function getPluginVersion() {
@@ -2210,11 +2198,11 @@ class Monitoring extends eqLogic {
 					1 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1)"]
 				],
 				'hdd' => sprintf($hdd_command, 'vg1000\|volume1'),
-				'hddv2' => sprintf($hdd_command, 'vg1001\|volume2'), // DSM 5.x / 6.x / 7.x
-				'hddv3' => sprintf($hdd_command, 'vg1002\|volume3'), // DSM 5.x / 6.x / 7.x
-				'hddv4' => sprintf($hdd_command, 'vg1003\|volume4'), // DSM 5.x / 6.x / 7.x
-				'hddusb' => sprintf($hdd_command, 'usb1p1\|volumeUSB1'), // DSM 5.x / 6.x / 7.x
-				'hddesata' => sprintf($hdd_command, 'sdf1\|volumeSATA') // DSM 5.x / 6.x / 7.x
+				'syno_hddv2' => sprintf($hdd_command, 'vg1001\|volume2'), // DSM 5.x / 6.x / 7.x
+				'syno_hddv3' => sprintf($hdd_command, 'vg1002\|volume3'), // DSM 5.x / 6.x / 7.x
+				'syno_hddv4' => sprintf($hdd_command, 'vg1003\|volume4'), // DSM 5.x / 6.x / 7.x
+				'syno_hddusb' => sprintf($hdd_command, 'usb1p1\|volumeUSB1'), // DSM 5.x / 6.x / 7.x
+				'syno_hddesata' => sprintf($hdd_command, 'sdf1\|volumeSATA') // DSM 5.x / 6.x / 7.x
 			]
 		];
 
@@ -2690,11 +2678,11 @@ class Monitoring extends eqLogic {
 
 						$syno_version_file = $this->execSSH($hostId, $commands['syno_version'], 'SynoVersion');
 						
-						$syno_hddv2 = $this->getConfiguration('synologyv2') == '1' ? $this->execSSH($hostId, $commands['syno_hddv2'], 'SynoHDDv2') : '';
-						$syno_hddv3 = $this->getConfiguration('synologyv3') == '1' ? $this->execSSH($hostId, $commands['syno_hddv3'], 'SynoHDDv3') : '';
-						$syno_hddv4 = $this->getConfiguration('synologyv4') == '1' ? $this->execSSH($hostId, $commands['syno_hddv4'], 'SynoHDDv4') : '';
-						$syno_hddusb = $this->getConfiguration('synologyusb') == '1' ? $this->execSSH($hostId, $commands['syno_hddusb'], 'SynoHDDUSB') : '';
-						$syno_hddesata = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA') : '';
+						$syno_hddv2_value = $this->getConfiguration('synologyv2') == '1' ? $this->execSSH($hostId, $commands['syno_hddv2'], 'SynoHDDv2') : '';
+						$syno_hddv3_value = $this->getConfiguration('synologyv3') == '1' ? $this->execSSH($hostId, $commands['syno_hddv3'], 'SynoHDDv3') : '';
+						$syno_hddv4_value = $this->getConfiguration('synologyv4') == '1' ? $this->execSSH($hostId, $commands['syno_hddv4'], 'SynoHDDv4') : '';
+						$syno_hddusb_value = $this->getConfiguration('synologyusb') == '1' ? $this->execSSH($hostId, $commands['syno_hddusb'], 'SynoHDDUSB') : '';
+						$syno_hddesata_value = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA') : '';
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uname :: ' . $uname);
@@ -2714,6 +2702,14 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Swap :: ' . $swap_value);
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] HDD :: ' . $hdd_value);
+
+					if ($isSynology) {
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv2 :: ' . $syno_hddv2_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv3 :: ' . $syno_hddv3_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv4 :: ' . $syno_hddv4_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDUSB :: ' . $syno_hddusb_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDeSATA :: ' . $syno_hddesata_value);
+					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauRXTX :: ' . $network_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauIP :: ' . $network_ip_value);
@@ -2909,7 +2905,6 @@ class Monitoring extends eqLogic {
 								'syno_hddv2_free' => $syno_hddv2_free,
 								'syno_hddv2_used_percent' => $syno_hddv2_used_percent,
 								'syno_hddv2_free_percent' => $syno_hddv2_free_percent,
-								
 							]);
 						}
 						if ($this->getConfiguration('synologyv3') == '1') {
@@ -2920,7 +2915,6 @@ class Monitoring extends eqLogic {
 								'syno_hddv3_free' => $syno_hddv3_free,
 								'syno_hddv3_used_percent' => $syno_hddv3_used_percent,
 								'syno_hddv3_free_percent' => $syno_hddv3_free_percent,
-								
 							]);
 						}
 						if ($this->getConfiguration('synologyv4') == '1') {
@@ -2931,7 +2925,6 @@ class Monitoring extends eqLogic {
 								'syno_hddv4_free' => $syno_hddv4_free,
 								'syno_hddv4_used_percent' => $syno_hddv4_used_percent,
 								'syno_hddv4_free_percent' => $syno_hddv4_free_percent,
-								
 							]);
 						}
 
@@ -2943,7 +2936,6 @@ class Monitoring extends eqLogic {
 								'syno_hddusb_used_percent' => $syno_hddusb_used_percent,
 								'syno_hddusb_free' => $syno_hddusb_free,
 								'syno_hddusb_free_percent' => $syno_hddusb_free_percent,
-								
 							]);
 						}
 						if ($this->getConfiguration('synologyesata') == '1') {
