@@ -34,6 +34,47 @@ class Monitoring extends eqLogic {
 		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
 	}
 
+	public static function getConfigForCommunity() {
+
+		$isSSHMExist = class_exists('sshmanager');
+
+		$CommunityInfo = "```\n";
+		$CommunityInfo .= 'Debian :: ' . system::getOsVersion() . "\n";
+		$CommunityInfo .= 'Plugin Monitoring (Version) :: ' . config::byKey('pluginVersion', 'Monitoring', 'N/A') . "\n";
+		$CommunityInfo .= 'Plugin SSH-Manager (Version) :: ' . config::byKey('pluginVersion', 'sshmanager', 'N/A') . "\n";
+		
+		$CommunityInfo .= "\n";
+		
+		if ($isSSHMExist) {
+			$_updateMonitoring = update::byLogicalId('Monitoring');
+			$_updateSSHManager = update::byLogicalId('sshmanager');
+
+			$CommunityInfo .= 'Plugin Monitoring (Version) :: ' . $_updateMonitoring->getConfiguration('version', 'N/A') . "\n";
+			$CommunityInfo .= 'Plugin SSH-Manager (Version) :: ' . $_updateSSHManager->getConfiguration('version', 'N/A') . "\n";
+		}
+
+
+		$CommunityInfo .= "\n";
+		$CommunityInfo .= 'Liste des équipements Monitoring :: ' . "\n";
+		foreach (eqLogic::byType('Monitoring') as $Monitoring) {
+			$CommunityInfo .= '  - ' . $Monitoring->getName() . ' (' . $Monitoring->getConfiguration('localoudistant') . ')' . "\n";
+		}
+
+		if ($isSSHMExist) {
+			$CommunityInfo .= "\n";
+			$CommunityInfo .= 'Liste des équipements SSH-Manager :: ' . "\n";
+			foreach (eqLogic::byType('sshmanager') as $sshManager) {
+				$CommunityInfo .= '  - ' . $sshManager->getName() . ' (' . $sshManager->getConfiguration('auth-method') . ')' . "\n";
+			}
+		} else {
+			$CommunityInfo .= "\n";
+			$CommunityInfo .= 'Plugin SSH-Manager non actif.' . "\n";
+		}
+
+		$CommunityInfo .= "```";
+		return $CommunityInfo;
+	}
+
 	public static function doMigrationToV3() {
 		if (class_exists('sshmanager')) {
 			log::add('Monitoring', 'info', __('[MIGRATION] Début de la migration vers la v3.0', __FILE__));
