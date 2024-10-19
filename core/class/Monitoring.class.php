@@ -43,21 +43,21 @@ class Monitoring extends eqLogic {
 		$CommunityInfo .= 'Plugin Monitoring (Version / Branche) : ' . config::byKey('pluginVersion', 'Monitoring', 'N/A') . ' / ' . config::byKey('pluginBranch', 'Monitoring', 'N/A') . "\n";
 		$CommunityInfo .= 'Plugin SSH Manager (Version / Branche) : ' . config::byKey('pluginVersion', 'sshmanager', 'N/A') . ' / ' . config::byKey('pluginBranch', 'sshmanager', 'N/A') . "\n";
 		
-		$CommunityInfo .= "\n";
+		/* $CommunityInfo .= "\n";
 		$CommunityInfo .= 'Liste des équipements Monitoring : ' . "\n";
 		foreach (eqLogic::byType('Monitoring') as $Monitoring) {
 			$CommunityInfo .= '  - ' . $Monitoring->getName() . ' (' . $Monitoring->getConfiguration('localoudistant') . ')' . "\n";
-		}
+		} */
 
-		if ($isSSHMExist) {
+		if (!$isSSHMExist) {
 			$CommunityInfo .= "\n";
+			$CommunityInfo .= 'Plugin SSH Manager non activé !' . "\n";
+		} else {
+			/* $CommunityInfo .= "\n";
 			$CommunityInfo .= 'Liste des équipements SSH Manager : ' . "\n";
 			foreach (eqLogic::byType('sshmanager') as $sshManager) {
 				$CommunityInfo .= '  - ' . $sshManager->getName() . ' (' . $sshManager->getConfiguration('auth-method') . ')' . "\n";
-			}
-		} else {
-			$CommunityInfo .= "\n";
-			$CommunityInfo .= 'Plugin SSH Manager non actif !' . "\n";
+			} */
 		}
 
 		$CommunityInfo .= "```";
