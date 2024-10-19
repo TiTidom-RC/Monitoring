@@ -246,6 +246,13 @@ class Monitoring extends eqLogic {
 		} else {
 			$orderCmd++;
 		}
+
+		// Initialisation de la valeur de la commande cron_status
+		if (is_object($MonitoringCmd) && $MonitoringCmd->execCmd() === '') {
+			// log::add('Monitoring', 'debug',  '[' . $this->getName() .'][PostSave] Cron Status Value :: Empty');
+			$this->checkAndUpdateCmd($MonitoringCmd->getLogicalId(), '1');
+		}
+
 		$cron_status_cmd = $MonitoringCmd->getId();
 
 		$MonitoringCmd = $this->getCmd(null, 'cron_on');
