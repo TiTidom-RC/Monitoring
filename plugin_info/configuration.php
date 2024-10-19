@@ -38,28 +38,28 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 }
 
 $_versionSSHManager = config::byKey('pluginVersion', 'sshmanager', 'N/A');
-$_branchSSHManager = config::byKey('pluginBranch', 'sshmanager', 'N/A');
 
+$_branchSSHManager = config::byKey('pluginBranch', 'sshmanager', 'N/A');
 $_branchMonitoring = config::byKey('pluginBranch', 'Monitoring', 'N/A');
 
 if (strpos($_branchMonitoring, 'stable') !== false) {
-    $_branchMonitoring = '<span class="label label-success">Stable</span>';
+    $_labelBranchMon = '<span class="label label-success">Stable</span>';
 } elseif (strpos($_branchMonitoring, 'beta') !== false) {
-    $_branchMonitoring = '<span class="label label-warning">Béta</span>';
+    $_labelBranchMon = '<span class="label label-warning">Béta</span>';
 } elseif (strpos($_branchMonitoring, 'dev') !== false) {
-    $_branchMonitoring = '<span class="label label-danger">Dev</span>';
+    $_labelBranchMon = '<span class="label label-danger">Dev</span>';
 } else {
-    $_branchMonitoring = '<span class="label label-default">N/A</span>';
+    $_labelBranchMon = '<span class="label label-info">N/A</span>';
 }
 
 if (strpos($_branchSSHManager, 'stable') !== false) {
-    $_branchSSHManager = '<span class="label label-success">Stable</span>';
+    $_labelBranchSSHM = '<span class="label label-success">Stable</span>';
 } elseif (strpos($_branchSSHManager, 'beta') !== false) {
-    $_branchSSHManager = '<span class="label label-warning">Béta</span>';
+    $_branchSSHM = '<span class="label label-warning">Béta</span>';
 } elseif (strpos($_branchSSHManager, 'dev') !== false) {
-    $_branchSSHManager = '<span class="label label-danger">Dev</span>';
+    $_labelBranchSSHM = '<span class="label label-danger">Dev</span>';
 } else {
-    $_branchSSHManager = '<span class="label label-default">N/A</span>';
+    $_labelBranchSSHM = '<span class="label label-info">N/A</span>';
 }
 
 ?>
@@ -67,7 +67,7 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
                     <input class="configKey form-control" data-l1key="pluginVersion" readonly />
                 </div>
                 <div class="col-md-1">
-                    <?php echo $_branchMonitoring ?>
+                    <?php echo $_labelBranchMon ?>
                 </div>
             </div>
             <div class="form-group">
@@ -78,7 +78,7 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
                     <input class="form-control" value="<?php echo $_versionSSHManager ?>" readonly />
                 </div>
                 <div class="col-md-1">
-                    <?php echo $_branchSSHManager ?>
+                    <?php echo $_labelBranchSSHM ?>
                 </div>
             </div>
             <legend><i class="fas fa-tasks"></i> {{Mises à jour Automatiques}} :</legend>
