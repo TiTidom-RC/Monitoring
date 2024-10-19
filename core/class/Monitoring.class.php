@@ -41,7 +41,7 @@ class Monitoring extends eqLogic {
 		$CommunityInfo = "```\n";
 		$CommunityInfo .= 'Debian :: ' . system::getOsVersion() . "\n";
 		$CommunityInfo .= 'Plugin Monitoring (Version) : ' . config::byKey('pluginVersion', 'Monitoring', 'N/A') . "\n";
-		$CommunityInfo .= 'Plugin SSH-Manager (Version) : ' . config::byKey('pluginVersion', 'sshmanager', 'N/A') . "\n";
+		$CommunityInfo .= 'Plugin SSH Manager (Version) : ' . config::byKey('pluginVersion', 'sshmanager', 'N/A') . "\n";
 		
 		$CommunityInfo .= "\n";
 		
@@ -50,7 +50,7 @@ class Monitoring extends eqLogic {
 			$_updateSSHManager = update::byLogicalId('sshmanager');
 
 			$CommunityInfo .= 'Plugin Monitoring (Version) : ' . $_updateMonitoring->getConfiguration('version', 'N/A') . ' (' . $_updateMonitoring->getLocalVersion() . ' - ' . $_updateMonitoring->getSource() . ')' . "\n";
-			$CommunityInfo .= 'Plugin SSH-Manager (Version) : ' . $_updateSSHManager->getConfiguration('version', 'N/A') . ' (' . $_updateSSHManager->getLocalVersion() . ' - ' . $_updateSSHManager->getSource() . ')' . "\n";
+			$CommunityInfo .= 'Plugin SSH Manager (Version) : ' . $_updateSSHManager->getConfiguration('version', 'N/A') . ' (' . $_updateSSHManager->getLocalVersion() . ' - ' . $_updateSSHManager->getSource() . ')' . "\n";
 		}
 
 
@@ -62,13 +62,13 @@ class Monitoring extends eqLogic {
 
 		if ($isSSHMExist) {
 			$CommunityInfo .= "\n";
-			$CommunityInfo .= 'Liste des équipements SSH-Manager : ' . "\n";
+			$CommunityInfo .= 'Liste des équipements SSH Manager : ' . "\n";
 			foreach (eqLogic::byType('sshmanager') as $sshManager) {
 				$CommunityInfo .= '  - ' . $sshManager->getName() . ' (' . $sshManager->getConfiguration('auth-method') . ')' . "\n";
 			}
 		} else {
 			$CommunityInfo .= "\n";
-			$CommunityInfo .= 'Plugin SSH-Manager non actif.' . "\n";
+			$CommunityInfo .= 'Plugin SSH Manager non actif.' . "\n";
 		}
 
 		$CommunityInfo .= "```";
@@ -114,7 +114,7 @@ class Monitoring extends eqLogic {
 			log::add('Monitoring', 'info', __('[MIGRATION] Fin de la migration vers la v3.0', __FILE__) . ' :: ' . $nbMigrated . ' équipement(s) migré(s)');
 			return ('Migration vers la v3.0 terminée :: ' . $nbMigrated . ' équipement(s) migré(s)');
 		} else {
-			throw new Exception(__('Le plugin SSH-Manager n\'est pas actif !', __FILE__));
+			throw new Exception(__('Le plugin SSH Manager n\'est pas actif !', __FILE__));
 		}
 	}
 

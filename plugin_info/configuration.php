@@ -80,8 +80,8 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label">{{Version SSH-Manager}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin SSH-Manager à indiquer sur Community}}"></i></sup>
+                <label class="col-md-3 control-label">{{Version SSH Manager}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin SSH Manager à indiquer sur Community}}"></i></sup>
                 </label>
                 <div class="col-md-1">
                     <input class="form-control" value="<?php echo $_versionSSHManager ?>" readonly />
@@ -118,7 +118,7 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
             </div>
             <div class="form-group">
                 <label class="col-md-3 control-label">{{Migrer les paramètres SSH des équipements}}
-                    <sup><i class="fas fa-question-circle tooltips" title="{{Migrer les paramètres des hôtes distants de vos équipements (v2.5) vers SSH-Manager}}"></i></sup>
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Migrer les paramètres des hôtes distants de vos équipements (v2.5) vers SSH Manager}}"></i></sup>
                 </label>
                 <div class="col-md-3">
                     <a class="btn btn-warning customclass-migrate"><i class="fas fa-play-circle"></i> {{Migrer (v2.5 -> v3.0)}}</a>
@@ -132,7 +132,7 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
     document.querySelector('.customclass-migrate').addEventListener('click', function() {
         jeeDialog.confirm({
             title: '<i class="warning fas fa-question-circle"></i> Migration v2.5 -> v3.0',
-            message: 'Etes-vous sûr de vouloir lancer la migration de la configuration des équipements distants vers SSH-Manager ?',
+            message: 'Etes-vous sûr de vouloir lancer la migration de la configuration des équipements distants vers SSH Manager ?',
             buttons: {
                 confirm: {
                     label: 'Migrer',
