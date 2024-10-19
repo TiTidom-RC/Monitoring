@@ -1732,6 +1732,7 @@ class Monitoring extends eqLogic {
 		}
 
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][getCmdReplace] '. $cmdName);
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
 
@@ -2917,7 +2918,6 @@ class Monitoring extends eqLogic {
 								'syno_hddv2_free' => $syno_hddv2_free,
 								'syno_hddv2_used_percent' => $syno_hddv2_used_percent,
 								'syno_hddv2_free_percent' => $syno_hddv2_free_percent,
-								
 							]);
 						}
 						if ($this->getConfiguration('synologyv3') == '1') {
@@ -2928,7 +2928,6 @@ class Monitoring extends eqLogic {
 								'syno_hddv3_free' => $syno_hddv3_free,
 								'syno_hddv3_used_percent' => $syno_hddv3_used_percent,
 								'syno_hddv3_free_percent' => $syno_hddv3_free_percent,
-								
 							]);
 						}
 						if ($this->getConfiguration('synologyv4') == '1') {
@@ -2939,7 +2938,6 @@ class Monitoring extends eqLogic {
 								'syno_hddv4_free' => $syno_hddv4_free,
 								'syno_hddv4_used_percent' => $syno_hddv4_used_percent,
 								'syno_hddv4_free_percent' => $syno_hddv4_free_percent,
-								
 							]);
 						}
 
@@ -2951,7 +2949,6 @@ class Monitoring extends eqLogic {
 								'syno_hddusb_used_percent' => $syno_hddusb_used_percent,
 								'syno_hddusb_free' => $syno_hddusb_free,
 								'syno_hddusb_free_percent' => $syno_hddusb_free_percent,
-								
 							]);
 						}
 						if ($this->getConfiguration('synologyesata') == '1') {
