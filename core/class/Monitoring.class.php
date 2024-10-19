@@ -49,8 +49,8 @@ class Monitoring extends eqLogic {
 			$_updateMonitoring = update::byLogicalId('Monitoring');
 			$_updateSSHManager = update::byLogicalId('sshmanager');
 
-			$CommunityInfo .= 'Plugin Monitoring (Version) :: ' . $_updateMonitoring->getConfiguration('version', 'N/A') . "\n";
-			$CommunityInfo .= 'Plugin SSH-Manager (Version) :: ' . $_updateSSHManager->getConfiguration('version', 'N/A') . "\n";
+			$CommunityInfo .= 'Plugin Monitoring (Version) :: ' . $_updateMonitoring->getConfiguration('version', 'N/A') . ' (' . $_updateMonitoring->getLocalVersion() . ' - ' . $_updateMonitoring->getSource() . ')' . "\n";
+			$CommunityInfo .= 'Plugin SSH-Manager (Version) :: ' . $_updateSSHManager->getConfiguration('version', 'N/A') . ' (' . $_updateSSHManager->getLocalVersion() . ' - ' . $_updateSSHManager->getSource() . ')' . "\n";
 		}
 
 
