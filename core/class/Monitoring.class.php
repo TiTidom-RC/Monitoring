@@ -149,12 +149,6 @@ class Monitoring extends eqLogic {
 					} else {
 						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Lancement (1min)');
 						$Monitoring->getInformations();
-						/* $mc = cache::byKey('MonitoringWidgetmobile' . $Monitoring->getId());
-						$mc->remove();
-						$mc = cache::byKey('MonitoringWidgetdashboard' . $Monitoring->getId());
-						$mc->remove();
-						$Monitoring->toHtml('mobile');
-						$Monitoring->toHtml('dashboard'); */
 						$Monitoring->refreshWidget();
 					}
 				}
