@@ -1732,7 +1732,7 @@ class Monitoring extends eqLogic {
 		}
 
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][getCmdReplace] '. $cmdName);
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][getCmdReplace] '. $cmdName . ' (' . $_version . ')');
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
 
