@@ -1706,7 +1706,6 @@ class Monitoring extends eqLogic {
 			'syno_hddesata_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
 		);
 	
-
 		if ($this->getConfiguration('synology') == '1') {
 			if ($this->getConfiguration('synologyv2') == '1') {
 				$cmdToReplace = array_merge($cmdToReplace, $syno_hddv2_array);
@@ -1726,7 +1725,7 @@ class Monitoring extends eqLogic {
 		}
 
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][getCmdReplace] '. $cmdName . ' (' . $_version . ')');
+			// log::add('Monitoring', 'debug', '['. $this->getName() .'][getCmdReplace] '. $cmdName . ' (' . $_version . ')');
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
 
