@@ -137,7 +137,8 @@ class Monitoring extends eqLogic {
 						$mc->remove();
 						$Monitoring->toHtml('mobile');
 						$Monitoring->toHtml('dashboard'); */
-						$Monitoring->refreshWidget();
+						// $Monitoring->refreshWidget();
+						$Monitoring->setChanged(true);
 					}
 				}
 			}
@@ -161,7 +162,8 @@ class Monitoring extends eqLogic {
 						$mc->remove();
 						$Monitoring->toHtml('mobile');
 						$Monitoring->toHtml('dashboard'); */
-						$Monitoring->refreshWidget();
+						// $Monitoring->refreshWidget();
+						$Monitoring->setChanged(true);
 					}
 				}
 			}
@@ -177,7 +179,8 @@ class Monitoring extends eqLogic {
 			} else {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
 				$Monitoring->getInformations();
-				$Monitoring->refreshWidget();
+				// $Monitoring->refreshWidget();
+				$Monitoring->setChanged(true);
 			}
 		}
 	}
