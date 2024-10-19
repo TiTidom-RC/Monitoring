@@ -38,6 +38,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 }
 
 $_versionSSHManager = config::byKey('pluginVersion', 'sshmanager', 'N/A');
+$_branchSSHManager = config::byKey('pluginBranch', 'sshmanager', 'N/A');
 
 ?>
 
@@ -51,6 +52,9 @@ $_versionSSHManager = config::byKey('pluginVersion', 'sshmanager', 'N/A');
                 </label>
                 <div class="col-md-1">
                     <input class="configKey form-control" data-l1key="pluginVersion" readonly />
+                </div>
+                <div class="col-md-1">
+                    <span class="configKey label label-info" data-l1key="pluginBranch"></span>
                 </div>
             </div>
             <div class="form-group">
