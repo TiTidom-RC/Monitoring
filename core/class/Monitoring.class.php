@@ -510,7 +510,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_total');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -528,7 +528,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_used');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -546,7 +546,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_free');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -566,7 +566,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_buffcache');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -584,7 +584,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('memory_available');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -674,7 +674,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('swap_total');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -692,7 +692,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('swap_used');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -710,7 +710,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('swap_free');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -782,7 +782,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_tx');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('octets');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -800,7 +800,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_rx');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('octets');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -870,7 +870,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('hdd_total');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -888,7 +888,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('hdd_used');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -906,7 +906,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('hdd_free');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('Ko');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -982,7 +982,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv2_total');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1000,7 +1000,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv2_used');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1018,7 +1018,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv2_free');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1094,7 +1094,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv3_total');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1112,7 +1112,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv3_used');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1130,7 +1130,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv3_free');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1206,7 +1206,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv4_total');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1224,7 +1224,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv4_used');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1242,7 +1242,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddv4_free');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1318,7 +1318,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddusb_total');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1336,7 +1336,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddusb_used');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1354,7 +1354,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddusb_free');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1430,7 +1430,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddesata_total');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1448,7 +1448,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddesata_used');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -1466,7 +1466,7 @@ class Monitoring extends eqLogic {
 					$MonitoringCmd->setLogicalId('syno_hddesata_free');
 					$MonitoringCmd->setType('info');
 					$MonitoringCmd->setSubType('numeric');
-					$MonitoringCmd->setUnite('Ko');
+					$MonitoringCmd->setUnite('Mo');
 					$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 					$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 					$MonitoringCmd->setIsVisible(0);
@@ -2394,7 +2394,7 @@ class Monitoring extends eqLogic {
 	public function formatNetwork($_network_txrx, $_network_ip, $_equipement) {
 		// Network TX, Network RX, Network Name, Network Ip, Text
 		$network_ip = isset($_network_ip) ? $_network_ip : '';
-		$result = [0, 0, '', $network_ip, ''];
+		$result = [0.00, 0.00, '', $network_ip, ''];
 
 		if (empty($_network_txrx)) {
 			return $result;
@@ -2412,6 +2412,10 @@ class Monitoring extends eqLogic {
 
 		$network = __('TX', __FILE__) . ' : ' . $this->formatSize($network_tx) . ' - ' . __('RX', __FILE__) . ' : ' . $this->formatSize($network_rx);
 		
+		// Convert to Mo, source in octects. it's to avoid problem with big values in Jeedom History DB
+		$network_tx = $network_tx != 0 ? round($network_tx / 1024 / 1024, 2) : 0.00;
+		$network_rx = $network_rx != 0 ? round($network_rx / 1024 / 1024, 2) : 0.00;
+
 		log::add('Monitoring', 'debug', '['. $_equipement .'][RESEAU] Carte Réseau / IP (TX - RX) :: ' . $network_name . ' / IP : ' . $network_ip . ' (' . $network .')');
 		
 		$result = [$network_tx, $network_rx, $network_name, $network_ip, $network];
@@ -2420,7 +2424,7 @@ class Monitoring extends eqLogic {
 
 	public function formatSwap($_swap, $_equipement) {
 		// Total, Used, Free, Used %, Free %, Text
-		$result = [0, 0, 0, 0.0, 0.0, ''];
+		$result = [0.00, 0.00, 0.00, 0.0, 0.0, ''];
 
 		if (empty($_swap)) {
 			return $result;
@@ -2453,6 +2457,11 @@ class Monitoring extends eqLogic {
 
 		$swap = __('Total', __FILE__) . ' : ' . $this->formatSize($swap_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap_free, 'Ko');
 		
+		// Convert to Mo, source in Ko. it's to avoid problem with big values in Jeedom History DB
+		$swap_total = $swap_total != 0 ? round($swap_total / 1024, 2) : 0.00;
+		$swap_used = $swap_used != 0 ? round($swap_used / 1024, 2) : 0.00;
+		$swap_free = $swap_free != 0 ? round($swap_free / 1024, 2) : 0.00;
+
 		$result = [$swap_total, $swap_used, $swap_free, $swap_used_percent, $swap_free_percent, $swap];
 		return $result;
 	}
@@ -2498,6 +2507,12 @@ class Monitoring extends eqLogic {
 			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Available % :: ' . $memory_available_percent);
 
 			$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Disponible', __FILE__) . ' : ' . $this->formatSize($memory_available, 'Ko');
+			
+			// Convert to Mo, source in Ko. it's to avoid problem with big values in Jeedom History DB
+			$memory_total = $memory_total != 0 ? round($memory_total / 1024, 2) : 0.00;
+			$memory_used = $memory_used != 0 ? round($memory_used / 1024, 2) : 0.00;
+			$memory_free = $memory_free != 0 ? round($memory_free / 1024, 2) : 0.00;
+			
 			$result = [$memory_total, $memory_used, $memory_free, $memory_buffcache, $memory_available, $memory_used_percent, $memory_free_percent, $memory_available_percent, $memory];
 
 		} else {
@@ -2507,7 +2522,7 @@ class Monitoring extends eqLogic {
 				return $result;
 			}
 
-			// Total, Used*, Free, Buff/Cache = N/A, Availabe = N/A, Free %, Used %, Text
+			// Total, Used*, Free, Buff/Cache = N/A, Available = N/A, Free %, Used %, Text
 			$memory_total = intval($memory_data[0]);
 			$memory_free = intval($memory_data[1]);
 			$memory_used = $memory_total - $memory_free;
@@ -2554,7 +2569,7 @@ class Monitoring extends eqLogic {
 	}
 
 	public function formatHDD($hdd_value, $hdd_name, $equipement) {
-		$result = [0, 0, 0, 0.0, 0.0, '']; // Total, Used, Free, Used %, Free %, Text
+		$result = [0.00, 0.00, 0.00, 0.0, 0.0, '']; // Total, Used, Free, Used %, Free %, Text
 
 		if (empty($hdd_value)) {
 			return $result;
@@ -2583,6 +2598,11 @@ class Monitoring extends eqLogic {
 
 		$hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($hdd_free, 'Ko');
 		
+		// Convert to Mo, source in Ko. it's to avoid problem with big values in Jeedom History DB
+		$hdd_total = $hdd_total != 0 ? round($hdd_total / 1024, 2) : 0.00;
+		$hdd_used = $hdd_used != 0 ? round($hdd_used / 1024, 2) : 0.00;
+		$hdd_free = $hdd_free != 0 ? round($hdd_free / 1024, 2) : 0.00;
+
 		// HDD Total, Used, Free, Used %, Free %, Text
 		$result = [$hdd_total, $hdd_used, $hdd_free, $hdd_used_percent, $hdd_free_percent, $hdd];			
 		return $result;	
