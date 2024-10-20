@@ -782,7 +782,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_tx');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('octets');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -800,7 +800,7 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network_rx');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('numeric');
-			$MonitoringCmd->setUnite('octets');
+			$MonitoringCmd->setUnite('Mo');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(0);
@@ -2394,6 +2394,7 @@ class Monitoring extends eqLogic {
 	public function formatNetwork($_network_txrx, $_network_ip, $_equipement) {
 		// Network TX, Network RX, Network Name, Network Ip, Text
 		$network_ip = isset($_network_ip) ? $_network_ip : '';
+		
 		$result = [0, 0, '', $network_ip, ''];
 
 		if (empty($_network_txrx)) {
@@ -2412,6 +2413,13 @@ class Monitoring extends eqLogic {
 
 		$network = __('TX', __FILE__) . ' : ' . $this->formatSize($network_tx) . ' - ' . __('RX', __FILE__) . ' : ' . $this->formatSize($network_rx);
 		
+		// Convert to Mo, source in octects. it's to avoid problem with big values in Jeedom History DB
+		if ($network_tx != 0) {
+			$network_tx = round($network_tx / 1024 / 1024, 2);
+		}
+		if ($network_rx != 0) {
+			$network_rx = round($network_rx / 1024 / 1024, 2);
+		}
 		log::add('Monitoring', 'debug', '['. $_equipement .'][RESEAU] Carte Réseau / IP (TX - RX) :: ' . $network_name . ' / IP : ' . $network_ip . ' (' . $network .')');
 		
 		$result = [$network_tx, $network_rx, $network_name, $network_ip, $network];
@@ -2507,7 +2515,7 @@ class Monitoring extends eqLogic {
 				return $result;
 			}
 
-			// Total, Used*, Free, Buff/Cache = N/A, Availabe = N/A, Free %, Used %, Text
+			// Total, Used*, Free, Buff/Cache = N/A, Available = N/A, Free %, Used %, Text
 			$memory_total = intval($memory_data[0]);
 			$memory_free = intval($memory_data[1]);
 			$memory_used = $memory_total - $memory_free;

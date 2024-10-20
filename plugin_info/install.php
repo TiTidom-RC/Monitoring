@@ -122,9 +122,20 @@ function Monitoring_update() {
     }
 
     foreach (eqLogic::byType('Monitoring', false) as $Monitoring) {
+        // Init Pull Use Custom
         if ($Monitoring->getConfiguration('pull_use_custom') == '') {
             $Monitoring->setConfiguration('pull_use_custom', '0');
             $Monitoring->save();
+        }
+
+        // Convert Unite 'o' to 'Mo' for Network TX/RX
+        $_cmdNetTX = $Monitoring->getCmd(null, 'network_tx');
+        $_cmdNetRX = $Monitoring->getCmd(null, 'network_rx');
+        foreach (array($_cmdNetTX, $_cmdNetRX) as $_cmdNet) {
+            if (is_object($_cmdNet) && $_cmdNet->getUnite() == 'o') {
+                $_cmdNet->setUnite('Mo');
+                $_cmdNet->save();
+            }
         }
     }
 
