@@ -129,10 +129,48 @@ function Monitoring_update() {
         }
 
         // Convert Unite 'o' to 'Mo' for Network TX/RX
-        $_cmdNetTX = $Monitoring->getCmd(null, 'network_tx');
-        $_cmdNetRX = $Monitoring->getCmd(null, 'network_rx');
-        foreach (array($_cmdNetTX, $_cmdNetRX) as $_cmdNet) {
-            if (is_object($_cmdNet) && $_cmdNet->getUnite() == 'octets') {
+        // Convert Unite from 'Ko' to 'Mo' for HDD and Swap
+        $_cmdArray = [
+            'hdd_total',
+            'hdd_used',
+            'hdd_free',
+
+            'swap_total',
+            'swap_used',
+            'swap_free',
+
+            'syno_hddv2_total',
+            'syno_hddv2_used',
+            'syno_hddv2_free',
+
+            'syno_hddv3_total',
+            'syno_hddv3_used',
+            'syno_hddv3_free',
+
+            'syno_hddv4_total',
+            'syno_hddv4_used',
+            'syno_hddv4_free',
+
+            'syno_hddusb_total',
+            'syno_hddusb_used',
+            'syno_hddusb_free',
+
+            'syno_hddesata_total',
+            'syno_hddesata_used',
+            'syno_hddesata_free',
+
+            'memory_total',
+            'memory_used',
+            'memory_free',
+            'memory_buffcache',
+            'memory_available',
+
+            'network_tx',
+            'network_rx',
+        ];
+        foreach ($_cmdArray as $_cmdNet) {
+            $_cmdNet = $Monitoring->getCmd(null, $_cmdNet);
+            if (is_object($_cmdNet) && in_array($_cmdNet->getUnite(), ['octets', 'Ko'])) {
                 $_cmdNet->setUnite('Mo');
                 $_cmdNet->save();
             }
