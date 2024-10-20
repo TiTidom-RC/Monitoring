@@ -132,7 +132,7 @@ function Monitoring_update() {
         $_cmdNetTX = $Monitoring->getCmd(null, 'network_tx');
         $_cmdNetRX = $Monitoring->getCmd(null, 'network_rx');
         foreach (array($_cmdNetTX, $_cmdNetRX) as $_cmdNet) {
-            if (is_object($_cmdNet) && $_cmdNet->getUnite() == 'o') {
+            if (is_object($_cmdNet) && $_cmdNet->getUnite() == 'octets') {
                 $_cmdNet->setUnite('Mo');
                 $_cmdNet->save();
             }
