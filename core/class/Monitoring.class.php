@@ -1683,56 +1683,56 @@ class Monitoring extends eqLogic {
 			'distri_name' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
 			
 			'load_avg' => array('icon', 'id', 'display', 'collect', 'value'),
-			'load_avg_1mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
-			'load_avg_5mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
-			'load_avg_15mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_2'),
+			'load_avg_1mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats'),
+			'load_avg_5mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats'),
+			'load_avg_15mn' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats'),
 			
 			'uptime' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
 			
 			'hdd' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'hdd_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
+			'hdd_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats'),
 			
 			'memory' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'memory_available_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
+			'memory_available_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats'),
 			
 			'swap' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'swap_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0'),
+			'swap_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats'),
 			
 			'network' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
 			'network_name' => array('exec', 'id'),
 			'network_ip' => array('exec', 'id'),
 			
 			'cpu' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'cpu_temp' => array('exec', 'id', 'display', 'colorlow', 'colorhigh', 'stats_0'),
+			'cpu_temp' => array('exec', 'id', 'display', 'colorlow', 'colorhigh', 'stats'),
 
-			'perso1' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats_2'),
-			'perso2' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats_2')
+			'perso1' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats'),
+			'perso2' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats')
 		);
 
 		// Synology
 		$syno_hddv2_array = array(
 			'syno_hddv2' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv2_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+			'syno_hddv2_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
 		);
 
 		$syno_hddv3_array = array(
 			'syno_hddv3' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv3_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+			'syno_hddv3_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
 		);
 
 		$syno_hddv4_array = array(
 			'syno_hddv4' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv4_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+			'syno_hddv4_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
 		);
 
 		$syno_hddusb_array = array(
 			'syno_hddusb' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddusb_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+			'syno_hddusb_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
 		);
 
 		$syno_hddesata_array = array(
 			'syno_hddesata' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddesata_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats_0')
+			'syno_hddesata_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
 		);
 	
 		if ($this->getConfiguration('synology') == '1') {
@@ -1839,7 +1839,7 @@ class Monitoring extends eqLogic {
 
 		if ($this->getConfiguration('linux_use_temp_cmd')) {
 			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-			log::add('Monitoring','debug', '['. $equipement .'][LOCAL] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
+			log::add('Monitoring','debug', '['. $equipement .'][' . $localoudistant == 'local' ? 'LOCAL' : 'SSH-EXEC' .'] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
 			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom')) : '';
 			if (!empty($cpu_temp)) {
 				$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => 'Custom'];
@@ -1884,39 +1884,46 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function getStats($cmd, $cmdName, &$replace, int $precision = 2) {
+	public function getStats($cmd, $cmdName, int $precision = 2) {
 		try {
 			if ($cmd->getIsHistorized() == 1) {
 				$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
 				$historyStatistique = $cmd->getStatistique($startHist, date('Y-m-d H:i:s'));
 				if ($historyStatistique['avg'] == 0 && $historyStatistique['min'] == 0 && $historyStatistique['max'] == 0) {
-					$replace['#' . $cmdName . '_averageHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
-					$replace['#' . $cmdName . '_minHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
-					$replace['#' . $cmdName . '_maxHistory#'] = round(floatval($replace['#' . $cmdName . '#']), $precision);
+					$cmd_value = $cmd->execCmd();
+					$cmd->setConfiguration($cmdName . '_averageHistory', round(floatval($cmd_value), $precision));
+					$cmd->setConfiguration($cmdName . '_minHistory', round(floatval($cmd_value), $precision));
+					$cmd->setConfiguration($cmdName . '_maxHistory', round(floatval($cmd_value), $precision));
+					$cmd->save();
 				} else {
-					$replace['#' . $cmdName . '_averageHistory#'] = round($historyStatistique['avg'], $precision);
-					$replace['#' . $cmdName . '_minHistory#'] = round($historyStatistique['min'], $precision);
-					$replace['#' . $cmdName . '_maxHistory#'] = round($historyStatistique['max'], $precision);
+					$cmd->setConfiguration($cmdName . '_averageHistory', round($historyStatistique['avg'], $precision));
+					$cmd->setConfiguration($cmdName . '_minHistory', round($historyStatistique['min'], $precision));
+					$cmd->setConfiguration($cmdName . '_maxHistory', round($historyStatistique['max'], $precision));
+					$cmd->save();
 				}
 				// Tendance
 				if ($this->getConfiguration('stats_tendance', '0') == '1') {
 					$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
 					log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
 					if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
-						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-up"></i>';
+						$cmd->setConfiguration($cmdName . '_tendance', 'arrow-up');
 					} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
-						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-arrow-down"></i>';
+						$cmd->setConfiguration($cmdName . '_tendance', 'arrow-down');
 					} else {
-						$replace['#' . $cmdName . '_tendance#'] = ' <i style="color: var(--al-info-color) !important;" class="fas fa-minus"></i>';
+						$cmd->setConfiguration($cmdName . '_tendance', 'minus');
 					}
+					$cmd->save();
+
 				} else {
-					$replace['#' . $cmdName . '_tendance#'] = '';
+					$cmd->setConfiguration($cmdName . '_tendance', '');
+					$cmd->save();
 				}
 			} else {
-				$replace['#' . $cmdName . '_averageHistory#'] = '-';
-				$replace['#' . $cmdName . '_minHistory#'] = '-';
-				$replace['#' . $cmdName . '_maxHistory#'] = '-';
-				$replace['#' . $cmdName . '_tendance#'] = '';
+				$cmd->setConfiguration($cmdName . '_averageHistory', '-');
+				$cmd->setConfiguration($cmdName . '_minHistory', '-');
+				$cmd->setConfiguration($cmdName . '_maxHistory', '-');
+				$cmd->setConfiguration($cmdName . '_tendance', '');
+				$cmd->save();
 			}
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[' . $this->getName() . '][getStats] ' . $e->getMessage());
@@ -2013,11 +2020,11 @@ class Monitoring extends eqLogic {
 			'colorhigh' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, &$replace, $cmdName) {
 				$replace[$cmdNamePrefix . '_colorhigh#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_colorhigh') : '';
 			},
-			'stats_0' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
-				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 0); }
-			},
-			'stats_2' => function() use ($isCmdObject, $cmd, $cmdName, &$replace) {
-				if ($isCmdObject) { $this->getStats($cmd, $cmdName, $replace, 2); }
+			'stats' => function() use ($isCmdObject, $cmd, $cmdNamePrefix, $cmdName, &$replace) {
+				$replace[$cmdNamePrefix . '_averageHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_averageHistory') : '-';
+				$replace[$cmdNamePrefix . '_minHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_minHistory') : '-';
+				$replace[$cmdNamePrefix . '_maxHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_maxHistory') : '-';
+				$replace[$cmdNamePrefix . '_tendance#'] = ($isCmdObject && $cmd->getConfiguration($cmdName . '_tendance', '') !== '') ? ' <i style="color: var(--al-info-color) !important;" class="fas fa-' . $cmd->getConfiguration($cmdName . '_tendance') . '"></i>' : '';
 			}
 		];
 
@@ -2038,8 +2045,8 @@ class Monitoring extends eqLogic {
 		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
 		$memory_command = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
 		$swap_command = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
-		$network_command = "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
-		$network_ip_command = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+		$network_command = "cat /proc/net/dev 2>/dev/null | grep \"" . $cartereseau . ":\" | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
+		$network_ip_command = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep \"" . $cartereseau . " \" | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 		$load_avg_command = "cat /proc/loadavg 2>/dev/null";
 		$uptime_command = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 		$release_command = "awk -F'=' '/%s/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
@@ -2273,15 +2280,18 @@ class Monitoring extends eqLogic {
 		}	
 	}
 
-	public function getNetworkCard($_networkCard = '') {
+	public function getNetworkCard($_networkCard = '', $_localorremote = 'local', $_hostId = '') {
 		$networkCard = '';
 		if ($_networkCard == 'netautre') {
-			$networkCard = $this->getConfiguration('cartereseauautre');
+			$networkCard = trim($this->getConfiguration('cartereseauautre'));
 		} elseif ($_networkCard == 'netauto') {
-			$networkCard = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+			$networkCard_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";
+			$networkCard = $_localorremote == 'local' ? $this->execSRV($networkCard_cmd, 'NetworkCard') : $this->execSSH($_hostId, $networkCard_cmd, 'NetworkCard');
 		} else {
 			$networkCard = $_networkCard;
 		}
+
+		log::add('Monitoring', 'debug', '['. $this->getName() .'][getNetworkCard] NetworkCard :: ' . $networkCard);
 		return $networkCard;
 	}
 
@@ -2678,7 +2688,6 @@ class Monitoring extends eqLogic {
 			// Architecture Key
 			$archKey = '';
 
-			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 			$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
 
@@ -2718,6 +2727,8 @@ class Monitoring extends eqLogic {
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey);
+
+					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId);
 					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
 
 					$ARMv = $ARMv ?? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
@@ -2806,6 +2817,7 @@ class Monitoring extends eqLogic {
 				
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ARMv :: ' . $ARMv);
 
+				$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'local');
 				$commands = $this->getCommands($ARMv, $cartereseau, 'local');
 
 				$uname = $commands['uname'];
@@ -2963,6 +2975,18 @@ class Monitoring extends eqLogic {
 						'perso2' => $perso2,
 					);
 
+					$dataresult_stats = array(
+						'load_avg_1mn' => 2,
+						'load_avg_5mn' => 2,
+						'load_avg_15mn' => 2,
+						'hdd_free_percent' => 1,
+						'swap_free_percent' => 1,
+						'memory_available_percent' => 1,
+						'cpu_temp' => 1,
+						'perso1' => 2,
+						'perso2' => 2
+					);
+
 					if ($isSynology) {
 						if ($this->getConfiguration('synologyv2') == '1') {
 							$dataresult = array_merge($dataresult, [
@@ -2972,6 +2996,10 @@ class Monitoring extends eqLogic {
 								'syno_hddv2_free' => $syno_hddv2_free,
 								'syno_hddv2_used_percent' => $syno_hddv2_used_percent,
 								'syno_hddv2_free_percent' => $syno_hddv2_free_percent,
+							]);
+
+							$dataresult_stats = array_merge($dataresult_stats, [
+								'syno_hddv2_free_percent' => 1,
 							]);
 						}
 						if ($this->getConfiguration('synologyv3') == '1') {
@@ -2983,6 +3011,10 @@ class Monitoring extends eqLogic {
 								'syno_hddv3_used_percent' => $syno_hddv3_used_percent,
 								'syno_hddv3_free_percent' => $syno_hddv3_free_percent,
 							]);
+
+							$dataresult_stats = array_merge($dataresult_stats, [
+								'syno_hddv3_free_percent' => 1,
+							]);
 						}
 						if ($this->getConfiguration('synologyv4') == '1') {
 							$dataresult = array_merge($dataresult, [
@@ -2992,6 +3024,10 @@ class Monitoring extends eqLogic {
 								'syno_hddv4_free' => $syno_hddv4_free,
 								'syno_hddv4_used_percent' => $syno_hddv4_used_percent,
 								'syno_hddv4_free_percent' => $syno_hddv4_free_percent,
+							]);
+
+							$dataresult_stats = array_merge($dataresult_stats, [
+								'syno_hddv4_free_percent' => 1,
 							]);
 						}
 
@@ -3004,6 +3040,10 @@ class Monitoring extends eqLogic {
 								'syno_hddusb_free' => $syno_hddusb_free,
 								'syno_hddusb_free_percent' => $syno_hddusb_free_percent,
 							]);
+
+							$dataresult_stats = array_merge($dataresult_stats, [
+								'syno_hddusb_free_percent' => 1,
+							]);
 						}
 						if ($this->getConfiguration('synologyesata') == '1') {
 							$dataresult = array_merge($dataresult, [
@@ -3013,6 +3053,10 @@ class Monitoring extends eqLogic {
 								'syno_hddesata_used_percent' => $syno_hddesata_used_percent,
 								'syno_hddesata_free' => $syno_hddesata_free,
 								'syno_hddesata_free_percent' => $syno_hddesata_free_percent,
+							]);
+
+							$dataresult_stats = array_merge($dataresult_stats, [
+								'syno_hddesata_free_percent' => 1,
 							]);
 						}
 					}
@@ -3024,6 +3068,15 @@ class Monitoring extends eqLogic {
 							$cmd->event($value);
 						}
 					}
+
+					// getStats pour les commandes
+					foreach ($dataresult_stats as $cmd_name => $precision) {
+						$cmd = $this->getCmd(null, $cmd_name);
+						if (is_object($cmd)) {
+							$this->getStats($cmd, $cmd_name, $precision);
+						}
+					}
+
 				} elseif ($cnx_ssh == 'KO') {
 					$dataresult = array(
 						'distri_name' => 'Connexion SSH KO',
