@@ -3061,6 +3061,14 @@ class Monitoring extends eqLogic {
 						}
 					}
 
+					// Event sur les commandes après récupération des données
+					foreach ($dataresult as $key => $value) {
+						$cmd = $this->getCmd(null, $key);
+						if (is_object($cmd)) {
+							$cmd->event($value);
+						}
+					}
+
 					// getStats pour les commandes
 					foreach ($dataresult_stats as $cmd_name => $precision) {
 						$cmd = $this->getCmd(null, $cmd_name);
@@ -3069,13 +3077,6 @@ class Monitoring extends eqLogic {
 						}
 					}
 
-					// Event sur les commandes après récupération des données
-					foreach ($dataresult as $key => $value) {
-						$cmd = $this->getCmd(null, $key);
-						if (is_object($cmd)) {
-							$cmd->event($value);
-						}
-					}
 				} elseif ($cnx_ssh == 'KO') {
 					$dataresult = array(
 						'distri_name' => 'Connexion SSH KO',
