@@ -2283,6 +2283,8 @@ class Monitoring extends eqLogic {
 		} else {
 			$networkCard = $_networkCard;
 		}
+
+		log::add('Monitoring', 'debug', '['. $this->getName() .'][getNetworkCard] NetworkCard :: ' . $networkCard);
 		return $networkCard;
 	}
 
