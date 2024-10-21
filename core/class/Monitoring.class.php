@@ -2276,9 +2276,9 @@ class Monitoring extends eqLogic {
 	public function getNetworkCard($_networkCard = '', $_localorremote = 'local', $_hostId = '') {
 		$networkCard = '';
 		if ($_networkCard == 'netautre') {
-			$networkCard = $this->getConfiguration('cartereseauautre');
+			$networkCard = trim($this->getConfiguration('cartereseauautre'));
 		} elseif ($_networkCard == 'netauto') {
-			$networkCard_cmd = "ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";
+			$networkCard_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";
 			$networkCard = $_localorremote == 'local' ? $this->execSRV($networkCard_cmd, 'NetworkCard') : $this->execSSH($_hostId, $networkCard_cmd, 'NetworkCard');
 		} else {
 			$networkCard = $_networkCard;
