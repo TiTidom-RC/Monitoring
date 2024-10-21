@@ -2273,12 +2273,13 @@ class Monitoring extends eqLogic {
 		}	
 	}
 
-	public function getNetworkCard($_networkCard = '') {
+	public function getNetworkCard($_networkCard = '', $_localorremote = 'local', $_hostId = '') {
 		$networkCard = '';
 		if ($_networkCard == 'netautre') {
 			$networkCard = $this->getConfiguration('cartereseauautre');
 		} elseif ($_networkCard == 'netauto') {
-			$networkCard = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+			$networkCard_cmd = "$(ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }')";
+			$networkCard = $_localorremote == 'local' ? $this->execSRV($networkCard_cmd, 'NetworkCard') : $this->execSSH($_hostId, $networkCard_cmd, 'NetworkCard');
 		} else {
 			$networkCard = $_networkCard;
 		}
@@ -2678,7 +2679,6 @@ class Monitoring extends eqLogic {
 			// Architecture Key
 			$archKey = '';
 
-			$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'));
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 			$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
 
@@ -2718,6 +2718,8 @@ class Monitoring extends eqLogic {
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey);
+
+					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId);
 					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
 
 					$ARMv = $ARMv ?? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
@@ -2806,6 +2808,7 @@ class Monitoring extends eqLogic {
 				
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ARMv :: ' . $ARMv);
 
+				$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'local');
 				$commands = $this->getCommands($ARMv, $cartereseau, 'local');
 
 				$uname = $commands['uname'];
