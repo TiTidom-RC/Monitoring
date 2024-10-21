@@ -1894,10 +1894,12 @@ class Monitoring extends eqLogic {
 					$cmd->setConfiguration($cmdName . '_averageHistory', round(floatval($cmd_value), $precision));
 					$cmd->setConfiguration($cmdName . '_minHistory', round(floatval($cmd_value), $precision));
 					$cmd->setConfiguration($cmdName . '_maxHistory', round(floatval($cmd_value), $precision));
+					$cmd->save();
 				} else {
 					$cmd->setConfiguration($cmdName . '_averageHistory', round($historyStatistique['avg'], $precision));
 					$cmd->setConfiguration($cmdName . '_minHistory', round($historyStatistique['min'], $precision));
 					$cmd->setConfiguration($cmdName . '_maxHistory', round($historyStatistique['max'], $precision));
+					$cmd->save();
 				}
 				// Tendance
 				if ($this->getConfiguration('stats_tendance', '0') == '1') {
@@ -1910,14 +1912,18 @@ class Monitoring extends eqLogic {
 					} else {
 						$cmd->setConfiguration($cmdName . '_tendance', 'minus');
 					}
+					$cmd->save();
+
 				} else {
 					$cmd->setConfiguration($cmdName . '_tendance', '');
+					$cmd->save();
 				}
 			} else {
 				$cmd->setConfiguration($cmdName . '_averageHistory', '-');
 				$cmd->setConfiguration($cmdName . '_minHistory', '-');
 				$cmd->setConfiguration($cmdName . '_maxHistory', '-');
 				$cmd->setConfiguration($cmdName . '_tendance', '');
+				$cmd->save();
 			}
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[' . $this->getName() . '][getStats] ' . $e->getMessage());
