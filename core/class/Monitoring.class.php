@@ -2038,8 +2038,8 @@ class Monitoring extends eqLogic {
 		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
 		$memory_command = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
 		$swap_command = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
-		$network_command = "cat /proc/net/dev 2>/dev/null | grep " . $cartereseau . " | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
-		$network_ip_command = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep " . $cartereseau . " | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+		$network_command = "cat /proc/net/dev 2>/dev/null | grep '" . $cartereseau . ":' | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
+		$network_ip_command = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep '" . $cartereseau . " ' | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
 		$load_avg_command = "cat /proc/loadavg 2>/dev/null";
 		$uptime_command = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 		$release_command = "awk -F'=' '/%s/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
