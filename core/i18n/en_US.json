@@ -27,6 +27,8 @@
         "Espace Disque Utilisé": "Disk space used",
         "Espace Disque Utilisé (Pourcent)": "Disk space used (Percent)",
         "Fréquence CPU": "CPU frequency",
+        "IP": "IP",
+        "Infos Réseau": "Network info",
         "Le plugin SSH Manager n\\'est pas actif !": "The SSH Manager plugin is not active!",
         "Libre": "Free",
         "Mémoire": "Memory",
