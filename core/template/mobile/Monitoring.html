@@ -207,6 +207,15 @@
 				}
 			}
 		</script>
+		<div class="tooltips" style="display: #network_infos_display#;">
+			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
+			<span id="network_infos#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('network_infos#id#').innerHTML = '<span>#network_infos#</span>';
+			}
+		</script>
 		<div class="tooltips" style="display: #network_display#;">
 			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
 			<span id="network#id#"></span>

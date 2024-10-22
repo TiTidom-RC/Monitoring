@@ -774,6 +774,24 @@ class Monitoring extends eqLogic {
 			$orderCmd++;
 		}
 
+		$MonitoringCmd = $this->getCmd(null, 'network_infos');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Infos Réseau', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('network_infos');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-ethernet"></i>');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(1);
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
 		$MonitoringCmd = $this->getCmd(null, 'network_tx');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -1699,6 +1717,7 @@ class Monitoring extends eqLogic {
 			'swap_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats'),
 			
 			'network' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'network_infos' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
 			'network_name' => array('exec', 'id'),
 			'network_ip' => array('exec', 'id'),
 			
@@ -1954,6 +1973,9 @@ class Monitoring extends eqLogic {
 				break;
 			case 'network':
 				$icon = '<i class="fas fa-network-wired"></i>';
+				break;
+			case 'network_infos':
+				$icon = '<i class="fas fas fa-ethernet"></i>';
 				break;
 			case 'cpu':
 				$icon = '<i class="fas fa-microchip"></i>';
@@ -2404,7 +2426,9 @@ class Monitoring extends eqLogic {
 	public function formatNetwork($_network_txrx, $_network_ip, $_equipement) {
 		// Network TX, Network RX, Network Name, Network Ip, Text
 		$network_ip = isset($_network_ip) ? $_network_ip : '';
-		$result = [0.00, 0.00, '', $network_ip, ''];
+
+		// Init result
+		$result = [0.00, 0.00, '', $network_ip, '', ''];
 
 		if (empty($_network_txrx)) {
 			return $result;
@@ -2415,20 +2439,21 @@ class Monitoring extends eqLogic {
 			return $result;
 		}
 
-		// TX, RX, Name, Text
+		// TX, RX, Name, Network Text, NetworkInfos Text
 		$network_tx = intval($network_data[2]);
 		$network_rx = intval($network_data[1]);
 		$network_name = $network_data[0];
 
 		$network = __('TX', __FILE__) . ' : ' . $this->formatSize($network_tx) . ' - ' . __('RX', __FILE__) . ' : ' . $this->formatSize($network_rx);
-		
+		$network_infos = __('Carte Réseau', __FILE__) . ' : ' . $network_name . ' - ' . __('IP', __FILE__) . ' : ' . $network_ip;
+
 		// Convert to Mo, source in octects. it's to avoid problem with big values in Jeedom History DB
 		$network_tx = $network_tx != 0 ? round($network_tx / 1024 / 1024, 2) : 0.00;
 		$network_rx = $network_rx != 0 ? round($network_rx / 1024 / 1024, 2) : 0.00;
 
 		log::add('Monitoring', 'debug', '['. $_equipement .'][RESEAU] Carte Réseau / IP (TX - RX) :: ' . $network_name . ' / IP : ' . $network_ip . ' (' . $network .')');
 		
-		$result = [$network_tx, $network_rx, $network_name, $network_ip, $network];
+		$result = [$network_tx, $network_rx, $network_name, $network_ip, $network, $network_infos];
 		return $result;
 	}
 
@@ -2919,7 +2944,7 @@ class Monitoring extends eqLogic {
 					[$swap_total, $swap_used, $swap_free, $swap_used_percent, $swap_free_percent, $swap_display] = isset($swap_value) ? $this->formatSwap($swap_value, $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 	
 					// Réseau (New)
-					[$network_tx, $network_rx, $network_name, $network_ip, $network] = isset($network_value) ? $this->formatNetwork($network_value, $network_ip_value, $equipement) : [0, 0, '', '', ''];
+					[$network_tx, $network_rx, $network_name, $network_ip, $network, $network_infos] = isset($network_value) ? $this->formatNetwork($network_value, $network_ip_value, $equipement) : [0, 0, '', '', '', ''];
 	
 					// HDD (New)
 					[$hdd_total, $hdd_used, $hdd_free, $hdd_used_percent, $hdd_free_percent, $hdd] = isset($hdd_value) ? $this->formatHDD($hdd_value, 'HDD', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
@@ -2957,6 +2982,7 @@ class Monitoring extends eqLogic {
 						'swap_used' => $swap_used,
 						'swap_free' => $swap_free,
 						'network' => $network,
+						'network_infos' => $network_infos,
 						'network_tx' => $network_tx,
 						'network_rx' => $network_rx,
 						'network_name' => $network_name,
