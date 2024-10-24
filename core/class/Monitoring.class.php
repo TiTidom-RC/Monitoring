@@ -1606,7 +1606,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'perso1');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('perso1', __FILE__));
+			$MonitoringCmd->setName(__('Perso1', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('perso1');
 			$MonitoringCmd->setType('info');
@@ -1623,7 +1623,7 @@ class Monitoring extends eqLogic {
 		$MonitoringCmd = $this->getCmd(null, 'perso2');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
-			$MonitoringCmd->setName(__('perso2', __FILE__));
+			$MonitoringCmd->setName(__('Perso2', __FILE__));
 			$MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('perso2');
 			$MonitoringCmd->setType('info');
