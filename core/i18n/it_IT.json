@@ -41,6 +41,8 @@
         "Mémoire Utilisée": "Memoria utilizzata",
         "Mémoire Utilisée (Pourcent)": "Memoria utilizzata (percentuale)",
         "Nb CPU": "CPU Nb",
+        "Perso1": "Own1",
+        "Perso2": "Perso2",
         "PowerOff": "Spegnimento",
         "RX": "RX",
         "Rafraichir": "Aggiornare",
@@ -103,9 +105,7 @@
         "[MIGRATION] Equipement :: ": "[Apparecchiature ::",
         "[MIGRATION] Equipement Distant :: ": "[Apparecchiature remote ::",
         "[MIGRATION] Erreur lors de la migration de l\\'équipement :: ": "[Errore durante la migrazione delle apparecchiature ::",
-        "[MIGRATION] Fin de la migration vers la v3.0": "[MIGRAZIONE] Fine della migrazione alla v3.0",
-        "perso1": "perso1",
-        "perso2": "perso2"
+        "[MIGRATION] Fin de la migration vers la v3.0": "[MIGRAZIONE] Fine della migrazione alla v3.0"
     },
     "plugins\/Monitoring\/core\/php\/Monitoringcli.php": {
         "[DEP-INSTALL] >>>> Fin des dépendances <<<<": "[DEP-INSTALL] >>>> Fine delle dipendenze <<<<",
