@@ -2547,6 +2547,8 @@ class Monitoring extends eqLogic {
 			$memory_total = $memory_total != 0 ? round($memory_total / 1024, 2) : 0.00;
 			$memory_used = $memory_used != 0 ? round($memory_used / 1024, 2) : 0.00;
 			$memory_free = $memory_free != 0 ? round($memory_free / 1024, 2) : 0.00;
+			$memory_buffcache = $memory_buffcache != 0 ? round($memory_buffcache / 1024, 2) : 0.00;
+			$memory_available = $memory_available != 0 ? round($memory_available / 1024, 2) : 0.00;
 			
 			$result = [$memory_total, $memory_used, $memory_free, $memory_buffcache, $memory_available, $memory_used_percent, $memory_free_percent, $memory_available_percent, $memory];
 
@@ -2578,6 +2580,12 @@ class Monitoring extends eqLogic {
 			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used % :: ' . $memory_used_percent);
 
 			$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($memory_free, 'Ko');
+			
+			// Convert to Mo, source in Ko. it's to avoid problem with big values in Jeedom History DB
+			$memory_total = $memory_total != 0 ? round($memory_total / 1024, 2) : 0.00;
+			$memory_used = $memory_used != 0 ? round($memory_used / 1024, 2) : 0.00;
+			$memory_free = $memory_free != 0 ? round($memory_free / 1024, 2) : 0.00;
+
 			$result = [$memory_total, $memory_used, $memory_free, 0, 0, $memory_used_percent, $memory_free_percent, 0.0, $memory];
 		}
 		return $result;
