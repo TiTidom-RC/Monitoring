@@ -330,13 +330,13 @@
 					if ('#syno_hddesata_free_percent#' === '') {
 						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
 					} else if ((parseFloat('#syno_hddesata_free_percent#') > parseFloat('#syno_hddesata_free_percent_colorhigh#')) && '#syno_hddesata_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else if ((parseFloat('#syno_hddesata_free_percent#') >= parseFloat('#syno_hddesata_free_percent_colorlow#')) && (parseFloat('#syno_hddesata_free_percent#') <= parseFloat('#syno_hddesata_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else if (parseFloat('#syno_hddesata_free_percent#') < parseFloat('#syno_hddesata_free_percent_colorlow#')) {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
 					} else {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata_total# (<span class="state">#syno_hddesata_free_percent#</span><span>%</span>)';
+						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span class="state">#syno_hddesata_free_percent#</span><span>%</span>)';
 					}
 				}
 			}
