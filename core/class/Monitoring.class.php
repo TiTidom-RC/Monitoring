@@ -2229,7 +2229,7 @@ class Monitoring extends eqLogic {
 			],
 			'FreeBSD' => [ // uname + distri_name
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
-				'distri_bits' => $distri_bits_command,
+				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
 				'uptime' => "sysctl kern.boottime | awk -F'sec = |,' '{ print $2 }'",
 				'load_avg' => "LC_ALL=C uptime | awk '{ print $8,$9,$10 }'",
