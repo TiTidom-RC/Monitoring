@@ -2229,8 +2229,9 @@ class Monitoring extends eqLogic {
 			],
 			'FreeBSD' => [ // uname + distri_name
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
-				'distri_bits' => ['cmd', "sysctl kern.smp.maxcpus | awk '{ print $2 }'"],
+				'distri_bits' => $distri_bits_command,
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
+				'uptime' => "sysctl kern.boottime | awk -F'sec = |,' '{ print $2 }'",
 				'load_avg' => "LC_ALL=C uptime | awk '{ print $8,$9,$10 }'",
 				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'",
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
