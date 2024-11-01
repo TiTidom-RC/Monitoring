@@ -2734,6 +2734,7 @@ class Monitoring extends eqLogic {
 
 			// Architecture Key
 			$archKey = '';
+			$archKeyType = '';
 
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 			$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
@@ -2746,12 +2747,14 @@ class Monitoring extends eqLogic {
 
 					if ($isSynology) {
 						$archKey = 'syno';
+						$archKeyType = 'Synology';
 					} else {
 						$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 						$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
 
 						if (!empty($ARMv)) {
 							$archKey = $ARMv;
+							$archKeyType = 'ARMv';
 						} else {
 							// Unset $ARMv
 							unset($ARMv);
@@ -2761,6 +2764,7 @@ class Monitoring extends eqLogic {
 
 							if (in_array($distri_name_value, ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc'])) {
 								$archKey = $distri_name_value;
+								$archKeyType = 'DistriName';
 							} else {
 								// unset $distri_name_value
 								unset($distri_name_value);
@@ -2769,11 +2773,12 @@ class Monitoring extends eqLogic {
 								$uname_cmd = "uname -a 2>/dev/null | awk '{ print $2,$1 }'";
 								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
 								$archKey = $uname;
+								$archKeyType = 'Uname';
 							}
 						}
 					}
 
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey . ' (' . $archKeyType . ')');
 
 					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId);
 					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
