@@ -2218,7 +2218,7 @@ class Monitoring extends eqLogic {
 				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
 			],
-			'piCorePlayer' => [ // uname
+			'piCorePlayer' => [ // distri_name
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
