@@ -2291,13 +2291,13 @@ class Monitoring extends eqLogic {
 			if (array_key_exists($key, $cmdLocalSpecific)) {
 				return array_merge($cmdLocalCommon, $cmdLocalSpecific[$key]);		
 			} else {
-				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__));
+				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' :: ' . $key . ' (' . $confLocalorRemote . ')');
 			}
 		} else {
 			if (array_key_exists($key, $cmdRemoteSpecific)) {
 				return array_merge($cmdRemoteCommon, $cmdRemoteSpecific[$key]);		
 			} else {
-				throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__));
+				throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__) . ' :: ' . $key . ' (' . $confLocalorRemote . ')');
 			}
 		}	
 	}
