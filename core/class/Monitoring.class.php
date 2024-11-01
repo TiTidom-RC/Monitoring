@@ -2093,7 +2093,7 @@ class Monitoring extends eqLogic {
 		$cmdLocalCommon = [
 			'distri_bits' => $distri_bits_command,
 			'distri_name' => sprintf($release_command, '^PRETTY_NAME'),
-			'os_version' => sprintf($release_command, 'VERSION_ID'),
+			'os_version' => sprintf($release_command, '^VERSION_ID'),
 			'uptime' => $uptime_command,
 			'load_avg' => $load_avg_command,
 			'memory' => $memory_command,
@@ -2160,7 +2160,7 @@ class Monitoring extends eqLogic {
 				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
-				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm6l_command,
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"],
@@ -2173,7 +2173,7 @@ class Monitoring extends eqLogic {
 				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
-				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_aarch64_command,
 				'cpu_freq' => [
 					1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 2>/dev/null"],
@@ -2189,7 +2189,7 @@ class Monitoring extends eqLogic {
 				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
-				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_x86_command,
 				'cpu_freq' => $cpu_freq_x86_array,
 				'cpu_temp' => [
@@ -2205,7 +2205,7 @@ class Monitoring extends eqLogic {
 			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name)
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
-				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
@@ -2214,7 +2214,7 @@ class Monitoring extends eqLogic {
 			'osmc' => [ // distri_name
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
-				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
@@ -2224,7 +2224,7 @@ class Monitoring extends eqLogic {
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
-				'os_version' => sprintf($release_command, 'VERSION_ID'),
+				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
