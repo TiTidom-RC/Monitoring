@@ -2227,7 +2227,7 @@ class Monitoring extends eqLogic {
 				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p')
 			],
-			'FreeBSD' => [ // uname
+			'FreeBSD' => [ // uname + distri_name
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
 				'distri_bits' => ['cmd', "sysctl kern.smp.maxcpus | awk '{ print $2 }'"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
@@ -2763,26 +2763,38 @@ class Monitoring extends eqLogic {
 							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
 							// Search for specific distribution in distri_name_value
-							$distriValues = ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc', 'piCorePlayer'];
+							$distriValues = ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc', 'piCorePlayer', 'FreeBSD'];
 							$foundDistri = false;
 							foreach ($distriValues as $distriValue) {
 								if (stripos($distri_name_value, $distriValue) !== false) {
 									$foundDistri = true;
+									$archKey = $distriValue;
+									$archKeyType = 'DistriName';
 									break;
 								}
 							}
-							if ($foundDistri) {
-								$archKey = $distri_name_value;
-								$archKeyType = 'DistriName';
-							} else {
+							if (!$foundDistri) {
 								// unset $distri_name_value
 								unset($distri_name_value);
 
 								// Uname Command
+								// TODO revoir la manière de détecter l'OS en envoyant seulement l'OS détecté et pas le contenu de la réponse entière !
 								$uname_cmd = "uname -a 2>/dev/null | awk '{ print $2,$1 }'";
 								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
-								$archKey = $uname;
-								$archKeyType = 'Uname';
+								$unameValues = ['FreeBSD', 'Medion'];
+								$foundUname = false;
+								foreach ($unameValues as $unameValue) {
+									if (stripos($uname, $unameValue) !== false) {
+										$foundUname = true;
+										$archKey = $unameValue;
+										$archKeyType = 'Uname';
+										break;
+									}
+								}
+								if (!$foundUname) {
+									$archKey = 'unknown';
+									$archKeyType = 'Unknown';
+								}
 							}
 						}
 					}
