@@ -2424,7 +2424,7 @@ class Monitoring extends eqLogic {
 		// log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
 
 		// CPUFreq
-		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS]);
+		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'KHz');
 
 		// CPU Temp
 		$cpu_temp = $this->formatTemp($_cpu_temp);
@@ -2781,7 +2781,7 @@ class Monitoring extends eqLogic {
 								// TODO revoir la manière de détecter l'OS en envoyant seulement l'OS détecté et pas le contenu de la réponse entière !
 								$uname_cmd = "uname -a 2>/dev/null | awk '{ print $2,$1 }'";
 								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
-								$unameValues = ['FreeBSD', 'Medion'];
+								$unameValues = ['FreeBSD', 'medion'];
 								$foundUname = false;
 								foreach ($unameValues as $unameValue) {
 									if (stripos($uname, $unameValue) !== false) {
