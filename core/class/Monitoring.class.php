@@ -2429,7 +2429,8 @@ class Monitoring extends eqLogic {
 		// log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
 
 		// CPUFreq
-		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'KHz');
+		// TODO Voir quelle est l'unité pour un medion ou un freebsd pour la fréquence des CPU
+		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'KHz');	
 
 		// CPU Temp
 		$cpu_temp = $this->formatTemp($_cpu_temp);
@@ -2710,8 +2711,13 @@ class Monitoring extends eqLogic {
 		return round($tempNum, 1, PHP_ROUND_HALF_UP);
 	}
 
-	public function formatUptime($uptime) {
-		$uptimeNum = floatval($uptime);
+	public function formatUptime($uptime, $type = 'uptime') {
+		if ($type == 'unix') {
+			$uptimeNum = floatval(time() - $uptime);
+		} else {
+			$uptimeNum = floatval($uptime);
+		}
+		
 		$days = sprintf('%0.0f', floor($uptimeNum / 86400));
 		$hours = sprintf('%0.0f', floor(fmod($uptimeNum, 86400) / 3600));
 		$minutes = sprintf('%0.0f', floor(fmod($uptimeNum, 3600) / 60));
@@ -2985,7 +2991,11 @@ class Monitoring extends eqLogic {
 					}
 	
 					// Uptime (New)
-					[$uptime, $uptime_sec] = isset($uptime_value) ? $this->formatUptime($uptime_value) : ['', 0];
+					if ($archKey == 'FreeBSD') {
+						[$uptime, $uptime_sec] = isset($uptime_value) ? $this->formatUptime($uptime_value, 'unix') : ['', 0];
+					} else {
+						[$uptime, $uptime_sec] = isset($uptime_value) ? $this->formatUptime($uptime_value) : ['', 0];
+					}
 	
 					// LoadAverage (New)
 					[$load_avg_1mn, $load_avg_5mn, $load_avg_15mn, $load_avg] = isset($load_avg_value) ? $this->formatLoadAvg($load_avg_value) : [0.0, 0.0, 0.0, ''];
