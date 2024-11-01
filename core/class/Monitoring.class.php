@@ -2290,7 +2290,7 @@ class Monitoring extends eqLogic {
 		if ($confLocalorRemote == 'local') {
 			$foundKey = null;
 			foreach (array_keys($cmdLocalSpecific) as $arrayKey) {
-				if (strpos($key, $arrayKey) !== false) {
+				if (stripos($key, $arrayKey) !== false) {
 					$foundKey = $arrayKey;
 					break;
 				}
@@ -2303,7 +2303,7 @@ class Monitoring extends eqLogic {
 		} else {
 			$foundKey = null;
 			foreach (array_keys($cmdRemoteSpecific) as $arrayKey) {
-				if (strpos($key, $arrayKey) !== false) {
+				if (stripos($key, $arrayKey) !== false) {
 					$foundKey = $arrayKey;
 					break;
 				}
