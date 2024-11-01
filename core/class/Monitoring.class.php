@@ -2231,6 +2231,8 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p')
 			],
 			'FreeBSD' => [ // uname + distri_name
+				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | head -1 | awk -F': ' '{print $1, $2}'
+				
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
