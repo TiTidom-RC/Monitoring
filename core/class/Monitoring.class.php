@@ -2235,7 +2235,8 @@ class Monitoring extends eqLogic {
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
-				'uptime' => "sysctl kern.boottime | awk -F'sec = |,' '{ print $2 }'",
+				'uptime' => "sysctl -n kern.boottime | awk -v ORS=\"\" -F'[{}=,]' '{gsub(/ /, \"\", $3); gsub(/ /, \"\", $5); print $3 \".\" $5}'",
+				// 'uptime' => "sysctl -n kern.boottime | awk -F'sec = |,' '{ print $2 }'",
 				'load_avg' => "LC_ALL=C uptime | awk '{ print $8,$9,$10 }'",
 				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'",
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
@@ -2713,7 +2714,7 @@ class Monitoring extends eqLogic {
 
 	public function formatUptime($uptime, $type = 'uptime') {
 		if ($type == 'unix') {
-			$uptimeNum = floatval(time() - $uptime);
+			$uptimeNum = microtime(true) - floatval($uptime);
 		} else {
 			$uptimeNum = floatval($uptime);
 		}
