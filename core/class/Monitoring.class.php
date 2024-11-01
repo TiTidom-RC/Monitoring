@@ -2762,7 +2762,16 @@ class Monitoring extends eqLogic {
 							$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
 							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
-							if (in_array($distri_name_value, ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc'])) {
+							// Search for specific distribution in distri_name_value
+							$distriValues = ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc', 'piCorePlayer'];
+							$foundDistri = false;
+							foreach ($distriValues as $distriValue) {
+								if (stripos($distri_name_value, $distriValue) !== false) {
+									$foundDistri = true;
+									break;
+								}
+							}
+							if ($foundDistri) {
 								$archKey = $distri_name_value;
 								$archKeyType = 'DistriName';
 							} else {
