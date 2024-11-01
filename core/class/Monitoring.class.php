@@ -2288,14 +2288,28 @@ class Monitoring extends eqLogic {
 		$cmdRemoteSpecific['i386'] = &$cmdRemoteSpecific['x86_64'];
 
 		if ($confLocalorRemote == 'local') {
-			if (array_key_exists($key, $cmdLocalSpecific)) {
-				return array_merge($cmdLocalCommon, $cmdLocalSpecific[$key]);		
+			$foundKey = null;
+			foreach (array_keys($cmdLocalSpecific) as $arrayKey) {
+				if (strpos($key, $arrayKey) !== false) {
+					$foundKey = $arrayKey;
+					break;
+				}
+			}
+			if ($foundKey !== null) {
+				return array_merge($cmdLocalCommon, $cmdLocalSpecific[$foundKey]);
 			} else {
 				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' :: ' . $key);
 			}
 		} else {
-			if (array_key_exists($key, $cmdRemoteSpecific)) {
-				return array_merge($cmdRemoteCommon, $cmdRemoteSpecific[$key]);		
+			$foundKey = null;
+			foreach (array_keys($cmdRemoteSpecific) as $arrayKey) {
+				if (strpos($key, $arrayKey) !== false) {
+					$foundKey = $arrayKey;
+					break;
+				}
+			}
+			if ($foundKey !== null) {
+				return array_merge($cmdRemoteCommon, $cmdRemoteSpecific[$foundKey]);
 			} else {
 				throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__) . ' :: ' . $key);
 			}
