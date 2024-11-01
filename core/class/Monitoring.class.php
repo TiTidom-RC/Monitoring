@@ -2205,6 +2205,7 @@ class Monitoring extends eqLogic {
 			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name)
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
+				'os_version' => sprintf($release_command, 'VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
@@ -2213,6 +2214,7 @@ class Monitoring extends eqLogic {
 			'osmc' => [ // distri_name
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
+				'os_version' => sprintf($release_command, 'VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
@@ -2222,6 +2224,7 @@ class Monitoring extends eqLogic {
 				'ARMv' => ['value', "arm"],
 				'distri_bits' => ['value', "32"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
+				'os_version' => sprintf($release_command, 'VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
@@ -2231,6 +2234,7 @@ class Monitoring extends eqLogic {
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
+				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'uptime' => "sysctl kern.boottime | awk -F'sec = |,' '{ print $2 }'",
 				'load_avg' => "LC_ALL=C uptime | awk '{ print $8,$9,$10 }'",
 				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'",
