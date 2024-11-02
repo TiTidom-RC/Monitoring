@@ -2225,7 +2225,7 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p2')
 			],
 			'piCorePlayer' => [ // distri_name
-				'ARMv' => ['value', "arm"],
+				'ARMv' => ['cmd', "uname -m 2>/dev/null"],
 				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
