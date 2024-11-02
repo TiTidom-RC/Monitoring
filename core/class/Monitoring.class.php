@@ -2079,7 +2079,8 @@ class Monitoring extends eqLogic {
 			2 => ['cmd', "cat /proc/cpuinfo 2>/dev/null | grep -i '^cpu MHz' | head -1 | cut -d':' -f2 | awk '{ print \$NF }'"] // OK pour Debian 10,11,12, Ubuntu 22.04, pve-debian12
 		];
 		$cpu_freq_arm_array = [
-			1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
+			1 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq 2>/dev/null"],
+			2 => ['cmd', "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null"],
 		];
 
 		$cpu_temp_zone0_array = [
@@ -2230,7 +2231,7 @@ class Monitoring extends eqLogic {
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
 				'os_version' => sprintf($release_command, '^VERSION'),
 				'network_ip' => "ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != \"addr:127.0.0.1\" { print iface, $2 }' | head -1 | awk -v ORS=\"\" -F'[: ]' '{print $3}'",
-				'cpu_nb' => $cpu_nb_arm_command,
+				'cpu_nb' => "grep 'processor' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command_alt, '/mnt/mmcblk')
