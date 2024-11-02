@@ -2229,6 +2229,7 @@ class Monitoring extends eqLogic {
 				'distri_bits' => ['value', "32"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
 				'os_version' => sprintf($release_command, '^VERSION'),
+				'network_ip' => "ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != \"addr:127.0.0.1\" { print iface, $2 }' | head -1 | awk -v ORS=\"\" -F'[: ]' '{print $3}'",
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
