@@ -2235,7 +2235,10 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command_alt, '/dev/mmcblk')
 			],
 			'FreeBSD' => [ // uname + distri_name
-				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -F': ' '{print $1, $2}' | awk -v ORS="" '{ print $1, $2 }'
+				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -v ORS="" -F': ' '{print $1, $2}'
+				// récuperer le nom de la carte réseau : "ifconfig -u -l ether | awk -v ORS=\"\" '{ print $1 }'"
+				// Stats réseaux avec nom de la carte réseau, adresse IP, et TX, RX : "netstat -b -i -n -f inet | grep '" . $cartereseau . "' | head -1 | awk -v ORS=\"\" '{ print $1,$8,$11 }'"
+				// Adresse IP : "ifconfig -u le0 | awk -v ORS=\"\" '/inet / { print $2 }'"
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
 				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', $distri_bits_command],
@@ -2244,6 +2247,8 @@ class Monitoring extends eqLogic {
 				'uptime' => "sysctl -n kern.boottime | awk -v ORS=\"\" -F'[{}=,]' '{gsub(/ /, \"\", $3); gsub(/ /, \"\", $5); print $3 \".\" $5}'",
 				'load_avg' => "sysctl -n vm.loadavg | awk '{ print $2, $3, $4 }'",
 				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'", // A Corriger, ne fonctionne pas
+				'network' => "netstat -b -i -n -f inet | grep '" . $cartereseau . "' | awk -v ORS=\"\" '{ print $1,$8,$11 }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
+				'network_ip' => "ifconfig -u " . $cartereseau . " | awk -v ORS=\"\" '/inet / { print $2 }'",
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
 				'cpu_freq' => [
 					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2 }'"],
@@ -2327,12 +2332,17 @@ class Monitoring extends eqLogic {
 		}	
 	}
 
-	public function getNetworkCard($_networkCard = '', $_localorremote = 'local', $_hostId = '') {
+	public function getNetworkCard($_networkCard = '', $_localorremote = 'local', $_hostId = '', $_archKey = '') {
 		$networkCard = '';
 		if ($_networkCard == 'netautre') {
 			$networkCard = trim($this->getConfiguration('cartereseauautre'));
 		} elseif ($_networkCard == 'netauto') {
-			$networkCard_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";
+			$networkCard_cmd = '';
+			if ($_archKey == 'FreeBSD') {
+				$networkCard_cmd = "ifconfig -u -l ether 2>/dev/null | awk -v ORS=\"\" '{ print $1 }'";
+			} else {
+				$networkCard_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";	
+			}
 			$networkCard = $_localorremote == 'local' ? $this->execSRV($networkCard_cmd, 'NetworkCard') : $this->execSSH($_hostId, $networkCard_cmd, 'NetworkCard');
 		} else {
 			$networkCard = $_networkCard;
@@ -2818,7 +2828,7 @@ class Monitoring extends eqLogic {
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey . ' (' . $archKeyType . ')');
 
-					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId);
+					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId, $archKey);
 					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
 
 					$ARMv = $ARMv ?? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
