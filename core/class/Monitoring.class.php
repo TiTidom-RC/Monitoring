@@ -2228,11 +2228,11 @@ class Monitoring extends eqLogic {
 				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
-				'os_version' => sprintf($release_command, '^VERSION_ID'),
+				'os_version' => sprintf($release_command, '^VERSION'),
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command_alt, '/dev/mmcblk')
+				'hdd' => sprintf($hdd_command_alt, '/mnt/mmcblk')
 			],
 			'FreeBSD' => [ // uname + distri_name
 				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -v ORS="" -F': ' '{print $1, $2}'
