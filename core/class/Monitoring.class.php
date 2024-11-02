@@ -2543,14 +2543,14 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function formatMemory($_memory, $_uname, $_equipement) {
+	public function formatMemory($_memory, $_archKey, $_equipement) {
 		$result = [0, 0, 0, 0, 0, 0.0, 0.0, 0.0, ''];
 
 		if (empty($_memory)) {
 			return $result;
 		}
 
-		if (!preg_match("#FreeBSD#", $_uname)) {		
+		if (stripos($_archKey, 'FreeBSD') === false) {
 			$memory_data = explode(' ', $_memory);
 			if (count($memory_data) != 5) {
 				return $result;
@@ -2811,10 +2811,9 @@ class Monitoring extends eqLogic {
 								unset($distri_name_value);
 
 								// Uname Command
-								// TODO revoir la manière de détecter l'OS en envoyant seulement l'OS détecté et pas le contenu de la réponse entière !
 								$uname_cmd = "uname -a 2>/dev/null";
 								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
-								$unameValues = ['FreeBSD', 'medion'];
+								$unameValues = ['FreeBSD', 'medion', 'AsusWRT'];
 								$foundUname = false;
 								foreach ($unameValues as $unameValue) {
 									if (stripos($uname, $unameValue) !== false) {
@@ -3029,7 +3028,7 @@ class Monitoring extends eqLogic {
 					[$load_avg_1mn, $load_avg_5mn, $load_avg_15mn, $load_avg] = isset($load_avg_value) ? $this->formatLoadAvg($load_avg_value) : [0.0, 0.0, 0.0, ''];
 	
 					// Memory (New)
-					[$memory_total, $memory_used, $memory_free, $memory_buffcache, $memory_available, $memory_used_percent, $memory_free_percent, $memory_available_percent, $memory] = isset($memory_value) ? $this->formatMemory($memory_value, $uname, $equipement) : [0, 0, 0, 0, 0, 0.0, 0.0, 0.0, ''];
+					[$memory_total, $memory_used, $memory_free, $memory_buffcache, $memory_available, $memory_used_percent, $memory_free_percent, $memory_available_percent, $memory] = isset($memory_value) ? $this->formatMemory($memory_value, $archKey, $equipement) : [0, 0, 0, 0, 0, 0.0, 0.0, 0.0, ''];
 	
 					// Swap (New)
 					[$swap_total, $swap_used, $swap_free, $swap_used_percent, $swap_free_percent, $swap_display] = isset($swap_value) ? $this->formatSwap($swap_value, $equipement) : [0, 0, 0, 0.0, 0.0, ''];
