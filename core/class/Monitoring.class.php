@@ -2229,7 +2229,7 @@ class Monitoring extends eqLogic {
 				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', "uname -m | grep -q '64' && echo \"64\" || echo \"32\""],
 				// 'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
-				'distri_name' => "awk -F'=' '/^PCPVERS/ { print $2 }' /usr/local/etc/pcp/pcpversion.cfg | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'distri_name' => ['cmd', "awk -F'=' '/^PCPVERS/ { print $2 }' /usr/local/etc/pcp/pcpversion.cfg | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
 				// 'os_version' => sprintf($release_command, '^VERSION'),
 				'os_version' => "awk -F'=' '/^PCPVERS/ { print $2 }' /usr/local/etc/pcp/pcpversion.cfg | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
 				'network_ip' => "ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != \"addr:127.0.0.1\" { print iface, $2 }' | head -1 | awk -v ORS=\"\" -F'[: ]' '{print $3}'",
