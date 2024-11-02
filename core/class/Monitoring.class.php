@@ -2064,6 +2064,7 @@ class Monitoring extends eqLogic {
 		
 		// Cmd Templates
 		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		$hdd_command_alt = "LC_ALL=C df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
 		$memory_command = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
 		$swap_command = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
@@ -2204,6 +2205,7 @@ class Monitoring extends eqLogic {
 			],
 			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name)
 				'ARMv' => ['value', "arm"],
+				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
@@ -2213,6 +2215,7 @@ class Monitoring extends eqLogic {
 			],
 			'osmc' => [ // distri_name
 				'ARMv' => ['value', "arm"],
+				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
@@ -2222,24 +2225,25 @@ class Monitoring extends eqLogic {
 			],
 			'piCorePlayer' => [ // distri_name
 				'ARMv' => ['value', "arm"],
+				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command, '/dev/mmcblk0p')
+				'hdd' => sprintf($hdd_command_alt, '/dev/mmcblk')
 			],
 			'FreeBSD' => [ // uname + distri_name
-				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | head -1 | awk -F': ' '{print $1, $2}'
-				
+				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -F': ' '{print $1, $2}' | awk -v ORS="" '{ print $1, $2 }'
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
+				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'uptime' => "sysctl -n kern.boottime | awk -v ORS=\"\" -F'[{}=,]' '{gsub(/ /, \"\", $3); gsub(/ /, \"\", $5); print $3 \".\" $5}'",
 				'load_avg' => "sysctl -n vm.loadavg | awk '{ print $2, $3, $4 }'",
-				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'",
+				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'", // A Corriger, ne fonctionne pas
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
 				'cpu_freq' => [
 					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2 }'"],
