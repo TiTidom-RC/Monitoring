@@ -2212,7 +2212,7 @@ class Monitoring extends eqLogic {
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command, '/storage')
+				'hdd' => sprintf($hdd_command_alt, '/storage')
 			],
 			'osmc' => [ // distri_name
 				'ARMv' => ['value', "arm"],
@@ -2222,7 +2222,7 @@ class Monitoring extends eqLogic {
 				'cpu_nb' => $cpu_nb_arm_command,
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command, '/dev/mmcblk')
+				'hdd' => sprintf($hdd_command_alt, '/dev/mmcblk')
 			],
 			'piCorePlayer' => [ // distri_name
 				'ARMv' => ['cmd', "uname -m 2>/dev/null"],
