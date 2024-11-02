@@ -2204,7 +2204,7 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name)
+			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name = NO, détecté via ARMv comme x86_64 donc ce bloc n'est pas utilisé)
 				'ARMv' => ['value', "arm"],
 				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
@@ -2214,7 +2214,7 @@ class Monitoring extends eqLogic {
 				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command_alt, '/storage')
 			],
-			'osmc' => [ // distri_name
+			'osmc' => [ // distri_name = NO ! détecté via ARMv comme armv7l et ce bloc n'est donc jamais utilisé
 				'ARMv' => ['value', "arm"],
 				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
