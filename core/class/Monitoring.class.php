@@ -2812,7 +2812,7 @@ class Monitoring extends eqLogic {
 
 								// Uname Command
 								// TODO revoir la manière de détecter l'OS en envoyant seulement l'OS détecté et pas le contenu de la réponse entière !
-								$uname_cmd = "uname -a 2>/dev/null | awk '{ print $2,$1 }'";
+								$uname_cmd = "uname -a 2>/dev/null";
 								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
 								$unameValues = ['FreeBSD', 'medion'];
 								$foundUname = false;
@@ -2839,7 +2839,13 @@ class Monitoring extends eqLogic {
 
 					$ARMv = $ARMv ?? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
 					$uname = $uname ?? ($commands['uname'][0] === 'cmd' ? $this->execSSH($hostId, $commands['uname'][1], 'uname') : $commands['uname'][1]);
-					$distri_name_value = $distri_name_value ?? ($commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1]);
+					
+					// Pour contourner le bug de la version du piCorePlayer qui n'est pas bonne dans le fichier /etc/os-release
+					if ($archKey == "piCorePlayer") {
+						$distri_name_value = $commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1];
+					} else {
+						$distri_name_value = $distri_name_value ?? ($commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1]);	
+					}
 					$distri_bits = $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits') : $commands['distri_bits'][1];
 					
 					$os_version_value = $this->execSSH($hostId, $commands['os_version'], 'OsVersion');
