@@ -2881,7 +2881,11 @@ class Monitoring extends eqLogic {
 					// Get Architecture Keys + $ARMv + $distri_name_value
 					[$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value] = $this->getRemoteArchKeys($hostId, $osType);
 
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey / ArchSubKey :: ' . $archKey . ' / ' . $archSubKey . ' (' . $archKeyType . ')');
+					if (!empty($archSubKey)) {
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey / ArchSubKey :: ' . $archKey . ' / ' . $archSubKey . ' (' . $archKeyType . ')');
+					} else {
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey . ' (' . $archKeyType . ')');
+					}
 
 					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId, $archKey);
 					$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, 'remote');
