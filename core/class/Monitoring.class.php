@@ -2660,7 +2660,7 @@ class Monitoring extends eqLogic {
 
 			// Total, Used, Free, Buff/Cache, Available, Used %, Free %, Buff/Cache %, Text
 
-			if (stripos($_archKey, 'FreeBSD') === true) {
+			if (stripos($_archKey, 'FreeBSD') !== false) {
 				$memory_total = intval(intval($memory_data[0]) / 1024);
 				$memory_used = intval(intval($memory_data[1]) / 1024);
 				$memory_free = intval(intval($memory_data[2]) / 1024);
