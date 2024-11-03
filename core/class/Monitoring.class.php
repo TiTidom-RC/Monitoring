@@ -2659,11 +2659,20 @@ class Monitoring extends eqLogic {
 			}
 
 			// Total, Used, Free, Buff/Cache, Available, Used %, Free %, Buff/Cache %, Text
-			$memory_total = intval($memory_data[0]);
-			$memory_used = intval($memory_data[1]);
-			$memory_free = intval($memory_data[2]);
-			$memory_buffcache = intval($memory_data[3]);
-			$memory_available = intval($memory_data[4]);
+
+			if (stripos($_archKey, 'FreeBSD') === true) {
+				$memory_total = intval(intval($memory_data[0]) / 1024);
+				$memory_used = intval(intval($memory_data[1]) / 1024);
+				$memory_free = intval(intval($memory_data[2]) / 1024);
+				$memory_buffcache = intval(intval($memory_data[3])	/ 1024);
+				$memory_available = intval(intval($memory_data[4])	/ 1024);
+			} else {
+				$memory_total = intval($memory_data[0]);
+				$memory_used = intval($memory_data[1]);
+				$memory_free = intval($memory_data[2]);
+				$memory_buffcache = intval($memory_data[3]);
+				$memory_available = intval($memory_data[4]);
+			}
 
 			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Total :: ' . $memory_total);
 			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used :: ' . $memory_used);
