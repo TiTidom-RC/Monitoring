@@ -2204,7 +2204,10 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'RasPlex' => [ // RasPlex (distri_name), OpenElec (distri_name), LibreELEC (distri_name = NO, détecté via ARMv comme x86_64 donc ce bloc n'est pas utilisé)
+			'RasPlex' => [ 
+				// RasPlex (distri_name), 
+				// OpenElec (distri_name), 
+				// LibreELEC (distri_name = NO, détecté via ARMv comme x86_64 donc ce bloc n'est pas utilisé)
 				'ARMv' => ['value', "arm"],
 				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
