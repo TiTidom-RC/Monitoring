@@ -2540,6 +2540,7 @@ class Monitoring extends eqLogic {
 			'armv6l' => 'KHz',
 			'armv7l' => 'KHz',
 			'mips64' => 'KHz',
+			'FreeBSD' => 'MHz',
 		];
 
 		// log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
@@ -2891,13 +2892,13 @@ class Monitoring extends eqLogic {
 					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId, $archKey);
 					$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, 'remote');
 
-					$ARMv = $ARMv ?? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
+					$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]) : $ARMv;
 					
 					// Pour contourner le bug de la version du piCorePlayer qui n'est pas bonne dans le fichier /etc/os-release
 					if ($archKey == "piCorePlayer") {
 						$distri_name_value = $commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1];
 					} else {
-						$distri_name_value = $distri_name_value ?? ($commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1]);	
+						$distri_name_value = empty($distri_name_value) ? ($commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1]) : $distri_name_value;
 					}
 					$distri_bits = $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits') : $commands['distri_bits'][1];
 					
@@ -2928,6 +2929,7 @@ class Monitoring extends eqLogic {
 						$syno_hddesata_value = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA') : '';
 					}
 
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriName :: ' . $distri_name_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriBits :: ' . $distri_bits);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsVersion :: ' . $os_version_value);
