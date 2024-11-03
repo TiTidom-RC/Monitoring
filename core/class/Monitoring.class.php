@@ -2829,9 +2829,9 @@ class Monitoring extends eqLogic {
 
 	public function formatUptime($uptime, $type = 'uptime') {
 		if ($type == 'unix') {
-			$uptimeNum = microtime(true) - floatval($uptime);
+			$uptimeNum = round(microtime(true) - floatval($uptime), 3);
 		} else {
-			$uptimeNum = floatval($uptime);
+			$uptimeNum = round(floatval($uptime), 3);
 		}
 		
 		$days = sprintf('%0.0f', floor($uptimeNum / 86400));
