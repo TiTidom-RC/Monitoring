@@ -2328,6 +2328,7 @@ class Monitoring extends eqLogic {
 				'uptime' => "sysctl -n kern.boottime | awk -v ORS=\"\" -F'[{}=,]' '{gsub(/ /, \"\", $3); gsub(/ /, \"\", $5); print $3 \".\" $5}'",
 				'load_avg' => "sysctl -n vm.loadavg | awk '{ print $2, $3, $4 }'",
 				'memory' => "dmesg | grep Mem | tr '\n' ' ' | awk '{ print $4,$10 }'", // A Corriger, ne fonctionne pas
+				'swap' => "swapinfo | awk 'NR>1 {print $2, $3, $4}'",
 				'network' => "netstat -b -i -n -f inet | grep '" . $cartereseau . "' | awk -v ORS=\"\" '{ print $1,$8,$11 }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
 				'network_ip' => "ifconfig -u " . $cartereseau . " | awk -v ORS=\"\" '/inet / { print $2 }'",
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
