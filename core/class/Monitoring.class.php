@@ -2327,7 +2327,7 @@ class Monitoring extends eqLogic {
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
 				'uptime' => "sysctl -n kern.boottime | awk -v ORS=\"\" -F'[{}=,]' '{gsub(/ /, \"\", $3); gsub(/ /, \"\", $5); print $3 \".\" $5}'",
 				'load_avg' => "sysctl -n vm.loadavg | awk '{ print $2, $3, $4 }'",
-				'memory' => "total=\$(sysctl -n hw.physmem); free=\$((\$(sysctl -n vm.stats.vm.v_free_count) * \$(sysctl -n hw.pagesize))); inactive=\$(($(sysctl -n vm.stats.vm.v_inactive_count) * \$(sysctl -n hw.pagesize))); cache=\$((\$(sysctl -n vm.stats.vm.v_cache_count) * \$(sysctl -n hw.pagesize))); wired=\$((\$(sysctl -n vm.stats.vm.v_wire_count) * \$(sysctl -n hw.pagesize))); used=\$((\$total - (\$free + \$inactive + \$cache))); available=\$((\$free + \$inactive + \$cache)); echo \"\$total \$used \$free \$cache \$available\"",
+				'memory' => "total=\$(sysctl -n hw.physmem); pagesize=\$(sysctl -n hw.pagesize); free=\$((\$(sysctl -n vm.stats.vm.v_free_count) * \$pagesize)); inactive=\$(($(sysctl -n vm.stats.vm.v_inactive_count) * \$pagesize)); cache=\$((\$(sysctl -n vm.stats.vm.v_cache_count) * \$pagesize)); wired=\$((\$(sysctl -n vm.stats.vm.v_wire_count) * \$pagesize)); used=\$((\$total - (\$free + \$inactive + \$cache))); available=\$((\$free + \$inactive + \$cache)); echo \"\$total \$used \$free \$cache \$available\"",
 				'swap' => "swapinfo | awk 'NR>1 {print $2, $3, $4}'",
 				'network' => "netstat -b -i -n -f inet | grep '" . $cartereseau . "' | awk -v ORS=\"\" '{ print $1,$8,$11 }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
 				'network_ip' => "ifconfig -u " . $cartereseau . " | awk -v ORS=\"\" '/inet / { print $2 }'",
