@@ -2291,12 +2291,12 @@ class Monitoring extends eqLogic {
 			'LibreELEC' => [
 				// LibreELEC :: SubKey (détecté via ARMv comme x86_64 / armv7l, mais il manque le disque et le 32bits)
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
-				'hdd' => sprintf($hdd_command, '/storage')
+				'hdd' => sprintf($hdd_command_alt, '/storage')
 			],
 			'OpenELEC' => [
 				// OpenElec :: SubKey (distri_name ?) 
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
-				'hdd' => sprintf($hdd_command, '/storage')
+				'hdd' => sprintf($hdd_command_alt, '/storage')
 			],
 			'piCorePlayer' => [ // distri_name
 				'ARMv' => ['cmd', "uname -m 2>/dev/null"],
