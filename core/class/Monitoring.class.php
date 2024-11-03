@@ -2547,7 +2547,7 @@ class Monitoring extends eqLogic {
 
 		// CPUFreq
 		// TODO Voir quelle est l'unité pour un medion ou un freebsd pour la fréquence des CPU
-		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'MHz');
+		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'KHz');
 
 		// CPU Temp
 		$cpu_temp = $this->formatTemp($_cpu_temp);
