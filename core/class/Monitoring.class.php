@@ -2085,9 +2085,14 @@ class Monitoring extends eqLogic {
 			$foundARMv = false;
 
 			if (!empty($ARMv)) {
-				$foundARMv = true;
-				$archKey = $ARMv;
-				$archKeyType = 'ARMv';
+				// check if $ARMv is x86_64 or i686 or i386
+				if (in_array($ARMv, ['x86_64', 'aarch64', 'armv6l', 'armv7l', 'mips64', 'i686', 'i386'])) {
+					$foundARMv = true;
+					$archKey = $ARMv;
+					$archKeyType = 'ARMv';
+				} else {
+					$ARMv = '';
+				}
 			}
 
 			// Search with distri_name
