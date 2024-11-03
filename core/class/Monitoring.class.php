@@ -2878,22 +2878,23 @@ class Monitoring extends eqLogic {
 			// Configuration Locale ou Distante
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 			
+			// Architecture Keys
+			$archKey = '';
+			$archSubKey = '';
+			$archKeyType = '';
+
+			// Configuration spécifique à un équipement
+			$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
+			$isQNAP = ($this->getConfiguration('qnap') == '1') ? true : false;
+			$isAsusWRT = ($this->getConfiguration('asuswrt') == '1') ? true : false;
+
 			// Configuration distante
 			if ($confLocalOrRemote == 'distant' && $this->getIsEnable()) {
 				[$cnx_ssh, $hostId] = $this->connectSSH();
 				
 				if ($cnx_ssh == 'OK') {
 
-					// Architecture Keys
-					$archKey = '';
-					$archSubKey = '';
-					$archKeyType = '';
-
-					// Configuration Spécifiques à un équipement
-					$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
-					$isAsusWRT = ($this->getConfiguration('asuswrt') == '1') ? true : false;
-					$isQNAP = ($this->getConfiguration('qnap') == '1') ? true : false;
-
+					// OS Type
 					$osType = $isSynology ? "Synology" : ($isAsusWRT ? "AsusWRT" : ($isQNAP ? "QNAP" : ''));
 
 					// Get Architecture Keys + $ARMv + $distri_name_value
