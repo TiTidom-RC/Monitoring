@@ -2546,6 +2546,7 @@ class Monitoring extends eqLogic {
 			'armv7l' => 'KHz',
 			'mips64' => 'KHz',
 			'amd64' => 'MHz',
+			'arm64' => 'MHz',
 		];
 
 		log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
