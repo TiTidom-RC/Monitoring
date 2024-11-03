@@ -2540,14 +2540,14 @@ class Monitoring extends eqLogic {
 			'armv6l' => 'KHz',
 			'armv7l' => 'KHz',
 			'mips64' => 'KHz',
-			'FreeBSD' => 'MHz',
+			'amd64' => 'MHz',
 		];
 
-		// log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
+		log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
 
 		// CPUFreq
 		// TODO Voir quelle est l'unité pour un medion ou un freebsd pour la fréquence des CPU
-		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'KHz');	
+		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'MHz');
 
 		// CPU Temp
 		$cpu_temp = $this->formatTemp($_cpu_temp);
