@@ -2064,8 +2064,12 @@ class Monitoring extends eqLogic {
 		
 		// Cmd Templates
 		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		// Lorsque l'option -l n'est pas disponible
 		$hdd_command_alt = "LC_ALL=C \\df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		
 		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
+		// Lorsque la commande getconf n'est pas disponible
+		$distri_bits_command_alt = "uname -m | grep -q '64' && echo \"64\" || echo \"32\"";
 		$memory_command = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
 		$swap_command = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 		$network_command = "cat /proc/net/dev 2>/dev/null | grep \"" . $cartereseau . ":\" | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
@@ -2205,9 +2209,9 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'RasPlex' => [ 
-				// RasPlex (distri_name), 
+				// RasPlex (distri_name => plus de mise à jour depuis 2021, donc ne sera plus supporté), 
 				// OpenElec (distri_name), 
-				// LibreELEC (distri_name = NO, détecté via ARMv comme x86_64 donc ce bloc n'est pas utilisé)
+				// LibreELEC (distri_name = NO, détecté via ARMv comme x86_64 /armv7l donc ce bloc n'est pas utilisé, mais il manque le disque et le 32bits)
 				'ARMv' => ['value', "arm"],
 				'uname' => ['value', "."],
 				'distri_bits' => ['value', "32"],
