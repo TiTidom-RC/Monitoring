@@ -2060,7 +2060,7 @@ class Monitoring extends eqLogic {
 	}
 
 	public function getRemoteArchKeys($hostId, $osType = '') {
-		[$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value] = ['unknown', 'unknown', 'Unknown', '', ''];
+		[$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value] = ['unknown', '', 'Unknown', '', ''];
 		
 		if ($osType == 'Synology') {
 			// Synology
@@ -2130,6 +2130,7 @@ class Monitoring extends eqLogic {
 				}
 			}
 		}
+
 		return [$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value];
 	}
 
