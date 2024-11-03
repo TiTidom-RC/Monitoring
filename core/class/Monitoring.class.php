@@ -2652,7 +2652,7 @@ class Monitoring extends eqLogic {
 			return $result;
 		}
 
-		if (stripos($_archKey, 'FreeBSD') === false) {
+		// if (stripos($_archKey, 'FreeBSD') === false) {
 			$memory_data = explode(' ', $_memory);
 			if (count($memory_data) != 5) {
 				return $result;
@@ -2696,7 +2696,7 @@ class Monitoring extends eqLogic {
 			
 			$result = [$memory_total, $memory_used, $memory_free, $memory_buffcache, $memory_available, $memory_used_percent, $memory_free_percent, $memory_available_percent, $memory];
 
-		} else {
+		/* } else {
 			// FreeBSD
 			$memory_data = explode(' ', $_memory);
 			if (count($memory_data) != 2) {
@@ -2731,7 +2731,7 @@ class Monitoring extends eqLogic {
 			$memory_free = $memory_free != 0 ? round($memory_free / 1024, 2) : 0.00;
 
 			$result = [$memory_total, $memory_used, $memory_free, 0, 0, $memory_used_percent, $memory_free_percent, 0.0, $memory];
-		}
+		} */
 		return $result;
 	}
 
