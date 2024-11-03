@@ -2332,10 +2332,10 @@ class Monitoring extends eqLogic {
 				'network_ip' => "ifconfig -u " . $cartereseau . " | awk -v ORS=\"\" '/inet / { print $2 }'",
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
 				'cpu_freq' => [
-					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.freq' | awk '{ print $2 }'"],
+					1 => ['cmd', "sysctl -n 'dev.cpu.0.freq' 2>/dev/null"],
 				],
 				'cpu_temp' => [
-					1 => ['cmd', "sysctl -a | egrep -E 'cpu.0.temp' | awk '{ print $2 }'"],
+					1 => ['cmd', "sysctl -n 'dev.cpu.0.temperature' 2>/dev/null"],
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
