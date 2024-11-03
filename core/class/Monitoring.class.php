@@ -2994,7 +2994,6 @@ class Monitoring extends eqLogic {
 				extract($this->getCPUFreq($commands['cpu_freq'], $equipement));
 				extract($this->getCPUTemp($commands['cpu_temp'], $equipement));
 				
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uname :: ' . $uname);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriName :: ' . $distri_name_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriBits :: ' . $distri_bits);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] OsVersion :: ' . $os_version_value);
