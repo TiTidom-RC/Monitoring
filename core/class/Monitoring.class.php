@@ -2059,10 +2059,89 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	public function getCommands($key, $cartereseau = '', $confLocalorRemote = 'local') {
-		log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key / LocalorRemote :: ' . $key . ' / ' . $confLocalorRemote);
+	public function getRemoteArchKeys($hostId, $osType = '') {
+		[$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value] = ['unknown', 'unknown', 'Unknown', '', ''];
+		
+		if ($osType == 'Synology') {
+			// Synology
+			$archKey = 'syno';
+			$archSubKey = '';
+			$archKeyType = 'Synology';
+		} elseif ($osType == 'QNAP') {
+			// QNAP
+			$archKey = 'qnap';
+			$archSubKey = '';
+			$archKeyType = 'QNAP';
+		} elseif ($osType == 'AsusWRT') {
+			// AsusWRT
+			$archKey = 'asuswrt';
+			$archSubKey = '';
+			$archKeyType = 'AsusWRT';
+		} else {
+			// ARMv
+			$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+			$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
+
+			$foundARMv = false;
+
+			if (!empty($ARMv)) {
+				$foundARMv = true;
+				$archKey = $ARMv;
+				$archKeyType = 'ARMv';
+			}
+
+			// Search with distri_name
+			$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+			$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+
+			// Search for specific distribution in distri_name_value
+			$distriValues = ['OpenELEC', 'LibreELEC', 'piCorePlayer', 'FreeBSD'];
+			$foundDistri = false;
+			foreach ($distriValues as $distriValue) {
+				if (stripos($distri_name_value, $distriValue) !== false) {
+					$foundDistri = true;
+					if ($foundARMv) {
+						$archSubKey = $distriValue;
+						$archKeyType .= ' + DistriName';
+					} else {
+						$archKey = $distriValue;
+						$archSubKey = '';
+						$archKeyType = 'DistriName';
+					}
+					break;
+				}
+			}
+			if (!$foundDistri) {
+				// Search with uname
+				$uname_cmd = "uname -a 2>/dev/null";
+				$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
+				$unameValues = ['medion'];
+				foreach ($unameValues as $unameValue) {
+					if (stripos($uname, $unameValue) !== false) {
+						if ($foundARMv) {
+							$archSubKey = $unameValue;
+							$archKeyType .= ' + Uname';
+						} else {
+							$archKey = $unameValue;
+							$archKeyType = 'Uname';
+						}
+						break;
+					}
+				}
+			}
+		}
+		return [$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value];
+	}
+
+	public function getCommands($key, $subKey = '', $cartereseau = '', $confLocalorRemote = 'local') {
+		if (!empty($subKey)) {
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key / SubKey (LocalorRemote) :: ' . $key . ' / ' . $subKey . ' (' . $confLocalorRemote . ')');
+		} else {
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key (LocalorRemote) :: ' . $key . ' (' . $confLocalorRemote . ')');
+		}
 		
 		// Cmd Templates
+		
 		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		// Lorsque l'option -l n'est pas disponible
 		$hdd_command_alt = "LC_ALL=C \\df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
@@ -2070,6 +2149,7 @@ class Monitoring extends eqLogic {
 		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
 		// Lorsque la commande getconf n'est pas disponible
 		$distri_bits_command_alt = "uname -m | grep -q '64' && echo \"64\" || echo \"32\"";
+
 		$memory_command = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
 		$swap_command = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
 		$network_command = "cat /proc/net/dev 2>/dev/null | grep \"" . $cartereseau . ":\" | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
@@ -2096,6 +2176,9 @@ class Monitoring extends eqLogic {
 		$cpu_nb_arm6l_command = "LC_ALL=C lscpu 2>/dev/null | grep 'CPU(s):' | awk '{ print $2 }'";
 		$cpu_nb_arm_command = "grep 'model name' /proc/cpuinfo 2>/dev/null | wc -l";
 
+		$pcp_version_command = "awk -F'=' '/^PCPVERS/ { print $2 }' /usr/local/etc/pcp/pcpversion.cfg | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+
+		// Local
 		$cmdLocalCommon = [
 			'distri_bits' => $distri_bits_command,
 			'distri_name' => sprintf($release_command, '^PRETTY_NAME'),
@@ -2109,10 +2192,9 @@ class Monitoring extends eqLogic {
 			'network_ip' => $network_ip_command,
 		];
 	
-		// Local
+		// Local Specific
 		$cmdLocalSpecific = [
 			'x86_64' => [
-				'uname' => ".",
 				'cpu_nb' => $cpu_nb_x86_command,
 				'cpu_freq' => $cpu_freq_x86_array,
 				'cpu_temp' => [
@@ -2124,7 +2206,6 @@ class Monitoring extends eqLogic {
 				],
 			],
 			'aarch64' => [
-				'uname' => ".",
 				'cpu_nb' => $cpu_nb_aarch64_command,
 				'cpu_freq' => [
 					1 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"], 
@@ -2136,7 +2217,6 @@ class Monitoring extends eqLogic {
 				],
 			],
 			'armv6l' => [
-				'uname' => ".",
 				'cpu_nb' => $cpu_nb_arm6l_command,
 				'cpu_freq' => [
 					1 => ['file', "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq"],
@@ -2152,7 +2232,7 @@ class Monitoring extends eqLogic {
 		$cmdLocalSpecific['i686'] = &$cmdLocalSpecific['x86_64'];
 		$cmdLocalSpecific['i386'] = &$cmdLocalSpecific['x86_64'];
 
-		// Distant
+		// Remote
 		$cmdRemoteCommon = [
 			'uptime' => $uptime_command,
 			'load_avg' => $load_avg_command,
@@ -2161,9 +2241,10 @@ class Monitoring extends eqLogic {
 			'network' => $network_command, // on récupère le nom de la carte en plus pour l'afficher dans les infos
 			'network_ip' => $network_ip_command,
 		];
+
+		// Remote Specific
 		$cmdRemoteSpecific = [
 			'armv6l' => [ // ARMv
-				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
@@ -2175,8 +2256,7 @@ class Monitoring extends eqLogic {
 				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'aarch64' => [ // ARMv
-				'uname' => ['value', "."],
+			'aarch64' => [ // ARMv (+ armv7l)
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
@@ -2192,7 +2272,6 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command, '/$')
 			],
 			'x86_64' => [ // ARMv
-				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', sprintf($release_command, '^PRETTY_NAME')],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
@@ -2208,50 +2287,35 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
-			'RasPlex' => [ 
-				// RasPlex (distri_name => plus de mise à jour depuis 2021, donc ne sera plus supporté), 
-				// OpenElec (distri_name), 
-				// LibreELEC (distri_name = NO, détecté via ARMv comme x86_64 /armv7l donc ce bloc n'est pas utilisé, mais il manque le disque et le 32bits)
-				'ARMv' => ['value', "arm"],
-				'uname' => ['value', "."],
-				'distri_bits' => ['value', "32"],
-				'os_version' => sprintf($release_command, '^VERSION_ID'),
-				'cpu_nb' => $cpu_nb_arm_command,
-				'cpu_freq' => $cpu_freq_arm_array,
-				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command_alt, '/storage')
+			'LibreELEC' => [
+				// LibreELEC :: SubKey (détecté via ARMv comme x86_64 / armv7l, mais il manque le disque et le 32bits)
+				'distri_bits' => ['cmd', $distri_bits_command_alt],
+				'hdd' => sprintf($hdd_command, '/storage')
 			],
-			'osmc' => [ // distri_name = NO ! détecté via ARMv comme armv7l et ce bloc n'est donc jamais utilisé
-				'ARMv' => ['value', "arm"],
-				'uname' => ['value', "."],
-				'distri_bits' => ['value', "32"],
-				'os_version' => sprintf($release_command, '^VERSION_ID'),
-				'cpu_nb' => $cpu_nb_arm_command,
-				'cpu_freq' => $cpu_freq_arm_array,
-				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command_alt, '/dev/mmcblk')
+			'OpenELEC' => [
+				// OpenElec :: SubKey (distri_name ?) 
+				'distri_bits' => ['cmd', $distri_bits_command_alt],
+				'hdd' => sprintf($hdd_command, '/storage')
 			],
 			'piCorePlayer' => [ // distri_name
 				'ARMv' => ['cmd', "uname -m 2>/dev/null"],
-				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', "uname -m | grep -q '64' && echo \"64\" || echo \"32\""],
 				// 'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $2,$3 }'"],
-				'distri_name' => ['cmd', "awk -F'=' '/^PCPVERS/ { print $2 }' /usr/local/etc/pcp/pcpversion.cfg | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'"],
+				'distri_name' => ['cmd', $pcp_version_command],
 				// 'os_version' => sprintf($release_command, '^VERSION'),
-				'os_version' => "awk -F'=' '/^PCPVERS/ { print $2 }' /usr/local/etc/pcp/pcpversion.cfg | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'",
+				'os_version' => $pcp_version_command,
 				'network_ip' => "ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != \"addr:127.0.0.1\" { print iface, $2 }' | head -1 | awk -v ORS=\"\" -F'[: ]' '{print $3}'",
 				'cpu_nb' => "grep 'processor' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => $cpu_freq_arm_array,
 				'cpu_temp' => $cpu_temp_zone0_array,
 				'hdd' => sprintf($hdd_command_alt, '/mnt/mmcblk')
 			],
-			'FreeBSD' => [ // uname + distri_name
+			'FreeBSD' => [ // distri_name
 				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -v ORS="" -F': ' '{print $1, $2}'
 				// récuperer le nom de la carte réseau : "ifconfig -u -l ether | awk -v ORS=\"\" '{ print $1 }'"
 				// Stats réseaux avec nom de la carte réseau, adresse IP, et TX, RX : "netstat -b -i -n -f inet | grep '" . $cartereseau . "' | head -1 | awk -v ORS=\"\" '{ print $1,$8,$11 }'"
 				// Adresse IP : "ifconfig -u le0 | awk -v ORS=\"\" '/inet / { print $2 }'"
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
-				'uname' => ['value', "."],
 				'distri_bits' => ['cmd', $distri_bits_command],
 				'distri_name' => ['cmd', "uname -a 2>/dev/null | awk '{ print $1,$3 }'"],
 				'os_version' => sprintf($release_command, '^VERSION_ID'),
@@ -2284,9 +2348,8 @@ class Monitoring extends eqLogic {
 				],
 				'hdd' => sprintf($hdd_command, '/home$')
 			],
-			'syno'=> [
+			'syno'=> [ // Synology
 				'ARMv' => ['value', "syno"],
-				'uname' => ['value', "."],
 				'distri_bits' => ['value', ""],
 				'distri_name' => ['value', ""],
 				'os_version' => "awk -F'=' '/productversion/ { print $2 }' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
@@ -2306,15 +2369,22 @@ class Monitoring extends eqLogic {
 				'syno_hddv4' => sprintf($hdd_command, 'vg1003\|volume4'), // DSM 5.x / 6.x / 7.x
 				'syno_hddusb' => sprintf($hdd_command, 'usb1p1\|volumeUSB1'), // DSM 5.x / 6.x / 7.x
 				'syno_hddesata' => sprintf($hdd_command, 'sdf1\|volumeSATA') // DSM 5.x / 6.x / 7.x
-			]
+			],
+			'asuswrt' => [
+				'ARMv' => ['value', "asuswrt"],
+			],
+			'qnap' => [
+				'ARMv' => ['value', "qnap"],
+			],
 		];
 
-		$cmdRemoteSpecific['armv7l'] = &$cmdRemoteSpecific['aarch64'];
+		$cmdRemoteSpecific['armv7l'] = &$cmdRemoteSpecific['aarch64']; // Included OS : OSMC, LibreELEC, OpenELEC?
 		$cmdRemoteSpecific['mips64'] = &$cmdRemoteSpecific['aarch64'];
 		$cmdRemoteSpecific['i686'] = &$cmdRemoteSpecific['x86_64'];
 		$cmdRemoteSpecific['i386'] = &$cmdRemoteSpecific['x86_64'];
 
 		if ($confLocalorRemote == 'local') {
+			// Local
 			$foundKey = null;
 			foreach (array_keys($cmdLocalSpecific) as $arrayKey) {
 				if (stripos($key, $arrayKey) !== false) {
@@ -2328,6 +2398,7 @@ class Monitoring extends eqLogic {
 				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' :: ' . $key);
 			}
 		} else {
+			// Distant
 			$foundKey = null;
 			foreach (array_keys($cmdRemoteSpecific) as $arrayKey) {
 				if (stripos($key, $arrayKey) !== false) {
@@ -2336,9 +2407,24 @@ class Monitoring extends eqLogic {
 				}
 			}
 			if ($foundKey !== null) {
-				return array_merge($cmdRemoteCommon, $cmdRemoteSpecific[$foundKey]);
+				$result = array_merge($cmdRemoteCommon, $cmdRemoteSpecific[$foundKey]);
+				if (!empty($subKey)) {
+					$foundSubKey = null;
+					foreach (array_keys($cmdRemoteSpecific) as $arrayKey) {
+						if (stripos($subKey, $arrayKey) !== false) {
+							$foundSubKey = $arrayKey;
+							break;
+						}
+					}
+					if ($foundSubKey !== null) {
+						$result = array_merge($result, $cmdRemoteSpecific[$foundSubKey]);
+					} else {
+						throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__) . ' (SubKey) :: ' . $subKey);
+					}
+				}
+				return $result;
 			} else {
-				throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__) . ' :: ' . $key);
+				throw new Exception(__('Aucune commande distante disponible pour cette architecture', __FILE__) . ' (Key) :: ' . $key);
 			}
 		}	
 	}
@@ -2771,80 +2857,36 @@ class Monitoring extends eqLogic {
 	public function getInformations() {
 		$equipement = $this->getName();
 		try {
-
-			// Architecture Key
-			$archKey = '';
-			$archKeyType = '';
-
+			// Configuration Locale ou Distante
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
-			$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
-
+			
 			// Configuration distante
 			if ($confLocalOrRemote == 'distant' && $this->getIsEnable()) {
 				[$cnx_ssh, $hostId] = $this->connectSSH();
 				
 				if ($cnx_ssh == 'OK') {
 
-					if ($isSynology) {
-						$archKey = 'syno';
-						$archKeyType = 'Synology';
-					} else {
-						$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-						$ARMv = $this->execSSH($hostId, $ARMv_cmd, 'ARMv');
+					// Architecture Keys
+					$archKey = '';
+					$archSubKey = '';
+					$archKeyType = '';
 
-						if (!empty($ARMv)) {
-							$archKey = $ARMv;
-							$archKeyType = 'ARMv';
-						} else {
-							// Unset $ARMv
-							unset($ARMv);
+					// Configuration Spécifiques à un équipement
+					$isSynology = ($this->getConfiguration('synology') == '1') ? true : false;
+					$isAsusWRT = ($this->getConfiguration('asuswrt') == '1') ? true : false;
+					$isQNAP = ($this->getConfiguration('qnap') == '1') ? true : false;
 
-							$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-							$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+					$osType = $isSynology ? "Synology" : ($isAsusWRT ? "AsusWRT" : ($isQNAP ? "QNAP" : ''));
 
-							// Search for specific distribution in distri_name_value
-							$distriValues = ['RasPlex', 'OpenELEC', 'LibreELEC', 'osmc', 'piCorePlayer', 'FreeBSD'];
-							$foundDistri = false;
-							foreach ($distriValues as $distriValue) {
-								if (stripos($distri_name_value, $distriValue) !== false) {
-									$foundDistri = true;
-									$archKey = $distriValue;
-									$archKeyType = 'DistriName';
-									break;
-								}
-							}
-							if (!$foundDistri) {
-								// unset $distri_name_value
-								unset($distri_name_value);
+					// Get Architecture Keys + $ARMv + $distri_name_value
+					[$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value] = $this->getRemoteArchKeys($hostId, $osType);
 
-								// Uname Command
-								$uname_cmd = "uname -a 2>/dev/null";
-								$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
-								$unameValues = ['FreeBSD', 'medion', 'AsusWRT'];
-								$foundUname = false;
-								foreach ($unameValues as $unameValue) {
-									if (stripos($uname, $unameValue) !== false) {
-										$foundUname = true;
-										$archKey = $unameValue;
-										$archKeyType = 'Uname';
-										break;
-									}
-								}
-								if (!$foundUname) {
-									$archKey = 'unknown';
-									$archKeyType = 'Unknown';
-								}
-							}
-						}
-					}
-
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey :: ' . $archKey . ' (' . $archKeyType . ')');
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ArchKey / ArchSubKey :: ' . $archKey . ' / ' . $archSubKey . ' (' . $archKeyType . ')');
 
 					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId, $archKey);
-					$commands = $this->getCommands($archKey, $cartereseau, 'remote');
+					$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, 'remote');
 
 					$ARMv = $ARMv ?? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]);
-					$uname = $uname ?? ($commands['uname'][0] === 'cmd' ? $this->execSSH($hostId, $commands['uname'][1], 'uname') : $commands['uname'][1]);
 					
 					// Pour contourner le bug de la version du piCorePlayer qui n'est pas bonne dans le fichier /etc/os-release
 					if ($archKey == "piCorePlayer") {
@@ -2936,9 +2978,8 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ARMv :: ' . $ARMv);
 
 				$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'local');
-				$commands = $this->getCommands($ARMv, $cartereseau, 'local');
+				$commands = $this->getCommands($ARMv, '', $cartereseau, 'local');
 
-				$uname = $commands['uname'];
 				$distri_bits = $this->execSRV($commands['distri_bits'], 'DistriBits');
 				$distri_name_value = $this->execSRV($commands['distri_name'], 'DistriName');
 				$os_version_value = $this->execSRV($commands['os_version'], 'OsVersion');
@@ -2955,8 +2996,8 @@ class Monitoring extends eqLogic {
 				extract($this->getCPUTemp($commands['cpu_temp'], $equipement));
 				
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uname :: ' . $uname);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriBits :: ' . $distri_bits);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriName :: ' . $distri_name_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriBits :: ' . $distri_bits);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] OsVersion :: ' . $os_version_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uptime :: ' . $uptime_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] LoadAverage :: ' . $load_avg_value);
