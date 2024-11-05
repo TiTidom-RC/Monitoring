@@ -2100,7 +2100,7 @@ class Monitoring extends eqLogic {
 			$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
 			// Search for specific distribution in distri_name_value
-			$distriValues = ['OpenELEC', 'LibreELEC', 'piCorePlayer', 'FreeBSD'];
+			$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD'];
 			$foundDistri = false;
 			foreach ($distriValues as $distriValue) {
 				if (stripos($distri_name_value, $distriValue) !== false) {
@@ -2298,11 +2298,6 @@ class Monitoring extends eqLogic {
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'hdd' => sprintf($hdd_command_alt, '/storage')
 			],
-			'OpenELEC' => [
-				// OpenElec :: SubKey (distri_name ?) 
-				'distri_bits' => ['cmd', $distri_bits_command_alt],
-				'hdd' => sprintf($hdd_command_alt, '/storage')
-			],
 			'piCorePlayer' => [ // distri_name
 				'ARMv' => ['cmd', "uname -m 2>/dev/null"],
 				'distri_bits' => ['cmd', "uname -m | grep -q '64' && echo \"64\" || echo \"32\""],
@@ -2385,7 +2380,7 @@ class Monitoring extends eqLogic {
 			],
 		];
 
-		$cmdRemoteSpecific['armv7l'] = &$cmdRemoteSpecific['aarch64']; // Included OS : OSMC, LibreELEC, OpenELEC?
+		$cmdRemoteSpecific['armv7l'] = &$cmdRemoteSpecific['aarch64']; // Included OS : OSMC, LibreELEC
 		$cmdRemoteSpecific['mips64'] = &$cmdRemoteSpecific['aarch64'];
 		$cmdRemoteSpecific['i686'] = &$cmdRemoteSpecific['x86_64'];
 		$cmdRemoteSpecific['i386'] = &$cmdRemoteSpecific['x86_64'];
