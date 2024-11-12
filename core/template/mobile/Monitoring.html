@@ -7,7 +7,7 @@
 		span.monitor-name-center {
 			display: flex;
 			flex: 1;
-			float: center;
+			float: none;
 			justify-content: center;
 			text-align: center;
 			white-space: nowrap;
@@ -44,6 +44,7 @@
 			white-space: nowrap;
 			width: 100%;
 			height: calc(100% - 24px);
+			box-sizing: border-box;
 		}
 	</style>
 	<span class="monitor-name-flex">
@@ -96,7 +97,9 @@
 			</span>
 		</span>
 		<span class="monitor-name-center">
-			<span class="widget-name">#name_display#</span>
+			<span class="widget-name">
+				<span>#name_display#</span>
+			</span>
 		</span>
 		<span class="monitor-name-right">
 			<span class="cmd refresh cursor" data-cmd_id="#refresh_id#">
@@ -112,9 +115,6 @@
 				}
 			</script>
 		</span>
-	</span>
-	<span class="monitor-name-flex">
-		
 	</span>
 	<div class="monitor-cmds">
 		<div class="tooltips" style="display: #distri_name_display#;">

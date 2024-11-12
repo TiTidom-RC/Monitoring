@@ -41,10 +41,11 @@
 			white-space: nowrap;
 			width: 100%;
 			height: calc(100% - 24px);
+			box-sizing: border-box;
 		}
 	</style>
 	<div class="widget-name monitor-name-flex">
-		<div class="monitor-name-left">
+		<div class="widget-name monitor-name-left">
 			<span id="iconSSH#id#"></span>
 			<script>
 				if ('#cnx_ssh#' == 'OK') {
@@ -124,11 +125,11 @@
 				});
 			</script>
 		</div>
-		<div class="monitor-name-center">
+		<div class="widget-name monitor-name-center">
 			<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
 			<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
 		</div>
-		<div class="monitor-name-right">	
+		<div class="widget-name monitor-name-right">	
 			<span class="cmd refresh cursor" title="Rafraîchir" data-cmd_id="#refresh_id#">
 				<i class="fas fa-sync"></i>
 			</span>

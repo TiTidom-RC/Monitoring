@@ -2357,6 +2357,10 @@ class Monitoring extends eqLogic {
 				'os_version' => "awk -F'=' '/productversion/ { print $2 }' /etc.defaults/VERSION 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'", 
 				'syno_model' =>  "get_key_value /etc/synoinfo.conf upnpmodelname 2>/dev/null",
 				'syno_model_alt' => "cat /proc/sys/kernel/syno_hw_version 2>/dev/null",
+				
+				// on pourrait aussi utiliser la fonction php parse_ini_string pour parser le fichier de conf en récupérant simplement le fichier et en enlevant les " :
+				// 'syno_version' => "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }'",
+				
 				'syno_version' => "cat /etc.defaults/VERSION 2>/dev/null | awk '{ gsub(/\"/, \"\"); print }' | awk NF=NF RS='\r\n' OFS='&'", // Récupération de tout le fichier de version pour le parser et récupérer le nom des champs
 				'cpu_nb' => "cat /proc/sys/kernel/syno_CPU_info_core 2>/dev/null",
 				'cpu_freq' => [
