@@ -2381,6 +2381,16 @@ class Monitoring extends eqLogic {
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
+				'uname' => ['cmd', "uname -n"],
+				'os_version' => "awk -F'=' '/^VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null",
+				'distri_bits' => ['value', ""],
+				'distri_name' => ['value', ""],
+        'cpu_nb' => "grep processor /proc/cpuinfo | wc -l",
+				'cpu_freq' => [
+					1 => ['cmd', "grep 'cpu MHz' /proc/cpuinfo 2>/dev/null"]
+				],
+				'cpu_temp' => $cpu_temp_zone0_array,
+				'hdd' => "getsysinfo vol_totalsize 1",
 			],
 		];
 
@@ -3049,8 +3059,11 @@ class Monitoring extends eqLogic {
 				// Connexion Local ou Connexion SSH OK
 				if ($this->getConfiguration('localoudistant') == 'local' || $cnx_ssh == 'OK') {
 
-					// Synology (New)
-					if ($isSynology) {
+					// QNAP (Dev)
+					if ($isQNAP) {
+				    $distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null";
+            $distri_name = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+          } elseif ($isSynology) { // Synology (New)
 						// Syno DistriName (New)
 						$distri_name = isset($syno_version_file, $syno_model) ? $this->getSynoVersion($syno_version_file, $syno_model, $equipement) : '';
 
