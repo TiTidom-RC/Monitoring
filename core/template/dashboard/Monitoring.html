@@ -11,14 +11,15 @@
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-name-flex {
 			display: flex;
 			justify-content: space-between;
+			padding-left: 5px !important;
 		}
 
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-name-left {
-			display: flex !important;
+			display: flex;
 			flex: 0 1 auto;
-			padding-left: 5px;
 			float: left;
-			justify-content: flex-start;			
+			justify-content: flex-start;
+			align-items: center;
 		}
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-name-left span:not(:empty) {
 			margin-right: 3px;
@@ -26,18 +27,30 @@
 
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-name-center {
 			display: flex;
-			flex: 1;
+			flex: 1 1 auto;
 			justify-content: center;
+			text-align: center;
+			overflow: hidden;
 		}
 		
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-name-right {
 			display: flex;
 			flex: 0 1 auto;
-			padding-right: 5px;
 			float: right;
 			justify-content: flex-end;
+			align-items: center;
+			padding-left: 3px;
 		}
 
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-name-right .refresh {
+			position: relative;
+		}
+
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-name-right a {
+			margin-right: 5px;
+			margin-top : unset !important;
+		}		
+		
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-cmds {
 			display: block;
 			text-align: left;
