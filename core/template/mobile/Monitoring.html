@@ -4,21 +4,7 @@
 			display: flex;
 			padding-left: 5px !important;
 		}
-		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center {
-			display: flex;
-			flex: 1;
-			float: none;
-			justify-content: center;
-			text-align: center;
-			white-space: nowrap;
-		}
-		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center span {
-			display: flex !important;
-			flex: 1;
-			justify-content: center;
-			padding-left: 12px !important;
-			padding-right: 12px !important;
-		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-left {
 			display: flex;
 			flex: 0 1 auto;
@@ -29,16 +15,45 @@
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-left span:not(:empty) {
 			margin-right: 5px;
 		}
+
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center {
+			display: flex;
+			flex: 1 1 auto;
+			justify-content: center;
+			text-align: center;
+			overflow: hidden;
+		}
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center span {
+			justify-content: center;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center .widget-name {
+			display: flex;
+			flex: 1 1 auto;
+			padding-left: 6px;
+			padding-right: 6px;
+		}
+		
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right {
 			display: flex;
 			flex: 0 1 auto;
 			float: right;
 			justify-content: flex-end;
 			align-items: center;
+			padding-left: 5px;
 		}
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right .refresh {
+			position: relative;
+		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right i {
-			margin-right: 10px !important;
+			margin-right: 10px;
+			margin-top: unset !important;
 		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-cmds {
 			display: block;
 			text-align: left;
