@@ -73,7 +73,7 @@
 	</style>
 	<div class="widget-name monitor-name-flex">
 		<div class="monitor-name-left">
-			<span id="iconSSH#id#"></span>
+			<span id="iconSSH#id#" class="cmd monitor-btn"></span>
 			<script>
 				if ('#cnx_ssh#' == 'OK') {
 					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="cmd monitor-btn fas fa-check tooltips" style="color: var(--al-success-color) !important;"></i>';
@@ -82,7 +82,7 @@
 					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="cmd monitor-btn fas fa-times-circle tooltips" style="color: var(--al-danger-color) !important;"></i>';
 				}
 			</script>
-			<span id="iconCron#id#"></span>
+			<span id="iconCron#id#" class="cmd monitor-btn"></span>
 			<script>
 				if ('#cron_status#' == '1') {
 					if ('#cron_status_custom#' == '1') {
