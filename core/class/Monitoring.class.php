@@ -2204,7 +2204,7 @@ class Monitoring extends eqLogic {
 				'cpu_nb' => $cpu_nb_x86_command,
 				'cpu_freq' => $cpu_freq_x86_array,
 				'cpu_temp' => [
-					1 => ['file', "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Whyse
+					1 => ['file', "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Wyse
 					2 => ['file', "/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input"], // OK AOpen DE2700
 					3 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"], // OK AMD Ryzen
 					4 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) { printf(\"%f\",$4);} }'"], // OK by sensors
@@ -2219,7 +2219,7 @@ class Monitoring extends eqLogic {
 				],
 				'cpu_temp' => [
 					1 => ['file', "/sys/class/thermal/thermal_zone0/temp"], // OK RPi2/3, Odroid
-					2 => ['file', "/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"] // OK Banana Pi (Cubie surement un jour...)
+					2 => ['file', "/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"] // OK Banana Pi (Cubie sûrement un jour...)
 				],
 			],
 			'armv6l' => [
@@ -2273,7 +2273,7 @@ class Monitoring extends eqLogic {
 				],
 				'cpu_temp' => [				
 					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"], // OK RPi2
-					2 => ['cmd', "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"] // OK Banana Pi (Cubie surement un jour...)
+					2 => ['cmd', "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"] // OK Banana Pi (Cubie sûrement un jour...)
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
@@ -2312,8 +2312,8 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command_alt, '/mnt/mmcblk')
 			],
 			'FreeBSD' => [ // distri_name
-				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -v ORS="" -F': ' '{print $1, $2}'
-				// récuperer le nom de la carte réseau : "ifconfig -u -l ether | awk -v ORS=\"\" '{ print $1 }'"
+				// pour récupérer la carte réseau et l’adresse IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -v ORS="" -F': ' '{print $1, $2}'
+				// récupérer le nom de la carte réseau : "ifconfig -u -l ether | awk -v ORS=\"\" '{ print $1 }'"
 				// Stats réseaux avec nom de la carte réseau, adresse IP, et TX, RX : "netstat -b -i -n -f inet | grep '" . $cartereseau . "' | head -1 | awk -v ORS=\"\" '{ print $1,$8,$11 }'"
 				// Adresse IP : "ifconfig -u le0 | awk -v ORS=\"\" '/inet / { print $2 }'"
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
@@ -2552,7 +2552,7 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
 
 		// CPUFreq
-		// TODO Voir quelle est l'unité pour un medion ou un freebsd pour la fréquence des CPU
+		// TODO Voir quelle est l'unité pour un medion ou un FreeBSD pour la fréquence des CPU
 		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'KHz');
 
 		// CPU Temp
@@ -2590,7 +2590,7 @@ class Monitoring extends eqLogic {
 		$network = __('TX', __FILE__) . ' : ' . $this->formatSize($network_tx) . ' - ' . __('RX', __FILE__) . ' : ' . $this->formatSize($network_rx);
 		$network_infos = __('Carte Réseau', __FILE__) . ' : ' . $network_name . ' - ' . __('IP', __FILE__) . ' : ' . $network_ip;
 
-		// Convert to Mo, source in octects. it's to avoid problem with big values in Jeedom History DB
+		// Convert to Mo, source in octets. it's to avoid problem with big values in Jeedom History DB
 		$network_tx = $network_tx != 0 ? round($network_tx / 1024 / 1024, 2) : 0.00;
 		$network_rx = $network_rx != 0 ? round($network_rx / 1024 / 1024, 2) : 0.00;
 
@@ -3349,7 +3349,7 @@ class MonitoringCmd extends cmd {
 	/* * *************************Attributs****************************** */
 	public static $_widgetPossibility = array('custom' => false);
 
-	/* * *********************Methode d'instance************************* */
+	/* * *********************Méthode d'instance************************* */
 
 	public function dontRemoveCmd() {
         return ($this->getLogicalId() == 'refresh');
