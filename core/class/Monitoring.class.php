@@ -2378,9 +2378,20 @@ class Monitoring extends eqLogic {
 			],
 			'asuswrt' => [
 				'ARMv' => ['value', "asuswrt"],
+
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
+				'uname' => ['cmd', "uname -n"],
+				'os_version' => "awk -F'=' '/^VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null",
+				'distri_bits' => ['value', ""],
+				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null"],
+				'cpu_nb' => "grep processor /proc/cpuinfo | wc -l",
+				'cpu_freq' => [
+					1 => ['cmd', "grep 'cpu MHz' /proc/cpuinfo 2>/dev/null"]
+				],
+				'cpu_temp' => $cpu_temp_zone0_array,
+				'hdd' => "getsysinfo vol_totalsize 1"
 			],
 		];
 
