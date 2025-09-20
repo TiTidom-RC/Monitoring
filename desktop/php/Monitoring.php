@@ -286,7 +286,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                 </div>
 					        </fieldset>
                             <fieldset>
-                                <legend>{{Autre Equipement}} :</legend>
+                                <legend>{{Autre Equipement Spécifique}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{QNAP}}</label>
                                     <div class="col-md-8">
