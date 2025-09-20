@@ -286,6 +286,26 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                 </div>
 					        </fieldset>
                             <fieldset>
+                                <legend>{{NAS QNAP}} :</legend>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" >{{Activer}}</label>
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="qnap" />
+                                        <span style="font-size: 85%;">({{A cocher pour monitorer un NAS QNAP}})</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <legend>{{Routeur AsusWRT}} :</legend>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" >{{Activer}}</label>
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="asuswrt" />
+                                        <span style="font-size: 85%;">({{A cocher pour monitorer un Routeur AsusWRT}})</span>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
                                 <legend>{{Linux / Proxmox}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{Temp (Alt)}}</label>

@@ -70,6 +70,7 @@
         "synologyesata",
         "synologyusb",
         "synologyv",
+        "temppath",
         "Thresholdd",
         "timeoutsrv",
         "timeoutssh",
