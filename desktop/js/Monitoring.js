@@ -100,6 +100,27 @@ function addCmdToTable(_cmd) {
 	})
 }
 
+document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('change', function() {
+	if (this.checked) {
+		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
+		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
+	}
+});
+
+document.querySelector(".eqLogicAttr[data-l2key='qnap']").addEventListener('change', function() {
+	if (this.checked) {
+		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
+		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
+	}
+});
+
+document.querySelector(".eqLogicAttr[data-l2key='asuswrt']").addEventListener('change', function() {
+	if (this.checked) {
+		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
+		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
+	}
+});
+
 document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(function (element) {
 	element.addEventListener('click', function () {
 		window.open(this.getAttribute("data-location"), "_blank", null);
@@ -145,27 +166,6 @@ document.querySelector(".eqLogicAttr[data-l2key='localoudistant']").addEventList
 	} else { 
 		document.querySelector(".distant").style.display = "none";
 		document.querySelector(".local").style.display = "block";
-	}
-});
-
-document.querySelector(".eqLogicAttr[data-l2key='qnap']").addEventListener('change', function() {
-	if (this.checked) {
-		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
-		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
-	}
-});
-
-document.querySelector(".eqLogicAttr[data-l2key='asuswrt']").addEventListener('change', function() {
-	if (this.checked) {
-		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
-		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
-	}
-});
-
-document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('change', function() {
-	if (this.checked) {
-		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
-		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
 	}
 });
 
