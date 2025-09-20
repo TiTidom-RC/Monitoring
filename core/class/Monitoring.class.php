@@ -153,6 +153,7 @@ class Monitoring extends eqLogic {
 	public static function pull() {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
+			/** @var Monitoring $Monitoring */
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('localoudistant') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
 					$cronState = $Monitoring->getCmd(null, 'cron_status');
@@ -171,6 +172,7 @@ class Monitoring extends eqLogic {
 	public static function pullLocal() {
 		log::add('Monitoring', 'debug', '[PULLLOCAL] Config PullLocal :: '. config::byKey('configPullLocal', 'Monitoring'));
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
+			/** @var Monitoring $Monitoring */
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('localoudistant') == 'local') {
 					$cronState = $Monitoring->getCmd(null, 'cron_status');
@@ -187,6 +189,7 @@ class Monitoring extends eqLogic {
 	}
 
 	public static function pullCustom($_options) {
+		/** @var Monitoring $Monitoring */
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
 			$cronState = $Monitoring->getCmd(null, 'cron_status');
@@ -3367,6 +3370,7 @@ class MonitoringCmd extends cmd {
     }
 
 	public function execute($_options = null) {
+		/** @var Monitoring $eqLogic */
 		$eqLogic = $this->getEqLogic();
 		$paramaction = $this->getLogicalId();
 

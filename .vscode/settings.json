@@ -25,6 +25,7 @@
         "Formated",
         "getconf",
         "getconfiguration",
+        "getsysinfo",
         "gsub",
         "hddesata",
         "hddusb",
@@ -69,8 +70,10 @@
         "synologyesata",
         "synologyusb",
         "synologyv",
+        "Thresholdd",
         "timeoutsrv",
         "timeoutssh",
+        "totalsize",
         "txrx",
         "upnpmodelname",
         "Wyse"
