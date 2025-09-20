@@ -27,17 +27,9 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 <style>
     /* Style spécifique pour les options du NAS Synology */
     .syno_conf {
-        position: relative;
-        padding-left: 150px;
-    }
-    .syno_conf::before {
-        content: "";
-        position: absolute;
-        left: 130px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background-color: #4d4d4d; /* Couleur de la ligne verticale */
+        margin-left: 30px; /* Le décalage vers la droite */
+        padding-left: 5px; /* Un peu d'espace avant le contenu */
+        border-left: 2px solid #4d4d4d; /* Une ligne verticale */
     }
 </style>
 
