@@ -228,9 +228,9 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                     <div class="col-xs-6">
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend>{{NAS Synology}} :</legend>
+                                <legend>{{Equipement Spécifique}} :</legend>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label" >{{Activer}}</label>
+                                    <label class="col-md-2 control-label" >{{Synology}}</label>
                                     <div class="col-md-8">
                                         <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synology" />
                                         <span style="font-size: 85%;">({{A cocher pour monitorer un NAS Synology}})</span>
@@ -293,9 +293,6 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         </div>
                                     </div>
                                 </div>
-					        </fieldset>
-                            <fieldset>
-                                <legend>{{Autre Equipement Spécifique}} :</legend>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label" >{{QNAP}}</label>
                                     <div class="col-md-8">
@@ -310,7 +307,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         <span style="font-size: 85%;">({{A cocher pour monitorer un Routeur AsusWRT}})</span>
                                     </div>
                                 </div>
-                            </fieldset>
+					        </fieldset>
                             <fieldset>
                                 <legend>{{Linux / Proxmox}} :</legend>
                                 <div class="form-group">
