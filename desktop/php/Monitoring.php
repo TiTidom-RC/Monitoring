@@ -24,6 +24,15 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 
 ?>
 
+<style>
+    /* Style spécifique pour les options du NAS Synology */
+    .syno_conf {
+        margin-left: 50px; /* Le décalage vers la droite */
+        padding-left: 15px; /* Un peu d'espace avant le contenu */
+        border-left: 2px solid #4d4d4d; /* Une ligne verticale pour un meilleur design */
+    }
+</style>
+
 <div class="row row-overflow">
     <!-- Page d'accueil du plugin -->
     <div class="col-xs-12 eqLogicThumbnailDisplay">
