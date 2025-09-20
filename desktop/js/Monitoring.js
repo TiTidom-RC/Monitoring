@@ -114,6 +114,7 @@ document.querySelector(".eqLogicAttr[data-l2key='qnap']").addEventListener('chan
 	if (this.checked) {
 		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
 		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
+		document.querySelector(".syno_conf").style.display = "none";
 	}
 });
 
@@ -121,6 +122,7 @@ document.querySelector(".eqLogicAttr[data-l2key='asuswrt']").addEventListener('c
 	if (this.checked) {
 		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
 		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
+		document.querySelector(".syno_conf").style.display = "none";
 	}
 });
 
