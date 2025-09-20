@@ -10,6 +10,7 @@
         "cartereseauautre",
         "colorhigh",
         "colorlow",
+        "commandtab",
         "coretemp",
         "cpufreq",
         "Cubie",
@@ -20,8 +21,11 @@
         "deporte",
         "distri",
         "ELEC",
+        "Eqlogic",
+        "eqlogictab",
         "equipement",
         "Equipement",
+        "Etat",
         "Formated",
         "getconf",
         "getconfiguration",
@@ -77,6 +81,7 @@
         "totalsize",
         "txrx",
         "upnpmodelname",
+        "wlan",
         "Wyse"
     ]
 }

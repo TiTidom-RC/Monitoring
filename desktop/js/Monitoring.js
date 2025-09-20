@@ -148,6 +148,27 @@ document.querySelector(".eqLogicAttr[data-l2key='localoudistant']").addEventList
 	}
 });
 
+document.querySelector(".eqLogicAttr[data-l2key='qnap']").addEventListener('change', function() {
+	if (this.checked) {
+		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
+		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
+	}
+});
+
+document.querySelector(".eqLogicAttr[data-l2key='asuswrt']").addEventListener('change', function() {
+	if (this.checked) {
+		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
+		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
+	}
+});
+
+document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('change', function() {
+	if (this.checked) {
+		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
+		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
+	}
+});
+
 function printEqLogic(_eqLogic) {
 	buildSelectHost(_eqLogic.configuration.SSHHostId);
 }
