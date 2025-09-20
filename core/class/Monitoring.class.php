@@ -3092,6 +3092,12 @@ class Monitoring extends eqLogic {
 						if ($this->getConfiguration('synologyesata') == '1') {
 							[$syno_hddesata_total, $syno_hddesata_used, $syno_hddesata_free, $syno_hddesata_used_percent, $syno_hddesata_free_percent, $syno_hddesata] = isset($syno_hddesata_value) ? $this->formatHDD($syno_hddesata_value, 'Syno HDDeSATA', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
+					} elseif ($isQNAP) {
+						// QNAP DistriName
+						$distri_name = isset($os_version_value, $distri_name_value) ? 'QNAP ' . trim($distri_name_value) . ' (' . $os_version_value . ')' : '';
+					} elseif ($isAsusWRT) {
+						// AsusWRT DistriName
+						$distri_name = isset($os_version_value) ? 'AsusWRT ' . $os_version_value : '';
 					} elseif ($archKey == 'medion') {
 						// Medion DistriName (New)
 						$distri_name = isset($distri_name_value, $os_version_value) ? 'Medion/Linux ' . $os_version_value . ' (' . trim($distri_name_value) . ')' : ''; 
@@ -3299,6 +3305,8 @@ class Monitoring extends eqLogic {
 		$confLocalOrRemote = $this->getConfiguration('localoudistant');
 		$equipement = $this->getName();
 		$isSynology = $this->getConfiguration('synology') == '1' ? true : false;
+		$isQNAP = $this->getConfiguration('qnap') == '1' ? true : false;
+		$isAsusWRT = $this->getConfiguration('asuswrt') == '1' ? true : false;
 
 		if ($confLocalOrRemote == 'distant' && $this->getIsEnable()) {
 			[$cnx_ssh, $hostId] = $this->connectSSH();
@@ -3309,6 +3317,12 @@ class Monitoring extends eqLogic {
 						if ($isSynology) {
 							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
+						} elseif ($isQNAP) {
+							$rebootcmd = "timeout 3 sudo -S /sbin/reboot 2>/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-REBOOT] Lancement commande distante REBOOT');
+						} elseif ($isAsusWRT) {
+							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-REBOOT] Lancement commande distante REBOOT');
 						} else {
 							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-REBOOT] Lancement commande distante REBOOT');
@@ -3319,6 +3333,12 @@ class Monitoring extends eqLogic {
 						if ($isSynology) {
 							$poweroffcmd = 'timeout 3 sudo -S /sbin/shutdown -h now 2>/dev/null';
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-POWEROFF] Lancement commande distante POWEROFF');
+						} elseif ($isQNAP) {
+							$poweroffcmd = "timeout 3 sudo -S /sbin/poweroff 2>/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-POWEROFF] Lancement commande distante POWEROFF');
+						} elseif ($isAsusWRT) {
+							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
 							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-POWEROFF] Lancement commande distante POWEROFF');
