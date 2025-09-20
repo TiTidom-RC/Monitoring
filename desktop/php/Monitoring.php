@@ -28,12 +28,12 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
     /* Style spécifique pour les options du NAS Synology */
     .syno_conf {
         position: relative;
-        padding-left: 205px;
+        padding-left: 150px;
     }
     .syno_conf::before {
         content: "";
         position: absolute;
-        left: 185px;
+        left: 130px;
         top: 0;
         bottom: 0;
         width: 2px;
