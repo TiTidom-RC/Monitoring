@@ -8,7 +8,7 @@
  * (at your option) any later version.
  *
  * Jeedom is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; witfhout even the implied warranty of
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
@@ -153,6 +153,7 @@ class Monitoring extends eqLogic {
 	public static function pull() {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
+			/** @var Monitoring $Monitoring */
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('localoudistant') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
 					$cronState = $Monitoring->getCmd(null, 'cron_status');
@@ -171,6 +172,7 @@ class Monitoring extends eqLogic {
 	public static function pullLocal() {
 		log::add('Monitoring', 'debug', '[PULLLOCAL] Config PullLocal :: '. config::byKey('configPullLocal', 'Monitoring'));
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
+			/** @var Monitoring $Monitoring */
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('localoudistant') == 'local') {
 					$cronState = $Monitoring->getCmd(null, 'cron_status');
@@ -187,6 +189,7 @@ class Monitoring extends eqLogic {
 	}
 
 	public static function pullCustom($_options) {
+		/** @var Monitoring $Monitoring */
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
 			$cronState = $Monitoring->getCmd(null, 'cron_status');
@@ -2150,7 +2153,7 @@ class Monitoring extends eqLogic {
 		
 		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		// Lorsque l'option -l n'est pas disponible
-		$hdd_command_alt = "LC_ALL=C \\df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		$hdd_command_alt = "LC_ALL=C df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		
 		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
 		// Lorsque la commande getconf n'est pas disponible
@@ -2204,7 +2207,7 @@ class Monitoring extends eqLogic {
 				'cpu_nb' => $cpu_nb_x86_command,
 				'cpu_freq' => $cpu_freq_x86_array,
 				'cpu_temp' => [
-					1 => ['file', "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Whyse
+					1 => ['file', "/sys/devices/virtual/thermal/thermal_zone0/temp"], // OK Dell Wyse
 					2 => ['file', "/sys/devices/platform/coretemp.0/hwmon/hwmon0/temp?_input"], // OK AOpen DE2700
 					3 => ['cmd', "timeout 3 cat $(find /sys/devices/* -name temp*_input | head -1) 2>/dev/null"], // OK AMD Ryzen
 					4 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) { printf(\"%f\",$4);} }'"], // OK by sensors
@@ -2219,7 +2222,7 @@ class Monitoring extends eqLogic {
 				],
 				'cpu_temp' => [
 					1 => ['file', "/sys/class/thermal/thermal_zone0/temp"], // OK RPi2/3, Odroid
-					2 => ['file', "/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"] // OK Banana Pi (Cubie surement un jour...)
+					2 => ['file', "/sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1"] // OK Banana Pi (Cubie sûrement un jour...)
 				],
 			],
 			'armv6l' => [
@@ -2273,7 +2276,7 @@ class Monitoring extends eqLogic {
 				],
 				'cpu_temp' => [				
 					1 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"], // OK RPi2
-					2 => ['cmd', "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"] // OK Banana Pi (Cubie surement un jour...)
+					2 => ['cmd', "cat /sys/devices/platform/sunxi-i2c.0/i2c-0/0-0034/temp1_input 2>/dev/null"] // OK Banana Pi (Cubie sûrement un jour...)
 				],
 				'hdd' => sprintf($hdd_command, '/$')
 			],
@@ -2312,8 +2315,8 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command_alt, '/mnt/mmcblk')
 			],
 			'FreeBSD' => [ // distri_name
-				// pour récupérer la carte réseau et l'adrese IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -v ORS="" -F': ' '{print $1, $2}'
-				// récuperer le nom de la carte réseau : "ifconfig -u -l ether | awk -v ORS=\"\" '{ print $1 }'"
+				// pour récupérer la carte réseau et l’adresse IP : ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != "127.0.0.1" { print iface, $2 }' | awk -v ORS="" -F': ' '{print $1, $2}'
+				// récupérer le nom de la carte réseau : "ifconfig -u -l ether | awk -v ORS=\"\" '{ print $1 }'"
 				// Stats réseaux avec nom de la carte réseau, adresse IP, et TX, RX : "netstat -b -i -n -f inet | grep '" . $cartereseau . "' | head -1 | awk -v ORS=\"\" '{ print $1,$8,$11 }'"
 				// Adresse IP : "ifconfig -u le0 | awk -v ORS=\"\" '/inet / { print $2 }'"
 				'ARMv' => ['cmd', "sysctl hw.machine | awk '{ print $2}'"],
@@ -2378,9 +2381,21 @@ class Monitoring extends eqLogic {
 			],
 			'asuswrt' => [
 				'ARMv' => ['value', "asuswrt"],
+
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
+				'uname' => ['cmd', "uname -n"],
+				'os_version' => "awk -F'=' '/^VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null",
+				'distri_bits' => ['value', ""],
+				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null"],
+				'qnap_model' =>  "getsysinfo model 2>/dev/null",
+				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
+				'cpu_freq' => [
+					1 => ['cmd', "grep 'cpu MHz' /proc/cpuinfo 2>/dev/null"]
+				],
+				'cpu_temp' => $cpu_temp_zone0_array,
+				'hdd' => sprintf($hdd_command, '/share/CACHEDEV1_DATA'),
 			],
 		];
 
@@ -2537,6 +2552,8 @@ class Monitoring extends eqLogic {
 	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
 		$unitCPUFreq = [
 			'syno' => 'MHz',
+			'qnap' => 'MHz',
+			'asuswrt' => 'MHz',
 			'arm' => 'KHz',
 			'x86_64' => 'MHz',
 			'i686' => 'MHz',
@@ -2552,7 +2569,7 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '['. $_equipement .'][formatCPU] OS :: ' . $_OS);
 
 		// CPUFreq
-		// TODO Voir quelle est l'unité pour un medion ou un freebsd pour la fréquence des CPU
+		// TODO Voir quelle est l'unité pour un medion ou un FreeBSD pour la fréquence des CPU
 		[$cpu_freq, $cpu_freq_txt] = $this->formatFreq($_cpu_freq, $unitCPUFreq[$_OS] ?? 'KHz');
 
 		// CPU Temp
@@ -2590,7 +2607,7 @@ class Monitoring extends eqLogic {
 		$network = __('TX', __FILE__) . ' : ' . $this->formatSize($network_tx) . ' - ' . __('RX', __FILE__) . ' : ' . $this->formatSize($network_rx);
 		$network_infos = __('Carte Réseau', __FILE__) . ' : ' . $network_name . ' - ' . __('IP', __FILE__) . ' : ' . $network_ip;
 
-		// Convert to Mo, source in octects. it's to avoid problem with big values in Jeedom History DB
+		// Convert to Mo, source in octets. it's to avoid problem with big values in Jeedom History DB
 		$network_tx = $network_tx != 0 ? round($network_tx / 1024 / 1024, 2) : 0.00;
 		$network_rx = $network_rx != 0 ? round($network_rx / 1024 / 1024, 2) : 0.00;
 
@@ -2945,6 +2962,11 @@ class Monitoring extends eqLogic {
 						$syno_hddesata_value = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA') : '';
 					}
 
+					if ($isQNAP) {
+						$qnap_model_cmd = $commands['qnap_model'];
+						$qnap_model = $this->execSSH($hostId, $qnap_model_cmd, 'QnapModel');
+					}
+
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriName :: ' . $distri_name_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriBits :: ' . $distri_bits);
@@ -2953,6 +2975,10 @@ class Monitoring extends eqLogic {
 					if ($isSynology) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoModel :: ' . $syno_model);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoVersion :: ' . $syno_version_file);
+					}
+
+					if ($isQNAP) {
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
@@ -3078,6 +3104,12 @@ class Monitoring extends eqLogic {
 						if ($this->getConfiguration('synologyesata') == '1') {
 							[$syno_hddesata_total, $syno_hddesata_used, $syno_hddesata_free, $syno_hddesata_used_percent, $syno_hddesata_free_percent, $syno_hddesata] = isset($syno_hddesata_value) ? $this->formatHDD($syno_hddesata_value, 'Syno HDDeSATA', $equipement) : [0, 0, 0, 0.0, 0.0, ''];
 						}
+					} elseif ($isQNAP) {
+						// QNAP DistriName
+						$distri_name = isset($qnap_model, $distri_name_value) ? trim($distri_name_value) . ' / ' . trim($qnap_model) : '';
+					} elseif ($isAsusWRT) {
+						// AsusWRT DistriName
+						$distri_name = isset($os_version_value) ? 'AsusWRT ' . $os_version_value : '';
 					} elseif ($archKey == 'medion') {
 						// Medion DistriName (New)
 						$distri_name = isset($distri_name_value, $os_version_value) ? 'Medion/Linux ' . $os_version_value . ' (' . trim($distri_name_value) . ')' : ''; 
@@ -3285,6 +3317,8 @@ class Monitoring extends eqLogic {
 		$confLocalOrRemote = $this->getConfiguration('localoudistant');
 		$equipement = $this->getName();
 		$isSynology = $this->getConfiguration('synology') == '1' ? true : false;
+		$isQNAP = $this->getConfiguration('qnap') == '1' ? true : false;
+		$isAsusWRT = $this->getConfiguration('asuswrt') == '1' ? true : false;
 
 		if ($confLocalOrRemote == 'distant' && $this->getIsEnable()) {
 			[$cnx_ssh, $hostId] = $this->connectSSH();
@@ -3295,6 +3329,12 @@ class Monitoring extends eqLogic {
 						if ($isSynology) {
 							$rebootcmd = "timeout 3 sudo -S /sbin/shutdown -r now 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-REBOOT] Lancement commande distante REBOOT');
+						} elseif ($isQNAP) {
+							$rebootcmd = "timeout 3 sudo -S /sbin/reboot 2>/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-REBOOT] Lancement commande distante REBOOT');
+						} elseif ($isAsusWRT) {
+							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-REBOOT] Lancement commande distante REBOOT');
 						} else {
 							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-REBOOT] Lancement commande distante REBOOT');
@@ -3305,6 +3345,12 @@ class Monitoring extends eqLogic {
 						if ($isSynology) {
 							$poweroffcmd = 'timeout 3 sudo -S /sbin/shutdown -h now 2>/dev/null';
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][SYNO-POWEROFF] Lancement commande distante POWEROFF');
+						} elseif ($isQNAP) {
+							$poweroffcmd = "timeout 3 sudo -S /sbin/poweroff 2>/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-POWEROFF] Lancement commande distante POWEROFF');
+						} elseif ($isAsusWRT) {
+							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
+							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
 							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][LINUX-POWEROFF] Lancement commande distante POWEROFF');
@@ -3349,13 +3395,14 @@ class MonitoringCmd extends cmd {
 	/* * *************************Attributs****************************** */
 	public static $_widgetPossibility = array('custom' => false);
 
-	/* * *********************Methode d'instance************************* */
+	/* * *********************Méthode d'instance************************* */
 
 	public function dontRemoveCmd() {
         return ($this->getLogicalId() == 'refresh');
     }
 
 	public function execute($_options = null) {
+		/** @var Monitoring $eqLogic */
 		$eqLogic = $this->getEqLogic();
 		$paramaction = $this->getLogicalId();
 
