@@ -2398,8 +2398,8 @@ class Monitoring extends eqLogic {
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
 				],
 				'cpu_temp' => [
-					1 => ['file', "/sys/class/hwmon/hwmon0/temp1_input"],
-					2 => ['file', "/sys/class/hwmon/hwmon1/temp2_input"],
+					1 => ['cmd', "cat /sys/class/hwmon/hwmon0/temp1_input 2>/dev/null"],
+					2 => ['cmd', "cat /sys/class/hwmon/hwmon1/temp2_input 2>/dev/null"],
 				],
 				'hdd' => sprintf($hdd_command_qnap, '/share/CACHEDEV[1-9]_DATA$'),
 			],
