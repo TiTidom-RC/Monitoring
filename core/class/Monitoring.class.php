@@ -2399,7 +2399,9 @@ class Monitoring extends eqLogic {
 				],
 				'cpu_temp' => [
 					1 => ['cmd', "cat /sys/class/hwmon/hwmon0/temp1_input 2>/dev/null"],
-					2 => ['cmd', "cat /sys/class/hwmon/hwmon1/temp2_input 2>/dev/null"],
+					2 => ['cmd', "cat /sys/class/hwmon/hwmon0/temp2_input 2>/dev/null"],
+					3 => ['cmd', "cat /sys/class/hwmon/hwmon1/temp1_input 2>/dev/null"],
+					4 => ['cmd', "cat /sys/class/hwmon/hwmon1/temp2_input 2>/dev/null"],
 				],
 				'hdd' => sprintf($hdd_command_qnap, '/share/CACHEDEV[1-9]_DATA$'),
 			],
