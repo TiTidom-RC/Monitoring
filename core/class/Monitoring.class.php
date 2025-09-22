@@ -2388,9 +2388,10 @@ class Monitoring extends eqLogic {
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
 				'uname' => ['cmd', "uname -a 2>/dev/null"],
-				'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				# 'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				'os_version' => "getcfg system version 2>/dev/null",
 				'distri_bits' => ['value', ""],
-				'distri_name' => ['cmd', "awk -v ORS=\"\" -F'=' '/^PRETTY_NAME/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null"],
+				'distri_name' => ['cmd', "uname -n 2>/dev/null"],
 				'qnap_model' =>  "getsysinfo model 2>/dev/null",
 				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
@@ -3108,7 +3109,7 @@ class Monitoring extends eqLogic {
 						}
 					} elseif ($isQNAP) {
 						// QNAP DistriName
-						$distri_name = isset($qnap_model, $distri_name_value) ? trim($distri_name_value) . ' / ' . trim($qnap_model) : '';
+						$distri_name = isset($qnap_model, $distri_name_value) ? trim($distri_name_value) . ' / ' . trim($qnap_model) : ''; #TODO - Add QNAP Firmware Version
 					} elseif ($isAsusWRT) {
 						// AsusWRT DistriName
 						$distri_name = isset($os_version_value) ? 'AsusWRT ' . $os_version_value : '';
