@@ -2154,7 +2154,9 @@ class Monitoring extends eqLogic {
 		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		// Lorsque l'option -l n'est pas disponible
 		$hdd_command_alt = "LC_ALL=C df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-		
+		// pour les QNAP, on utilise l'option -kP
+		$hdd_command_qnap = "LC_ALL=C df -kP 2>/dev/null | grep -E '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+
 		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
 		// Lorsque la commande getconf n'est pas disponible
 		$distri_bits_command_alt = "uname -m | grep -q '64' && echo \"64\" || echo \"32\"";
@@ -2385,17 +2387,21 @@ class Monitoring extends eqLogic {
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
-				'uname' => ['cmd', "uname -n"],
-				'os_version' => "awk -F'=' '/^VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null",
+				'uname' => ['cmd', "uname -a 2>/dev/null"],
+				# 'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				'os_version' => "getcfg system version 2>/dev/null",
 				'distri_bits' => ['value', ""],
-				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null"],
+				'distri_name' => ['cmd', "uname -n 2>/dev/null"],
 				'qnap_model' =>  "getsysinfo model 2>/dev/null",
 				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
-					1 => ['cmd', "grep 'cpu MHz' /proc/cpuinfo 2>/dev/null"]
+					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
 				],
-				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command, '/share/CACHEDEV1_DATA'),
+				'cpu_temp' => [
+					1 => ['file', "/sys/class/hwmon/hwmon0/temp1_input"],
+					2 => ['file', "/sys/class/hwmon/hwmon1/temp2_input"],
+				],
+				'hdd' => sprintf($hdd_command_qnap, '/share/CACHEDEV[1-9]_DATA$'),
 			],
 		];
 
@@ -3106,7 +3112,7 @@ class Monitoring extends eqLogic {
 						}
 					} elseif ($isQNAP) {
 						// QNAP DistriName
-						$distri_name = isset($qnap_model, $distri_name_value) ? trim($distri_name_value) . ' / ' . trim($qnap_model) : '';
+						$distri_name = isset($qnap_model, $distri_name_value, $os_version_value) ? 'QTS ' . trim($os_version_value) . ' (' . trim($qnap_model) . ' - ' . trim($distri_name_value) . ')' : '';
 					} elseif ($isAsusWRT) {
 						// AsusWRT DistriName
 						$distri_name = isset($os_version_value) ? 'AsusWRT ' . $os_version_value : '';
