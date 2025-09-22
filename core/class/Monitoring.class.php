@@ -2385,17 +2385,17 @@ class Monitoring extends eqLogic {
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
-				'uname' => ['cmd', "uname -n"],
-				'os_version' => "awk -F'=' '/^VERSION_ID/ { print $2 }' /etc/*-release 2>/dev/null",
+				'uname' => ['cmd', "uname -a 2>/dev/null"],
+				'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
 				'distri_bits' => ['value', ""],
-				'distri_name' => ['cmd', "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null"],
+				'distri_name' => ['cmd', "awk -v ORS=\"\" -F'=' '/^PRETTY_NAME/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null"],
 				'qnap_model' =>  "getsysinfo model 2>/dev/null",
 				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
-					1 => ['cmd', "grep 'cpu MHz' /proc/cpuinfo 2>/dev/null"]
+					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
 				],
 				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command, '/share/CACHEDEV1_DATA'),
+				'hdd' => sprintf($hdd_command_alt, '/share/CACHEDEV1_DATA'),
 			],
 		];
 
