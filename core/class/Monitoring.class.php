@@ -3109,7 +3109,7 @@ class Monitoring extends eqLogic {
 						}
 					} elseif ($isQNAP) {
 						// QNAP DistriName
-						$distri_name = isset($qnap_model, $distri_name_value, $os_version_value) ? 'QTS ' . trim($os_version_value) . ' (' . trim($distri_name_value) . ' / ' . trim($qnap_model) . ')' : '';
+						$distri_name = isset($qnap_model, $distri_name_value, $os_version_value) ? 'QTS ' . trim($os_version_value) . ' (' . trim($qnap_model) . ' - ' . trim($distri_name_value) . ')' : '';
 					} elseif ($isAsusWRT) {
 						// AsusWRT DistriName
 						$distri_name = isset($os_version_value) ? 'AsusWRT ' . $os_version_value : '';
