@@ -6,6 +6,7 @@
         "boottime",
         "buffcache",
         "buildnumber",
+        "CACHEDEV",
         "cartereseau",
         "cartereseauautre",
         "colorhigh",

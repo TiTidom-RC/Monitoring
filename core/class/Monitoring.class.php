@@ -2154,7 +2154,9 @@ class Monitoring extends eqLogic {
 		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		// Lorsque l'option -l n'est pas disponible
 		$hdd_command_alt = "LC_ALL=C df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
-		
+		// pour les QNAP, on utilise l'option -kP
+		$hdd_command_qnap = "LC_ALL=C df -kP 2>/dev/null | grep -E '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+
 		$distri_bits_command = "getconf LONG_BIT 2>/dev/null";
 		// Lorsque la commande getconf n'est pas disponible
 		$distri_bits_command_alt = "uname -m | grep -q '64' && echo \"64\" || echo \"32\"";
@@ -2395,7 +2397,7 @@ class Monitoring extends eqLogic {
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
 				],
 				'cpu_temp' => $cpu_temp_zone0_array,
-				'hdd' => sprintf($hdd_command_alt, '/share/CACHEDEV1_DATA'),
+				'hdd' => sprintf($hdd_command_qnap, '/share/CACHEDEV[1-9]_DATA$'),
 			],
 		];
 
