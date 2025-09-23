@@ -2390,9 +2390,12 @@ class Monitoring extends eqLogic {
 				'uname' => ['cmd', "uname -a 2>/dev/null"],
 				# 'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
 				'os_version' => "getcfg system version 2>/dev/null",
+				'os_build' => "getcfg system 'build number' 2>/dev/null",
+				'os_name' => "getcfg system 'os' 2>/dev/null",
 				'distri_bits' => ['value', ""],
 				'distri_name' => ['cmd', "uname -n 2>/dev/null"],
 				'qnap_model' =>  "getsysinfo model 2>/dev/null",
+				'qnap_name' =>  "uname -n 2>/dev/null",
 				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
