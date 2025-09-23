@@ -28,6 +28,7 @@
         "Equipement",
         "Etat",
         "Formated",
+        "getcfg",
         "getconf",
         "getconfiguration",
         "getsysinfo",
