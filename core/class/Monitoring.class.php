@@ -228,7 +228,7 @@ class Monitoring extends eqLogic {
 
 		$MonitoringCmd = $this->getCmd(null, 'refresh');
         if (!is_object($MonitoringCmd)) {
-            $MonitoringCmd = new sshmanagerCmd();
+            $MonitoringCmd = new MonitoringCmd();
 			$MonitoringCmd->setName(__('Rafraichir', __FILE__));
             $MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('refresh');
