@@ -228,7 +228,7 @@ class Monitoring extends eqLogic {
 
 		$MonitoringCmd = $this->getCmd(null, 'refresh');
         if (!is_object($MonitoringCmd)) {
-            $MonitoringCmd = new sshmanagerCmd();
+            $MonitoringCmd = new MonitoringCmd();
 			$MonitoringCmd->setName(__('Rafraichir', __FILE__));
             $MonitoringCmd->setEqLogic_id($this->getId());
 			$MonitoringCmd->setLogicalId('refresh');
@@ -2390,9 +2390,12 @@ class Monitoring extends eqLogic {
 				'uname' => ['cmd', "uname -a 2>/dev/null"],
 				# 'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
 				'os_version' => "getcfg system version 2>/dev/null",
+				'os_build' => "getcfg system 'build number' 2>/dev/null",
+				'os_name' => "getcfg system 'os' 2>/dev/null",
 				'distri_bits' => ['value', ""],
 				'distri_name' => ['cmd', "uname -n 2>/dev/null"],
 				'qnap_model' =>  "getsysinfo model 2>/dev/null",
+				'qnap_name' =>  "uname -n 2>/dev/null",
 				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
@@ -2971,8 +2974,10 @@ class Monitoring extends eqLogic {
 					}
 
 					if ($isQNAP) {
-						$qnap_model_cmd = $commands['qnap_model'];
-						$qnap_model = $this->execSSH($hostId, $qnap_model_cmd, 'QnapModel');
+						$qnap_model_value = $this->execSSH($hostId, $commands['qnap_model'], 'QnapModel');
+						$qnap_name_value = $this->execSSH($hostId, $commands['qnap_name'], 'QnapName');
+						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
+						$os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -2986,7 +2991,10 @@ class Monitoring extends eqLogic {
 					}
 
 					if ($isQNAP) {
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapName :: ' . $qnap_name_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
@@ -3114,7 +3122,7 @@ class Monitoring extends eqLogic {
 						}
 					} elseif ($isQNAP) {
 						// QNAP DistriName
-						$distri_name = isset($qnap_model, $distri_name_value, $os_version_value) ? 'QTS ' . trim($os_version_value) . ' (' . trim($qnap_model) . ' - ' . trim($distri_name_value) . ')' : '';
+						$distri_name = isset($qnap_model_value, $qnap_name_value, $os_version_value, $os_build_value, $os_name_value) ? trim($os_name_value) . ' ' . trim($os_version_value) . ' (' . trim($os_build_value) . ') - ' . trim($qnap_model_value) . ' / ' . trim($qnap_name_value) : 'QTS/Linux';
 					} elseif ($isAsusWRT) {
 						// AsusWRT DistriName
 						$distri_name = isset($os_version_value) ? 'AsusWRT ' . $os_version_value : '';
