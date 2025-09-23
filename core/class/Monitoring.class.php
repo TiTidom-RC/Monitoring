@@ -2974,8 +2974,10 @@ class Monitoring extends eqLogic {
 					}
 
 					if ($isQNAP) {
-						$qnap_model_cmd = $commands['qnap_model'];
-						$qnap_model = $this->execSSH($hostId, $qnap_model_cmd, 'QnapModel');
+						$qnap_model_value = $this->execSSH($hostId, $commands['qnap_model'], 'QnapModel');
+						$qnap_name_value = $this->execSSH($hostId, $commands['qnap_name'], 'QnapName');
+						$os_built_value = $this->execSSH($hostId, $commands['os_built'], 'OsBuilt');
+						$os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -2989,7 +2991,10 @@ class Monitoring extends eqLogic {
 					}
 
 					if ($isQNAP) {
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapName :: ' . $qnap_name_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuilt :: ' . $os_built_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
@@ -3117,7 +3122,7 @@ class Monitoring extends eqLogic {
 						}
 					} elseif ($isQNAP) {
 						// QNAP DistriName
-						$distri_name = isset($qnap_model, $distri_name_value, $os_version_value) ? 'QTS ' . trim($os_version_value) . ' (' . trim($qnap_model) . ' - ' . trim($distri_name_value) . ')' : '';
+						$distri_name = isset($qnap_model_value, $qnap_name_value, $os_version_value, $os_build_value, $os_name_value) ? $os_name_value . ' ' . trim($os_version_value) . ' (' . trim($os_build_value) . ') - ' . trim($qnap_model_value) : 'QTS/Linux';
 					} elseif ($isAsusWRT) {
 						// AsusWRT DistriName
 						$distri_name = isset($os_version_value) ? 'AsusWRT ' . $os_version_value : '';
