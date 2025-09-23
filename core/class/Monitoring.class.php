@@ -2976,7 +2976,7 @@ class Monitoring extends eqLogic {
 					if ($isQNAP) {
 						$qnap_model_value = $this->execSSH($hostId, $commands['qnap_model'], 'QnapModel');
 						$qnap_name_value = $this->execSSH($hostId, $commands['qnap_name'], 'QnapName');
-						$os_built_value = $this->execSSH($hostId, $commands['os_built'], 'OsBuilt');
+						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
 						$os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
 					}
 
@@ -2993,7 +2993,7 @@ class Monitoring extends eqLogic {
 					if ($isQNAP) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapName :: ' . $qnap_name_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuilt :: ' . $os_built_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
 					}
 					
