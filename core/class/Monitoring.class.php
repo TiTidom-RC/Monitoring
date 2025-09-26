@@ -1841,7 +1841,7 @@ class Monitoring extends eqLogic {
 		if (is_array($hddCmds)) {
 			foreach ($hddCmds as $id => [$type, $command]) {
 				if ($type == 'file') {
-					$hdd_cmd = "cat " . $command . ' 2>/dev/null';
+					$hdd_cmd = "cat " . $command . " 2>/dev/null";
 				} elseif ($type == 'cmd') {
 					$hdd_cmd = $command;
 				} else {
@@ -1864,7 +1864,7 @@ class Monitoring extends eqLogic {
 		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
 		foreach ($cpuFreqArray as $id => [$type, $command]) {
 			if ($type == 'file') {
-				$cpu_freq_cmd = "cat " . $command . ' 2>/dev/null';
+				$cpu_freq_cmd = "cat " . $command . " 2>/dev/null";
 			} elseif ($type == 'cmd') {
 				$cpu_freq_cmd = $command;
 			} else {
@@ -1893,7 +1893,7 @@ class Monitoring extends eqLogic {
 		} elseif (is_array($tempArray)) {
 			foreach ($tempArray as $id => [$type, $command]) {	
 				if ($type == 'file') {
-					$cpu_temp_cmd = "cat " . $command . ' 2>/dev/null';
+					$cpu_temp_cmd = "cat " . $command . " 2>/dev/null";
 				} elseif ($type == 'cmd') {
 					$cpu_temp_cmd = $command;
 				} else {
