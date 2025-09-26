@@ -2393,7 +2393,7 @@ class Monitoring extends eqLogic {
 				'os_build' => "getcfg system 'build number' 2>/dev/null",
 				'os_name' => "getcfg system 'os' 2>/dev/null",
 				'distri_bits' => ['value', ""],
-				# 'distri_name' => ['cmd', "uname -n 2>/dev/null"],
+				'distri_name' => ['value', ""],
 				'qnap_model' =>  "getsysinfo model 2>/dev/null",
 				# 'qnap_name' =>  "uname -n 2>/dev/null",
 				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
