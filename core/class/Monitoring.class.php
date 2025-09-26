@@ -1836,11 +1836,35 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
+	public function getHDD($hddCmds, $equipement, $localOrRemote = 'local', $hostId = '') {
+		$result = ['hdd_value' => '', 'hdd_id' => ''];
+		if (is_array($hddCmds)) {
+			foreach ($hddCmds as $id => [$type, $command]) {
+				if ($localOrRemote == 'local' && $type == 'file' && file_exists($command)) {
+					$hdd_cmd = "cat " . $command . " 2>/dev/null";
+				} elseif ($type == 'cmd') {
+					$hdd_cmd = $command;
+				} else {
+					$hdd_cmd = '';
+				}
+				$hdd_value = trim($hdd_cmd) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($hdd_cmd, 'HDD-' . $id) : $this->execSSH($hostId, $hdd_cmd, 'HDD-' . $id)) : '';
+				if (!empty($hdd_value)) {
+					$result = ['hdd_value' => $hdd_value, 'hdd_id' => $id];
+					break;
+				}
+			}
+		} else {
+			$hdd_value = trim($hddCmds) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($hddCmds, 'HDD') : $this->execSSH($hostId, $hddCmds, 'HDD')) : '';
+			$result = ['hdd_value' => $hdd_value, 'hdd_id' => ''];
+		}
+		return $result;
+	}
+
 	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '') {
 		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
 		foreach ($cpuFreqArray as $id => [$type, $command]) {
-			if ($type == 'file' && file_exists($command)) {
-				$cpu_freq_cmd = "cat " . $command;
+			if ($localOrRemote == 'local' && $type == 'file' && file_exists($command)) {
+				$cpu_freq_cmd = "cat " . $command . " 2>/dev/null";
 			} elseif ($type == 'cmd') {
 				$cpu_freq_cmd = $command;
 			} else {
@@ -1867,9 +1891,9 @@ class Monitoring extends eqLogic {
 				$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => 'Custom'];
 			}
 		} elseif (is_array($tempArray)) {
-			foreach ($tempArray as $id => [$type, $command]) {	
-				if ($type == 'file' && file_exists($command)) {
-					$cpu_temp_cmd = "cat " . $command;
+			foreach ($tempArray as $id => [$type, $command]) {
+				if ($localoudistant == 'local' && $type == 'file' && file_exists($command)) {
+					$cpu_temp_cmd = "cat " . $command . " 2>/dev/null";
 				} elseif ($type == 'cmd') {
 					$cpu_temp_cmd = $command;
 				} else {
@@ -2957,25 +2981,7 @@ class Monitoring extends eqLogic {
 					$swap_value = $this->execSSH($hostId, $commands['swap'], 'Swap');
 					
 					// Récupération des infos HDD
-					
-					if (is_array($commands['hdd'])) {
-						$hdd_value = '';
-						foreach ($commands['hdd'] as $id => [$type, $command]) {
-							if ($type == 'file' && file_exists($command)) {
-								$hdd_cmd = "cat " . $command;
-							} elseif ($type == 'cmd') {
-								$hdd_cmd = $command;
-							} else {
-								$hdd_cmd = '';
-							}
-							$hdd_value = trim($hdd_cmd) !== '' ? $this->execSSH($hostId, $hdd_cmd, 'HDD-' . $id) : '';
-							if (!empty($hdd_value)) {
-								break;
-							}
-						}
-					} else {
-						$hdd_value = $this->execSSH($hostId, $commands['hdd'], 'HDD');
-					}
+					extract($this->getHDD($commands['hdd'], $equipement, 'remote', $hostId));
 
 					$network_value = $this->execSSH($hostId, $commands['network'], 'ReseauRXTX');
 					$network_ip_value = $this->execSSH($hostId, $commands['network_ip'], 'ReseauIP');
@@ -3028,6 +3034,7 @@ class Monitoring extends eqLogic {
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Swap :: ' . $swap_value);
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] HDD :: ' . $hdd_value);
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] HDD Id :: ' . $hdd_id);
 
 					if ($isSynology) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv2 :: ' . $syno_hddv2_value);
@@ -3075,11 +3082,11 @@ class Monitoring extends eqLogic {
 				$load_avg_value = $this->execSRV($commands['load_avg'], 'LoadAverage');
 				$memory_value = $this->execSRV($commands['memory'], 'Memory');
 				$swap_value = $this->execSRV($commands['swap'], 'Swap');
-				$hdd_value = $this->execSRV($commands['hdd'], 'HDD');
 				$network_value = $this->execSRV($commands['network'], 'ReseauRXTX');
 				$network_ip_value = $this->execSRV($commands['network_ip'], 'ReseauIP');
 				$cpu_nb = $this->execSRV($commands['cpu_nb'], 'NbCPU');
 
+				extract($this->getHDD($commands['hdd'], $equipement));
 				extract($this->getCPUFreq($commands['cpu_freq'], $equipement));
 				extract($this->getCPUTemp($commands['cpu_temp'], $equipement));
 				
@@ -3091,6 +3098,7 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Memory :: ' . $memory_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Swap :: ' . $swap_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] HDD :: ' . $hdd_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] HDD Id :: ' . $hdd_id);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauRXTX :: ' . $network_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauIP :: ' . $network_ip_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] NbCPU :: ' . $cpu_nb);
