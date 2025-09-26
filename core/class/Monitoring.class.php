@@ -2151,9 +2151,9 @@ class Monitoring extends eqLogic {
 		
 		// Cmd Templates
 		
-		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		$hdd_command = "LC_ALL=C df -lP 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		// Lorsque l'option -l n'est pas disponible
-		$hdd_command_alt = "LC_ALL=C df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		$hdd_command_alt = "LC_ALL=C df -P 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		// pour les QNAP, on utilise l'option -kP
 		$hdd_command_qnap = "LC_ALL=C df -kP 2>/dev/null | grep -E '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 
@@ -2296,7 +2296,10 @@ class Monitoring extends eqLogic {
 					5 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"Package\")) { printf(\"%f\",$4);} }'"], // OK by sensors
 					6 => ['cmd', "LC_ALL=C sensors 2>/dev/null | awk '{if (match($0, \"MB Temperature\")) { printf(\"%f\",$3);} }'"] // OK by sensors
 				],
-				'hdd' => sprintf($hdd_command, '/$')
+				'hdd' => [
+					1 => ['cmd', sprintf($hdd_command, '/$')],
+					2 => ['cmd', sprintf($hdd_command_alt, '/$')]
+				],
 			],
 			'LibreELEC' => [
 				// LibreELEC :: SubKey (détecté via ARMv comme x86_64 / armv7l, mais il manque le disque et le 32bits)
@@ -2952,7 +2955,28 @@ class Monitoring extends eqLogic {
 					$load_avg_value = $this->execSSH($hostId, $commands['load_avg'], 'LoadAverage');
 					$memory_value = $this->execSSH($hostId, $commands['memory'], 'Memory');
 					$swap_value = $this->execSSH($hostId, $commands['swap'], 'Swap');
-					$hdd_value = $this->execSSH($hostId, $commands['hdd'], 'HDD');
+					
+					// Récupération des infos HDD
+					
+					if (is_array($commands['hdd'])) {
+						$hdd_value = '';
+						foreach ($commands['hdd'] as $id => [$type, $command]) {
+							if ($type == 'file' && file_exists($command)) {
+								$hdd_cmd = "cat " . $command;
+							} elseif ($type == 'cmd') {
+								$hdd_cmd = $command;
+							} else {
+								$hdd_cmd = '';
+							}
+							$hdd_value = trim($hdd_cmd) !== '' ? $this->execSSH($hostId, $hdd_cmd, 'HDD-' . $id) : '';
+							if (!empty($hdd_value)) {
+								break;
+							}
+						}
+					} else {
+						$hdd_value = $this->execSSH($hostId, $commands['hdd'], 'HDD');
+					}
+
 					$network_value = $this->execSSH($hostId, $commands['network'], 'ReseauRXTX');
 					$network_ip_value = $this->execSSH($hostId, $commands['network_ip'], 'ReseauIP');
 					$cpu_nb = $this->execSSH($hostId, $commands['cpu_nb'], 'NbCPU');
