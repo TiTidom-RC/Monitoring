@@ -2151,9 +2151,9 @@ class Monitoring extends eqLogic {
 		
 		// Cmd Templates
 		
-		$hdd_command = "LC_ALL=C df -l 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		$hdd_command = "LC_ALL=C df -lP 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		// Lorsque l'option -l n'est pas disponible
-		$hdd_command_alt = "LC_ALL=C df 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
+		$hdd_command_alt = "LC_ALL=C df -P 2>/dev/null | grep '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 		// pour les QNAP, on utilise l'option -kP
 		$hdd_command_qnap = "LC_ALL=C df -kP 2>/dev/null | grep -E '%s' | head -1 | awk '{ print $2,$3,$4,$5 }'";
 
