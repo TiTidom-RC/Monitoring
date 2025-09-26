@@ -1840,7 +1840,7 @@ class Monitoring extends eqLogic {
 		$result = ['hdd_value' => '', 'hdd_id' => ''];
 		if (is_array($hddCmds)) {
 			foreach ($hddCmds as $id => [$type, $command]) {
-				if ($type == 'file') {
+				if ($localOrRemote == 'local' && $type == 'file' && file_exists($command)) {
 					$hdd_cmd = "cat " . $command . " 2>/dev/null";
 				} elseif ($type == 'cmd') {
 					$hdd_cmd = $command;
@@ -1863,7 +1863,7 @@ class Monitoring extends eqLogic {
 	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '') {
 		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
 		foreach ($cpuFreqArray as $id => [$type, $command]) {
-			if ($type == 'file') {
+			if ($localOrRemote == 'local' && $type == 'file' && file_exists($command)) {
 				$cpu_freq_cmd = "cat " . $command . " 2>/dev/null";
 			} elseif ($type == 'cmd') {
 				$cpu_freq_cmd = $command;
@@ -1891,8 +1891,8 @@ class Monitoring extends eqLogic {
 				$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => 'Custom'];
 			}
 		} elseif (is_array($tempArray)) {
-			foreach ($tempArray as $id => [$type, $command]) {	
-				if ($type == 'file') {
+			foreach ($tempArray as $id => [$type, $command]) {
+				if ($localoudistant == 'local' && $type == 'file' && file_exists($command)) {
 					$cpu_temp_cmd = "cat " . $command . " 2>/dev/null";
 				} elseif ($type == 'cmd') {
 					$cpu_temp_cmd = $command;
