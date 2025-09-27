@@ -2422,6 +2422,7 @@ class Monitoring extends eqLogic {
 				],
 				'cpu_temp' => [
 					1 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"],
+					2 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
 				],
 				'hdd' => sprintf($hdd_command_alt, '/$')
 			],
