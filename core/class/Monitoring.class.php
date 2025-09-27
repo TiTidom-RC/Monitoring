@@ -2410,7 +2410,20 @@ class Monitoring extends eqLogic {
 			],
 			'asuswrt' => [
 				'ARMv' => ['value', "asuswrt"],
-
+				'distri_bits' => ['cmd', $distri_bits_command_alt],
+				'distri_name' => ['value', ""],
+				'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				'os_build' => "awk -v ORS=\"\" -F'=' '/^BUILD_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				'os_name' => "awk -v ORS=\"\" -F'=' '/^NAME/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				'asuswrt_model' => "uname -n 2>/dev/null",
+				'cpu_nb' => "grep '^processor' /proc/cpuinfo 2>/dev/null | wc -l",
+				'cpu_freq' => [
+					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
+				],
+				'cpu_temp' => [
+					1 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"],
+				],
+				'hdd' => sprintf($hdd_command_alt, '/$')
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
@@ -3010,6 +3023,12 @@ class Monitoring extends eqLogic {
 						$os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
 					}
 
+					if ($isAsusWRT) {
+						$asus_model_value = $this->execSSH($hostId, $commands['asuswrt_model'], 'AsusWRTModel');
+						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
+						$os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
+					}
+
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriName :: ' . $distri_name_value);
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriBits :: ' . $distri_bits);
@@ -3023,6 +3042,12 @@ class Monitoring extends eqLogic {
 					if ($isQNAP) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model_value);
 						# log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapName :: ' . $qnap_name_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
+					}
+
+					if ($isAsusWRT) {
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRTModel :: ' . $asus_model_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
 					}
