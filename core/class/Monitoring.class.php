@@ -2415,6 +2415,7 @@ class Monitoring extends eqLogic {
 				'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
 				'os_build' => "awk -v ORS=\"\" -F'=' '/^BUILD_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
 				'os_name' => "awk -v ORS=\"\" -F'=' '/^NAME/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				# 'asuswrt_model' => "nvram get productid 2>/dev/null",
 				'asuswrt_model' => "uname -n 2>/dev/null",
 				'cpu_nb' => "grep '^processor' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
