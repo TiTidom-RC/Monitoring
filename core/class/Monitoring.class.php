@@ -3184,7 +3184,7 @@ class Monitoring extends eqLogic {
 						$distri_name = isset($qnap_model_value, $os_version_value, $os_build_value, $os_name_value) ? (empty(trim($os_name_value)) ? 'QTS ' : trim($os_name_value) . ' ') . trim($os_version_value) . ' Build ' . trim($os_build_value) . ' (' . trim($qnap_model_value) . ')' : 'QTS/Linux';
 					} elseif ($isAsusWRT) {
 						// AsusWRT DistriName
-						$distri_name = isset($os_version_value) ? 'AsusWRT ' . $os_version_value : '';
+						$distri_name = isset($asus_model_value, $os_version_value, $os_build_value, $os_name_value) ? (empty(trim($os_name_value)) ? 'AsusWRT ' : trim($os_name_value) . ' ') . trim($os_version_value) . ' Build ' . trim($os_build_value) . ' (' . trim($asus_model_value) . ')' : 'AsusWRT/Linux';
 					} elseif ($archKey == 'medion') {
 						// Medion DistriName (New)
 						$distri_name = isset($distri_name_value, $os_version_value) ? 'Medion/Linux ' . $os_version_value . ' (' . trim($distri_name_value) . ')' : ''; 
