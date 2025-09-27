@@ -2412,11 +2412,13 @@ class Monitoring extends eqLogic {
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'distri_name' => ['value', ""],
-				'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
-				'os_build' => "awk -v ORS=\"\" -F'=' '/^BUILD_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
-				'os_name' => "awk -v ORS=\"\" -F'=' '/^NAME/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
-				# 'asuswrt_model' => "nvram get productid 2>/dev/null",
-				'asuswrt_model' => "uname -n 2>/dev/null",
+				# 'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				# 'os_build' => "awk -v ORS=\"\" -F'=' '/^BUILD_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				# 'asuswrt_model' => "uname -n 2>/dev/null",
+				'os_version' => "nvram get firmver 2>/dev/null",
+				'os_build' => "nvram get buildno 2>/dev/null",
+				# 'os_name' => "awk -v ORS=\"\" -F'=' '/^NAME/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
+				'asuswrt_model' => "nvram get productid 2>/dev/null",
 				'cpu_nb' => "grep '^processor' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
@@ -3028,7 +3030,7 @@ class Monitoring extends eqLogic {
 					if ($isAsusWRT) {
 						$asus_model_value = $this->execSSH($hostId, $commands['asuswrt_model'], 'AsusWRTModel');
 						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
-						$os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
+						# $os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -3051,7 +3053,7 @@ class Monitoring extends eqLogic {
 					if ($isAsusWRT) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRTModel :: ' . $asus_model_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
+						# log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
@@ -3181,11 +3183,10 @@ class Monitoring extends eqLogic {
 						}
 					} elseif ($isQNAP) {
 						// QNAP DistriName
-						# $distri_name = isset($qnap_model_value, $qnap_name_value, $os_version_value, $os_build_value, $os_name_value) ? trim($os_name_value) . ' ' . trim($os_version_value) . ' (' . trim($os_build_value) . ') - ' . trim($qnap_model_value) . ' / ' . trim($qnap_name_value) : 'QTS/Linux';
 						$distri_name = isset($qnap_model_value, $os_version_value, $os_build_value, $os_name_value) ? (empty(trim($os_name_value)) ? 'QTS ' : trim($os_name_value) . ' ') . trim($os_version_value) . ' Build ' . trim($os_build_value) . ' (' . trim($qnap_model_value) . ')' : 'QTS/Linux';
 					} elseif ($isAsusWRT) {
 						// AsusWRT DistriName
-						$distri_name = isset($asus_model_value, $os_version_value, $os_build_value, $os_name_value) ? (empty(trim($os_name_value)) ? 'AsusWRT ' : trim($os_name_value) . ' ') . trim($os_version_value) . ' Build ' . trim($os_build_value) . ' (' . trim($asus_model_value) . ')' : 'AsusWRT/Linux';
+						$distri_name = isset($asus_model_value, $os_version_value, $os_build_value) ? 'AsusWRT ' . trim($os_version_value) . ' Build ' . trim($os_build_value) . ' (' . trim($asus_model_value) . ')' : 'AsusWRT/Linux';
 					} elseif ($archKey == 'medion') {
 						// Medion DistriName (New)
 						$distri_name = isset($distri_name_value, $os_version_value) ? 'Medion/Linux ' . $os_version_value . ' (' . trim($distri_name_value) . ')' : ''; 
