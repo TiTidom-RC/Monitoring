@@ -24,6 +24,15 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 
 ?>
 
+<style>
+    /* Style spécifique pour les options du NAS Synology */
+    .syno_conf {
+        margin-left: 50px; /* Le décalage vers la droite */
+        padding-left: 15px; /* Un peu d'espace avant le contenu */
+        border-left: 2px solid #4d4d4d; /* Une ligne verticale */
+    }
+</style>
+
 <div class="row row-overflow">
     <!-- Page d'accueil du plugin -->
     <div class="col-xs-12 eqLogicThumbnailDisplay">
@@ -189,7 +198,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                 <div class="local" style="display:none;">
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Timeout SRV}}
-                                            <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration d'une commande executée en local (par défaut : 30s)}}"></i></sup>
+                                            <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration d'une commande exécutée en local (par défaut : 30s)}}"></i></sup>
                                         </label>
                                         <div class="col-md-6">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="timeoutsrv" type="text" placeholder="{{Saisir le timeout SRV}}" />
@@ -219,9 +228,9 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                     <div class="col-xs-6">
                         <form class="form-horizontal">
                             <fieldset>
-                                <legend>{{NAS Synology}} :</legend>
+                                <legend>{{Equipement Spécifique}} :</legend>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label" >{{Activer}}</label>
+                                    <label class="col-md-2 control-label" >{{Synology}}</label>
                                     <div class="col-md-8">
                                         <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="synology" />
                                         <span style="font-size: 85%;">({{A cocher pour monitorer un NAS Synology}})</span>
@@ -282,6 +291,20 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         <div class="col-md-6">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input}}" />
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" >{{QNAP}}</label>
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="qnap" />
+                                        <span style="font-size: 85%;">({{A cocher pour monitorer un NAS QNAP}})</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" >{{AsusWRT}}</label>
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="asuswrt" />
+                                        <span style="font-size: 85%;">({{A cocher pour monitorer un Routeur AsusWRT}})</span>
                                     </div>
                                 </div>
 					        </fieldset>
