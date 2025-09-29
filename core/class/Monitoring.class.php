@@ -3418,7 +3418,8 @@ class Monitoring extends eqLogic {
 							$rebootcmd = "sudo -S /sbin/reboot 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-REBOOT] Lancement commande distante REBOOT');
 						} elseif ($isAsusWRT) {
-							$rebootcmd = "sudo -S reboot 2>/dev/null";
+							// On part du principe que l'utilisateur se connecte avec le seul compte 'admin'
+							$rebootcmd = "reboot 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-REBOOT] Lancement commande distante REBOOT');
 						} else {
 							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
@@ -3434,7 +3435,8 @@ class Monitoring extends eqLogic {
 							$poweroffcmd = "sudo -S /sbin/poweroff 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-POWEROFF] Lancement commande distante POWEROFF');
 						} elseif ($isAsusWRT) {
-							$poweroffcmd = "sudo -S poweroff 2>/dev/null";
+							// On part du principe que l'utilisateur se connecte avec le seul compte 'admin'
+							$poweroffcmd = "halt -p 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
 							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
