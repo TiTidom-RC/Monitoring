@@ -2424,8 +2424,9 @@ class Monitoring extends eqLogic {
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
 				],
 				'cpu_temp' => [
-					1 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"],
+					1 => ['cmd', "cat /proc/dmu/temperature | grep -oE '[0-9]+'"],
 					2 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
+					3 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"]
 				],
 				'hdd' => sprintf($hdd_command_alt, '/$')
 			],
@@ -2515,8 +2516,10 @@ class Monitoring extends eqLogic {
 				$networkCard_cmd = "ifconfig -u -l ether 2>/dev/null | awk -v ORS=\"\" '{ print $1 }'";
 			} elseif ($_archKey == 'piCorePlayer') {
 				$networkCard_cmd = "ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != \"addr:127.0.0.1\" { print iface, $2 }' | head -1 | awk -v ORS=\"\" -F'[: ]' '{ print $1 }'";
+			} elseif ($_archKey == 'asuswrt') {
+				$networkCard_cmd = "nvram get lan_ifname 2>/dev/null";
 			} else {
-				$networkCard_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";	
+				$networkCard_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1|127.0.1.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";	
 			}
 			$networkCard = $_localorremote == 'local' ? $this->execSRV($networkCard_cmd, 'NetworkCard') : $this->execSSH($_hostId, $networkCard_cmd, 'NetworkCard');
 		} else {
@@ -3156,6 +3159,7 @@ class Monitoring extends eqLogic {
 					if ($isSynology) {
 						// Syno DistriName (New)
 						$distri_name = isset($syno_version_file, $syno_model) ? $this->getSynoVersion($syno_version_file, $syno_model, $equipement) : '';
+						log::add('Monitoring', 'debug', '['. $equipement .'] Syno DistriName :: ' . $distri_name);
 
 						// Syno Volume 2
 						if ($this->getConfiguration('synologyv2') == '1') {
@@ -3184,15 +3188,19 @@ class Monitoring extends eqLogic {
 					} elseif ($isQNAP) {
 						// QNAP DistriName
 						$distri_name = isset($qnap_model_value, $os_version_value, $os_build_value, $os_name_value) ? (empty(trim($os_name_value)) ? 'QTS ' : trim($os_name_value) . ' ') . trim($os_version_value) . ' Build ' . trim($os_build_value) . ' (' . trim($qnap_model_value) . ')' : 'QTS/Linux';
+						log::add('Monitoring', 'debug', '['. $equipement .'] QNAP DistriName :: ' . $distri_name);
 					} elseif ($isAsusWRT) {
 						// AsusWRT DistriName
 						$distri_name = isset($asus_model_value, $os_version_value, $os_build_value) ? 'AsusWRT ' . trim($os_version_value) . ' Build ' . trim($os_build_value) . ' (' . trim($asus_model_value) . ')' : 'AsusWRT/Linux';
+						log::add('Monitoring', 'debug', '['. $equipement .'] AsusWRT DistriName :: ' . $distri_name);
 					} elseif ($archKey == 'medion') {
 						// Medion DistriName (New)
-						$distri_name = isset($distri_name_value, $os_version_value) ? 'Medion/Linux ' . $os_version_value . ' (' . trim($distri_name_value) . ')' : ''; 
+						$distri_name = isset($distri_name_value, $os_version_value) ? 'Medion/Linux ' . $os_version_value . ' (' . trim($distri_name_value) . ')' : '';
+						log::add('Monitoring', 'debug', '['. $equipement .'] Medion DistriName :: ' . $distri_name);
 					} else {
 						// General DistriName (New)
 						$distri_name = isset($distri_name_value, $distri_bits, $ARMv) ? trim($distri_name_value) . ' ' . $distri_bits . 'bits (' . $ARMv . ')' : '';
+						log::add('Monitoring', 'debug', '['. $equipement .'] General DistriName :: ' . $distri_name);
 					}
 	
 					// Uptime (New)
@@ -3410,7 +3418,8 @@ class Monitoring extends eqLogic {
 							$rebootcmd = "sudo -S /sbin/reboot 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-REBOOT] Lancement commande distante REBOOT');
 						} elseif ($isAsusWRT) {
-							$rebootcmd = "sudo -S reboot 2>/dev/null";
+							// On part du principe que l'utilisateur se connecte avec le seul compte 'admin'
+							$rebootcmd = "reboot 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-REBOOT] Lancement commande distante REBOOT');
 						} else {
 							$rebootcmd = "timeout 3 sudo -S reboot 2>/dev/null";
@@ -3426,7 +3435,8 @@ class Monitoring extends eqLogic {
 							$poweroffcmd = "sudo -S /sbin/poweroff 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-POWEROFF] Lancement commande distante POWEROFF');
 						} elseif ($isAsusWRT) {
-							$poweroffcmd = "sudo -S poweroff 2>/dev/null";
+							// On part du principe que l'utilisateur se connecte avec le seul compte 'admin'
+							$poweroffcmd = "halt -p 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
 							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
