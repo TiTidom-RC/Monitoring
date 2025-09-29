@@ -2424,8 +2424,9 @@ class Monitoring extends eqLogic {
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
 				],
 				'cpu_temp' => [
-					1 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"],
+					1 => ['cmd', "cat /proc/dmu/temperature | grep -oE '[0-9]+'"],
 					2 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
+					3 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"]
 				],
 				'hdd' => sprintf($hdd_command_alt, '/$')
 			],
@@ -2516,7 +2517,7 @@ class Monitoring extends eqLogic {
 			} elseif ($_archKey == 'piCorePlayer') {
 				$networkCard_cmd = "ifconfig | awk '/^[a-z]/ { iface=$1 } /inet / && $2 != \"addr:127.0.0.1\" { print iface, $2 }' | head -1 | awk -v ORS=\"\" -F'[: ]' '{ print $1 }'";
 			} else {
-				$networkCard_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";	
+				$networkCard_cmd = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep -Ev 'docker|127.0.0.1|127.0.1.1' | head -1 | awk '{ print $2 }' | awk -F'@' -v ORS=\"\" '{ print $1 }'";	
 			}
 			$networkCard = $_localorremote == 'local' ? $this->execSRV($networkCard_cmd, 'NetworkCard') : $this->execSSH($_hostId, $networkCard_cmd, 'NetworkCard');
 		} else {
