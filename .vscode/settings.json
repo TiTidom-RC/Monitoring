@@ -42,6 +42,7 @@
         "Historized",
         "hwmon",
         "iface",
+        "ifname",
         "loadavg",
         "Localor",
         "localorremote",
