@@ -2424,7 +2424,7 @@ class Monitoring extends eqLogic {
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
 				],
 				'cpu_temp' => [
-					1 => ['cmd', "cat /proc/dmu/temperature | grep -oE '[0-9]+'"],
+					1 => ['cmd', "cat /proc/dmu/temperature 2>/dev/null | grep -oE '[0-9]+'"],
 					2 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
 					3 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"]
 				],
