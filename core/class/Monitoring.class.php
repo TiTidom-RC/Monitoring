@@ -2410,7 +2410,8 @@ class Monitoring extends eqLogic {
 			],
 			'asuswrt' => [
 				# devices : cat /var/lib/misc/dnsmasq.leases
-				# 
+				# wifi : cat /tmp/clientlist.json
+				
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'distri_name' => ['value', ""],
