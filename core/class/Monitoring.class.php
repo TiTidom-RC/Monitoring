@@ -2409,6 +2409,8 @@ class Monitoring extends eqLogic {
 				'syno_hddesata' => sprintf($hdd_command, 'sdf1\|volumeSATA') // DSM 5.x / 6.x / 7.x
 			],
 			'asuswrt' => [
+				# devices : cat /var/lib/misc/dnsmasq.leases
+				# 
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'distri_name' => ['value', ""],
