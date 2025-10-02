@@ -2127,7 +2127,7 @@ class Monitoring extends eqLogic {
 			$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
 			// Search for specific distribution in distri_name_value
-			$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD'];
+			$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD', 'Alpine'];
 			$foundDistri = false;
 			foreach ($distriValues as $distriValue) {
 				if (stripos($distri_name_value, $distriValue) !== false) {
@@ -2329,6 +2329,10 @@ class Monitoring extends eqLogic {
 				// LibreELEC :: SubKey (détecté via ARMv comme x86_64 / armv7l, mais il manque le disque et le 32bits)
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'hdd' => sprintf($hdd_command_alt, '/storage')
+			],
+			'Alpine' => [
+				// Alpine :: SubKey (détecté via ARMv comme x86_64, mais la commande CPU renvoie par défaut ceux de l'hôte)
+				'cpu_nb' => "nproc 2>/dev/null",
 			],
 			'piCorePlayer' => [ // distri_name
 				'ARMv' => ['cmd', "uname -m 2>/dev/null"],
