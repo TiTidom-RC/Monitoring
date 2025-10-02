@@ -2127,7 +2127,7 @@ class Monitoring extends eqLogic {
 			$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
 
 			// Search for specific distribution in distri_name_value
-			$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD'];
+			$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD', 'Alpine'];
 			$foundDistri = false;
 			foreach ($distriValues as $distriValue) {
 				if (stripos($distri_name_value, $distriValue) !== false) {
@@ -2330,6 +2330,10 @@ class Monitoring extends eqLogic {
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'hdd' => sprintf($hdd_command_alt, '/storage')
 			],
+			'Alpine' => [
+				// Alpine :: SubKey (détecté via ARMv comme x86_64, mais la commande CPU renvoie par défaut ceux de l'hôte)
+				'cpu_nb' => "nproc 2>/dev/null",
+			],
 			'piCorePlayer' => [ // distri_name
 				'ARMv' => ['cmd', "uname -m 2>/dev/null"],
 				'distri_bits' => ['cmd', "uname -m | grep -q '64' && echo \"64\" || echo \"32\""],
@@ -2409,6 +2413,9 @@ class Monitoring extends eqLogic {
 				'syno_hddesata' => sprintf($hdd_command, 'sdf1\|volumeSATA') // DSM 5.x / 6.x / 7.x
 			],
 			'asuswrt' => [
+				# devices : cat /var/lib/misc/dnsmasq.leases
+				# wifi : cat /tmp/clientlist.json
+				
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'distri_name' => ['value', ""],
