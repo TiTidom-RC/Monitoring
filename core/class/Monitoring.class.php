@@ -3443,7 +3443,8 @@ class Monitoring extends eqLogic {
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-POWEROFF] Lancement commande distante POWEROFF');
 						} elseif ($isAsusWRT) {
 							// On part du principe que l'utilisateur se connecte avec le seul compte 'admin'
-							$poweroffcmd = "halt -p 2>/dev/null";
+							// $poweroffcmd = "halt -p 2>/dev/null";
+							$poweroffcmd = "halt 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
 							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
