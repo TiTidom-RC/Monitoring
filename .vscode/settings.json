@@ -43,6 +43,7 @@
         "hwmon",
         "iface",
         "ifname",
+        "jffs",
         "loadavg",
         "Localor",
         "localorremote",
