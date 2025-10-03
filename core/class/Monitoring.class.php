@@ -2435,7 +2435,7 @@ class Monitoring extends eqLogic {
 					2 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
 					3 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"]
 				],
-				'hdd' => sprintf($hdd_command_alt, '/$')
+				'hdd' => sprintf($hdd_command_alt, '/jffs$')
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
@@ -3443,7 +3443,8 @@ class Monitoring extends eqLogic {
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][QNAP-POWEROFF] Lancement commande distante POWEROFF');
 						} elseif ($isAsusWRT) {
 							// On part du principe que l'utilisateur se connecte avec le seul compte 'admin'
-							$poweroffcmd = "halt -p 2>/dev/null";
+							// $poweroffcmd = "halt -p 2>/dev/null";
+							$poweroffcmd = "halt 2>/dev/null";
 							log::add('Monitoring', 'info', '['. $equipement .'][SSH][ASUSWRT-POWEROFF] Lancement commande distante POWEROFF');
 						} else {
 							$poweroffcmd = "timeout 3 sudo -S poweroff 2>/dev/null";
