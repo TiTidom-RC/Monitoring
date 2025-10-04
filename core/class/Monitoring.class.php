@@ -155,7 +155,7 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			
 			$mem_start_usage = memory_get_usage();
-			log::add('Monitoring', 'debug', '[PULL] Memory Get Usage Start :: ' . $mem_start_usage / 1024 / 1024 . ' Mo');
+			log::add('Monitoring', 'debug', '[PULL] Memory Get Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
 
 			/** @var Monitoring $Monitoring */
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
@@ -168,14 +168,14 @@ class Monitoring extends eqLogic {
 						$Monitoring->getInformations();
 						$mem_cycle_usage = memory_get_usage();
 						$mem_cycle_peak = memory_get_peak_usage();
-						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Memory Used :: ' . $mem_cycle_usage / 1024 / 1024 . ' Mo');
-						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Memory Peak :: ' . $mem_cycle_peak / 1024 / 1024 . ' Mo');
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Memory Used :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Memory Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
 						$Monitoring->refreshWidget();
 					}
 				}
 			}
 			$mem_end_usage = memory_get_usage();
-			log::add('Monitoring', 'debug', '[PULL] Memory Usage Pull :: ' . $mem_end_usage / 1024 / 1024 . ' Mo | Conso Pull :: ' . ($mem_end_usage - $mem_start_usage) / 1024 . ' Ko');
+			log::add('Monitoring', 'debug', '[PULL] Memory Usage Pull :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso Pull :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 		}
 	}
 
@@ -184,7 +184,7 @@ class Monitoring extends eqLogic {
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 
 			$mem_start_usage = memory_get_usage();
-			log::add('Monitoring', 'debug', '[PULLLOCAL] Memory Get Usage Start :: ' . $mem_start_usage / 1024 / 1024 . ' Mo');
+			log::add('Monitoring', 'debug', '[PULLLOCAL] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
 
 			/** @var Monitoring $Monitoring */
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
@@ -197,20 +197,20 @@ class Monitoring extends eqLogic {
 						$Monitoring->getInformations();
 						$mem_cycle_usage = memory_get_usage();
 						$mem_cycle_peak = memory_get_peak_usage();
-						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Used :: ' . $mem_cycle_usage / 1024 / 1024 . ' Mo');
-						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Peak :: ' . $mem_cycle_peak / 1024 / 1024 . ' Mo');
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
 						$Monitoring->refreshWidget();
 					}
 				}
 			}
 			$mem_end_usage = memory_get_usage();
-			log::add('Monitoring', 'debug', '[PULLLOCAL] Memory Usage PullLocal :: ' . $mem_end_usage / 1024 / 1024 . ' Mo | Conso PullLocal :: ' . ($mem_end_usage - $mem_start_usage) / 1024 . ' Ko');
+			log::add('Monitoring', 'debug', '[PULLLOCAL] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 		}
 	}
 
 	public static function pullCustom($_options) {
 		$mem_start_usage = memory_get_usage();
-		log::add('Monitoring', 'debug', '[PULLCUSTOM] Memory Get Usage Start :: ' . $mem_start_usage / 1024 / 1024 . ' Mo');
+		log::add('Monitoring', 'debug', '[PULLCUSTOM] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
 
 		/** @var Monitoring $Monitoring */
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
@@ -223,13 +223,13 @@ class Monitoring extends eqLogic {
 				$Monitoring->getInformations();
 				$mem_cycle_usage = memory_get_usage();
 				$mem_cycle_peak = memory_get_peak_usage();
-				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Used :: ' . $mem_cycle_usage / 1024 / 1024 . ' Mo');
-				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Peak :: ' . $mem_cycle_peak / 1024 / 1024 . ' Mo');
+				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Used :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
+				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
 				$Monitoring->refreshWidget();
 			}
 		}
 		$mem_end_usage = memory_get_usage();
-		log::add('Monitoring', 'debug', '[PULLCUSTOM] Memory Usage PullCustom :: ' . $mem_end_usage / 1024 / 1024 . ' Mo | Conso PullCustom :: ' . ($mem_end_usage - $mem_start_usage) / 1024 . ' Ko');
+		log::add('Monitoring', 'debug', '[PULLCUSTOM] Memory Usage PullCustom :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso PullCustom :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 	}
 
   	public static function postConfig_configPullLocal($value) {
