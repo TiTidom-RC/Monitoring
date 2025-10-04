@@ -2482,7 +2482,9 @@ class Monitoring extends eqLogic {
 					2 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
 					3 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"]
 				],
-				'hdd' => sprintf($hdd_command_alt, '/jffs$')
+				'hdd' => sprintf($hdd_command_alt, '/jffs$'),
+				'clients' => "cat /tmp/clientlist.json 2>/dev/null",
+				'devices' => "cat /var/lib/misc/dnsmasq.leases 2>/dev/null",
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
