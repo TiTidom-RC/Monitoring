@@ -3428,6 +3428,9 @@ class Monitoring extends eqLogic {
 					}
 				}
 			}
+
+			unset($dataresult, $dataresult_stats, $commands);
+
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[' . $equipement . '][getInformations] Exception (Line ' . $e->getLine() . ') :: '. $e->getMessage());
 			log::add('Monitoring', 'debug', '[' . $equipement . '][getInformations] Exception Trace :: '. json_encode($e->getTrace()));
