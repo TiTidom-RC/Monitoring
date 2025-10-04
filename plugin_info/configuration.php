@@ -142,7 +142,7 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-3 control-label">{{Stats Mémoire Equipements Personnalisés}}
+                <label class="col-md-3 control-label">{{Stats Mémoire Cron Personnalisés}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver l'affichage des statistiques mémoire des cron personnalisés dans les logs}}"></i></sup>
                 </label>
                 <div class="col-md-3">
