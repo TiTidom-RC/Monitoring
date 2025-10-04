@@ -174,6 +174,7 @@ class Monitoring extends eqLogic {
 					}
 				}
 			}
+			gc_collect_cycles();
 			$mem_end_usage = memory_get_usage();
 			log::add('Monitoring', 'debug', '[PULL] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 		}
@@ -203,6 +204,7 @@ class Monitoring extends eqLogic {
 					}
 				}
 			}
+			gc_collect_cycles();
 			$mem_end_usage = memory_get_usage();
 			log::add('Monitoring', 'debug', '[PULLLOCAL] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 		}
@@ -228,6 +230,7 @@ class Monitoring extends eqLogic {
 				$Monitoring->refreshWidget();
 			}
 		}
+		gc_collect_cycles();
 		$mem_end_usage = memory_get_usage();
 		log::add('Monitoring', 'debug', '[PULLCUSTOM] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 	}
