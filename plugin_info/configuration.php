@@ -124,6 +124,31 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
                     <a class="btn btn-warning customclass-migrate"><i class="fas fa-play-circle"></i> {{Migrer (v2.5 -> v3.0)}}</a>
                 </div>
             </div>
+            <legend><i class="fas fa-chart-line"></i> {{Statistiques Mémoire}} :</legend>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{Stats Mémoire Equipement Local}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver l'affichage des statistiques mémoire de l'équipement local dans les logs}}"></i></sup>
+                </label>
+                <div class="col-md-3">
+                    <input type="checkbox" class="configKey form-control" data-l1key="configStatsMemLocal" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{Stats Mémoire Equipements Distants}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver l'affichage des statistiques mémoire des équipements distants dans les logs}}"></i></sup>
+                </label>
+                <div class="col-md-3">
+                    <input type="checkbox" class="configKey form-control" data-l1key="configStatsMemDistants" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{Stats Mémoire Equipements Personnalisés}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Activer ou Désactiver l'affichage des statistiques mémoire des cron personnalisés dans les logs}}"></i></sup>
+                </label>
+                <div class="col-md-3">
+                    <input type="checkbox" class="configKey form-control" data-l1key="configStatsMemCustom" />
+                </div>
+            </div>
         </div>
     </fieldset>
 </form>
