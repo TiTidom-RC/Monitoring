@@ -1832,7 +1832,13 @@ class Monitoring extends eqLogic {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
 		}
 
-		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'Monitoring', 'Monitoring')));
+		// use a specific template for AsusWRT 
+		if ($this->getConfiguration('type') == 'AsusWRT') {
+			$template = 'AsusWRT';
+		} else {
+			$template = 'Monitoring';
+		}
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, $template, 'Monitoring')));
 	}
 
 	public static function getPluginBranch() {
