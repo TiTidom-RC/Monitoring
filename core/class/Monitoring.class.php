@@ -3552,7 +3552,7 @@ class Monitoring extends eqLogic {
 						]);
 
 						// AsusWRT Wifi_Clients
-						[$asus_clients_wifi_2G, $asus_clients_wifi_5G, $asus_clients_wired] = isset($asus_wifi_clients_value) ? $this->formatAsusWRTClients($asus_clients_value, $equipement) : [0, 0, 0];
+						[$asus_clients_wifi_2G, $asus_clients_wifi_5G, $asus_clients_wired] = isset($asus_clients_value) ? $this->formatAsusWRTClients($asus_clients_value, $equipement) : [0, 0, 0];
 						$dataresult = array_merge($dataresult, [
 							'asus_clients_wifi_2G' => $asus_clients_wifi_2G,
 							'asus_clients_wifi_5G' => $asus_clients_wifi_5G,
