@@ -1614,8 +1614,6 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
 				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
-				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
-				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
 				$MonitoringCmd->setIsVisible(1);
 				$MonitoringCmd->setOrder($orderCmd++);
 				$MonitoringCmd->save();
