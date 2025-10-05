@@ -1582,6 +1582,80 @@ class Monitoring extends eqLogic {
 			}
 		}
 
+		if ($this->getconfiguration('asuswrt') == '1') {
+			$MonitoringCmd = $this->getCmd(null, 'asus_fw_check');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Check Firmware', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_fw_check');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('binary');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-bell"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients_wifi24');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Nb Clients Wifi 2.4GHz', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients_wifi24');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients_wifi5');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Nb Clients Wifi 5GHz', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients_wifi5');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients_wired');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Nb Clients RJ45', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients_wired');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+		}
+
 		$MonitoringCmd = $this->getCmd(null, 'cpu');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -3551,11 +3625,11 @@ class Monitoring extends eqLogic {
 							'asus_fw_check' => $asus_fw_check_value,
 						]);
 
-						// AsusWRT Wifi_Clients
+						// AsusWRT Clients
 						[$asus_clients_wifi_2G, $asus_clients_wifi_5G, $asus_clients_wired] = isset($asus_clients_value) ? $this->formatAsusWRTClients($asus_clients_value, $equipement) : [0, 0, 0];
 						$dataresult = array_merge($dataresult, [
-							'asus_clients_wifi_2G' => $asus_clients_wifi_2G,
-							'asus_clients_wifi_5G' => $asus_clients_wifi_5G,
+							'asus_clients_wifi24' => $asus_clients_wifi_2G,
+							'asus_clients_wifi5' => $asus_clients_wifi_5G,
 							'asus_clients_wired' => $asus_clients_wired
 						]);
 					}
