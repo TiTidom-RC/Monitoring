@@ -2133,6 +2133,47 @@ class Monitoring extends eqLogic {
 		}
 	}
 
+	public function getLocalArchKeys() {
+		[$archKey, $archSubKey, $archKeyType, $ARMv] = ['unknown', '', 'Unknown', ''];
+
+		// ARMv
+		$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+		$ARMv = $this->execSRV($ARMv_cmd, 'ARMv');
+		$foundARMv = false;
+		if (!empty($ARMv)) {
+			// check if $ARMv is x86_64 or i686 or i386
+			if (in_array($ARMv, ['x86_64', 'aarch64', 'armv6l', 'armv7l', 'mips64', 'i686', 'i386'])) {
+				$foundARMv = true;
+				$archKey = $ARMv;
+				$archKeyType = 'ARMv';
+			} else {
+				$ARMv = '';
+			}
+		}
+
+		// Search LXC
+		$detect_virt_cmd = "systemd-detect-virt 2>/dev/null";
+		$detect_virt = $this->execSRV($detect_virt_cmd, 'DetectVirt');
+		$lxcValues = ['LXC', 'KVM'];
+		$foundLXC = false;
+		foreach ($lxcValues as $lxcValue) {
+			if (stripos($detect_virt, $lxcValue) !== false) {
+				$foundLXC = true;
+				if ($foundARMv) {
+					$archSubKey = $lxcValue;
+					$archKeyType .= ' + ' . $lxcValue;
+				} else {
+					$archKey = $lxcValue;
+					$archSubKey = '';
+					$archKeyType = $lxcValue;
+				}
+				break;
+			}
+		}
+
+		return [$archKey, $archSubKey, $archKeyType, $ARMv];
+	}
+
 	public function getRemoteArchKeys($hostId, $osType = '') {
 		[$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value] = ['unknown', '', 'Unknown', '', ''];
 		
@@ -2331,11 +2372,16 @@ class Monitoring extends eqLogic {
 					1 => ['file', "/sys/class/thermal/thermal_zone0/temp"]
 				]
 			],
+			'KVM' => [
+				// KVM :: SubKey (détecté via ARMv, mais la commande CPU renvoie par défaut ceux de l'hôte)
+				'cpu_nb' => "nproc 2>/dev/null",
+			],
 		];
 
 		$cmdLocalSpecific['armv7l'] = &$cmdLocalSpecific['aarch64'];
 		$cmdLocalSpecific['i686'] = &$cmdLocalSpecific['x86_64'];
 		$cmdLocalSpecific['i386'] = &$cmdLocalSpecific['x86_64'];
+		$cmdLocalSpecific['LXC'] = &$cmdLocalSpecific['KVM'];
 
 		// Remote
 		$cmdRemoteCommon = [
@@ -2551,9 +2597,24 @@ class Monitoring extends eqLogic {
 				}
 			}
 			if ($foundKey !== null) {
-				return array_merge($cmdLocalCommon, $cmdLocalSpecific[$foundKey]);
+				$result = array_merge($cmdLocalCommon, $cmdLocalSpecific[$foundKey]);
+				if (!empty($subKey)) {
+					$foundSubKey = null;
+					foreach (array_keys($cmdLocalSpecific) as $arrayKey) {
+						if (stripos($subKey, $arrayKey) !== false) {
+							$foundSubKey = $arrayKey;
+							break;
+						}
+					}
+					if ($foundSubKey !== null) {
+						$result = array_merge($result, $cmdLocalSpecific[$foundSubKey]);
+					} else {
+						throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' (SubKey) :: ' . $subKey);
+					}
+				}
+				return $result;
 			} else {
-				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' :: ' . $key);
+				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' (Key) :: ' . $key);
 			}
 		} else {
 			// Distant
@@ -3179,14 +3240,18 @@ class Monitoring extends eqLogic {
 			elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 				$cnx_ssh = 'No';
 				
-				// ARMv Command
-				$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-				$ARMv = $this->execSRV($ARMv_cmd, 'ARMv');
-				
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ARMv :: ' . $ARMv);
+				[$archKey, $archSubKey, $archKeyType, $ARMv] = $this->getLocalArchKeys();
+
+				if (!empty($archSubKey)) {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ArchKey / ArchSubKey :: ' . $archKey . ' / ' . $archSubKey . ' (' . $archKeyType . ')');
+				} else {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ArchKey :: ' . $archKey . ' (' . $archKeyType . ')');
+				}
 
 				$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'local');
-				$commands = $this->getCommands($ARMv, '', $cartereseau, 'local');
+				$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, 'local');
+
+				$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSRV($commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]) : $ARMv;
 
 				$distri_bits = $this->execSRV($commands['distri_bits'], 'DistriBits');
 				$distri_name_value = $this->execSRV($commands['distri_name'], 'DistriName');
