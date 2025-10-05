@@ -2536,7 +2536,8 @@ class Monitoring extends eqLogic {
 			],
 			'asuswrt' => [
 				# devices : cat /var/lib/misc/dnsmasq.leases
-				# wifi : cat /tmp/clientlist.json
+				# wifi au format JSON : cat /tmp/clientlist.json
+				# nvram get custom_clientlist
 				
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
@@ -2558,8 +2559,8 @@ class Monitoring extends eqLogic {
 					3 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"]
 				],
 				'hdd' => sprintf($hdd_command_alt, '/jffs$'),
-				'clients' => "cat /tmp/clientlist.json 2>/dev/null",
-				'devices' => "cat /var/lib/misc/dnsmasq.leases 2>/dev/null",
+				'wifi_clients' => "cat /tmp/clientlist.json 2>/dev/null",
+				'firmware_check' => "nvram get firmware_check 2>/dev/null",
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
@@ -2753,6 +2754,31 @@ class Monitoring extends eqLogic {
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Cmd Exception :: ' . $e->getMessage());
 		}
 		return $cmdResult_ssh;
+	}
+
+	public function formatAsusWRTWifiClients($_wifi_clients, $_equipement) {
+		[$wifi_clients_2G, $wifi_clients_5G, $wifi_clients_wired] = [0, 0, 0];
+		if (empty($_wifi_clients)) {
+			return [$wifi_clients_2G, $wifi_clients_5G, $wifi_clients_wired];
+		}
+
+		$wifi_clients_data = json_decode($_wifi_clients, true);
+		if (json_last_error() === JSON_ERROR_NONE && isset($wifi_clients_data['clientlist']) && is_array($wifi_clients_data['clientlist'])) {
+			foreach ($wifi_clients_data['clientlist'] as $client) {
+				if (isset($client['2G'])) {
+					$wifi_clients_2G++;
+				} elseif (isset($client['5G'])) {
+					$wifi_clients_5G++;
+				} elseif (isset($client['wired_mac'])) {
+					$wifi_clients_wired++;
+				}
+			}
+		} else {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
+		}
+
+		log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-CLIENTS] Nombre de clients WiFi connectés :: ' . $wifi_clients_2G . ' (2.4GHz), ' . $wifi_clients_5G . ' (5GHz), ' . $wifi_clients_wired . ' (Wired)');
+		return [$wifi_clients_2G, $wifi_clients_5G, $wifi_clients_wired];
 	}
 
 	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
@@ -3181,7 +3207,11 @@ class Monitoring extends eqLogic {
 					if ($isAsusWRT) {
 						$asus_model_value = $this->execSSH($hostId, $commands['asuswrt_model'], 'AsusWRTModel');
 						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
-						# $os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
+
+						// Récupération du check du Firmware
+						$asus_fw_check_value = $this->execSSH($hostId, $commands['firmware_check'], 'AsusWRT :: Firmware_Check');
+						// Récupération du nombre de la liste des clients WIFI au format JSON
+						$asus_wifi_clients_value = $this->execSSH($hostId, $commands['wifi_clients'], 'AsusWRT :: Wifi_Clients');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -3196,15 +3226,15 @@ class Monitoring extends eqLogic {
 
 					if ($isQNAP) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model_value);
-						# log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapName :: ' . $qnap_name_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
 					}
 
 					if ($isAsusWRT) {
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRTModel :: ' . $asus_model_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Model :: ' . $asus_model_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
-						# log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Firmware_Check :: ' . $asus_fw_check_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Wifi_Clients :: ' . $asus_wifi_clients_value);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
@@ -3513,6 +3543,21 @@ class Monitoring extends eqLogic {
 								'syno_hddesata_free_percent' => 1,
 							]);
 						}
+					}
+
+					if ($isAsusWRT) {
+						// AsusWRT Firmware_Check
+						$dataresult = array_merge($dataresult, [
+							'asus_fw_check' => $asus_fw_check_value,
+						]);
+
+						// AsusWRT Wifi_Clients
+						[$asus_wifi_clients_2G, $asus_wifi_clients_5G, $asus_wifi_clients_wired] = isset($asus_wifi_clients_value) ? $this->formatAsusWRTWifiClients($asus_wifi_clients_value, $equipement) : [0, 0, 0];
+						$dataresult = array_merge($dataresult, [
+							'asus_wifi_clients_2G' => $asus_wifi_clients_2G,
+							'asus_wifi_clients_5G' => $asus_wifi_clients_5G,
+							'asus_wifi_clients_wired' => $asus_wifi_clients_wired
+						]);
 					}
 
 					// Event sur les commandes après récupération des données
