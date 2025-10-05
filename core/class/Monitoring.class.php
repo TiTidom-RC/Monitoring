@@ -2542,12 +2542,8 @@ class Monitoring extends eqLogic {
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'distri_name' => ['value', ""],
-				# 'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
-				# 'os_build' => "awk -v ORS=\"\" -F'=' '/^BUILD_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
-				# 'asuswrt_model' => "uname -n 2>/dev/null",
 				'os_version' => "nvram get firmver 2>/dev/null",
 				'os_build' => "nvram get buildno 2>/dev/null",
-				# 'os_name' => "awk -v ORS=\"\" -F'=' '/^NAME/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
 				'asuswrt_model' => "nvram get productid 2>/dev/null",
 				'cpu_nb' => "grep '^processor' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
@@ -2559,8 +2555,8 @@ class Monitoring extends eqLogic {
 					3 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"]
 				],
 				'hdd' => sprintf($hdd_command_alt, '/jffs$'),
-				'wifi_clients' => "cat /tmp/clientlist.json 2>/dev/null",
-				'firmware_check' => "nvram get firmware_check 2>/dev/null",
+				'clients' => "cat /tmp/clientlist.json 2>/dev/null",
+				'fw_check' => "nvram get firmware_check 2>/dev/null",
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
@@ -2572,7 +2568,6 @@ class Monitoring extends eqLogic {
 				'distri_bits' => ['value', ""],
 				'distri_name' => ['value', ""],
 				'qnap_model' =>  "getsysinfo model 2>/dev/null",
-				# 'qnap_name' =>  "uname -n 2>/dev/null",
 				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
@@ -2756,34 +2751,34 @@ class Monitoring extends eqLogic {
 		return $cmdResult_ssh;
 	}
 
-	public function formatAsusWRTWifiClients($_wifi_clients, $_equipement) {
-		[$wifi_clients_2G, $wifi_clients_5G, $wifi_clients_wired] = [0, 0, 0];
-		if (empty($_wifi_clients)) {
-			log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-CLIENTS] Erreur :: Liste Vide ');
-			return [$wifi_clients_2G, $wifi_clients_5G, $wifi_clients_wired];
+	public function formatAsusWRTClients($_clients, $_equipement) {
+		[$clients_wifi_2G, $clients_wifi_5G, $clients_wired] = [0, 0, 0];
+		if (empty($_clients)) {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][ASUS-CLIENTS] Erreur :: Liste Vide ');
+			return [$clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 		}
 
-		$wifi_clients_data = json_decode($_wifi_clients, true);
+		$clients_data = json_decode($_clients, true);
 		if (json_last_error() === JSON_ERROR_NONE) {
 			// On compte le nombre de clients 2.4GHz, 5GHz et filaire
-			foreach ($wifi_clients_data as $client) {
+			foreach ($clients_data as $client) {
 				if (isset($client['2G']) && is_array($client['2G'])) {
-					$wifi_clients_2G += count($client['2G']);
+					$clients_wifi_2G += count($client['2G']);
 				}
 				if (isset($client['5G']) && is_array($client['5G'])) {
-					$wifi_clients_5G += count($client['5G']);
+					$clients_wifi_5G += count($client['5G']);
 				}
 				if (isset($client['wired_mac']) && is_array($client['wired_mac'])) {
-					$wifi_clients_wired += count($client['wired_mac']);
+					$clients_wired += count($client['wired_mac']);
 				}
 			}
 
 		} else {
-			log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
+			log::add('Monitoring', 'debug', '['. $_equipement .'][ASUS-CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
 		}
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-CLIENTS] Nombre de clients WiFi connectés :: ' . $wifi_clients_2G . ' (2.4GHz), ' . $wifi_clients_5G . ' (5GHz), ' . $wifi_clients_wired . ' (Wired)');
-		return [$wifi_clients_2G, $wifi_clients_5G, $wifi_clients_wired];
+		log::add('Monitoring', 'debug', '['. $_equipement .'][ASUS-CLIENTS] Nombre de clients connectés :: ' . $clients_wifi_2G . ' (Wifi 2.4GHz), ' . $clients_wifi_5G . ' (Wifi 5GHz), ' . $clients_wired . ' (Wired)');
+		return [$clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 	}
 
 	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
@@ -3214,9 +3209,9 @@ class Monitoring extends eqLogic {
 						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
 
 						// Récupération du check du Firmware
-						$asus_fw_check_value = $this->execSSH($hostId, $commands['firmware_check'], 'AsusWRT :: Firmware_Check');
+						$asus_fw_check_value = $this->execSSH($hostId, $commands['fw_check'], 'AsusWRT FW_Check');
 						// Récupération du nombre de la liste des clients WIFI au format JSON
-						$asus_wifi_clients_value = $this->execSSH($hostId, $commands['wifi_clients'], 'AsusWRT :: Wifi_Clients');
+						$asus_clients_value = $this->execSSH($hostId, $commands['clients'], 'AsusWRT Clients');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -3238,8 +3233,8 @@ class Monitoring extends eqLogic {
 					if ($isAsusWRT) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Model :: ' . $asus_model_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Firmware_Check :: ' . $asus_fw_check_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Wifi_Clients :: ' . $asus_wifi_clients_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT FW_Check :: ' . $asus_fw_check_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Clients :: ' . $asus_clients_value);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
@@ -3557,11 +3552,11 @@ class Monitoring extends eqLogic {
 						]);
 
 						// AsusWRT Wifi_Clients
-						[$asus_wifi_clients_2G, $asus_wifi_clients_5G, $asus_wifi_clients_wired] = isset($asus_wifi_clients_value) ? $this->formatAsusWRTWifiClients($asus_wifi_clients_value, $equipement) : [0, 0, 0];
+						[$asus_clients_wifi_2G, $asus_clients_wifi_5G, $asus_clients_wired] = isset($asus_wifi_clients_value) ? $this->formatAsusWRTClients($asus_clients_value, $equipement) : [0, 0, 0];
 						$dataresult = array_merge($dataresult, [
-							'asus_wifi_clients_2G' => $asus_wifi_clients_2G,
-							'asus_wifi_clients_5G' => $asus_wifi_clients_5G,
-							'asus_wifi_clients_wired' => $asus_wifi_clients_wired
+							'asus_clients_wifi_2G' => $asus_clients_wifi_2G,
+							'asus_clients_wifi_5G' => $asus_clients_wifi_5G,
+							'asus_clients_wired' => $asus_clients_wired
 						]);
 					}
 
