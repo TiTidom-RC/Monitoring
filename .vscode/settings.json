@@ -92,6 +92,7 @@
         "totalsize",
         "txrx",
         "upnpmodelname",
+        "virt",
         "wlan",
         "Wyse"
     ]

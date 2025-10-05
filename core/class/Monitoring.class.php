@@ -2169,42 +2169,65 @@ class Monitoring extends eqLogic {
 				}
 			}
 
-			// Search with distri_name
-			$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-			$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+			// Search LXC
+			$detect_virt_cmd = "systemd-detect-virt 2>/dev/null";
+			$detect_virt = $this->execSSH($hostId, $detect_virt_cmd, 'DetectVirt');
 
-			// Search for specific distribution in distri_name_value
-			$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD', 'Alpine'];
-			$foundDistri = false;
-			foreach ($distriValues as $distriValue) {
-				if (stripos($distri_name_value, $distriValue) !== false) {
-					$foundDistri = true;
+			$lxcValues = ['LXC', 'KVM'];
+			$foundLXC = false;
+			foreach ($lxcValues as $lxcValue) {
+				if (stripos($detect_virt, $lxcValue) !== false) {
+					$foundLXC = true;
 					if ($foundARMv) {
-						$archSubKey = $distriValue;
-						$archKeyType .= ' + DistriName';
+						$archSubKey = $lxcValue;
+						$archKeyType .= ' + ' . $lxcValue;
 					} else {
-						$archKey = $distriValue;
+						$archKey = $lxcValue;
 						$archSubKey = '';
-						$archKeyType = 'DistriName';
+						$archKeyType = $lxcValue;
 					}
 					break;
 				}
 			}
-			if (!$foundDistri) {
-				// Search with uname
-				$uname_cmd = "uname -a 2>/dev/null";
-				$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
-				$unameValues = ['medion'];
-				foreach ($unameValues as $unameValue) {
-					if (stripos($uname, $unameValue) !== false) {
+
+			if (!$foundLXC) {
+				// Search with distri_name
+				$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+				$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+
+				// Search for specific distribution in distri_name_value
+				$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD', 'Alpine'];
+				$foundDistri = false;
+				foreach ($distriValues as $distriValue) {
+					if (stripos($distri_name_value, $distriValue) !== false) {
+						$foundDistri = true;
 						if ($foundARMv) {
-							$archSubKey = $unameValue;
-							$archKeyType .= ' + Uname';
+							$archSubKey = $distriValue;
+							$archKeyType .= ' + DistriName';
 						} else {
-							$archKey = $unameValue;
-							$archKeyType = 'Uname';
+							$archKey = $distriValue;
+							$archSubKey = '';
+							$archKeyType = 'DistriName';
 						}
 						break;
+					}
+				}
+				if (!$foundDistri) {
+					// Search with uname
+					$uname_cmd = "uname -a 2>/dev/null";
+					$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
+					$unameValues = ['medion'];
+					foreach ($unameValues as $unameValue) {
+						if (stripos($uname, $unameValue) !== false) {
+							if ($foundARMv) {
+								$archSubKey = $unameValue;
+								$archKeyType .= ' + Uname';
+							} else {
+								$archKey = $unameValue;
+								$archKeyType = 'Uname';
+							}
+							break;
+						}
 					}
 				}
 			}
@@ -2377,8 +2400,8 @@ class Monitoring extends eqLogic {
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'hdd' => sprintf($hdd_command_alt, '/storage')
 			],
-			'Alpine' => [
-				// Alpine :: SubKey (détecté via ARMv comme x86_64, mais la commande CPU renvoie par défaut ceux de l'hôte)
+			'KVM' => [
+				// KVM :: SubKey (détecté via ARMv comme x86_64, mais la commande CPU renvoie par défaut ceux de l'hôte)
 				'cpu_nb' => "nproc 2>/dev/null",
 			],
 			'piCorePlayer' => [ // distri_name
@@ -2515,7 +2538,9 @@ class Monitoring extends eqLogic {
 		$cmdRemoteSpecific['mips64'] = &$cmdRemoteSpecific['aarch64'];
 		$cmdRemoteSpecific['i686'] = &$cmdRemoteSpecific['x86_64'];
 		$cmdRemoteSpecific['i386'] = &$cmdRemoteSpecific['x86_64'];
-
+		$cmdRemoteSpecific['LXC'] = &$cmdRemoteSpecific['KVM'];
+		$cmdRemoteSpecific['Alpine'] = &$cmdRemoteSpecific['KVM'];
+		
 		if ($confLocalorRemote == 'local') {
 			// Local
 			$foundKey = null;
