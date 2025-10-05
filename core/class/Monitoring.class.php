@@ -1833,7 +1833,7 @@ class Monitoring extends eqLogic {
 		}
 
 		// use a specific template for AsusWRT 
-		if ($this->getConfiguration('type') == 'AsusWRT') {
+		if ($this->getConfiguration('asuswrt') == '1') {
 			$template = 'AsusWRT';
 		} else {
 			$template = 'Monitoring';
