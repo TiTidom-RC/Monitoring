@@ -2684,6 +2684,8 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command_alt, '/jffs$'),
 				'clients' => "cat /tmp/clientlist.json 2>/dev/null",
 				'fw_check' => "nvram get firmware_check 2>/dev/null",
+				'wifi2g_temp' => "wl -i eth1 phy_tempsense | awk '{ print $1 * .5 + 20 }'",
+				'wifi5g_temp' => "wl -i eth2 phy_tempsense | awk '{ print $1 * .5 + 20 }'",
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
