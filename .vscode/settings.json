@@ -55,6 +55,8 @@
         "mips",
         "mmcblk",
         "Monitoringcli",
+        "Namedashboard",
+        "Namemobile",
         "ncpu",
         "netauto",
         "netautre",

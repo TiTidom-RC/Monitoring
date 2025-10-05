@@ -1594,6 +1594,48 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-bell"></i>');
 				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Clients', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('string');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+			
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients_total');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Nb Clients Total', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients_total');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
 				$MonitoringCmd->setIsVisible(1);
 				$MonitoringCmd->setOrder($orderCmd++);
 				$MonitoringCmd->save();
@@ -1612,6 +1654,8 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
 				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
 				$MonitoringCmd->setIsVisible(1);
 				$MonitoringCmd->setOrder($orderCmd++);
 				$MonitoringCmd->save();
@@ -1630,6 +1674,8 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
 				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
 				$MonitoringCmd->setIsVisible(1);
 				$MonitoringCmd->setOrder($orderCmd++);
 				$MonitoringCmd->save();
@@ -1648,6 +1694,8 @@ class Monitoring extends eqLogic {
 				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
 				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
 				$MonitoringCmd->setIsVisible(1);
 				$MonitoringCmd->setOrder($orderCmd++);
 				$MonitoringCmd->save();
@@ -1899,14 +1947,12 @@ class Monitoring extends eqLogic {
 		// AsusWRT
 		$asuswrt_array = array(
 			'asus_fw_check' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'asus_clients_wifi24' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'asus_clients_wifi5' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'asus_clients_wired' => array('icon', 'exec', 'id', 'display', 'collect', 'value')
+			'asus_clients' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
 		);
 		if ($this->getConfiguration('asuswrt') == '1') {
 			$cmdToReplace = array_merge($cmdToReplace, $asuswrt_array);
 		}
-		
+
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
@@ -2837,10 +2883,10 @@ class Monitoring extends eqLogic {
 	}
 
 	public function formatAsusWRTClients($_clients, $_equipement) {
-		[$clients_wifi_2G, $clients_wifi_5G, $clients_wired] = [0, 0, 0];
+		[$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired] = ['', 0, 0, 0, 0];
 		if (empty($_clients)) {
 			log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Erreur :: Liste Vide ');
-			return [$clients_wifi_2G, $clients_wifi_5G, $clients_wired];
+			return [$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 		}
 
 		$clients_data = json_decode($_clients, true);
@@ -2857,13 +2903,15 @@ class Monitoring extends eqLogic {
 					$clients_wired += count($client['wired_mac']);
 				}
 			}
+			$clients_nb = $clients_wifi_2G + $clients_wifi_5G + $clients_wired;
+			$clients_str = $clients_nb . ' (' . $clients_wifi_2G . ' Wifi 2.4GHz, ' . $clients_wifi_5G . ' Wifi 5GHz, ' . $clients_wired . ' Wired)';
 
 		} else {
 			log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
 		}
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Nombre de clients connectés :: ' . $clients_wifi_2G . ' (Wifi 2.4GHz), ' . $clients_wifi_5G . ' (Wifi 5GHz), ' . $clients_wired . ' (Wired)');
-		return [$clients_wifi_2G, $clients_wifi_5G, $clients_wired];
+		log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Nombre de clients connectés :: ' . $clients_nb . ' (' . $clients_wifi_2G . ' Wifi 2.4GHz, ' . $clients_wifi_5G . ' Wifi 5GHz, ' . $clients_wired . ' Wired)');
+		return [$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 	}
 
 	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
@@ -3637,8 +3685,10 @@ class Monitoring extends eqLogic {
 						]);
 
 						// AsusWRT Clients
-						[$asus_clients_wifi_2G, $asus_clients_wifi_5G, $asus_clients_wired] = isset($asus_clients_value) ? $this->formatAsusWRTClients($asus_clients_value, $equipement) : [0, 0, 0];
+						[$asus_clients, $asus_clients_nb, $asus_clients_wifi_2G, $asus_clients_wifi_5G, $asus_clients_wired] = isset($asus_clients_value) ? $this->formatAsusWRTClients($asus_clients_value, $equipement) : ['', 0, 0, 0, 0];
 						$dataresult = array_merge($dataresult, [
+							'asus_clients' => $asus_clients,
+							'asus_clients_total' => $asus_clients_nb,
 							'asus_clients_wifi24' => $asus_clients_wifi_2G,
 							'asus_clients_wifi5' => $asus_clients_wifi_5G,
 							'asus_clients_wired' => $asus_clients_wired
