@@ -99,6 +99,15 @@
 					}
 				}
 			</script>
+			<span id="iconCheckFirmware#id#" class="cmd monitor-btn"></span>
+			<script>
+				if ('#asus_fw_check#' == '1') {
+					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 1" class="cmd monitor-btn fas fa-bell tooltips" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>';
+				}
+				if ('#asus_fw_check#' == '0') {
+					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 0" class="cmd monitor-btn fas fa-bell-slash tooltips" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>';
+				}
+			</script>
 			<span class="cmd action reboot cursor" title="Redémarrer l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="cmd monitor-btn fas fa-redo"></i>
 			</span>
@@ -124,15 +133,6 @@
 						}
 					});
 				});
-			</script>
-			<span id="iconCheckFirmware#id#" class="cmd monitor-btn"></span>
-			<script>
-				if ('#asus_fw_check#' == '1') {
-					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 1" class="cmd monitor-btn fas fa-bell tooltips" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>';
-				}
-				if ('#asus_fw_check#' == '0') {
-					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 0" class="cmd monitor-btn fas fa-bell-slash tooltips" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>';
-				}
 			</script>
 		</div>
 		<div class="widget-name monitor-name-center">
