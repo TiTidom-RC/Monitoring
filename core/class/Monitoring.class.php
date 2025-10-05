@@ -2754,7 +2754,7 @@ class Monitoring extends eqLogic {
 	public function formatAsusWRTClients($_clients, $_equipement) {
 		[$clients_wifi_2G, $clients_wifi_5G, $clients_wired] = [0, 0, 0];
 		if (empty($_clients)) {
-			log::add('Monitoring', 'debug', '['. $_equipement .'][ASUS-CLIENTS] Erreur :: Liste Vide ');
+			log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Erreur :: Liste Vide ');
 			return [$clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 		}
 
@@ -2774,10 +2774,10 @@ class Monitoring extends eqLogic {
 			}
 
 		} else {
-			log::add('Monitoring', 'debug', '['. $_equipement .'][ASUS-CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
+			log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
 		}
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'][ASUS-CLIENTS] Nombre de clients connectés :: ' . $clients_wifi_2G . ' (Wifi 2.4GHz), ' . $clients_wifi_5G . ' (Wifi 5GHz), ' . $clients_wired . ' (Wired)');
+		log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Nombre de clients connectés :: ' . $clients_wifi_2G . ' (Wifi 2.4GHz), ' . $clients_wifi_5G . ' (Wifi 5GHz), ' . $clients_wired . ' (Wired)');
 		return [$clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 	}
 
