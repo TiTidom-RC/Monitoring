@@ -2759,20 +2759,25 @@ class Monitoring extends eqLogic {
 	public function formatAsusWRTWifiClients($_wifi_clients, $_equipement) {
 		[$wifi_clients_2G, $wifi_clients_5G, $wifi_clients_wired] = [0, 0, 0];
 		if (empty($_wifi_clients)) {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-CLIENTS] Erreur :: Liste Vide ');
 			return [$wifi_clients_2G, $wifi_clients_5G, $wifi_clients_wired];
 		}
 
 		$wifi_clients_data = json_decode($_wifi_clients, true);
-		if (json_last_error() === JSON_ERROR_NONE && isset($wifi_clients_data['clientlist']) && is_array($wifi_clients_data['clientlist'])) {
-			foreach ($wifi_clients_data['clientlist'] as $client) {
-				if (isset($client['2G'])) {
-					$wifi_clients_2G++;
-				} elseif (isset($client['5G'])) {
-					$wifi_clients_5G++;
-				} elseif (isset($client['wired_mac'])) {
-					$wifi_clients_wired++;
+		if (json_last_error() === JSON_ERROR_NONE) {
+			// On compte le nombre de clients 2.4GHz, 5GHz et filaire
+			foreach ($wifi_clients_data as $client) {
+				if (isset($client['2G']) && is_array($client['2G'])) {
+					$wifi_clients_2G += count($client['2G']);
+				}
+				if (isset($client['5G']) && is_array($client['5G'])) {
+					$wifi_clients_5G += count($client['5G']);
+				}
+				if (isset($client['wired_mac']) && is_array($client['wired_mac'])) {
+					$wifi_clients_wired += count($client['wired_mac']);
 				}
 			}
+
 		} else {
 			log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
 		}
