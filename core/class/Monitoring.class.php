@@ -1896,6 +1896,17 @@ class Monitoring extends eqLogic {
 			}
 		}
 
+		// AsusWRT
+		$asuswrt_array = array(
+			'asus_fw_check' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'asus_clients_wifi24' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'asus_clients_wifi5' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'asus_clients_wired' => array('icon', 'exec', 'id', 'display', 'collect', 'value')
+		);
+		if ($this->getConfiguration('asuswrt') == '1') {
+			$cmdToReplace = array_merge($cmdToReplace, $asuswrt_array);
+		}
+		
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
