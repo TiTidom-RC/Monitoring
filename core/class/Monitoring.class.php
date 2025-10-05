@@ -2904,13 +2904,13 @@ class Monitoring extends eqLogic {
 				}
 			}
 			$clients_nb = $clients_wifi_2G + $clients_wifi_5G + $clients_wired;
-			$clients_str = $clients_nb . ' (' . $clients_wifi_2G . ' Wifi 2.4GHz, ' . $clients_wifi_5G . ' Wifi 5GHz, ' . $clients_wired . ' Wired)';
+			$clients_str = 'Clients : ' . $clients_nb . ' (' . $clients_wifi_2G . ' WiFi 2.4GHz | ' . $clients_wifi_5G . ' WiFi 5GHz | ' . $clients_wired . ' RJ45)';
 
 		} else {
 			log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
 		}
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Nombre de clients connectés :: ' . $clients_nb . ' (' . $clients_wifi_2G . ' Wifi 2.4GHz, ' . $clients_wifi_5G . ' Wifi 5GHz, ' . $clients_wired . ' Wired)');
+		log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Nombre de clients connectés :: ' . $clients_nb . ' (' . $clients_wifi_2G . ' WiFi 2.4GHz | ' . $clients_wifi_5G . ' WiFi 5GHz | ' . $clients_wired . ' RJ45)');
 		return [$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 	}
 
