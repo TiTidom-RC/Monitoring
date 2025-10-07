@@ -1698,6 +1698,49 @@ class Monitoring extends eqLogic {
 			} else {
 				$orderCmd++;
 			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_wifi2g_temp');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Température Wifi 2.4GHz', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_wifi2g_temp');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-temperature-low"></i>');
+				$MonitoringCmd->setUnite('°C');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_wifi5g_temp');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Température Wifi 5GHz', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_wifi5g_temp');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-temperature-low"></i>');
+				$MonitoringCmd->setUnite('°C');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
 		}
 
 		$MonitoringCmd = $this->getCmd(null, 'cpu');
@@ -3343,6 +3386,8 @@ class Monitoring extends eqLogic {
 						$asus_fw_check_value = $this->execSSH($hostId, $commands['fw_check'], 'AsusWRT FW_Check');
 						// Récupération du nombre de la liste des clients WIFI au format JSON
 						$asus_clients_value = $this->execSSH($hostId, $commands['clients'], 'AsusWRT Clients');
+						$asus_wifi2g_temp_value = $this->execSSH($hostId, $commands['asus_wifi2g_temp'], 'AsusWRT Wifi 2.4G Temp');
+						$asus_wifi5g_temp_value = $this->execSSH($hostId, $commands['asus_wifi5g_temp'], 'AsusWRT Wifi 5G Temp');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -3366,6 +3411,8 @@ class Monitoring extends eqLogic {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT FW_Check :: ' . $asus_fw_check_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Clients :: ' . $asus_clients_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Wifi 2.4G Temp :: ' . $asus_wifi2g_temp_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Wifi 5G Temp :: ' . $asus_wifi5g_temp_value);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
@@ -3680,6 +3727,8 @@ class Monitoring extends eqLogic {
 						// AsusWRT Firmware_Check
 						$dataresult = array_merge($dataresult, [
 							'asus_fw_check' => $asus_fw_check_value,
+							'asus_wifi2g_temp' => $asus_wifi2g_temp_value,
+							'asus_wifi5g_temp' => $asus_wifi5g_temp_value
 						]);
 
 						// AsusWRT Clients
