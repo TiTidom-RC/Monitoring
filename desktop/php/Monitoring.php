@@ -309,13 +309,13 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                 </div>
                                 <div class="asuswrt_conf" style="display:none;">
                                     <div class="form-group">
-                                        <label class="col-md-2 control-label" >{{Interface WiFi 2.4G}}</label>
+                                        <label class="col-md-3 control-label" >{{Interface WiFi 2.4G}}</label>
                                         <div class="col-md-2">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="asuswrt_wifi2g_if" type="text" placeholder="eth1" />
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-2 control-label" >{{Interface WiFi 5G}}</label>
+                                        <label class="col-md-3 control-label" >{{Interface WiFi 5G}}</label>
                                         <div class="col-md-2">
                                             <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="asuswrt_wifi5g_if" type="text" placeholder="eth2" />
                                         </div>
