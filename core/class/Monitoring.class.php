@@ -3414,8 +3414,13 @@ class Monitoring extends eqLogic {
 						$asus_fw_check_value = $this->execSSH($hostId, $commands['fw_check'], 'AsusWRT FW_Check');
 						// Récupération du nombre de la liste des clients WIFI au format JSON
 						$asus_clients_value = $this->execSSH($hostId, $commands['clients'], 'AsusWRT Clients');
-						$asus_wifi2g_temp_value = $this->execSSH($hostId, $commands['wifi2g_temp'], 'AsusWRT WiFi 2.4G Temp');
-						$asus_wifi5g_temp_value = $this->execSSH($hostId, $commands['wifi5g_temp'], 'AsusWRT WiFi 5G Temp');
+						// Récupération de la température des cartes Wifi
+						// Pour la 2.4G, si le champ de configuration est vide, on exécute la commande par défaut sinon en remplace la valeur eth1 par celle définie dans la conf
+						// Pour la 5G, si le champ de configuration est vide, on exécute la commande par défaut sinon en remplace la valeur eth2 par celle définie dans la conf
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Port WiFi 2.4Ghz :: ' . (empty($this->getConfiguration('wifi2g_temp')) ? 'eth1 (défaut)' : $this->getConfiguration('wifi2g_temp')));
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Port WiFi 5Ghz :: ' . (empty($this->getConfiguration('wifi5g_temp')) ? 'eth2 (défaut)' : $this->getConfiguration('wifi5g_temp')));
+						$asus_wifi2g_temp_value = $this->execSSH($hostId, empty($this->getConfiguration('wifi2g_temp')) ? $commands['wifi2g_temp'] : str_replace('eth1', $this->getConfiguration('wifi2g_temp'), $commands['wifi2g_temp']), 'AsusWRT WiFi 2.4G Temp');
+						$asus_wifi5g_temp_value = $this->execSSH($hostId, empty($this->getConfiguration('wifi5g_temp')) ? $commands['wifi5g_temp'] : str_replace('eth2', $this->getConfiguration('wifi5g_temp'), $commands['wifi5g_temp']), 'AsusWRT WiFi 5G Temp');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
