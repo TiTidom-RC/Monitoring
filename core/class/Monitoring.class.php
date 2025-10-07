@@ -2945,7 +2945,7 @@ class Monitoring extends eqLogic {
 		return $cmdResult_ssh;
 	}
 
-	public function formatAsusWifiTemp($_wifi2g_temp, $_wifi5g_temp, $_equipement) {
+	public function formatAsusWRTWifiTemp($_wifi2g_temp, $_wifi5g_temp, $_equipement) {
 		$wifi_temp = "WiFi 2.4Ghz : " . (is_numeric($_wifi2g_temp) ? $_wifi2g_temp . "°C" : "N/A") . " - WiFi 5GHz : " . (is_numeric($_wifi5g_temp) ? $_wifi5g_temp . "°C" : "N/A");
 		log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-TEMP] ' . $wifi_temp);
 		return $wifi_temp;
