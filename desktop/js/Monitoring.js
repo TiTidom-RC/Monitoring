@@ -103,6 +103,7 @@ function addCmdToTable(_cmd) {
 document.querySelector(".eqLogicAttr[data-l2key='synology']").addEventListener('change', function() {
 	if (this.checked) {
 		document.querySelector(".syno_conf").style.display = "block";
+		document.querySelector(".asuswrt_conf").style.display = "none";
 		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
 		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
 	} else {
@@ -115,6 +116,7 @@ document.querySelector(".eqLogicAttr[data-l2key='qnap']").addEventListener('chan
 		document.querySelector('input.eqLogicAttr[data-l2key="asuswrt"]').checked = false;
 		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
 		document.querySelector(".syno_conf").style.display = "none";
+		document.querySelector(".asuswrt_conf").style.display = "none";
 	}
 });
 
@@ -123,6 +125,9 @@ document.querySelector(".eqLogicAttr[data-l2key='asuswrt']").addEventListener('c
 		document.querySelector('input.eqLogicAttr[data-l2key="qnap"]').checked = false;
 		document.querySelector('input.eqLogicAttr[data-l2key="synology"]').checked = false;
 		document.querySelector(".syno_conf").style.display = "none";
+		document.querySelector(".asuswrt_conf").style.display = "block";
+	} else {
+		document.querySelector(".asuswrt_conf").style.display = "none";
 	}
 });
 
