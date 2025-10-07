@@ -2007,7 +2007,7 @@ class Monitoring extends eqLogic {
 		$asuswrt_array = array(
 			'asus_fw_check' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
 			'asus_clients' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'asus_wifi_temp' => array('exec', 'id', 'display', 'colorlow', 'colorhigh', 'stats')
+			'asus_wifi_temp' => array('icon', 'exec', 'id', 'display', 'collect', 'value')
 		);
 
 		if ($this->getConfiguration('asuswrt') == '1') {
