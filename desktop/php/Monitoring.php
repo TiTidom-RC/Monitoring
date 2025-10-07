@@ -25,8 +25,8 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 ?>
 
 <style>
-    /* Style spécifique pour les options du NAS Synology */
-    .syno_conf {
+    /* Style spécifique pour les options du NAS Synology et AsusWRT */
+    .syno_conf, .asuswrt_conf {
         margin-left: 50px; /* Le décalage vers la droite */
         padding-left: 15px; /* Un peu d'espace avant le contenu */
         border-left: 2px solid #4d4d4d; /* Une ligne verticale */
@@ -289,7 +289,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                     <div class="form-group syno_conf_temppath" style="display:none;">
                                         <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                         <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="{{timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input}}" />
+                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="syno_temp_path" type="text" placeholder="timeout 3 cat /sys/devices/platform/coretemp.0/temp2_input" />
                                         </div>
                                     </div>
                                 </div>
@@ -306,6 +306,20 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="asuswrt" />
                                         <span style="font-size: 85%;">({{A cocher pour monitorer un Routeur AsusWRT}})</span>
                                     </div>
+                                    <div class="asuswrt_conf" style="display:none;">
+                                        <div class="form-group asuswrt_conf_wifi2g" style="display:none;">
+                                            <label class="col-md-2 control-label" >{{Interface WiFi 2.4G}}</label>
+                                            <div class="col-md-6">
+                                                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="asuswrt_wifi2g_if" type="text" placeholder="eth1" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group asuswrt_conf_wifi5g" style="display:none;">
+                                            <label class="col-md-2 control-label" >{{Interface WiFi 5G}}</label>
+                                            <div class="col-md-6">
+                                                <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="asuswrt_wifi5g_if" type="text" placeholder="eth2" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 					        </fieldset>
                             <fieldset>
@@ -320,7 +334,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                 <div class="form-group linux_class_temp_cmd" style="display:none;">
                                     <label class="col-md-2 control-label" >{{Commande Temp}}</label>
                                     <div class="col-md-6">
-                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="linux_temp_cmd" type="text" placeholder="{{timeout 3 cat /sys/devices/virtual/thermal/thermal_zone1/temp}}" />
+                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="linux_temp_cmd" type="text" placeholder="timeout 3 cat /sys/devices/virtual/thermal/thermal_zone1/temp" />
                                     </div>
                                 </div>
                             </fieldset>
