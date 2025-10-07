@@ -1,0 +1,342 @@
+<div class="eqLogic eqLogic-widget col2" data-eqLogic_id="#id#" data-eqType="#eqType#" data-version="#version#" data-eqLogic_uid="#uid#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="#style#">
+	<style>
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-flex {
+			display: flex;
+			justify-content: space-between;
+			padding-left: 5px !important;
+		}
+
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-left {
+			display: flex;
+			flex: 0 1 auto;
+			float: left;
+			justify-content: flex-start;
+			align-items: center;
+		}
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-left span:not(:empty) {
+			padding-right: 5px;
+		}
+
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center {
+			display: flex;
+			flex: 1 1 auto;
+			justify-content: center;
+			text-align: center;
+			overflow: hidden;
+		}
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center span {
+			justify-content: center;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center .widget-name {
+			display: flex;
+			flex: 1 1 auto;
+			padding-left: 6px;
+			padding-right: 6px;
+		}
+		
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right {
+			display: flex;
+			flex: 0 1 auto;
+			float: right;
+			justify-content: flex-end;
+			align-items: center;
+			padding-left: 5px;
+		}
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right .refresh {
+			position: relative;
+		}
+
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right i {
+			margin-top: unset !important;
+			padding-right: 5px;
+			color: inherit !important;
+		}
+
+		div.eqLogic-widget[data-eqLogic_uid="#uid#"] div.monitor-cmds {
+			display: block;
+			text-align: left;
+			padding-left: 5px;
+			overflow: auto;
+			white-space: nowrap;
+			width: 100%;
+			height: calc(100% - 24px);
+			box-sizing: border-box;
+		}
+	</style>
+	<span class="monitor-name-flex">
+		<span class="monitor-name-left">
+			<span class="cmd" id="iconSSH#id#"></span>
+			<script>
+				if ('#cnx_ssh#' == 'OK') {
+					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>';
+				}
+				if ('#cnx_ssh#' == 'KO') {
+					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>';
+				}
+			</script>
+			<span class="cmd" id="iconCron#id#"></span>
+			<script>
+				if ('#cron_status#' == '1') {
+					if ('#cron_status_custom#' == '1') {
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
+					} else {
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
+					}
+				}
+				if ('#cron_status#' == '0') {
+					if ('#cron_status_custom#' == '1') {
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="cmd fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
+					} else {
+						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="cmd fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
+					}
+				}
+			</script>
+			<span class="cmd" id="iconCheckFirmware#id#"></span>
+			<script>
+				if ('#asus_fw_check#' == '1') {
+					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 1" class="fas fa-bell" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>';
+				}
+				if ('#asus_fw_check#' == '0') {
+					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 0" class="fas fa-bell-slash" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>';
+				}
+			</script>
+			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+				<i class="fas fa-redo"></i>
+			</span>
+			<script>
+				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')?.addEventListener('click', function () {
+					if (confirm("Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?")) {
+						jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
+					}
+				});
+			</script>
+		</span>
+		<span class="monitor-name-center">
+			<span class="widget-name">
+				<span>#name_display#</span>
+			</span>
+		</span>
+		<span class="monitor-name-right">
+			<span class="cmd refresh cursor" data-cmd_id="#refresh_id#">
+				<i class="fas fa-sync"></i>
+			</span>
+			<script>
+				if ('#refresh_id#' != '') {
+					document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.addEventListener('click', function() {
+						jeedom.cmd.execute({ id: '#refresh_id#' })
+					})
+				} else {
+					document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.remove()
+				}
+			</script>
+		</span>
+	</span>
+	<div class="monitor-cmds">
+		<div class="tooltips" style="display: #distri_name_display#;">
+			<span title="Distribution AsusWRT || Date valeur : #distri_name_value# || Date collecte : #distri_name_collect#" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
+			<span>#distri_name#</span>
+		</div>
+		<div class="tooltips" style="display: #uptime_display#;">
+			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
+			<span id="uptime#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('uptime#id#').innerHTML = '<span>#uptime#</span>';
+			}
+		</script>
+		<div class="tooltips" style="display: #load_avg_display#;">
+			<span title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
+			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#load_avg_1mn#' === '') {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_1mn#') < parseFloat('#load_avg_1mn_colorlow#')) {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_1mn#</span>';
+				} else if ((parseFloat('#load_avg_1mn#') >= parseFloat('#load_avg_1mn_colorlow#')) && (parseFloat('#load_avg_1mn#') <= parseFloat('#load_avg_1mn_colorhigh#'))) {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_1mn#</span>';
+				} else if ((parseFloat('#load_avg_1mn#') > parseFloat('#load_avg_1mn_colorhigh#')) && '#load_avg_1mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_1mn#</span>';
+				} else {
+					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state">#load_avg_1mn#</span>';
+				}
+				if ('#load_avg_5mn#' === '') {
+					document.getElementById('load_avg_5mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_5mn#') < parseFloat('#load_avg_5mn_colorlow#')) {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_5mn#</span>';
+				} else if ((parseFloat('#load_avg_5mn#') >= parseFloat('#load_avg_5mn_colorlow#')) && (parseFloat('#load_avg_5mn#') <= parseFloat('#load_avg_5mn_colorhigh#'))) {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_5mn#</span>';
+				} else if ((parseFloat('#load_avg_5mn#') > parseFloat('#load_avg_5mn_colorhigh#')) && '#load_avg_5mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_5mn#</span>';
+				} else {
+					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state">#load_avg_5mn#</span>';
+				}
+				if ('#load_avg_15mn#' === '') {
+					document.getElementById('load_avg_15mn#id#').innerHTML = '<span></span>';
+				} else if (parseFloat('#load_avg_15mn#') < parseFloat('#load_avg_15mn_colorlow#')) {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_15mn#</span>';
+				} else if ((parseFloat('#load_avg_15mn#') >= parseFloat('#load_avg_15mn_colorlow#')) && (parseFloat('#load_avg_15mn#') <= parseFloat('#load_avg_15mn_colorhigh#'))) {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_15mn#</span>';
+				} else if ((parseFloat('#load_avg_15mn#') > parseFloat('#load_avg_15mn_colorhigh#')) && '#load_avg_15mn_colorhigh#' !== '') {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_15mn#</span>';
+				} else {
+					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state">#load_avg_15mn#</span>';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #memory_display#;">
+			<span title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
+			<span id="memory_available_percent#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#memory_available_percent#' === '') {
+					document.getElementById('memory_available_percent#id#').innerHTML = '<span>#memory#</span>';
+				} else if ((parseFloat('#memory_available_percent#') > parseFloat('#memory_available_percent_colorhigh#')) && '#memory_available_percent_colorhigh#' !== '') {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-success-color) !important;">#memory_available_percent#</span><span>%</span>)';
+				} else if ((parseFloat('#memory_available_percent#') >= parseFloat('#memory_available_percent_colorlow#')) && (parseFloat('#memory_available_percent#') <= parseFloat('#memory_available_percent_colorhigh#'))) {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-warning-color) !important;">#memory_available_percent#</span><span>%</span>)';
+				} else if (parseFloat('#memory_available_percent#') < parseFloat('#memory_available_percent_colorlow#')) {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-danger-color) !important;">#memory_available_percent#</span><span>%</span>)';
+				} else {
+					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state">#memory_available_percent#</span><span>%</span>)';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #swap_display#;">
+			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
+			<span id="swap_free_percent#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#swap_free_percent#' === '') {
+					document.getElementById('swap_free_percent#id#').innerHTML = '<span>#swap#</span>';
+				} else if ((parseFloat('#swap_free_percent#') > parseFloat('#swap_free_percent_colorhigh#')) && '#swap_free_percent_colorhigh#' !== '') {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-success-color) !important;">#swap_free_percent#</span><span>%</span>)';
+				} else if ((parseFloat('#swap_free_percent#') >= parseFloat('#swap_free_percent_colorlow#')) && (parseFloat('#swap_free_percent#') <= parseFloat('#swap_free_percentc_colorhigh#'))) {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-warning-color) !important;">#swap_free_percent#</span><span>%</span>)';
+				} else if (parseFloat('#swap_free_percent#') < parseFloat('#swap_free_percent_colorlow#')) {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-danger-color) !important;">#swap_free_percent#</span><span>%</span>)';
+				} else {
+					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state">#swap_free_percent#</span><span>%</span>)';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #network_infos_display#;">
+			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
+			<span id="network_infos#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('network_infos#id#').innerHTML = '<span>#network_infos#</span>';
+			}
+		</script>
+		<div class="tooltips" style="display: #network_display#;">
+			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
+			<span id="network#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
+			}
+		</script>
+		<div class="tooltips" style="display: #asus_clients_display#;">
+			<span title="Infos Clients || Date de valeur : #asus_clients_value# || Date de collecte : #asus_clients_collect#" style="width:15px;max-width:15px;max-height:15px;">#asus_clients_icon#</span>
+			<span>#asus_clients#</span>
+		</div>
+		<div class="tooltips" style="display: #asus_wifi_temp_display#;">
+			<span title="Infos Températures WiFi || Date valeur : #asus_wifi_temp_value# || Date collecte : #asus_wifi_temp_collect#" style="width:15px;max-width:15px;max-height:15px;">#asus_wifi_temp_icon#</span>
+			<span id="asus_wifi_temp#id#"></span>
+		</div>
+		<div class="tooltips" style="display: #hdd_display#;">
+			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
+			<span id="hdd#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#hdd_free_percent#' === '') {
+					document.getElementById('hdd#id#').innerHTML = '<span></span>';
+				} else if ((parseFloat('#hdd_free_percent#') > parseFloat('#hdd_free_percent_colorhigh#')) && '#hdd_free_percent_colorhigh#' !== '') {
+					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-success-color) !important;">#hdd_free_percent#</span><span>%</span>)';
+				} else if ((parseFloat('#hdd_free_percent#') >= parseFloat('#hdd_free_percent_colorlow#')) && (parseFloat('#hdd_free_percent#') <= parseFloat('#hdd_free_percent_colorhigh#'))) {
+					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-warning-color) !important;">#hdd_free_percent#</span><span>%</span>)';
+				} else if (parseFloat('#hdd_free_percent#') < parseFloat('#hdd_free_percent_colorlow#')) {
+					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-danger-color) !important;">#hdd_free_percent#</span><span>%</span>)';
+				} else {
+					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state">#hdd_free_percent#</span><span>%</span>)';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #cpu_display#;">
+			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
+			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' === 'block') {
+					document.getElementById('cpu#id#').innerHTML = '<span>#cpu# </span>';
+					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
+						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state" style="color: var(--al-success-color) !important;">#cpu_temp#</span><span>°C</span>)';
+					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temp_colorlow#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temp_colorhigh#'))) {
+						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state" style="color: var(--al-warning-color) !important;">#cpu_temp#</span><span>°C</span>)';
+					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temp_colorhigh#')) && '#cpu_temp_colorhigh#' !== '') {
+						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state" style="color: var(--al-danger-color) !important;">#cpu_temp#</span><span>°C</span>)';
+					} else {
+						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state">#cpu_temp#</span><span>°C</span>)';
+					}
+				} else {
+					document.getElementById('cpu#id#').innerHTML = '<span>#cpu#</span>';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #perso1_display#;">
+			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
+			<span id="perso1_unite#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso1#' !== '') {
+					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
+						document.getElementById('perso1_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso1#</span><span>#perso1_unite#</span>';
+					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
+						document.getElementById('perso1_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#perso1_unite#</span>';
+					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && '#perso1_colorhigh#' !== '') {
+						document.getElementById('perso1_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#perso1_unite#</span>';
+					} else {
+						document.getElementById('perso1_unite#id#').innerHTML = '<span>#perso1#</span><span>#perso1_unite#</span>';						
+					}
+				} else {
+					document.getElementById('perso1_unite#id#').innerHTML = '<span></span>';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #perso2_display#;">
+			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
+			<span id="perso2_unite#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso2#' !== '') {
+					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
+						document.getElementById('perso2_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso2#</span><span>#perso2_unite#</span>';
+					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
+						document.getElementById('perso2_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso2#</span><span>#perso2_unite#</span>';
+					} else if (parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#') && '#perso2_colorhigh#' !== '') {
+						document.getElementById('perso2_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso2#</span><span>#perso2_unite#</span>';
+					} else {
+						document.getElementById('perso2_unite#id#').innerHTML = '<span>#perso2#</span><span>#perso2_unite#</span>';
+					}
+				} else {
+					document.getElementById('perso2_unite#id#').innerHTML = '<span></span>';
+				}
+			}
+		</script>
+	</div>
+	#divGraphInfo#
+</div>

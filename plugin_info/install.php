@@ -27,8 +27,8 @@ function Monitoring_install() {
     $pluginBranch = Monitoring::getPluginBranch();
     config::save('pluginBranch', $pluginBranch, 'Monitoring');
 
-    message::removeAll('Monitoring', 'update');
-    message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, null, 'update');
+    message::removeAll('Monitoring', 'install');
+    message::add('Monitoring', 'Installation du plugin Monitoring :: v' . $pluginVersion, null, 'install');
 
     $cron = cron::byClassAndFunction('Monitoring', 'pull');
     if (!is_object($cron)) {
@@ -60,6 +60,9 @@ function Monitoring_install() {
     if (config::byKey('configPullLocal', 'Monitoring') == '') {
         config::save('configPullLocal', '0', 'Monitoring');
     }
+    if (config::byKey('disableUpdateMsg', 'Monitoring') == '') {
+        config::save('disableUpdateMsg', '0', 'Monitoring');
+    }
 }
 
 function Monitoring_update() {
@@ -73,8 +76,10 @@ function Monitoring_update() {
     // Check Version of the plugin
     log::add('Monitoring', 'debug', '[UPDATE_CHECK] Vérification des versions :: ' . jeedom::version() . ' vs ' . '4.4' . ' :: ' . version_compare(jeedom::version(), '4.4'));
     if (version_compare(jeedom::version(), '4.4', '<')) {
-        message::removeAll('Monitoring');
-        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
+        if (config::byKey('disableUpdateMsg', 'Monitoring', '0') == '0') {
+            message::removeAll('Monitoring');
+            message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');    
+        }
         event::add('jeedom::alert', array(
             'level' => 'danger',
             'title' => __('[Plugin :: Monitoring] Attention - Version Jeedom !', __FILE__),
@@ -84,8 +89,10 @@ function Monitoring_update() {
         log::add('Monitoring', 'warning', __('[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < "4.4". Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités. En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.', __FILE__));
     }
     else {
-        message::removeAll('Monitoring');
-        message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
+        if (config::byKey('disableUpdateMsg', 'Monitoring', '0') == '0') {
+            message::removeAll('Monitoring');
+            message::add('Monitoring', 'Mise à jour du plugin Monitoring :: v' . $pluginVersion, 'update');
+        }
     }
 
     // Check Cron(s)

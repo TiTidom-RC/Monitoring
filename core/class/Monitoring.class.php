@@ -153,6 +153,11 @@ class Monitoring extends eqLogic {
 	public static function pull() {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
+			$mem_stats = config::byKey('configStatsMemDistants', 'Monitoring', '0') == '1' ? true : false;
+			if ($mem_stats) {
+				$mem_start_usage = memory_get_usage();
+				log::add('Monitoring', 'info', '[PULL] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
+			}
 			/** @var Monitoring $Monitoring */
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && ($Monitoring->getConfiguration('localoudistant') != 'local' || config::byKey('configPullLocal', 'Monitoring') == '0')) {
@@ -160,11 +165,21 @@ class Monitoring extends eqLogic {
 					if (is_object($cronState) && $cronState->execCmd() === 0) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Pull (15min) :: En Pause');
 					} else {
-						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULL] Lancement (15min)');
 						$Monitoring->getInformations();
+						if ($mem_stats) {
+							$mem_cycle_usage = memory_get_usage();
+							$mem_cycle_peak = memory_get_peak_usage();
+							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
+							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+						}
 						$Monitoring->refreshWidget();
 					}
 				}
+			}
+			if ($mem_stats) {
+				$mem_end_usage = memory_get_usage();
+				log::add('Monitoring', 'info', '[PULL] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 			}
 		}
 	}
@@ -172,6 +187,12 @@ class Monitoring extends eqLogic {
 	public static function pullLocal() {
 		log::add('Monitoring', 'debug', '[PULLLOCAL] Config PullLocal :: '. config::byKey('configPullLocal', 'Monitoring'));
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
+			$mem_stats = config::byKey('configStatsMemLocal', 'Monitoring', '0') == '1' ? true : false;
+			if ($mem_stats) {
+				$mem_start_usage = memory_get_usage();
+				log::add('Monitoring', 'info', '[PULLLOCAL] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
+			}
+
 			/** @var Monitoring $Monitoring */
 			foreach (eqLogic::byType('Monitoring', true) as $Monitoring) {
 				if ($Monitoring->getConfiguration('pull_use_custom', '0') == '0' && $Monitoring->getConfiguration('localoudistant') == 'local') {
@@ -179,16 +200,32 @@ class Monitoring extends eqLogic {
 					if (is_object($cronState) && $cronState->execCmd() === 0) {
 						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] PullLocal (1min) :: En Pause');
 					} else {
-						log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Lancement (1min)');
+						log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLLOCAL] Lancement (1min)');
 						$Monitoring->getInformations();
+						if ($mem_stats) {
+							$mem_cycle_usage = memory_get_usage();
+							$mem_cycle_peak = memory_get_peak_usage();
+							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
+							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+						}
 						$Monitoring->refreshWidget();
 					}
 				}
+			}
+			if ($mem_stats) {
+				$mem_end_usage = memory_get_usage();
+				log::add('Monitoring', 'info', '[PULLLOCAL] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 			}
 		}
 	}
 
 	public static function pullCustom($_options) {
+		$mem_stats = config::byKey('configStatsMemCustom', 'Monitoring', '0') == '1' ? true : false;
+		if ($mem_stats) {
+			$mem_start_usage = memory_get_usage();
+			log::add('Monitoring', 'info', '[PULLCUSTOM] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
+		}
+
 		/** @var Monitoring $Monitoring */
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
@@ -198,8 +235,18 @@ class Monitoring extends eqLogic {
 			} else {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
 				$Monitoring->getInformations();
+				if ($mem_stats) {
+					$mem_cycle_usage = memory_get_usage();
+					$mem_cycle_peak = memory_get_peak_usage();
+					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
+					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+				}
 				$Monitoring->refreshWidget();
 			}
+		}
+		if ($mem_stats) {
+			$mem_end_usage = memory_get_usage();
+			log::add('Monitoring', 'info', '[PULLCUSTOM] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
 		}
 	}
 
@@ -1535,6 +1582,187 @@ class Monitoring extends eqLogic {
 			}
 		}
 
+		if ($this->getconfiguration('asuswrt') == '1') {
+			$MonitoringCmd = $this->getCmd(null, 'asus_fw_check');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Firmware Check', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_fw_check');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('binary');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-bell"></i>');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Clients', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('string');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+			
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients_total');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Nb Clients Total', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients_total');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients_wifi24');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Nb Clients WiFi 2.4GHz', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients_wifi24');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients_wifi5');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Nb Clients WiFi 5GHz', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients_wifi5');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_clients_wired');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Nb Clients RJ45', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_clients_wired');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-users"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_wifi_temp');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Températures WiFi', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_wifi_temp');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('string');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-temperature-high"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_wifi2g_temp');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Température WiFi 2.4GHz', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_wifi2g_temp');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-temperature-low"></i>');
+				$MonitoringCmd->setUnite('°C');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+			$MonitoringCmd = $this->getCmd(null, 'asus_wifi5g_temp');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('Température WiFi 5GHz', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_wifi5g_temp');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('numeric');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-temperature-low"></i>');
+				$MonitoringCmd->setUnite('°C');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
+		}
+
 		$MonitoringCmd = $this->getCmd(null, 'cpu');
 		if (!is_object($MonitoringCmd)) {
 			$MonitoringCmd = new MonitoringCmd();
@@ -1775,6 +2003,17 @@ class Monitoring extends eqLogic {
 			}
 		}
 
+		// AsusWRT
+		$asuswrt_array = array(
+			'asus_fw_check' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'asus_clients' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'asus_wifi_temp' => array('icon', 'exec', 'id', 'display', 'collect', 'value')
+		);
+
+		if ($this->getConfiguration('asuswrt') == '1') {
+			$cmdToReplace = array_merge($cmdToReplace, $asuswrt_array);
+		}
+
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
@@ -1785,7 +2024,13 @@ class Monitoring extends eqLogic {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
 		}
 
-		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'Monitoring', 'Monitoring')));
+		// use a specific template for AsusWRT 
+		if ($this->getConfiguration('asuswrt') == '1') {
+			$template = 'AsusWRT';
+		} else {
+			$template = 'Monitoring';
+		}
+		return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, $template, 'Monitoring')));
 	}
 
 	public static function getPluginBranch() {
@@ -2086,6 +2331,47 @@ class Monitoring extends eqLogic {
 		}
 	}
 
+	public function getLocalArchKeys() {
+		[$archKey, $archSubKey, $archKeyType, $ARMv] = ['unknown', '', 'Unknown', ''];
+
+		// ARMv
+		$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
+		$ARMv = $this->execSRV($ARMv_cmd, 'ARMv');
+		$foundARMv = false;
+		if (!empty($ARMv)) {
+			// check if $ARMv is x86_64 or i686 or i386
+			if (in_array($ARMv, ['x86_64', 'aarch64', 'armv6l', 'armv7l', 'mips64', 'i686', 'i386'])) {
+				$foundARMv = true;
+				$archKey = $ARMv;
+				$archKeyType = 'ARMv';
+			} else {
+				$ARMv = '';
+			}
+		}
+
+		// Search LXC
+		$detect_virt_cmd = "systemd-detect-virt 2>/dev/null";
+		$detect_virt = $this->execSRV($detect_virt_cmd, 'DetectVirt');
+		$lxcValues = ['LXC', 'KVM'];
+		$foundLXC = false;
+		foreach ($lxcValues as $lxcValue) {
+			if (stripos($detect_virt, $lxcValue) !== false) {
+				$foundLXC = true;
+				if ($foundARMv) {
+					$archSubKey = $lxcValue;
+					$archKeyType .= ' + ' . $lxcValue;
+				} else {
+					$archKey = $lxcValue;
+					$archSubKey = '';
+					$archKeyType = $lxcValue;
+				}
+				break;
+			}
+		}
+
+		return [$archKey, $archSubKey, $archKeyType, $ARMv];
+	}
+
 	public function getRemoteArchKeys($hostId, $osType = '') {
 		[$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value] = ['unknown', '', 'Unknown', '', ''];
 		
@@ -2122,42 +2408,65 @@ class Monitoring extends eqLogic {
 				}
 			}
 
-			// Search with distri_name
-			$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
-			$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+			// Search LXC
+			$detect_virt_cmd = "systemd-detect-virt 2>/dev/null";
+			$detect_virt = $this->execSSH($hostId, $detect_virt_cmd, 'DetectVirt');
 
-			// Search for specific distribution in distri_name_value
-			$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD', 'Alpine'];
-			$foundDistri = false;
-			foreach ($distriValues as $distriValue) {
-				if (stripos($distri_name_value, $distriValue) !== false) {
-					$foundDistri = true;
+			$lxcValues = ['LXC', 'KVM'];
+			$foundLXC = false;
+			foreach ($lxcValues as $lxcValue) {
+				if (stripos($detect_virt, $lxcValue) !== false) {
+					$foundLXC = true;
 					if ($foundARMv) {
-						$archSubKey = $distriValue;
-						$archKeyType .= ' + DistriName';
+						$archSubKey = $lxcValue;
+						$archKeyType .= ' + ' . $lxcValue;
 					} else {
-						$archKey = $distriValue;
+						$archKey = $lxcValue;
 						$archSubKey = '';
-						$archKeyType = 'DistriName';
+						$archKeyType = $lxcValue;
 					}
 					break;
 				}
 			}
-			if (!$foundDistri) {
-				// Search with uname
-				$uname_cmd = "uname -a 2>/dev/null";
-				$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
-				$unameValues = ['medion'];
-				foreach ($unameValues as $unameValue) {
-					if (stripos($uname, $unameValue) !== false) {
+
+			if (!$foundLXC) {
+				// Search with distri_name
+				$distri_name_cmd = "awk -F'=' '/^PRETTY_NAME/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
+				$distri_name_value = $this->execSSH($hostId, $distri_name_cmd, 'DistriName');
+
+				// Search for specific distribution in distri_name_value
+				$distriValues = ['LibreELEC', 'piCorePlayer', 'FreeBSD', 'Alpine'];
+				$foundDistri = false;
+				foreach ($distriValues as $distriValue) {
+					if (stripos($distri_name_value, $distriValue) !== false) {
+						$foundDistri = true;
 						if ($foundARMv) {
-							$archSubKey = $unameValue;
-							$archKeyType .= ' + Uname';
+							$archSubKey = $distriValue;
+							$archKeyType .= ' + DistriName';
 						} else {
-							$archKey = $unameValue;
-							$archKeyType = 'Uname';
+							$archKey = $distriValue;
+							$archSubKey = '';
+							$archKeyType = 'DistriName';
 						}
 						break;
+					}
+				}
+				if (!$foundDistri) {
+					// Search with uname
+					$uname_cmd = "uname -a 2>/dev/null";
+					$uname = $this->execSSH($hostId, $uname_cmd, 'uname');
+					$unameValues = ['medion'];
+					foreach ($unameValues as $unameValue) {
+						if (stripos($uname, $unameValue) !== false) {
+							if ($foundARMv) {
+								$archSubKey = $unameValue;
+								$archKeyType .= ' + Uname';
+							} else {
+								$archKey = $unameValue;
+								$archKeyType = 'Uname';
+							}
+							break;
+						}
 					}
 				}
 			}
@@ -2261,11 +2570,16 @@ class Monitoring extends eqLogic {
 					1 => ['file', "/sys/class/thermal/thermal_zone0/temp"]
 				]
 			],
+			'KVM' => [
+				// KVM :: SubKey (détecté via ARMv, mais la commande CPU renvoie par défaut ceux de l'hôte)
+				'cpu_nb' => "nproc 2>/dev/null",
+			],
 		];
 
 		$cmdLocalSpecific['armv7l'] = &$cmdLocalSpecific['aarch64'];
 		$cmdLocalSpecific['i686'] = &$cmdLocalSpecific['x86_64'];
 		$cmdLocalSpecific['i386'] = &$cmdLocalSpecific['x86_64'];
+		$cmdLocalSpecific['LXC'] = &$cmdLocalSpecific['KVM'];
 
 		// Remote
 		$cmdRemoteCommon = [
@@ -2330,8 +2644,8 @@ class Monitoring extends eqLogic {
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'hdd' => sprintf($hdd_command_alt, '/storage')
 			],
-			'Alpine' => [
-				// Alpine :: SubKey (détecté via ARMv comme x86_64, mais la commande CPU renvoie par défaut ceux de l'hôte)
+			'KVM' => [
+				// KVM :: SubKey (détecté via ARMv comme x86_64, mais la commande CPU renvoie par défaut ceux de l'hôte)
 				'cpu_nb' => "nproc 2>/dev/null",
 			],
 			'piCorePlayer' => [ // distri_name
@@ -2414,17 +2728,14 @@ class Monitoring extends eqLogic {
 			],
 			'asuswrt' => [
 				# devices : cat /var/lib/misc/dnsmasq.leases
-				# wifi : cat /tmp/clientlist.json
+				# wifi au format JSON : cat /tmp/clientlist.json
+				# nvram get custom_clientlist
 				
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
 				'distri_name' => ['value', ""],
-				# 'os_version' => "awk -v ORS=\"\" -F'=' '/^VERSION_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
-				# 'os_build' => "awk -v ORS=\"\" -F'=' '/^BUILD_ID/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
-				# 'asuswrt_model' => "uname -n 2>/dev/null",
 				'os_version' => "nvram get firmver 2>/dev/null",
 				'os_build' => "nvram get buildno 2>/dev/null",
-				# 'os_name' => "awk -v ORS=\"\" -F'=' '/^NAME/ { gsub(/\"/, \"\", $2); print $2 }' /etc/*-release 2>/dev/null",
 				'asuswrt_model' => "nvram get productid 2>/dev/null",
 				'cpu_nb' => "grep '^processor' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
@@ -2435,7 +2746,11 @@ class Monitoring extends eqLogic {
 					2 => ['cmd', "cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null"],
 					3 => ['cmd', "cat /sys/class/thermal/cooling_device0/cur_state 2>/dev/null"]
 				],
-				'hdd' => sprintf($hdd_command_alt, '/jffs$')
+				'hdd' => sprintf($hdd_command_alt, '/jffs$'),
+				'clients' => "cat /tmp/clientlist.json 2>/dev/null",
+				'fw_check' => "nvram get firmware_check 2>/dev/null",
+				'wifi2g_temp' => "wl -i eth1 phy_tempsense 2>/dev/null | grep -E '[0-9]+\.?[0-9]*' | awk '{ print $1 * .5 + 20 }'",
+				'wifi5g_temp' => "wl -i eth2 phy_tempsense 2>/dev/null | grep -E '[0-9]+\.?[0-9]*' | awk '{ print $1 * .5 + 20 }'",
 			],
 			'qnap' => [
 				'ARMv' => ['value', "qnap"],
@@ -2447,7 +2762,6 @@ class Monitoring extends eqLogic {
 				'distri_bits' => ['value', ""],
 				'distri_name' => ['value', ""],
 				'qnap_model' =>  "getsysinfo model 2>/dev/null",
-				# 'qnap_name' =>  "uname -n 2>/dev/null",
 				'cpu_nb' => "grep processor /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
@@ -2466,7 +2780,9 @@ class Monitoring extends eqLogic {
 		$cmdRemoteSpecific['mips64'] = &$cmdRemoteSpecific['aarch64'];
 		$cmdRemoteSpecific['i686'] = &$cmdRemoteSpecific['x86_64'];
 		$cmdRemoteSpecific['i386'] = &$cmdRemoteSpecific['x86_64'];
-
+		$cmdRemoteSpecific['LXC'] = &$cmdRemoteSpecific['KVM'];
+		$cmdRemoteSpecific['Alpine'] = &$cmdRemoteSpecific['KVM'];
+		
 		if ($confLocalorRemote == 'local') {
 			// Local
 			$foundKey = null;
@@ -2477,9 +2793,24 @@ class Monitoring extends eqLogic {
 				}
 			}
 			if ($foundKey !== null) {
-				return array_merge($cmdLocalCommon, $cmdLocalSpecific[$foundKey]);
+				$result = array_merge($cmdLocalCommon, $cmdLocalSpecific[$foundKey]);
+				if (!empty($subKey)) {
+					$foundSubKey = null;
+					foreach (array_keys($cmdLocalSpecific) as $arrayKey) {
+						if (stripos($subKey, $arrayKey) !== false) {
+							$foundSubKey = $arrayKey;
+							break;
+						}
+					}
+					if ($foundSubKey !== null) {
+						$result = array_merge($result, $cmdLocalSpecific[$foundSubKey]);
+					} else {
+						throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' (SubKey) :: ' . $subKey);
+					}
+				}
+				return $result;
 			} else {
-				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' :: ' . $key);
+				throw new Exception(__('Aucune commande locale disponible pour cette architecture', __FILE__) . ' (Key) :: ' . $key);
 			}
 		} else {
 			// Distant
@@ -2612,6 +2943,44 @@ class Monitoring extends eqLogic {
 			log::add('Monitoring', 'error', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Cmd Exception :: ' . $e->getMessage());
 		}
 		return $cmdResult_ssh;
+	}
+
+	public function formatAsusWRTWifiTemp($_wifi2g_temp, $_wifi5g_temp, $_equipement) {
+		$wifi_temp = "WiFi 2.4Ghz : " . (is_numeric($_wifi2g_temp) ? $_wifi2g_temp . "°C" : "N/A") . " - WiFi 5GHz : " . (is_numeric($_wifi5g_temp) ? $_wifi5g_temp . "°C" : "N/A");
+		log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-TEMP] ' . $wifi_temp);
+		return $wifi_temp;
+	}
+
+	public function formatAsusWRTClients($_clients, $_equipement) {
+		[$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired] = ['', 0, 0, 0, 0];
+		if (empty($_clients)) {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Erreur :: Liste Vide ');
+			return [$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired];
+		}
+
+		$clients_data = json_decode($_clients, true);
+		if (json_last_error() === JSON_ERROR_NONE) {
+			// On compte le nombre de clients 2.4GHz, 5GHz et filaire
+			foreach ($clients_data as $client) {
+				if (isset($client['2G']) && is_array($client['2G'])) {
+					$clients_wifi_2G += count($client['2G']);
+				}
+				if (isset($client['5G']) && is_array($client['5G'])) {
+					$clients_wifi_5G += count($client['5G']);
+				}
+				if (isset($client['wired_mac']) && is_array($client['wired_mac'])) {
+					$clients_wired += count($client['wired_mac']);
+				}
+			}
+			$clients_nb = $clients_wifi_2G + $clients_wifi_5G + $clients_wired;
+			$clients_str = 'Total : ' . $clients_nb . ' - WiFi 2.4Ghz : ' . $clients_wifi_2G . ' - WiFi 5GHz : ' . $clients_wifi_5G . ' - RJ45 : ' . $clients_wired;
+
+		} else {
+			log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Erreur de décodage JSON :: ' . json_last_error_msg());
+		}
+
+		log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Nombre de clients connectés :: ' . $clients_nb . ' (' . $clients_wifi_2G . ' WiFi 2.4GHz | ' . $clients_wifi_5G . ' WiFi 5GHz | ' . $clients_wired . ' RJ45)');
+		return [$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 	}
 
 	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
@@ -3040,7 +3409,18 @@ class Monitoring extends eqLogic {
 					if ($isAsusWRT) {
 						$asus_model_value = $this->execSSH($hostId, $commands['asuswrt_model'], 'AsusWRTModel');
 						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
-						# $os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
+
+						// Récupération du check du Firmware
+						$asus_fw_check_value = $this->execSSH($hostId, $commands['fw_check'], 'AsusWRT FW_Check');
+						// Récupération du nombre de la liste des clients WIFI au format JSON
+						$asus_clients_value = $this->execSSH($hostId, $commands['clients'], 'AsusWRT Clients');
+						// Récupération de la température des cartes Wifi
+						// Pour la 2.4G, si le champ de configuration est vide, on exécute la commande par défaut sinon en remplace la valeur eth1 par celle définie dans la conf
+						// Pour la 5G, si le champ de configuration est vide, on exécute la commande par défaut sinon en remplace la valeur eth2 par celle définie dans la conf
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Port WiFi 2.4Ghz :: ' . ($this->getConfiguration('asuswrt_wifi2g_if', '') == '' ? 'eth1 (défaut)' : $this->getConfiguration('asuswrt_wifi2g_if', '')));
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Port WiFi 5Ghz :: ' . ($this->getConfiguration('asuswrt_wifi5g_if', '') == '' ? 'eth2 (défaut)' : $this->getConfiguration('asuswrt_wifi5g_if', '')));
+						$asus_wifi2g_temp_value = $this->execSSH($hostId, $this->getConfiguration('asuswrt_wifi2g_if', '') == '' ? $commands['wifi2g_temp'] : str_replace('eth1', $this->getConfiguration('asuswrt_wifi2g_if', ''), $commands['wifi2g_temp']), 'AsusWRT WiFi 2.4G Temp');
+						$asus_wifi5g_temp_value = $this->execSSH($hostId, $this->getConfiguration('asuswrt_wifi5g_if', '') == '' ? $commands['wifi5g_temp'] : str_replace('eth2', $this->getConfiguration('asuswrt_wifi5g_if', ''), $commands['wifi5g_temp']), 'AsusWRT WiFi 5G Temp');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -3055,15 +3435,17 @@ class Monitoring extends eqLogic {
 
 					if ($isQNAP) {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model_value);
-						# log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapName :: ' . $qnap_name_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
 					}
 
 					if ($isAsusWRT) {
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRTModel :: ' . $asus_model_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Model :: ' . $asus_model_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
-						# log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT FW_Check :: ' . $asus_fw_check_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Clients :: ' . $asus_clients_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT WiFi 2.4G Temp :: ' . $asus_wifi2g_temp_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT WiFi 5G Temp :: ' . $asus_wifi5g_temp_value);
 					}
 					
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
@@ -3105,14 +3487,18 @@ class Monitoring extends eqLogic {
 			elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
 				$cnx_ssh = 'No';
 				
-				// ARMv Command
-				$ARMv_cmd = "LC_ALL=C lscpu 2>/dev/null | awk -F':' '/Architecture/ { print $2 }' | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
-				$ARMv = $this->execSRV($ARMv_cmd, 'ARMv');
-				
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ARMv :: ' . $ARMv);
+				[$archKey, $archSubKey, $archKeyType, $ARMv] = $this->getLocalArchKeys();
+
+				if (!empty($archSubKey)) {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ArchKey / ArchSubKey :: ' . $archKey . ' / ' . $archSubKey . ' (' . $archKeyType . ')');
+				} else {
+					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ArchKey :: ' . $archKey . ' (' . $archKeyType . ')');
+				}
 
 				$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'local');
-				$commands = $this->getCommands($ARMv, '', $cartereseau, 'local');
+				$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, 'local');
+
+				$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSRV($commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]) : $ARMv;
 
 				$distri_bits = $this->execSRV($commands['distri_bits'], 'DistriBits');
 				$distri_name_value = $this->execSRV($commands['distri_name'], 'DistriName');
@@ -3370,6 +3756,24 @@ class Monitoring extends eqLogic {
 						}
 					}
 
+					if ($isAsusWRT) {
+						// AsusWRT Values
+						[$asus_clients, $asus_clients_nb, $asus_clients_wifi_2G, $asus_clients_wifi_5G, $asus_clients_wired] = isset($asus_clients_value) ? $this->formatAsusWRTClients($asus_clients_value, $equipement) : ['', 0, 0, 0, 0];
+						$asus_wifi_temp = $this->formatAsusWRTWifiTemp($asus_wifi2g_temp_value, $asus_wifi5g_temp_value, $equipement);
+
+						$dataresult = array_merge($dataresult, [
+							'asus_fw_check' => $asus_fw_check_value,
+							'asus_wifi2g_temp' => $asus_wifi2g_temp_value,
+							'asus_wifi5g_temp' => $asus_wifi5g_temp_value,
+							'asus_wifi_temp' => $asus_wifi_temp,
+							'asus_clients' => $asus_clients,
+							'asus_clients_total' => $asus_clients_nb,
+							'asus_clients_wifi24' => $asus_clients_wifi_2G,
+							'asus_clients_wifi5' => $asus_clients_wifi_5G,
+							'asus_clients_wired' => $asus_clients_wired
+						]);
+					}
+
 					// Event sur les commandes après récupération des données
 					foreach ($dataresult as $key => $value) {
 						$cmd = $this->getCmd(null, $key);
@@ -3399,6 +3803,9 @@ class Monitoring extends eqLogic {
 					}
 				}
 			}
+
+			unset($dataresult, $dataresult_stats, $commands);
+
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[' . $equipement . '][getInformations] Exception (Line ' . $e->getLine() . ') :: '. $e->getMessage());
 			log::add('Monitoring', 'debug', '[' . $equipement . '][getInformations] Exception Trace :: '. json_encode($e->getTrace()));
