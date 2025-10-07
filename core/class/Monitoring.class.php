@@ -3386,8 +3386,8 @@ class Monitoring extends eqLogic {
 						$asus_fw_check_value = $this->execSSH($hostId, $commands['fw_check'], 'AsusWRT FW_Check');
 						// Récupération du nombre de la liste des clients WIFI au format JSON
 						$asus_clients_value = $this->execSSH($hostId, $commands['clients'], 'AsusWRT Clients');
-						$asus_wifi2g_temp_value = $this->execSSH($hostId, $commands['asus_wifi2g_temp'], 'AsusWRT Wifi 2.4G Temp');
-						$asus_wifi5g_temp_value = $this->execSSH($hostId, $commands['asus_wifi5g_temp'], 'AsusWRT Wifi 5G Temp');
+						$asus_wifi2g_temp_value = $this->execSSH($hostId, $commands['wifi2g_temp'], 'AsusWRT Wifi 2.4G Temp');
+						$asus_wifi5g_temp_value = $this->execSSH($hostId, $commands['wifi5g_temp'], 'AsusWRT Wifi 5G Temp');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
