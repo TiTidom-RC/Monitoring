@@ -2409,7 +2409,7 @@ class Monitoring extends eqLogic {
 			}
 
 			// Search LXC
-			$detect_virt_cmd = "systemd-detect-virt 2>/dev/null";
+			$detect_virt_cmd = "systemd-detect-virt 2>/dev/null | cat";
 			$detect_virt = $this->execSSH($hostId, $detect_virt_cmd, 'DetectVirt');
 
 			$lxcValues = ['LXC', 'KVM'];
