@@ -2730,6 +2730,10 @@ class Monitoring extends eqLogic {
 				# devices : cat /var/lib/misc/dnsmasq.leases
 				# wifi au format JSON : cat /tmp/clientlist.json
 				# nvram get custom_clientlist
+				# nvram get wan_ifnames
+				# nvram get wan0_ifname
+
+				# nvram get wan0_realip_ip
 				
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
@@ -2737,6 +2741,10 @@ class Monitoring extends eqLogic {
 				'os_version' => "nvram get firmver 2>/dev/null",
 				'os_build' => "nvram get buildno 2>/dev/null",
 				'asuswrt_model' => "nvram get productid 2>/dev/null",
+				'lan_ifname' => "nvram get lan_ifname 2>/dev/null",
+				'wan0_ifname' => "nvram get wan0_ifname 2>/dev/null",
+				'wan0_ip' => "nvram get wan0_realip_ip 2>/dev/null",
+				'network' => "cat /proc/net/dev 2>/dev/null | grep \"" . $cartereseau . ":\" | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'",
 				'cpu_nb' => "grep '^processor' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
