@@ -1,3 +1,3 @@
 # [Jeedom] Plugin Monitoring
 
-Plugin permettant de monitorer l'OS (Linux ou Synology) en local ou à distance (via SSH).
+Plugin permettant de monitorer l'OS (Linux, Synology, QNAP, Proxmox, AsusWRT, LXC) en local ou à distance (via une connexion SSH).

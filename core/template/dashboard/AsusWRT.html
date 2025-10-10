@@ -99,6 +99,15 @@
 					}
 				}
 			</script>
+			<span id="iconCheckFirmware#id#" class="cmd monitor-btn"></span>
+			<script>
+				if ('#asus_fw_check#' == '1') {
+					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 1" class="cmd monitor-btn fas fa-bell tooltips" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>';
+				}
+				if ('#asus_fw_check#' == '0') {
+					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 0" class="cmd monitor-btn fas fa-bell-slash tooltips" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>';
+				}
+			</script>
 			<span class="cmd action reboot cursor" title="Redémarrer l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="cmd monitor-btn fas fa-redo"></i>
 			</span>
@@ -125,38 +134,12 @@
 					});
 				});
 			</script>
-			<span class="cmd action poweroff cursor" title="Eteindre l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
-				<i class="cmd monitor-btn fas fa-power-off"></i>
-			</span>
-			<script>
-				document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')?.addEventListener('click', function () {
-					jeeDialog.confirm({
-						title: '<i class="danger fas fa-question-circle"></i> Eteindre l\'équipement',
-						message: 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?',
-						buttons: {
-							confirm: {
-								label: 'Eteindre',
-								className: 'danger'
-							},
-							cancel: {
-								label: 'Annuler',
-								className: 'info'
-							}
-						},
-						callback: function (result) {
-							if (result) {
-								jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
-							}
-						}
-					});
-				});
-			</script>
 		</div>
 		<div class="widget-name monitor-name-center">
 			<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
 			<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
 		</div>
-		<div class="monitor-name-right">	
+		<div class="monitor-name-right">
 			<span class="cmd refresh cursor" title="Rafraîchir" data-cmd_id="#refresh_id#">
 				<i class="fas fa-sync"></i>
 			</span>
@@ -173,7 +156,7 @@
 	</div>
 	<div class="monitor-cmds">
 		<div class="tooltips" style="display: #distri_name_display#;">
-			<span title="Distribution Linux<br><i>Date de valeur : #distri_name_value#<br>Date de collecte : #distri_name_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
+			<span title="Distribution AsusWRT<br><i>Date de valeur : #distri_name_value#<br>Date de collecte : #distri_name_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
 			<span>#distri_name#</span>
 		</div>
 		<div class="tooltips" style="display: #uptime_display#;">
@@ -284,6 +267,33 @@
 				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
 			}
 		</script>
+		<div class="tooltips" style="display: #asus_clients_display#;">
+			<span title="Infos Clients<br><i>Date de valeur : #asus_clients_value#<br>Date de collecte : #asus_clients_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_clients_icon#</span>
+			<span id="asus_clients#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_clients#id#').innerHTML = '<span>#asus_clients#</span>';
+			}
+		</script>
+		<div class="tooltips" style="display: #asus_wan0_ip_display#;">
+			<span title="Infos Internet (WAN)<br><i>Date de valeur : #asus_wan0_ip_value#<br>Date de collecte : #asus_wan0_ip_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_wan0_ip_icon#</span>
+			<span id="asus_wan0_ip#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_wan0_ip#id#').innerHTML = '<span>IP (WAN) : #asus_wan0_ip#</span>';
+			}
+		</script>
+		<div class="tooltips" style="display: #asus_wifi_temp_display#;">
+			<span title="Infos Températures WiFi<br><i>Date de valeur : #asus_wifi_temp_value#<br>Date de collecte : #asus_wifi_temp_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_wifi_temp_icon#</span>
+			<span id="asus_wifi_temp#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_wifi_temp#id#').innerHTML = '<span>#asus_wifi_temp#</span>';
+			}
+		</script>
 		<div class="tooltips" style="display: #hdd_display#;">
 			<span title="Espace Disque (% Libre)<br><i>Date de valeur : #hdd_value#<br>Date de collecte : #hdd_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
@@ -300,101 +310,6 @@
 					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span title="Stats : Espace Disque (% Libre)<br>Min: #hdd_free_percent_minHistory# | Moy : #hdd_free_percent_averageHistory# | Max : #hdd_free_percent_maxHistory#" data-cmd_id="#hdd_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hdd_free_percent#</span><span>%#hdd_free_percent_tendance#</span>)';
 				} else {
 					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span title="Stats : Espace Disque (% Libre)<br>Min: #hdd_free_percent_minHistory# | Moy : #hdd_free_percent_averageHistory# | Max : #hdd_free_percent_maxHistory#" data-cmd_id="#hdd_free_percent_id#" class="value history cursor tooltips">#hdd_free_percent#</span><span>%#hdd_free_percent_tendance#</span>)';
-				}
-			}
-		</script>
-		<div id="syno_hddv2#id#"></div>
-		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddv2_display#' === 'block') {
-					document.getElementById('syno_hddv2#id#').innerHTML = '<div id="syno_hddv2#id#" class="tooltips" style="display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre)<br><i>Date de valeur : #syno_hddv2_value#<br>Date de collecte : #syno_hddv2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
-					if ('#syno_hddv2_free_percent#' === '') {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddv2_free_percent#') > parseFloat('#syno_hddv2_free_percent_colorhigh#')) && '#syno_hddv2_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span title="Stats : Syno Volume 2 (% Libre)<br>Min: #syno_hddv2_free_percent_minHistory# | Moy : #syno_hddv2_free_percent_averageHistory# | Max : #syno_hddv2_free_percent_maxHistory#" data-cmd_id="#syno_hddv2_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#syno_hddv2_free_percent#</span><span>%#syno_hddv2_free_percent_tendance#</span>)';
-					} else if ((parseFloat('#syno_hddv2_free_percent#') >= parseFloat('#syno_hddv2_free_percent_colorlow#')) && (parseFloat('#syno_hddv2_free_percent#') <= parseFloat('#syno_hddv2_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span title="Stats : Syno Volume 2 (% Libre)<br>Min: #syno_hddv2_free_percent_minHistory# | Moy : #syno_hddv2_free_percent_averageHistory# | Max : #syno_hddv2_free_percent_maxHistory#" data-cmd_id="#syno_hddv2_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#syno_hddv2_free_percent#</span><span>%#syno_hddv2_free_percent_tendance#</span>)';
-					} else if (parseFloat('#syno_hddv2_free_percent#') < parseFloat('#syno_hddv2_free_percent_colorlow#')) {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span title="Stats : Syno Volume 2 (% Libre)<br>Min: #syno_hddv2_free_percent_minHistory# | Moy : #syno_hddv2_free_percent_averageHistory# | Max : #syno_hddv2_free_percent_maxHistory#" data-cmd_id="#syno_hddv2_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#syno_hddv2_free_percent#</span><span>%#syno_hddv2_free_percent_tendance#</span>)';
-					} else {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span title="Stats : Syno Volume 2 (% Libre)<br>Min: #syno_hddv2_free_percent_minHistory# | Moy : #syno_hddv2_free_percent_averageHistory# | Max : #syno_hddv2_free_percent_maxHistory#" data-cmd_id="#syno_hddv2_free_percent_id#" class="value history cursor tooltips">#syno_hddv2_free_percent#</span><span>%#syno_hddv2_free_percent_tendance#</span>)';
-					}
-				}
-			}
-		</script>
-		<div id="syno_hddv3#id#"></div>
-		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddv3_display#' === 'block') {
-					document.getElementById('syno_hddv3#id#').innerHTML = '<div id="syno_hddv3#id#" class="tooltips" style="display: #syno_hddv3_display#;"><span title="Syno Volume 3 (% Libre)<br><i>Date de valeur : #syno_hddv3_value#<br>Date de collecte : #syno_hddv3_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv3_icon#</span> <span id="syno_hddv3_free_percent#id#"></span></div>';
-					if ('#syno_hddv3_free_percent#' === '') {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddv3_free_percent#') > parseFloat('#syno_hddv3_free_percent_colorhigh#')) && '#syno_hddv3_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span title="Stats : Syno Volume 3 (% Libre)<br>Min: #syno_hddv3_free_percent_minHistory# | Moy : #syno_hddv3_free_percent_averageHistory# | Max : #syno_hddv3_free_percent_maxHistory#" data-cmd_id="#syno_hddv3_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#syno_hddv3_free_percent#</span><span>%#syno_hddv3_free_percent_tendance#</span>)';
-					} else if ((parseFloat('#syno_hddv3_free_percent#') >= parseFloat('#syno_hddv3_free_percent_colorlow#')) && (parseFloat('#syno_hddv3_free_percent#') <= parseFloat('#syno_hddv3_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span title="Stats : Syno Volume 3 (% Libre)<br>Min: #syno_hddv3_free_percent_minHistory# | Moy : #syno_hddv3_free_percent_averageHistory# | Max : #syno_hddv3_free_percent_maxHistory#" data-cmd_id="#syno_hddv3_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#syno_hddv3_free_percent#</span><span>%#syno_hddv3_free_percent_tendance#</span>)';
-					} else if (parseFloat('#syno_hddv3_free_percent#') < parseFloat('#syno_hddv3_free_percent_colorlow#')) {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span title="Stats : Syno Volume 3 (% Libre)<br>Min: #syno_hddv3_free_percent_minHistory# | Moy : #syno_hddv3_free_percent_averageHistory# | Max : #syno_hddv3_free_percent_maxHistory#" data-cmd_id="#syno_hddv3_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#syno_hddv3_free_percent#</span><span>%#syno_hddv3_free_percent_tendance#</span>)';
-					} else {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span title="Stats : Syno Volume 3 (% Libre)<br>Min: #syno_hddv3_free_percent_minHistory# | Moy : #syno_hddv3_free_percent_averageHistory# | Max : #syno_hddv3_free_percent_maxHistory#" data-cmd_id="#syno_hddv3_free_percent_id#" class="value history cursor tooltips">#syno_hddv3_free_percent#</span><span>%#syno_hddv3_free_percent_tendance#</span>)';
-					}
-				}
-			}
-		</script>
-		<div id="syno_hddv4#id#"></div>
-		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddv4_display#' === 'block') {
-					document.getElementById('syno_hddv4#id#').innerHTML = '<div id="syno_hddv4#id#" class="tooltips" style="display: #syno_hddv4_display#;"><span title="Syno Volume 4 (% Libre)<br><i>Date de valeur : #syno_hddv4_value#<br>Date de collecte : #syno_hddv4_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv4_icon#</span> <span id="syno_hddv4_free_percent#id#"></span></div>';
-					if ('#syno_hddv4_free_percent#' === '') {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddv4_free_percent#') > parseFloat('#syno_hddv4_free_percent_colorhigh#')) && '#syno_hddv4_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span title="Stats : Syno Volume 4 (% Libre)<br>Min: #syno_hddv4_free_percent_minHistory# | Moy : #syno_hddv4_free_percent_averageHistory# | Max : #syno_hddv4_free_percent_maxHistory#" data-cmd_id="#syno_hddv4_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#syno_hddv4_free_percent#</span><span>%#syno_hddv4_free_percent_tendance#</span>)';
-					} else if ((parseFloat('#syno_hddv4_free_percent#') >= parseFloat('#syno_hddv4_free_percent_colorlow#')) && (parseFloat('#syno_hddv4_free_percent#') <= parseFloat('#syno_hddv4_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span title="Stats : Syno Volume 4 (% Libre)<br>Min: #syno_hddv4_free_percent_minHistory# | Moy : #syno_hddv4_free_percent_averageHistory# | Max : #syno_hddv4_free_percent_maxHistory#" data-cmd_id="#syno_hddv4_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#syno_hddv4_free_percent#</span><span>%#syno_hddv4_free_percent_tendance#</span>)';
-					} else if (parseFloat('#syno_hddv4_free_percent#') < parseFloat('#syno_hddv4_free_percent_colorlow#')) {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span title="Stats : Syno Volume 4 (% Libre)<br>Min: #syno_hddv4_free_percent_minHistory# | Moy : #syno_hddv4_free_percent_averageHistory# | Max : #syno_hddv4_free_percent_maxHistory#" data-cmd_id="#syno_hddv4_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#syno_hddv4_free_percent#</span><span>%#syno_hddv4_free_percent_tendance#</span>)';
-					} else {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span title="Stats : Syno Volume 4 (% Libre)<br>Min: #syno_hddv4_free_percent_minHistory# | Moy : #syno_hddv4_free_percent_averageHistory# | Max : #syno_hddv4_free_percent_maxHistory#" data-cmd_id="#syno_hddv4_free_percent_id#" class="value history cursor tooltips">#syno_hddv4_free_percent#</span><span>%#syno_hddv4_free_percent_tendance#</span>)';
-					}
-				}
-			}
-		</script>
-		<div id="syno_hddusb#id#"></div>
-		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddusb_display#' === 'block') {
-					document.getElementById('syno_hddusb#id#').innerHTML = '<div id="syno_hddusb#id#" class="tooltips" style="display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre)<br><i>Date de valeur : #syno_hddusb_value#<br>Date de collecte : #syno_hddusb_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
-					if ('#syno_hddusb_free_percent#' === '') {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddusb_free_percent#') > parseFloat('#syno_hddusb_free_percent_colorhigh#')) && '#syno_hddusb_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span title="Stats : Syno Volume USB (% Libre)<br>Min: #syno_hddusb_free_percent_minHistory# | Moy : #syno_hddusb_free_percent_averageHistory# | Max : #syno_hddusb_free_percent_maxHistory#" data-cmd_id="#syno_hddusb_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#syno_hddusb_free_percent#</span><span>%#syno_hddusb_free_percent_tendance#</span>)';
-					} else if ((parseFloat('#syno_hddusb_free_percent#') >= parseFloat('#syno_hddusb_free_percent_colorlow#')) && (parseFloat('#syno_hddusb_free_percent#') <= parseFloat('#syno_hddusb_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span title="Stats : Syno Volume USB (% Libre)<br>Min: #syno_hddusb_free_percent_minHistory# | Moy : #syno_hddusb_free_percent_averageHistory# | Max : #syno_hddusb_free_percent_maxHistory#" data-cmd_id="#syno_hddusb_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#syno_hddusb_free_percent#</span><span>%#syno_hddusb_free_percent_tendance#</span>)';
-					} else if (parseFloat('#syno_hddusb_free_percent#') < parseFloat('#syno_hddusb_free_percent_colorlow#')) {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span title="Stats : Syno Volume USB (% Libre)<br>Min: #syno_hddusb_free_percent_minHistory# | Moy : #syno_hddusb_free_percent_averageHistory# | Max : #syno_hddusb_free_percent_maxHistory#" data-cmd_id="#syno_hddusb_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#syno_hddusb_free_percent#</span><span>%#syno_hddusb_free_percent_tendance#</span>)';
-					} else {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span title="Stats : Syno Volume USB (% Libre)<br>Min: #syno_hddusb_free_percent_minHistory# | Moy : #syno_hddusb_free_percent_averageHistory# | Max : #syno_hddusb_free_percent_maxHistory#" data-cmd_id="#syno_hddusb_free_percent_id#" class="value history cursor tooltips">#syno_hddusb_free_percent#</span><span>%#syno_hddusb_free_percent_tendance#</span>)';
-					}
-				}
-			}
-		</script>
-		<div id="syno_hddesata#id#"></div>
-		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddesata_display#' === 'block') {
-					document.getElementById('syno_hddesata#id#').innerHTML = '<div id="syno_hddesata#id#" class="tooltips" style="display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre)<br><i>Date de valeur : #syno_hddesata_value#<br>Date de collecte : #syno_hddesata_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
-					if ('#syno_hddesata_free_percent#' === '') {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddesata_free_percent#') > parseFloat('#syno_hddesata_free_percent_colorhigh#')) && '#syno_hddesata_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span title="Stats : Syno Volume eSATA (% Libre)<br>Min: #syno_hddesata_free_percent_minHistory# | Moy : #syno_hddesata_free_percent_averageHistory# | Max : #syno_hddesata_free_percent_maxHistory#" data-cmd_id="#syno_hddesata_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#syno_hddesata_free_percent#</span><span>%#syno_hddesata_free_percent_tendance#</span>)';
-					} else if ((parseFloat('#syno_hddesata_free_percent#') >= parseFloat('#syno_hddesata_free_percent_colorlow#')) && (parseFloat('#syno_hddesata_free_percent#') <= parseFloat('#syno_hddesata_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span title="Stats : Syno Volume eSATA (% Libre)<br>Min: #syno_hddesata_free_percent_minHistory# | Moy : #syno_hddesata_free_percent_averageHistory# | Max : #syno_hddesata_free_percent_maxHistory#" data-cmd_id="#syno_hddesata_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#syno_hddesata_free_percent#</span><span>%#syno_hddesata_free_percent_tendance#</span>)';
-					} else if (parseFloat('#syno_hddesata_free_percent#') < parseFloat('#syno_hddesata_free_percent_colorlow#')) {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span title="Stats : Syno Volume eSATA (% Libre)<br>Min: #syno_hddesata_free_percent_minHistory# | Moy : #syno_hddesata_free_percent_averageHistory# | Max : #syno_hddesata_free_percent_maxHistory#" data-cmd_id="#syno_hddesata_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#syno_hddesata_free_percent#</span><span>%#syno_hddesata_free_percent_tendance#</span>)';
-					} else {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span title="Stats : Syno Volume eSATA (% Libre)<br>Min: #syno_hddesata_free_percent_minHistory# | Moy : #syno_hddesata_free_percent_averageHistory# | Max : #syno_hddesata_free_percent_maxHistory#" data-cmd_id="#syno_hddesata_free_percent_id#" class="value history cursor tooltips">#syno_hddesata_free_percent#</span><span>%#syno_hddesata_free_percent_tendance#</span>)';
-					}
 				}
 			}
 		</script>
@@ -496,9 +411,9 @@
 						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
 					} else if ((parseFloat('#perso4#') > parseFloat('#perso4_colorhigh#')) && parseFloat('#perso4_colorhigh#') !== '') {
 						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
-					} else {
+					} else {	
 						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
-					}
+					}	
 				} else {
 					document.getElementById('perso4_unite#id#').innerHTML = '<span></span>';
 				}
