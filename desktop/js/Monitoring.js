@@ -48,7 +48,7 @@ function addCmdToTable(_cmd) {
 	if (['memory_free_percent', 'swap_free_percent', 'memory_available_percent', 'hdd_free_percent', 'syno_hddv2_free_percent', 'syno_hddusb_free_percent', 'syno_hddesata_free_percent'].includes(init(_cmd.logicalId))) {
 		tr += '<span style="color: red;font-weight: bold;">[{{Rouge}}] \< <input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span style="color: orange;font-weight: bold;"> \u{2264} [{{Orange}}] \u{2264} </span><span style="color: green;font-weight: bold;"><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [{{Vert}}]</span>';
 	}
-	if (['perso1', 'perso2'].includes(init(_cmd.logicalId))) {
+	if (['perso1', 'perso2', 'perso3', 'perso4'].includes(init(_cmd.logicalId))) {
 		tr += '<span><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '" style="margin: 1px auto;width: 70%;display: inherit" ></input></span>';
 		tr += '<span> {{Unité}} : <input class="cmdAttr form-control input-sm" title="{{Unité}}" data-l1key="unite" style="margin: 1px auto;width: 10%;display: inherit" ></input></span>';
         tr += '<br/><span style="color: green;font-weight: bold;">[{{Vert}}] \< <input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span style="color: orange;font-weight: bold;"> \u{2264} [{{Orange}}] \u{2264} </span><span style="color: red;font-weight: bold;"><input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [{{Rouge}}]</span>';
@@ -57,12 +57,12 @@ function addCmdToTable(_cmd) {
 	tr += '<td>';
 	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked /> {{Afficher}}<br/></label>';
 
-	if (['cron_status', 'uptime_sec', 'load_avg_1mn', 'load_avg_5mn', 'load_avg_15mn', 'memory_total', 'memory_used', 'memory_free', 'memory_buffcache', 'memory_available', 'memory_free_percent', 'memory_used_percent', 'memory_available_percent', 'swap_free_percent', 'swap_used_percent', 'swap_total', 'swap_used', 'swap_free', 'network_tx', 'network_rx', 'hdd_total', 'hdd_used', 'hdd_free', 'hdd_used_percent', 'hdd_free_percent', 'cpu_temp', 'perso1', 'perso2', 'syno_hddv2_total', 'syno_hddv2_used', 'syno_hddv2_free', 'syno_hddv2_used_percent', 'syno_hddv2_free_percent', 'syno_hddusb_total', 'syno_hddusb_used', 'syno_hddusb_used_percent', 'syno_hddusb_free', 'syno_hddusb_free_percent', 'syno_hddesata_total', 'syno_hddesata_used', 'syno_hddesata_used_percent', 'syno_hddesata_free', 'syno_hddesata_free_percent', 'asus_clients_total', 'asus_clients_wifi24', 'asus_clients_wifi5', 'asus_clients_wired', 'asus_fw_check', 'asus_wifi2g_temp', 'asus_wifi5g_temp'].includes(init(_cmd.logicalId))) {
+	if (['cron_status', 'uptime_sec', 'load_avg_1mn', 'load_avg_5mn', 'load_avg_15mn', 'memory_total', 'memory_used', 'memory_free', 'memory_buffcache', 'memory_available', 'memory_free_percent', 'memory_used_percent', 'memory_available_percent', 'swap_free_percent', 'swap_used_percent', 'swap_total', 'swap_used', 'swap_free', 'network_tx', 'network_rx', 'hdd_total', 'hdd_used', 'hdd_free', 'hdd_used_percent', 'hdd_free_percent', 'cpu_temp', 'perso1', 'perso2', 'perso3', 'perso4', 'syno_hddv2_total', 'syno_hddv2_used', 'syno_hddv2_free', 'syno_hddv2_used_percent', 'syno_hddv2_free_percent', 'syno_hddusb_total', 'syno_hddusb_used', 'syno_hddusb_used_percent', 'syno_hddusb_free', 'syno_hddusb_free_percent', 'syno_hddesata_total', 'syno_hddesata_used', 'syno_hddesata_used_percent', 'syno_hddesata_free', 'syno_hddesata_free_percent', 'asus_clients_total', 'asus_clients_wifi24', 'asus_clients_wifi5', 'asus_clients_wired', 'asus_fw_check', 'asus_wifi2g_temp', 'asus_wifi5g_temp'].includes(init(_cmd.logicalId))) {
 		tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isHistorized" /> {{Historiser}}</label>';
 	}
 	tr += '</td>';
 	tr += '<td>';
-	if (['perso1', 'perso2', 'cron_status'].includes(init(_cmd.logicalId))) {
+	if (['perso1', 'perso2', 'perso3', 'perso4', 'cron_status'].includes(init(_cmd.logicalId))) {
 		tr += '<span class="type" type="info"></span>';
 		tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	}

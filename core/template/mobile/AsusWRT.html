@@ -248,12 +248,31 @@
 		</script>
 		<div class="tooltips" style="display: #asus_clients_display#;">
 			<span title="Infos Clients || Date de valeur : #asus_clients_value# || Date de collecte : #asus_clients_collect#" style="width:15px;max-width:15px;max-height:15px;">#asus_clients_icon#</span>
-			<span>#asus_clients#</span>
+			<span id="asus_clients#id#"></span>
 		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_clients#id#').innerHTML = '<span>#asus_clients#</span>';
+			}
+		</script>
+		<div class="tooltips" style="display: #asus_wan0_ip_display#;">
+			<span title="Infos Internet (WAN0) || Date valeur : #asus_wan0_ip_value# || Date collecte : #asus_wan0_ip_collect#" style="width:15px;max-width:15px;max-height:15px;">#asus_wan0_ip_icon#</span>
+			<span id="asus_wan0_ip#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_wan0_ip#id#').innerHTML = '<span>#asus_wan0_ip#</span>';
+			}
+		</script>
 		<div class="tooltips" style="display: #asus_wifi_temp_display#;">
 			<span title="Infos Températures WiFi || Date valeur : #asus_wifi_temp_value# || Date collecte : #asus_wifi_temp_collect#" style="width:15px;max-width:15px;max-height:15px;">#asus_wifi_temp_icon#</span>
 			<span id="asus_wifi_temp#id#"></span>
 		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_wifi_temp#id#').innerHTML = '<span>#asus_wifi_temp#</span>';
+			}
+		</script>
 		<div class="tooltips" style="display: #hdd_display#;">
 			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
@@ -334,6 +353,48 @@
 					}
 				} else {
 					document.getElementById('perso2_unite#id#').innerHTML = '<span></span>';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #perso3_display#;">
+			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
+			<span id="perso3_unite#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso3#' !== '') {
+					if (parseFloat('#perso3#') < parseFloat('#perso3_colorlow#')) {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
+					} else if ((parseFloat('#perso3#') >= parseFloat('#perso3_colorlow#')) && (parseFloat('#perso3#') <= parseFloat('#perso3_colorhigh#'))) {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
+					} else if ((parseFloat('#perso3#') > parseFloat('#perso3_colorhigh#')) && '#perso3_colorhigh#' !== '') {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
+					} else {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span>#perso3#</span><span>#perso3_unite#</span>';						
+					}
+				} else {
+					document.getElementById('perso3_unite#id#').innerHTML = '<span></span>';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #perso4_display#;">
+			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
+			<span id="perso4_unite#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso4#' !== '') {
+					if (parseFloat('#perso4#') < parseFloat('#perso4_colorlow#')) {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
+					} else if ((parseFloat('#perso4#') >= parseFloat('#perso4_colorlow#')) && (parseFloat('#perso4#') <= parseFloat('#perso4_colorhigh#'))) {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
+					} else if ((parseFloat('#perso4#') > parseFloat('#perso4_colorhigh#')) && '#perso4_colorhigh#' !== '') {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
+					} else {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span>#perso4#</span><span>#perso4_unite#</span>';						
+					}
+				} else {
+					document.getElementById('perso4_unite#id#').innerHTML = '<span></span>';
 				}
 			}
 		</script>

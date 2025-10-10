@@ -269,12 +269,31 @@
 		</script>
 		<div class="tooltips" style="display: #asus_clients_display#;">
 			<span title="Infos Clients<br><i>Date de valeur : #asus_clients_value#<br>Date de collecte : #asus_clients_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_clients_icon#</span>
-			<span>#asus_clients#</span>
+			<span id="asus_clients#id#"></span>
 		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_clients#id#').innerHTML = '<span>#asus_clients#</span>';
+			}
+		</script>
+		<div class="tooltips" style="display: #asus_wan0_ip_display#;">
+			<span title="Infos Internet (WAN0)<br><i>Date de valeur : #asus_wan0_ip_value#<br>Date de collecte : #asus_wan0_ip_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_wan0_ip_icon#</span>
+			<span id="asus_wan0_ip#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_wan0_ip#id#').innerHTML = '<span>#asus_wan0_ip#</span>';
+			}
+		</script>
 		<div class="tooltips" style="display: #asus_wifi_temp_display#;">
 			<span title="Infos Températures WiFi<br><i>Date de valeur : #asus_wifi_temp_value#<br>Date de collecte : #asus_wifi_temp_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_wifi_temp_icon#</span>
-			<span>#asus_wifi_temp#</span>
+			<span id="asus_wifi_temp#id#"></span>
 		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				document.getElementById('asus_wifi_temp#id#').innerHTML = '<span>#asus_wifi_temp#</span>';
+			}
+		</script>
 		<div class="tooltips" style="display: #hdd_display#;">
 			<span title="Espace Disque (% Libre)<br><i>Date de valeur : #hdd_value#<br>Date de collecte : #hdd_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
@@ -355,6 +374,48 @@
 					}
 				} else {
 					document.getElementById('perso2_unite#id#').innerHTML = '<span></span>';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #perso3_display#;">
+			<span title="#perso3_name#<br><i>Date de valeur : #perso3_value#<br>Date de collecte : #perso3_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
+			<span id="perso3_unite#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso3#' !== '') {
+					if (parseFloat('#perso3#') < parseFloat('#perso3_colorlow#')) {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span title="Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#" data-cmd_id="#perso3_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso3#</span><span>#perso3_unite##perso3_tendance#</span>';
+					} else if ((parseFloat('#perso3#') >= parseFloat('#perso3_colorlow#')) && (parseFloat('#perso3#') <= parseFloat('#perso3_colorhigh#'))) {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span title="Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#" data-cmd_id="#perso3_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso3#</span><span>#perso3_unite##perso3_tendance#</span>';
+					} else if ((parseFloat('#perso3#') > parseFloat('#perso3_colorhigh#')) && parseFloat('#perso3_colorhigh#') !== '') {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span title="Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#" data-cmd_id="#perso3_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso3#</span><span>#perso3_unite##perso3_tendance#</span>';
+					} else {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span title="Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#" data-cmd_id="#perso3_id#" class="value history cursor tooltips">#perso3#</span><span>#perso3_unite##perso3_tendance#</span>';
+					}
+				} else {
+					document.getElementById('perso3_unite#id#').innerHTML = '<span></span>';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #perso4_display#;"></div>
+			<span title="#perso4_name#<br><i>Date de valeur : #perso4_value#<br>Date de collecte : #perso4_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
+			<span id="perso4_unite#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso4#' !== '') {
+					if (parseFloat('#perso4#') < parseFloat('#perso4_colorlow#')) {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
+					} else if ((parseFloat('#perso4#') >= parseFloat('#perso4_colorlow#')) && (parseFloat('#perso4#') <= parseFloat('#perso4_colorhigh#'))) {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
+					} else if ((parseFloat('#perso4#') > parseFloat('#perso4_colorhigh#')) && parseFloat('#perso4_colorhigh#') !== '') {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
+					} else {	
+						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
+					}	
+				} else {
+					document.getElementById('perso4_unite#id#').innerHTML = '<span></span>';
 				}
 			}
 		</script>
