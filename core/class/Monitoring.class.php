@@ -1699,6 +1699,26 @@ class Monitoring extends eqLogic {
 				$orderCmd++;
 			}
 
+			$MonitoringCmd = $this->getCmd(null, 'asus_wan0_ip');
+			if (!is_object($MonitoringCmd)) {
+				$MonitoringCmd = new MonitoringCmd();
+				$MonitoringCmd->setName(__('IP Internet', __FILE__));
+				$MonitoringCmd->setEqLogic_id($this->getId());
+				$MonitoringCmd->setLogicalId('asus_wan0_ip');
+				$MonitoringCmd->setType('info');
+				$MonitoringCmd->setSubType('string');
+				$MonitoringCmd->setDisplay('icon', '<i class="fas fa-globe"></i>');
+				$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+				$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamedashboard', '1');
+				$MonitoringCmd->setDisplay('showIconAndNamemobile', '1');
+				$MonitoringCmd->setIsVisible(1);
+				$MonitoringCmd->setOrder($orderCmd++);
+				$MonitoringCmd->save();
+			} else {
+				$orderCmd++;
+			}
+
 			$MonitoringCmd = $this->getCmd(null, 'asus_wifi_temp');
 			if (!is_object($MonitoringCmd)) {
 				$MonitoringCmd = new MonitoringCmd();
@@ -1868,6 +1888,40 @@ class Monitoring extends eqLogic {
 			$orderCmd++;
 		}
 
+		$MonitoringCmd = $this->getCmd(null, 'perso3');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Perso3', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('perso3');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
+		$MonitoringCmd = $this->getCmd(null, 'perso4');
+		if (!is_object($MonitoringCmd)) {
+			$MonitoringCmd = new MonitoringCmd();
+			$MonitoringCmd->setName(__('Perso4', __FILE__));
+			$MonitoringCmd->setEqLogic_id($this->getId());
+			$MonitoringCmd->setLogicalId('perso4');
+			$MonitoringCmd->setType('info');
+			$MonitoringCmd->setSubType('string');
+			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+			$MonitoringCmd->setIsVisible(0);
+			$MonitoringCmd->setOrder($orderCmd++);
+			$MonitoringCmd->save();
+		} else {
+			$orderCmd++;
+		}
+
 		if ($this->getConfiguration('pull_use_custom', '0') == '1') {
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
 			if (!is_object($cron)) {
@@ -1956,36 +2010,40 @@ class Monitoring extends eqLogic {
 			'cpu_temp' => array('exec', 'id', 'display', 'colorlow', 'colorhigh', 'stats'),
 
 			'perso1' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats'),
-			'perso2' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats')
+			'perso2' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats'),
+			'perso3' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats'),
+			'perso4' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats')
 		);
-
+		
 		// Synology
-		$syno_hddv2_array = array(
-			'syno_hddv2' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv2_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
-		);
-
-		$syno_hddv3_array = array(
-			'syno_hddv3' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv3_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
-		);
-
-		$syno_hddv4_array = array(
-			'syno_hddv4' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddv4_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
-		);
-
-		$syno_hddusb_array = array(
-			'syno_hddusb' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddusb_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
-		);
-
-		$syno_hddesata_array = array(
-			'syno_hddesata' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'syno_hddesata_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
-		);
-	
 		if ($this->getConfiguration('synology') == '1') {
+			// Arrays of Synology commands to add if the corresponding option is enabled
+			$syno_hddv2_array = array(
+				'syno_hddv2' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+				'syno_hddv2_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
+			);
+
+			$syno_hddv3_array = array(
+				'syno_hddv3' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+				'syno_hddv3_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
+			);
+
+			$syno_hddv4_array = array(
+				'syno_hddv4' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+				'syno_hddv4_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
+			);
+
+			$syno_hddusb_array = array(
+				'syno_hddusb' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+				'syno_hddusb_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
+			);
+
+			$syno_hddesata_array = array(
+				'syno_hddesata' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+				'syno_hddesata_free_percent' => array('exec', 'id', 'colorlow', 'colorhigh', 'stats')
+			);
+
+			// Add the selected Synology command arrays to the main command list
 			if ($this->getConfiguration('synologyv2') == '1') {
 				$cmdToReplace = array_merge($cmdToReplace, $syno_hddv2_array);
 			}
@@ -2004,13 +2062,16 @@ class Monitoring extends eqLogic {
 		}
 
 		// AsusWRT
-		$asuswrt_array = array(
+		if ($this->getConfiguration('asuswrt') == '1') {
+			// Array of AsusWRT commands to add
+			$asuswrt_array = array(
 			'asus_fw_check' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
 			'asus_clients' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
-			'asus_wifi_temp' => array('icon', 'exec', 'id', 'display', 'collect', 'value')
-		);
+			'asus_wifi_temp' => array('icon', 'exec', 'id', 'display', 'collect', 'value'),
+			'asus_wan0_ip' => array('icon', 'exec', 'id', 'display', 'collect', 'value')
+			);
 
-		if ($this->getConfiguration('asuswrt') == '1') {
+			// Add the AsusWRT command array to the main command list
 			$cmdToReplace = array_merge($cmdToReplace, $asuswrt_array);
 		}
 
@@ -2024,7 +2085,7 @@ class Monitoring extends eqLogic {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
 		}
 
-		// use a specific template for AsusWRT 
+		// Use a specific template for AsusWRT and default for others
 		if ($this->getConfiguration('asuswrt') == '1') {
 			$template = 'AsusWRT';
 		} else {
@@ -2263,6 +2324,8 @@ class Monitoring extends eqLogic {
 				break;
 			case 'perso1':
 			case 'perso2':
+			case 'perso3':
+			case 'perso4':
 				$icon = '<i class="fas fa-cogs"></i>';
 				break;
 			default:
@@ -2409,7 +2472,7 @@ class Monitoring extends eqLogic {
 			}
 
 			// Search LXC
-			$detect_virt_cmd = "systemd-detect-virt 2>/dev/null";
+			$detect_virt_cmd = "systemd-detect-virt 2>/dev/null | cat";
 			$detect_virt = $this->execSSH($hostId, $detect_virt_cmd, 'DetectVirt');
 
 			$lxcValues = ['LXC', 'KVM'];
@@ -2730,6 +2793,9 @@ class Monitoring extends eqLogic {
 				# devices : cat /var/lib/misc/dnsmasq.leases
 				# wifi au format JSON : cat /tmp/clientlist.json
 				# nvram get custom_clientlist
+				# nvram get wan_ifnames
+				# nvram get wan0_ifname
+				# nvram get wan0_realip_ip
 				
 				'ARMv' => ['value', "asuswrt"],
 				'distri_bits' => ['cmd', $distri_bits_command_alt],
@@ -2737,6 +2803,9 @@ class Monitoring extends eqLogic {
 				'os_version' => "nvram get firmver 2>/dev/null",
 				'os_build' => "nvram get buildno 2>/dev/null",
 				'asuswrt_model' => "nvram get productid 2>/dev/null",
+				# 'lan_ifname' => "nvram get lan_ifname 2>/dev/null",
+				# 'wan0_ifname' => "nvram get wan0_ifname 2>/dev/null",
+				'wan0_ip' => "nvram get wan0_realip_ip 2>/dev/null",
 				'cpu_nb' => "grep '^processor' /proc/cpuinfo 2>/dev/null | wc -l",
 				'cpu_freq' => [
 					1 => ['cmd', "awk -v ORS=\"\" '/cpu MHz/{ if ($4 > max) max = $4; found=1 } END { if (found) print max }' /proc/cpuinfo 2>/dev/null"]
@@ -3421,6 +3490,7 @@ class Monitoring extends eqLogic {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Port WiFi 5Ghz :: ' . ($this->getConfiguration('asuswrt_wifi5g_if', '') == '' ? 'eth2 (défaut)' : $this->getConfiguration('asuswrt_wifi5g_if', '')));
 						$asus_wifi2g_temp_value = $this->execSSH($hostId, $this->getConfiguration('asuswrt_wifi2g_if', '') == '' ? $commands['wifi2g_temp'] : str_replace('eth1', $this->getConfiguration('asuswrt_wifi2g_if', ''), $commands['wifi2g_temp']), 'AsusWRT WiFi 2.4G Temp');
 						$asus_wifi5g_temp_value = $this->execSSH($hostId, $this->getConfiguration('asuswrt_wifi5g_if', '') == '' ? $commands['wifi5g_temp'] : str_replace('eth2', $this->getConfiguration('asuswrt_wifi5g_if', ''), $commands['wifi5g_temp']), 'AsusWRT WiFi 5G Temp');
+						$asus_wan0_ip_value = $this->execSSH($hostId, $commands['wan0_ip'], 'AsusWRT WAN IP');
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -3444,6 +3514,7 @@ class Monitoring extends eqLogic {
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT FW_Check :: ' . $asus_fw_check_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Clients :: ' . $asus_clients_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT WAN IP :: ' . $asus_wan0_ip_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT WiFi 2.4G Temp :: ' . $asus_wifi2g_temp_value);
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT WiFi 5G Temp :: ' . $asus_wifi5g_temp_value);
 					}
@@ -3481,6 +3552,14 @@ class Monitoring extends eqLogic {
 					// Perso2 Command
 					$perso2_cmd = $this->getCmdPerso('perso2');
 					$perso2 = !empty($perso2_cmd) ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
+
+					// Perso3 Command
+					$perso3_cmd = $this->getCmdPerso('perso3');
+					$perso3 = !empty($perso3_cmd) ? $this->execSSH($hostId, $perso3_cmd, 'Perso3') : '';
+
+					// Perso4 Command
+					$perso4_cmd = $this->getCmdPerso('perso4');
+					$perso4 = !empty($perso4_cmd) ? $this->execSSH($hostId, $perso4_cmd, 'Perso4') : '';
 
 				}
 			}
@@ -3539,7 +3618,15 @@ class Monitoring extends eqLogic {
 				// Perso2 Command
 				$perso2_cmd = $this->getCmdPerso('perso2');
 				$perso2 = !empty($perso2_cmd) ? $this->execSRV($perso2_cmd, 'Perso2') : '';
-	
+
+				// Perso3 Command
+				$perso3_cmd = $this->getCmdPerso('perso3');
+				$perso3 = !empty($perso3_cmd) ? $this->execSRV($perso3_cmd, 'Perso3') : '';
+
+				// Perso4 Command
+				$perso4_cmd = $this->getCmdPerso('perso4');
+				$perso4 = !empty($perso4_cmd) ? $this->execSRV($perso4_cmd, 'Perso4') : '';
+
 			}
 	
 			// Traitement des données récupérées
@@ -3624,6 +3711,8 @@ class Monitoring extends eqLogic {
 					// Array des résultats
 					if (!isset($perso1)) {$perso1 = '';}
 					if (!isset($perso2)) {$perso2 = '';}
+					if (!isset($perso3)) {$perso3 = '';}
+					if (!isset($perso4)) {$perso4 = '';}
 	
 					$dataresult = array(
 						'cnx_ssh' => $cnx_ssh,
@@ -3668,6 +3757,8 @@ class Monitoring extends eqLogic {
 						'cpu_freq' => $cpu_freq,
 						'perso1' => $perso1,
 						'perso2' => $perso2,
+						'perso3' => $perso3,
+						'perso4' => $perso4
 					);
 
 					$dataresult_stats = array(
@@ -3679,7 +3770,9 @@ class Monitoring extends eqLogic {
 						'memory_available_percent' => 1,
 						'cpu_temp' => 1,
 						'perso1' => 2,
-						'perso2' => 2
+						'perso2' => 2,
+						'perso3' => 2,
+						'perso4' => 2
 					);
 
 					if ($isSynology) {
@@ -3770,7 +3863,8 @@ class Monitoring extends eqLogic {
 							'asus_clients_total' => $asus_clients_nb,
 							'asus_clients_wifi24' => $asus_clients_wifi_2G,
 							'asus_clients_wifi5' => $asus_clients_wifi_5G,
-							'asus_clients_wired' => $asus_clients_wired
+							'asus_clients_wired' => $asus_clients_wired,
+							'asus_wan0_ip' => $asus_wan0_ip_value
 						]);
 					}
 

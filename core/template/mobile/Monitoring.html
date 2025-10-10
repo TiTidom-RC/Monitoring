@@ -425,6 +425,48 @@
 				}
 			}
 		</script>
+		<div class="tooltips" style="display: #perso3_display#;">
+			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
+			<span id="perso3_unite#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso3#' !== '') {
+					if (parseFloat('#perso3#') < parseFloat('#perso3_colorlow#')) {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
+					} else if ((parseFloat('#perso3#') >= parseFloat('#perso3_colorlow#')) && (parseFloat('#perso3#') <= parseFloat('#perso3_colorhigh#'))) {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
+					} else if ((parseFloat('#perso3#') > parseFloat('#perso3_colorhigh#')) && '#perso3_colorhigh#' !== '') {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
+					} else {
+						document.getElementById('perso3_unite#id#').innerHTML = '<span>#perso3#</span><span>#perso3_unite#</span>';						
+					}
+				} else {
+					document.getElementById('perso3_unite#id#').innerHTML = '<span></span>';
+				}
+			}
+		</script>
+		<div class="tooltips" style="display: #perso4_display#;">
+			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
+			<span id="perso4_unite#id#"></span>
+		</div>
+		<script>
+			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
+				if ('#perso4#' !== '') {
+					if (parseFloat('#perso4#') < parseFloat('#perso4_colorlow#')) {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
+					} else if ((parseFloat('#perso4#') >= parseFloat('#perso4_colorlow#')) && (parseFloat('#perso4#') <= parseFloat('#perso4_colorhigh#'))) {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
+					} else if ((parseFloat('#perso4#') > parseFloat('#perso4_colorhigh#')) && '#perso4_colorhigh#' !== '') {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
+					} else {
+						document.getElementById('perso4_unite#id#').innerHTML = '<span>#perso4#</span><span>#perso4_unite#</span>';						
+					}
+				} else {
+					document.getElementById('perso4_unite#id#').innerHTML = '<span></span>';
+				}
+			}
+		</script>
 	</div>
 	#divGraphInfo#
 </div>
