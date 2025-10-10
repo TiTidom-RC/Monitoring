@@ -277,12 +277,12 @@
 			}
 		</script>
 		<div class="tooltips" style="display: #asus_wan0_ip_display#;">
-			<span title="Infos Internet (WAN0)<br><i>Date de valeur : #asus_wan0_ip_value#<br>Date de collecte : #asus_wan0_ip_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_wan0_ip_icon#</span>
+			<span title="Infos Internet (WAN)<br><i>Date de valeur : #asus_wan0_ip_value#<br>Date de collecte : #asus_wan0_ip_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_wan0_ip_icon#</span>
 			<span id="asus_wan0_ip#id#"></span>
 		</div>
 		<script>
 			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('asus_wan0_ip#id#').innerHTML = '<span>#asus_wan0_ip#</span>';
+				document.getElementById('asus_wan0_ip#id#').innerHTML = '<span>IP (WAN) : #asus_wan0_ip#</span>';
 			}
 		</script>
 		<div class="tooltips" style="display: #asus_wifi_temp_display#;">
