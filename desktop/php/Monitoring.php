@@ -337,6 +337,20 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="linux_temp_cmd" type="text" placeholder="timeout 3 cat /sys/devices/virtual/thermal/thermal_zone1/temp" />
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" >{{Cartes Réseau +}}</label>
+                                    <div class="col-md-8">
+                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="multi_if" />
+                                        <span style="font-size: 85%;">({{A cocher pour monitorer des cartes réseau supplémentaires}})</span>
+                                    </div>
+                                </div>
+                                <div class="form-group multi_if_conf" style="display:none;">
+                                    <label class="col-md-2 control-label" >{{Noms des cartes}}</label>
+                                    <div class="col-md-6">
+                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="multi_if_list" type="text" placeholder="{{eth1, wlan1, enp0s3}}" />
+                                        <span style="font-size: 75%;">({{Séparer les noms par des virgules}})</span>
+                                    </div>
+                                </div>
                             </fieldset>
                             <fieldset>
                                 <legend>{{Statistiques}} :</legend>

@@ -161,6 +161,14 @@ document.querySelector(".eqLogicAttr[data-l2key='pull_use_custom']").addEventLis
 	}
 });
 
+document.querySelector(".eqLogicAttr[data-l2key='multi_if']").addEventListener('change', function () {
+	if(this.checked){
+	  document.querySelector(".multi_if_conf").style.display = "block";
+	} else {
+	  document.querySelector(".multi_if_conf").style.display = "none";
+	}
+});
+
 document.querySelector(".eqLogicAttr[data-l2key='localoudistant']").addEventListener('change', function () {
 	if (this.selectedIndex == 1) {
 	  document.querySelector(".distant").style.display = "block";
