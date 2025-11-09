@@ -2126,6 +2126,23 @@ class Monitoring extends eqLogic {
 			'perso4' => array('icon', 'exec', 'id', 'display', 'collect', 'value', 'name', 'unite', 'colorlow', 'colorhigh', 'stats')
 		);
 		
+		// Cartes réseau supplémentaires
+		if ($this->getConfiguration('multi_if', '0') == '1') {
+			$multi_if_list = $this->getConfiguration('multi_if_list', '');
+			if (!empty($multi_if_list)) {
+				$network_cards = array_map('trim', explode(',', $multi_if_list));
+				foreach ($network_cards as $if_name) {
+					if (!empty($if_name)) {
+						$if_safe = preg_replace('/[^a-zA-Z0-9]/', '_', $if_name);
+						$cmdToReplace['network_infos_' . $if_safe] = array('icon', 'exec', 'id', 'display', 'collect', 'value');
+						$cmdToReplace['network_' . $if_safe] = array('icon', 'exec', 'id', 'display', 'collect', 'value');
+						$cmdToReplace['network_name_' . $if_safe] = array('exec', 'id');
+						$cmdToReplace['network_ip_' . $if_safe] = array('exec', 'id');
+					}
+				}
+			}
+		}
+		
 		// Synology
 		if ($this->getConfiguration('synology') == '1') {
 			// Arrays of Synology commands to add if the corresponding option is enabled
@@ -2189,6 +2206,59 @@ class Monitoring extends eqLogic {
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
+		
+		// Génération du HTML pour les cartes réseau supplémentaires
+		$multi_network_html = '';
+		if ($this->getConfiguration('multi_if', '0') == '1') {
+			$multi_if_list = $this->getConfiguration('multi_if_list', '');
+			if (!empty($multi_if_list)) {
+				$network_cards = array_map('trim', explode(',', $multi_if_list));
+				foreach ($network_cards as $if_name) {
+					if (!empty($if_name)) {
+						$if_safe = preg_replace('/[^a-zA-Z0-9]/', '_', $if_name);
+						
+						// Vérifier si les commandes existent
+						$cmd_infos = $this->getCmd(null, 'network_infos_' . $if_safe);
+						$cmd_network = $this->getCmd(null, 'network_' . $if_safe);
+						
+						if (is_object($cmd_infos) || is_object($cmd_network)) {
+							// Format des tooltips selon la version (dashboard ou mobile)
+							if ($version == 'mobile') {
+								// Format mobile : utilise || au lieu de <br>
+								$title_infos = 'Infos Réseau (' . $if_name . ') || Date valeur : #network_infos_' . $if_safe . '_value# || Date collecte : #network_infos_' . $if_safe . '_collect#';
+								$title_network = 'Trafic Réseau (#network_name_' . $if_safe . '# / #network_ip_' . $if_safe . '#) || Date valeur : #network_' . $if_safe . '_value# || Date collecte : #network_' . $if_safe . '_collect#';
+							} else {
+								// Format dashboard : utilise <br><i>
+								$title_infos = 'Infos Réseau (' . $if_name . ')<br><i>Date de valeur : #network_infos_' . $if_safe . '_value#<br>Date de collecte : #network_infos_' . $if_safe . '_collect#</i>';
+								$title_network = 'Trafic Réseau (#network_name_' . $if_safe . '# / #network_ip_' . $if_safe . '#)<br><i>Date de valeur : #network_' . $if_safe . '_value#<br>Date de collecte : #network_' . $if_safe . '_collect#</i>';
+							}
+							
+							$multi_network_html .= '
+		<!-- Carte réseau supplémentaire : ' . $if_name . ' -->
+		<div class="tooltips" style="display: #network_infos_' . $if_safe . '_display#;">
+			<span title="' . $title_infos . '" style="width:15px;max-width:15px;max-height:15px;">#network_infos_' . $if_safe . '_icon#</span>
+			<span id="network_infos_' . $if_safe . '#id#"></span>
+		</div>
+		<script>
+			if (\'#cnx_ssh#\' == \'OK\' || \'#cnx_ssh#\' == \'No\') {
+				document.getElementById(\'network_infos_' . $if_safe . '#id#\').innerHTML = \'<span>#network_infos_' . $if_safe . '#</span>\';
+			}
+		</script>
+		<div class="tooltips" style="display: #network_' . $if_safe . '_display#;">
+			<span title="' . $title_network . '" style="width:15px;max-width:15px;max-height:15px;">#network_' . $if_safe . '_icon#</span>
+			<span id="network_' . $if_safe . '#id#"></span>
+		</div>
+		<script>
+			if (\'#cnx_ssh#\' == \'OK\' || \'#cnx_ssh#\' == \'No\') {
+				document.getElementById(\'network_' . $if_safe . '#id#\').innerHTML = \'<span>#network_' . $if_safe . '#</span>\';
+			}
+		</script>';
+						}
+					}
+				}
+			}
+		}
+		$replace['#multi_network_cards#'] = $multi_network_html;
 
 		// Commandes Actions
 		foreach ($this->getCmd('action') as $cmd) {
