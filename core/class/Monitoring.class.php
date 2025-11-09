@@ -1922,6 +1922,117 @@ class Monitoring extends eqLogic {
 			$orderCmd++;
 		}
 
+		// Création des commandes pour les cartes réseau supplémentaires
+		if ($this->getConfiguration('multi_if', '0') == '1') {
+			$multi_if_list = $this->getConfiguration('multi_if_list', '');
+			if (!empty($multi_if_list)) {
+				// Nettoyer et parser la liste des cartes réseau
+				$network_cards = array_map('trim', explode(',', $multi_if_list));
+				
+				foreach ($network_cards as $if_name) {
+					if (empty($if_name)) {
+						continue;
+					}
+					
+					// Remplacer les caractères spéciaux par des underscores pour le logicalId
+					$if_safe = preg_replace('/[^a-zA-Z0-9]/', '_', $if_name);
+					
+					// Commande network_infos pour cette interface
+					$MonitoringCmd = $this->getCmd(null, 'network_infos_' . $if_safe);
+					if (!is_object($MonitoringCmd)) {
+						$MonitoringCmd = new MonitoringCmd();
+						$MonitoringCmd->setName(__('Infos Réseau', __FILE__) . ' (' . $if_name . ')');
+						$MonitoringCmd->setEqLogic_id($this->getId());
+						$MonitoringCmd->setLogicalId('network_infos_' . $if_safe);
+						$MonitoringCmd->setType('info');
+						$MonitoringCmd->setSubType('string');
+						$MonitoringCmd->setDisplay('icon', '<i class="fas fa-ethernet"></i>');
+						$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+						$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+						$MonitoringCmd->setIsVisible(1);
+						$MonitoringCmd->setOrder($orderCmd++);
+						$MonitoringCmd->save();
+					} else {
+						$orderCmd++;
+					}
+					
+					// Commande network_tx pour cette interface
+					$MonitoringCmd = $this->getCmd(null, 'network_tx_' . $if_safe);
+					if (!is_object($MonitoringCmd)) {
+						$MonitoringCmd = new MonitoringCmd();
+						$MonitoringCmd->setName(__('Réseau (TX)', __FILE__) . ' (' . $if_name . ')');
+						$MonitoringCmd->setEqLogic_id($this->getId());
+						$MonitoringCmd->setLogicalId('network_tx_' . $if_safe);
+						$MonitoringCmd->setType('info');
+						$MonitoringCmd->setSubType('numeric');
+						$MonitoringCmd->setUnite('Mo');
+						$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+						$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+						$MonitoringCmd->setIsVisible(0);
+						$MonitoringCmd->setOrder($orderCmd++);
+						$MonitoringCmd->save();
+					} else {
+						$orderCmd++;
+					}
+					
+					// Commande network_rx pour cette interface
+					$MonitoringCmd = $this->getCmd(null, 'network_rx_' . $if_safe);
+					if (!is_object($MonitoringCmd)) {
+						$MonitoringCmd = new MonitoringCmd();
+						$MonitoringCmd->setName(__('Réseau (RX)', __FILE__) . ' (' . $if_name . ')');
+						$MonitoringCmd->setEqLogic_id($this->getId());
+						$MonitoringCmd->setLogicalId('network_rx_' . $if_safe);
+						$MonitoringCmd->setType('info');
+						$MonitoringCmd->setSubType('numeric');
+						$MonitoringCmd->setUnite('Mo');
+						$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+						$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+						$MonitoringCmd->setIsVisible(0);
+						$MonitoringCmd->setOrder($orderCmd++);
+						$MonitoringCmd->save();
+					} else {
+						$orderCmd++;
+					}
+					
+					// Commande network_name pour cette interface
+					$MonitoringCmd = $this->getCmd(null, 'network_name_' . $if_safe);
+					if (!is_object($MonitoringCmd)) {
+						$MonitoringCmd = new MonitoringCmd();
+						$MonitoringCmd->setName(__('Carte Réseau', __FILE__) . ' (' . $if_name . ')');
+						$MonitoringCmd->setEqLogic_id($this->getId());
+						$MonitoringCmd->setLogicalId('network_name_' . $if_safe);
+						$MonitoringCmd->setType('info');
+						$MonitoringCmd->setSubType('string');
+						$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+						$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+						$MonitoringCmd->setIsVisible(1);
+						$MonitoringCmd->setOrder($orderCmd++);
+						$MonitoringCmd->save();
+					} else {
+						$orderCmd++;
+					}
+					
+					// Commande network_ip pour cette interface
+					$MonitoringCmd = $this->getCmd(null, 'network_ip_' . $if_safe);
+					if (!is_object($MonitoringCmd)) {
+						$MonitoringCmd = new MonitoringCmd();
+						$MonitoringCmd->setName(__('Adresse IP', __FILE__) . ' (' . $if_name . ')');
+						$MonitoringCmd->setEqLogic_id($this->getId());
+						$MonitoringCmd->setLogicalId('network_ip_' . $if_safe);
+						$MonitoringCmd->setType('info');
+						$MonitoringCmd->setSubType('string');
+						$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+						$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+						$MonitoringCmd->setIsVisible(1);
+						$MonitoringCmd->setOrder($orderCmd++);
+						$MonitoringCmd->save();
+					} else {
+						$orderCmd++;
+					}
+				}
+			}
+		}
+
 		if ($this->getConfiguration('pull_use_custom', '0') == '1') {
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
 			if (!is_object($cron)) {
