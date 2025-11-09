@@ -345,9 +345,9 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                     </div>
                                 </div>
                                 <div class="form-group multi_if_conf" style="display:none;">
-                                    <label class="col-md-2 control-label" >{{Noms des cartes}}</label>
+                                    <label class="col-md-2 control-label" >{{Noms des interfaces}}</label>
                                     <div class="col-md-6">
-                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="multi_if_list" type="text" placeholder="{{eth1, wlan1, enp0s3}}" />
+                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="multi_if_list" type="text" placeholder="{{eth2, eth5, enp0s3}}" />
                                         <span style="font-size: 75%;">({{Séparer les noms par des virgules}})</span>
                                     </div>
                                 </div>
