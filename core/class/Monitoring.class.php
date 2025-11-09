@@ -2649,7 +2649,7 @@ class Monitoring extends eqLogic {
 		return [$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value];
 	}
 
-	public function getCommands($key, $subKey = '', $cartereseau = '', $confLocalorRemote = 'local') {
+	public function getCommands($key, $subKey = '', $cartereseau = '', $cartesreseau_multi = [], $confLocalorRemote = 'local') {
 		if (!empty($subKey)) {
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key / SubKey (LocalorRemote) :: ' . $key . ' / ' . $subKey . ' (' . $confLocalorRemote . ')');
 		} else {
@@ -2670,8 +2670,10 @@ class Monitoring extends eqLogic {
 
 		$memory_command = "LC_ALL=C free 2>/dev/null | grep 'Mem' | head -1 | awk '{ print $2,$3,$4,$6,$7 }'";
 		$swap_command = "LC_ALL=C free 2>/dev/null | awk -F':' '/Swap/ { print $2 }' | awk '{ print $1,$2,$3}'";
-		$network_command = "cat /proc/net/dev 2>/dev/null | grep \"" . $cartereseau . ":\" | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
-		$network_ip_command = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep \"" . $cartereseau . " \" | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+		$network_command = "cat /proc/net/dev 2>/dev/null | grep \"%s:\" | awk '{ print $1,$2,$10 }' | awk -v ORS=\"\" '{ gsub(/:/, \"\"); print }'";
+		$network_ip_command = "LC_ALL=C ip -o -f inet a 2>/dev/null | grep \"%s \" | awk '{ print $4 }' | awk -v ORS=\"\" '{ gsub(/\/[0-9]+/, \"\"); print }'";
+		$network_freebsd_command = "netstat -b -i -n -f inet | grep '%s' | awk -v ORS=\"\" '{ print $1,$8,$11 }'";
+		$network_ip_freebsd_command = "ifconfig -u %s | awk -v ORS=\"\" '/inet / { print $2 }'";
 		$load_avg_command = "cat /proc/loadavg 2>/dev/null";
 		$uptime_command = "awk '{ print $1 }' /proc/uptime 2>/dev/null | awk -v ORS=\"\" '{ gsub(/^[[:space:]]+|[[:space:]]+$/, \"\"); print }'";
 		$release_command = "awk -F'=' '/%s/ { print $2 }' /etc/*-release 2>/dev/null | awk -v ORS=\"\" '{ gsub(/\"/, \"\"); print }'";
@@ -2706,9 +2708,17 @@ class Monitoring extends eqLogic {
 			'memory' => $memory_command,
 			'swap' => $swap_command,
 			'hdd' => sprintf($hdd_command, '/$'),
-			'network' => $network_command, // on récupère le nom de la carte en plus pour l'afficher dans les infos
-			'network_ip' => $network_ip_command,
+			'network' => sprintf($network_command, $cartereseau), // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network_ip' => sprintf($network_ip_command, $cartereseau),
 		];
+		
+		// Ajout des commandes pour les cartes réseau supplémentaires
+		if (!empty($cartesreseau_multi)) {
+			foreach ($cartesreseau_multi as $if_safe => $if_name) {
+				$cmdLocalCommon['network_' . $if_safe] = sprintf($network_command, $if_name);
+				$cmdLocalCommon['network_ip_' . $if_safe] = sprintf($network_ip_command, $if_name);
+			}
+		}
 	
 		// Local Specific
 		$cmdLocalSpecific = [
@@ -2761,9 +2771,17 @@ class Monitoring extends eqLogic {
 			'load_avg' => $load_avg_command,
 			'memory' => $memory_command,
 			'swap' => $swap_command,
-			'network' => $network_command, // on récupère le nom de la carte en plus pour l'afficher dans les infos
-			'network_ip' => $network_ip_command,
+			'network' => sprintf($network_command, $cartereseau), // on récupère le nom de la carte en plus pour l'afficher dans les infos
+			'network_ip' => sprintf($network_ip_command, $cartereseau),
 		];
+		
+		// Ajout des commandes pour les cartes réseau supplémentaires (remote)
+		if (!empty($cartesreseau_multi)) {
+			foreach ($cartesreseau_multi as $if_safe => $if_name) {
+				$cmdRemoteCommon['network_' . $if_safe] = sprintf($network_command, $if_name);
+				$cmdRemoteCommon['network_ip_' . $if_safe] = sprintf($network_ip_command, $if_name);
+			}
+		}
 
 		// Remote Specific
 		$cmdRemoteSpecific = [
@@ -2848,8 +2866,8 @@ class Monitoring extends eqLogic {
 				'load_avg' => "sysctl -n vm.loadavg | awk '{ print $2, $3, $4 }'",
 				'memory' => "total=\$(sysctl -n hw.physmem); pagesize=\$(sysctl -n hw.pagesize); free=\$((\$(sysctl -n vm.stats.vm.v_free_count) * \$pagesize)); inactive=\$(($(sysctl -n vm.stats.vm.v_inactive_count) * \$pagesize)); cache=\$((\$(sysctl -n vm.stats.vm.v_cache_count) * \$pagesize)); wired=\$((\$(sysctl -n vm.stats.vm.v_wire_count) * \$pagesize)); used=\$((\$total - (\$free + \$inactive + \$cache))); available=\$((\$free + \$inactive + \$cache)); echo \"\$total \$used \$free \$cache \$available\"",
 				'swap' => "swapinfo | awk 'NR>1 {print $2, $3, $4}'",
-				'network' => "netstat -b -i -n -f inet | grep '" . $cartereseau . "' | awk -v ORS=\"\" '{ print $1,$8,$11 }'", // on récupère le nom de la carte en plus pour l'afficher dans les infos
-				'network_ip' => "ifconfig -u " . $cartereseau . " | awk -v ORS=\"\" '/inet / { print $2 }'",
+				'network' => sprintf($network_freebsd_command, $cartereseau), // on récupère le nom de la carte en plus pour l'afficher dans les infos
+				'network_ip' => sprintf($network_ip_freebsd_command, $cartereseau),
 				'cpu_nb' => "sysctl hw.ncpu | awk '{ print $2}'",
 				'cpu_freq' => [
 					1 => ['cmd', "sysctl -n 'dev.cpu.0.freq' 2>/dev/null"],
@@ -2955,6 +2973,14 @@ class Monitoring extends eqLogic {
 				'hdd' => sprintf($hdd_command_qnap, '/share/CACHEDEV[1-9]_DATA$'),
 			],
 		];
+		
+		// Ajout des cartes réseau supplémentaires pour FreeBSD
+		if (!empty($cartesreseau_multi)) {
+			foreach ($cartesreseau_multi as $if_safe => $if_name) {
+				$cmdRemoteSpecific['FreeBSD']['network_' . $if_safe] = sprintf($network_freebsd_command, $if_name);
+				$cmdRemoteSpecific['FreeBSD']['network_ip_' . $if_safe] = sprintf($network_ip_freebsd_command, $if_name);
+			}
+		}
 
 		$cmdRemoteSpecific['armv7l'] = &$cmdRemoteSpecific['aarch64']; // Included OS : OSMC, LibreELEC
 		$cmdRemoteSpecific['mips64'] = &$cmdRemoteSpecific['aarch64'];
@@ -3518,6 +3544,21 @@ class Monitoring extends eqLogic {
 			$isQNAP = ($this->getConfiguration('qnap') == '1') ? true : false;
 			$isAsusWRT = ($this->getConfiguration('asuswrt') == '1') ? true : false;
 
+			// Préparation de la liste des cartes réseau supplémentaires
+			$cartesreseau_multi = [];
+			if ($this->getConfiguration('multi_if', '0') == '1') {
+				$multi_if_list = $this->getConfiguration('multi_if_list', '');
+				if (!empty($multi_if_list)) {
+					$network_cards = array_map('trim', explode(',', $multi_if_list));
+					foreach ($network_cards as $if_name) {
+						if (!empty($if_name)) {
+							$if_safe = preg_replace('/[^a-zA-Z0-9]/', '_', $if_name);
+							$cartesreseau_multi[$if_safe] = $if_name;
+						}
+					}
+				}
+			}
+
 			// Configuration distante
 			if ($confLocalOrRemote == 'distant' && $this->getIsEnable()) {
 				[$cnx_ssh, $hostId] = $this->connectSSH();
@@ -3537,7 +3578,7 @@ class Monitoring extends eqLogic {
 					}
 
 					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId, $archKey);
-					$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, 'remote');
+					$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, $cartesreseau_multi, 'remote');
 
 					$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]) : $ARMv;
 					
@@ -3561,6 +3602,18 @@ class Monitoring extends eqLogic {
 
 					$network_value = $this->execSSH($hostId, $commands['network'], 'ReseauRXTX');
 					$network_ip_value = $this->execSSH($hostId, $commands['network_ip'], 'ReseauIP');
+					
+					// Récupération des informations des cartes réseau supplémentaires (mode distant)
+					$multi_if_values = [];
+					if (!empty($cartesreseau_multi)) {
+						foreach ($cartesreseau_multi as $if_safe => $if_name) {
+							$multi_if_values[$if_safe] = [
+								'network_value' => $this->execSSH($hostId, $commands['network_' . $if_safe], 'ReseauRXTX_' . $if_name),
+								'network_ip_value' => $this->execSSH($hostId, $commands['network_ip_' . $if_safe], 'ReseauIP_' . $if_name)
+							];
+						}
+					}
+					
 					$cpu_nb = $this->execSSH($hostId, $commands['cpu_nb'], 'NbCPU');
 					
 					extract($this->getCPUFreq($commands['cpu_freq'], $equipement, 'remote', $hostId));
@@ -3686,7 +3739,7 @@ class Monitoring extends eqLogic {
 				}
 
 				$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'local');
-				$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, 'local');
+				$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, $cartesreseau_multi, 'local');
 
 				$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSRV($commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]) : $ARMv;
 
@@ -3699,6 +3752,18 @@ class Monitoring extends eqLogic {
 				$swap_value = $this->execSRV($commands['swap'], 'Swap');
 				$network_value = $this->execSRV($commands['network'], 'ReseauRXTX');
 				$network_ip_value = $this->execSRV($commands['network_ip'], 'ReseauIP');
+				
+				// Récupération des informations des cartes réseau supplémentaires (mode local)
+				$multi_if_values = [];
+				if (!empty($cartesreseau_multi)) {
+					foreach ($cartesreseau_multi as $if_safe => $if_name) {
+						$multi_if_values[$if_safe] = [
+							'network_value' => $this->execSRV($commands['network_' . $if_safe], 'ReseauRXTX_' . $if_name),
+							'network_ip_value' => $this->execSRV($commands['network_ip_' . $if_safe], 'ReseauIP_' . $if_name)
+						];
+					}
+				}
+				
 				$cpu_nb = $this->execSRV($commands['cpu_nb'], 'NbCPU');
 
 				extract($this->getHDD($commands['hdd'], $equipement));
@@ -3871,6 +3936,18 @@ class Monitoring extends eqLogic {
 						'perso3' => $perso3,
 						'perso4' => $perso4
 					);
+					
+					// Ajout des données des cartes réseau supplémentaires dans $dataresult
+					if (!empty($multi_if_values)) {
+						foreach ($multi_if_values as $if_safe => $if_data) {
+							[$if_tx, $if_rx, $if_name, $if_ip, $if_network, $if_infos] = $this->formatNetwork($if_data['network_value'], $if_data['network_ip_value'], $equipement);
+							$dataresult['network_tx_' . $if_safe] = $if_tx;
+							$dataresult['network_rx_' . $if_safe] = $if_rx;
+							$dataresult['network_name_' . $if_safe] = $if_name;
+							$dataresult['network_ip_' . $if_safe] = $if_ip;
+							$dataresult['network_infos_' . $if_safe] = $if_infos;
+						}
+					}
 
 					$dataresult_stats = array(
 						'load_avg_1mn' => 2,
