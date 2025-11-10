@@ -814,7 +814,8 @@ class Monitoring extends eqLogic {
 			$MonitoringCmd->setLogicalId('network');
 			$MonitoringCmd->setType('info');
 			$MonitoringCmd->setSubType('string');
-			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-network-wired"></i>');
+			// $MonitoringCmd->setDisplay('icon', '<i class="fas fa-network-wired"></i>');
+			$MonitoringCmd->setDisplay('icon', '<i class="fas fa-exchange-alt"></i>');
 			$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
 			$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
 			$MonitoringCmd->setIsVisible(1);
