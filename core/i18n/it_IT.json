@@ -146,6 +146,7 @@
         "1er port Wi-Fi": "1a porta Wi-Fi",
         "401 - Accès non autorisé": "401 - Accesso non autorizzato",
         "A cocher pour afficher les tendances (statistiques) sur le widget du dashboard": "Spunta per visualizzare i trend (statistiche) sul widget del cruscotto",
+        "A cocher pour monitorer des cartes réseau supplémentaires": "Da selezionare per monitorare schede di rete aggiuntive",
         "A cocher pour monitorer un NAS QNAP": "Da selezionare per monitorare un NAS QNAP",
         "A cocher pour monitorer un NAS Synology": "Controllare per monitorare un NAS Synology",
         "A cocher pour monitorer un Routeur AsusWRT": "Da selezionare per monitorare un router AsusWRT",
@@ -168,6 +169,7 @@
         "Auto-Actualisation (Cron)": "Aggiornamento automatico (Cron)",
         "Autre": "Altro",
         "Carte Réseau": "Scheda di rete",
+        "Cartes Réseau +": "Schede di rete +",
         "Catégorie": "Categoria",
         "Choisir un hôte dans la liste ou créez en un nouveau": "Scegliere un host dall'elenco o crearne uno nuovo",
         "Cliquer sur ? pour afficher l'assistant cron": "Fare clic su ? per visualizzare la procedura guidata di cron",
@@ -202,6 +204,7 @@
         "Nom de l'équipement": "Nome dell'apparecchiatura",
         "Nom de l'équipement Monitoring": "Nome dell'apparecchiatura Monitoraggio",
         "Nom de la carte réseau": "Nome della scheda di rete",
+        "Noms des interfaces": "Nomi delle interfacce",
         "Objet parent": "Oggetto genitore",
         "Options": "Opzioni",
         "Port WiFi 2.4G": "Porta WiFi 2.4G",
@@ -215,6 +218,7 @@
         "Statistiques": "Statistiche",
         "Supprimer": "Cancellare",
         "Synology": "Synology",
+        "Séparer les noms par des virgules": "Separare i nomi con virgole",
         "Temp (Alt)": "Temperatura (Alt)",
         "Tendance": "Tendenze",
         "Timeout SRV": "Timeout SRV",
@@ -227,7 +231,8 @@
         "[ATTENTION] La prochaine version du plugin Monitoring ne supportera plus les versions de Jeedom < \"4.4\".<br \/>Veuillez mettre à jour Jeedom pour bénéficier des dernières fonctionnalités.<br \/><br \/>En attendant, il est conseillé de bloquer les mises à jour du plugin Monitoring.": "[La prossima versione del plugin Monitoring non supporterà più le versioni di Jeedom < \"4.4\".<br \/>Si prega di aggiornare Jeedom per usufruire delle ultime funzionalità.<br \/><br \/>Nel frattempo, si consiglia di bloccare gli aggiornamenti del plugin Monitoring.",
         "[PLUGIN] Impossible de charger le fichier sshmanager.helper.js (Vérifiez les dépendances)": "[PLUGIN] Impossibile caricare sshmanager.helper.js (controllare le dipendenze)",
         "[Plugin :: Monitoring] Attention - Version Jeedom !": "[Plugin :: Monitoraggio] Attenzione - versione Jeedom!",
-        "eth1 : 2ème port Ethernet, wlan1 : 2ème port Wi-Fi...": "eth1: seconda porta Ethernet, wlan1: seconda porta Wi-Fi..."
+        "eth1 : 2ème port Ethernet, wlan1 : 2ème port Wi-Fi...": "eth1: seconda porta Ethernet, wlan1: seconda porta Wi-Fi...",
+        "eth2, eth5, enp0s3": "eth2, eth5, enp0s3"
     },
     "plugins\/Monitoring\/plugin_info\/configuration.php": {
         "Activer ou Désactiver l'affichage des statistiques mémoire de l'équipement local dans les logs": "Attivare o disattivare la visualizzazione delle statistiche di memoria dell'apparecchiatura locale nei log",
