@@ -2226,7 +2226,7 @@ class Monitoring extends eqLogic {
 		foreach ($cmdToReplace as $cmdName => $cmdOptions) {
 			$this->getCmdReplace($cmdName, $cmdOptions, $replace);
 		}
-		
+
 		// Génération du HTML pour les cartes réseau supplémentaires
 		$multi_network_html = '';
 		if ($this->getConfiguration('multi_if', '0') == '1') {
@@ -2236,11 +2236,11 @@ class Monitoring extends eqLogic {
 				foreach ($network_cards as $if_name) {
 					if (!empty($if_name)) {
 						$if_safe = preg_replace('/[^a-zA-Z0-9]/', '_', $if_name);
-						
+
 						// Vérifier si les commandes existent
 						$cmd_infos = $this->getCmd(null, 'network_infos_' . $if_safe);
 						$cmd_network = $this->getCmd(null, 'network_' . $if_safe);
-						
+
 						if (is_object($cmd_infos) || is_object($cmd_network)) {
 							// Format des tooltips selon la version (dashboard ou mobile)
 							if ($version == 'mobile') {
@@ -2252,27 +2252,27 @@ class Monitoring extends eqLogic {
 								$title_infos = 'Infos Réseau (' . $if_name . ')<br><i>Date de valeur : #network_infos_' . $if_safe . '_value#<br>Date de collecte : #network_infos_' . $if_safe . '_collect#</i>';
 								$title_network = 'Trafic Réseau (#network_name_' . $if_safe . '# / #network_ip_' . $if_safe . '#)<br><i>Date de valeur : #network_' . $if_safe . '_value#<br>Date de collecte : #network_' . $if_safe . '_collect#</i>';
 							}
-							
+
 							$multi_network_html .= '
-		<!-- Carte réseau supplémentaire : ' . $if_name . ' -->
-		<div class="tooltips" style="display: #network_infos_' . $if_safe . '_display#;">
-			<span title="' . $title_infos . '" style="width:15px;max-width:15px;max-height:15px;">#network_infos_' . $if_safe . '_icon#</span>
-			<span id="network_infos_' . $if_safe . '#id#"></span>
-		</div>
-		<script>
-			if (\'#cnx_ssh#\' == \'OK\' || \'#cnx_ssh#\' == \'No\') {
-				document.getElementById(\'network_infos_' . $if_safe . '#id#\').innerHTML = \'<span>#network_infos_' . $if_safe . '#</span>\';
-			}
-		</script>
-		<div class="tooltips" style="display: #network_' . $if_safe . '_display#;">
-			<span title="' . $title_network . '" style="width:15px;max-width:15px;max-height:15px;">#network_' . $if_safe . '_icon#</span>
-			<span id="network_' . $if_safe . '#id#"></span>
-		</div>
-		<script>
-			if (\'#cnx_ssh#\' == \'OK\' || \'#cnx_ssh#\' == \'No\') {
-				document.getElementById(\'network_' . $if_safe . '#id#\').innerHTML = \'<span>#network_' . $if_safe . '#</span>\';
-			}
-		</script>';
+								<!-- Carte réseau supplémentaire : ' . $if_name . ' -->
+								<div class="tooltips" style="display: #network_infos_' . $if_safe . '_display#;">
+									<span title="' . $title_infos . '" style="width:15px;max-width:15px;max-height:15px;">#network_infos_' . $if_safe . '_icon#</span>
+									<span id="network_infos_' . $if_safe . '#id#"></span>
+								</div>
+								<script>
+									if (\'#cnx_ssh#\' == \'OK\' || \'#cnx_ssh#\' == \'No\') {
+										document.getElementById(\'network_infos_' . $if_safe . '#id#\').innerHTML = \'<span>#network_infos_' . $if_safe . '#</span>\';
+									}
+								</script>
+								<div class="tooltips" style="display: #network_' . $if_safe . '_display#;">
+									<span title="' . $title_network . '" style="width:15px;max-width:15px;max-height:15px;">#network_' . $if_safe . '_icon#</span>
+									<span id="network_' . $if_safe . '#id#"></span>
+								</div>
+								<script>
+									if (\'#cnx_ssh#\' == \'OK\' || \'#cnx_ssh#\' == \'No\') {
+										document.getElementById(\'network_' . $if_safe . '#id#\').innerHTML = \'<span>#network_' . $if_safe . '#</span>\';
+									}
+								</script>';
 						}
 					}
 				}
