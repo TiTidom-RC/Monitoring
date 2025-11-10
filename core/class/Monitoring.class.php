@@ -3817,17 +3817,23 @@ class Monitoring extends eqLogic {
 					$perso3_cmd = $this->getCmdPerso('perso3');
 					$perso3 = !empty($perso3_cmd) ? $this->execSSH($hostId, $perso3_cmd, 'Perso3') : '';
 
-					// Perso4 Command
-					$perso4_cmd = $this->getCmdPerso('perso4');
-					$perso4 = !empty($perso4_cmd) ? $this->execSSH($hostId, $perso4_cmd, 'Perso4') : '';
+				// Perso4 Command
+				$perso4_cmd = $this->getCmdPerso('perso4');
+				$perso4 = !empty($perso4_cmd) ? $this->execSSH($hostId, $perso4_cmd, 'Perso4') : '';
 
-					// TODO: Ajouter une fermeture de la connexion SSH ici
+				// Fermeture explicite de la connexion SSH
+				if (class_exists('sshmanager') && method_exists('sshmanager', 'closeConnection')) {
+					try {
+						sshmanager::closeConnection($hostId);
+						log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-CNX] Connexion SSH fermée');
+					} catch (Exception $e) {
+						log::add('Monitoring', 'warning', '['. $this->getName() .'][SSH-CNX] Erreur lors de la fermeture :: ' . $e->getMessage());
+					}
 				}
 			}
-			elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
-				$cnx_ssh = 'No';
-				
-				[$archKey, $archSubKey, $archKeyType, $ARMv] = $this->getLocalArchKeys();
+		}
+		elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
+			$cnx_ssh = 'No';				[$archKey, $archSubKey, $archKeyType, $ARMv] = $this->getLocalArchKeys();
 
 				if (!empty($archSubKey)) {
 					log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ArchKey / ArchSubKey :: ' . $archKey . ' / ' . $archSubKey . ' (' . $archKeyType . ')');
@@ -4240,8 +4246,17 @@ class Monitoring extends eqLogic {
 						$poweroff = $this->execSSH($hostId, $poweroffcmd, 'PowerOff');
 						break;
 				}
-				// TODO: Ajouter une fermeture de la connexion SSH ici
 				
+				// Fermeture explicite de la connexion SSH
+				if (class_exists('sshmanager') && method_exists('sshmanager', 'closeConnection')) {
+					try {
+						sshmanager::closeConnection($hostId);
+						log::add('Monitoring', 'debug', '['. $equipement .'][SSH-CNX] Connexion SSH fermée');
+					} catch (Exception $e) {
+						log::add('Monitoring', 'warning', '['. $equipement .'][SSH-CNX] Erreur lors de la fermeture :: ' . $e->getMessage());
+					}
+				}
+
 			} else {
 				log::add('Monitoring', 'error', '['. $equipement .'][SSH] Reboot/Shutdown :: Connection SSH KO');
 			}
