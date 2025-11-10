@@ -3821,6 +3821,7 @@ class Monitoring extends eqLogic {
 					$perso4_cmd = $this->getCmdPerso('perso4');
 					$perso4 = !empty($perso4_cmd) ? $this->execSSH($hostId, $perso4_cmd, 'Perso4') : '';
 
+					// TODO: Ajouter une fermeture de la connexion SSH ici
 				}
 			}
 			elseif ($this->getConfiguration('localoudistant') == 'local' && $this->getIsEnable()) {
@@ -4239,6 +4240,8 @@ class Monitoring extends eqLogic {
 						$poweroff = $this->execSSH($hostId, $poweroffcmd, 'PowerOff');
 						break;
 				}
+				// TODO: Ajouter une fermeture de la connexion SSH ici
+				
 			} else {
 				log::add('Monitoring', 'error', '['. $equipement .'][SSH] Reboot/Shutdown :: Connection SSH KO');
 			}
