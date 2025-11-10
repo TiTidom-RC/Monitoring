@@ -2258,12 +2258,18 @@ class Monitoring extends eqLogic {
 				}
 			}
 		}
+		// Le HTML des cartes réseau sera remplacé après que toutes les variables soient définies
 		$replace['#multi_network_cards#'] = $multi_network_html;
 
 		// Commandes Actions
 		foreach ($this->getCmd('action') as $cmd) {
 			$replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
 			$replace['#cmd_' . $cmd->getLogicalId() . '_display#'] = (is_object($cmd) && $cmd->getIsVisible()) ? "inline-block" : "none";
+		}
+		
+		// Remplacer les variables dans le HTML des cartes réseau supplémentaires
+		if (!empty($multi_network_html)) {
+			$replace['#multi_network_cards#'] = template_replace($replace, $multi_network_html);
 		}
 
 		// Use a specific template for AsusWRT and default for others
