@@ -1956,6 +1956,25 @@ class Monitoring extends eqLogic {
 						$orderCmd++;
 					}
 					
+					// Commande network (TX-RX formaté) pour cette interface
+					$MonitoringCmd = $this->getCmd(null, 'network_' . $if_safe);
+					if (!is_object($MonitoringCmd)) {
+						$MonitoringCmd = new MonitoringCmd();
+						$MonitoringCmd->setName(__('Réseau (TX-RX)', __FILE__) . ' (' . $if_name . ')');
+						$MonitoringCmd->setEqLogic_id($this->getId());
+						$MonitoringCmd->setLogicalId('network_' . $if_safe);
+						$MonitoringCmd->setType('info');
+						$MonitoringCmd->setSubType('string');
+						$MonitoringCmd->setDisplay('icon', '<i class="fas fa-exchange-alt"></i>');
+						$MonitoringCmd->setDisplay('forceReturnLineBefore', '1');
+						$MonitoringCmd->setDisplay('forceReturnLineAfter', '1');
+						$MonitoringCmd->setIsVisible(1);
+						$MonitoringCmd->setOrder($orderCmd++);
+						$MonitoringCmd->save();
+					} else {
+						$orderCmd++;
+					}
+					
 					// Commande network_tx pour cette interface
 					$MonitoringCmd = $this->getCmd(null, 'network_tx_' . $if_safe);
 					if (!is_object($MonitoringCmd)) {
