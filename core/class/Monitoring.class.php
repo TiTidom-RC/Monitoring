@@ -4021,6 +4021,7 @@ class Monitoring extends eqLogic {
 							$dataresult['network_rx_' . $if_safe] = $if_rx;
 							$dataresult['network_name_' . $if_safe] = $if_name;
 							$dataresult['network_ip_' . $if_safe] = $if_ip;
+							$dataresult['network_' . $if_safe] = $if_network;
 							$dataresult['network_infos_' . $if_safe] = $if_infos;
 						}
 					}
