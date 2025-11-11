@@ -3321,7 +3321,7 @@ class Monitoring extends eqLogic {
 
 	public function formatNetwork($_network_txrx, $_network_ip, $_equipement) {
 		// Network TX, Network RX, Network Name, Network Ip, Text
-		$network_ip = isset($_network_ip) ? $_network_ip : '';
+		$network_ip = isset($_network_ip) && !empty($_network_ip) ? $_network_ip : 'N/A';
 
 		// Init result
 		$result = [0.00, 0.00, '', $network_ip, '', ''];
