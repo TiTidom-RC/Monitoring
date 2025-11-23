@@ -3639,10 +3639,10 @@ class Monitoring extends eqLogic {
 			// Configuration Locale ou Distante
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 			
-			// Calcul de la temporisation entre les commandes (une seule fois)
+			// Calcul de la temporisation entre les commandes
 			$cmd_delay = (float) $this->getConfiguration('cmd_delay', 0.0);
 			if ($cmd_delay < 0.0) $cmd_delay = 0.0;
-			if ($cmd_delay > 1.0) $cmd_delay = 1.0;
+			if ($cmd_delay > 2.0) $cmd_delay = 2.0;
 			
 			// Architecture Keys
 			$archKey = '';
