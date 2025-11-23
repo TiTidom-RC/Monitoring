@@ -207,7 +207,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">{{Tempo Cmd}}
-                                        <sup><i class="fas fa-question-circle tooltips" title="{{Délai / Pause en secondes entre chaque commande (Entre 0 et 2.0 sec par pas de 0.1, par défaut : 0)}}"></i></sup>
+                                        <sup><i class="fas fa-question-circle tooltips" title="{{Délai / Pause en secondes entre chaque commande (Entre 0 et 2.0 sec par pas de 0.1, par défaut : 0, valeur conseillée : 0.2)}}"></i></sup>
                                     </label>
                                     <div class="col-md-6">
                                         <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cmd_delay" type="number" min="0" max="2" step="0.1" placeholder="0" />
