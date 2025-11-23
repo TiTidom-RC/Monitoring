@@ -154,10 +154,12 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '[PULL] Config Pull :: '. config::byKey('configPull', 'Monitoring'));
 		if (config::byKey('configPull', 'Monitoring') == '1') {
 			// Délai aléatoire de 0 à 15 secondes pour éviter les exécutions simultanées
-			$randomDelay = rand(0, 15);
-			if ($randomDelay > 0) {
-				sleep($randomDelay);
-				log::add('Monitoring', 'debug', '[PULL] Démarrage après délai de ' . $randomDelay . 's');
+			if (config::byKey('configRandomDelay', 'Monitoring', '0') == '1') {
+				$randomDelay = rand(0, 15);
+				if ($randomDelay > 0) {
+					sleep($randomDelay);
+					log::add('Monitoring', 'debug', '[PULL] Démarrage après délai de ' . $randomDelay . 's');
+				}
 			}
 			
 			$mem_stats = config::byKey('configStatsMemDistants', 'Monitoring', '0') == '1' ? true : false;
@@ -195,10 +197,12 @@ class Monitoring extends eqLogic {
 		log::add('Monitoring', 'debug', '[PULLLOCAL] Config PullLocal :: '. config::byKey('configPullLocal', 'Monitoring'));
 		if (config::byKey('configPullLocal', 'Monitoring') == '1') {
 			// Délai aléatoire de 0 à 15 secondes pour éviter les exécutions simultanées
-			$randomDelay = rand(0, 15);
-			if ($randomDelay > 0) {
-				sleep($randomDelay);
-				log::add('Monitoring', 'debug', '[PULLLOCAL] Démarrage après délai de ' . $randomDelay . 's');
+			if (config::byKey('configRandomDelay', 'Monitoring', '0') == '1') {
+				$randomDelay = rand(0, 15);
+				if ($randomDelay > 0) {
+					sleep($randomDelay);
+					log::add('Monitoring', 'debug', '[PULLLOCAL] Démarrage après délai de ' . $randomDelay . 's');
+				}
 			}
 			
 			$mem_stats = config::byKey('configStatsMemLocal', 'Monitoring', '0') == '1' ? true : false;
@@ -248,11 +252,15 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: En Pause');
 			} else {
 				// Délai aléatoire de 0 à 15 secondes pour éviter les exécutions simultanées
-				$randomDelay = rand(0, 15);
-				if ($randomDelay > 0) {
-					sleep($randomDelay);
+				if (config::byKey('configRandomDelay', 'Monitoring', '0') == '1') {
+					$randomDelay = rand(0, 15);
+					if ($randomDelay > 0) {
+						sleep($randomDelay);
+					}
+					log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom) après délai de ' . $randomDelay . 's');
+				} else {
+					log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom)');
 				}
-				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Lancement (Custom) après délai de ' . $randomDelay . 's');
 				$Monitoring->getInformations();
 				if ($mem_stats) {
 					$mem_cycle_usage = memory_get_usage();

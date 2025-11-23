@@ -115,6 +115,14 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
                     <input type="checkbox" class="configKey form-control" data-l1key="configPull" checked />
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-md-3 control-label">{{Délai Aléatoire (MàJ)}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Ajoute un délai aléatoire (0-15s) au lancement des mises à jour des équipements pour éviter les exécutions simultanées et réduire la charge système}}"></i></sup>
+                </label>
+                <div class="col-md-3">
+                    <input type="checkbox" class="configKey form-control" data-l1key="configRandomDelay" />
+                </div>
+            </div>
             <legend><i class="fas fa-clipboard-check"></i> {{Migration v2.5 -> v3.0}}</legend>
             <div class="form-group">
                 <label class="col-md-3 control-label">{{Statut Migration}}
