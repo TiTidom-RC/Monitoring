@@ -205,6 +205,14 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">{{Tempo Cmd}}
+                                        <sup><i class="fas fa-question-circle tooltips" title="{{Délai / Pause en secondes entre chaque commande (Entre 0 et 1 sec, par défaut : 0s)}}"></i></sup>
+                                    </label>
+                                    <div class="col-md-6">
+                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="cmd_delay" type="number" min="0" max="1" step="0.1" placeholder="0" />
+                                    </div>
+                                </div>
                                 <div class="distant" style="display:none;">
                                     <div class="form-group">
                                         <label class="col-sm-4 control-label help" data-help="{{Choisir un hôte dans la liste ou créez en un nouveau}}">{{Hôte SSH}}</label>

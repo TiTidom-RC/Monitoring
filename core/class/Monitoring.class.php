@@ -2349,7 +2349,7 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function getHDD($hddCmds, $equipement, $localOrRemote = 'local', $hostId = '') {
+	public function getHDD($hddCmds, $equipement, $localOrRemote = 'local', $hostId = '', $cmd_delay = 0.0) {
 		$result = ['hdd_value' => '', 'hdd_id' => ''];
 		if (is_array($hddCmds)) {
 			foreach ($hddCmds as $id => [$type, $command]) {
@@ -2360,20 +2360,20 @@ class Monitoring extends eqLogic {
 				} else {
 					$hdd_cmd = '';
 				}
-				$hdd_value = trim($hdd_cmd) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($hdd_cmd, 'HDD-' . $id) : $this->execSSH($hostId, $hdd_cmd, 'HDD-' . $id)) : '';
+				$hdd_value = trim($hdd_cmd) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($hdd_cmd, 'HDD-' . $id, true, $cmd_delay) : $this->execSSH($hostId, $hdd_cmd, 'HDD-' . $id, $cmd_delay)) : '';
 				if (!empty($hdd_value)) {
 					$result = ['hdd_value' => $hdd_value, 'hdd_id' => $id];
 					break;
 				}
 			}
 		} else {
-			$hdd_value = trim($hddCmds) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($hddCmds, 'HDD') : $this->execSSH($hostId, $hddCmds, 'HDD')) : '';
+			$hdd_value = trim($hddCmds) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($hddCmds, 'HDD', true, $cmd_delay) : $this->execSSH($hostId, $hddCmds, 'HDD', $cmd_delay)) : '';
 			$result = ['hdd_value' => $hdd_value, 'hdd_id' => ''];
 		}
 		return $result;
 	}
 
-	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '') {
+	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '', $cmd_delay = 0.0) {
 		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
 		foreach ($cpuFreqArray as $id => [$type, $command]) {
 			if ($localOrRemote == 'local' && $type == 'file' && file_exists($command)) {
@@ -2383,7 +2383,7 @@ class Monitoring extends eqLogic {
 			} else {
 				$cpu_freq_cmd = '';
 			}
-			$cpu_freq = trim($cpu_freq_cmd) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($cpu_freq_cmd, 'CPUFreq-' . $id) : $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq-' . $id)) : '';
+			$cpu_freq = trim($cpu_freq_cmd) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($cpu_freq_cmd, 'CPUFreq-' . $id, true, $cmd_delay) : $this->execSSH($hostId, $cpu_freq_cmd, 'CPUFreq-' . $id, $cmd_delay)) : '';
 			$cpu_freq = preg_replace("/[^0-9.,]/", "", $cpu_freq);
 			if (!empty($cpu_freq)) {
 				$result = ['cpu_freq' => $cpu_freq, 'cpu_freq_id' => $id];
@@ -2393,13 +2393,13 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function getCPUTemp($tempArray, $equipement, $localoudistant = 'local', $hostId = '') {
+	public function getCPUTemp($tempArray, $equipement, $localoudistant = 'local', $hostId = '', $cmd_delay = 0.0) {
 		$result = ['cpu_temp' => '', 'cpu_temp_id' => ''];
 
 		if ($this->getConfiguration('linux_use_temp_cmd')) {
 			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
 			log::add('Monitoring','debug', '['. $equipement .'][' . $localoudistant == 'local' ? 'LOCAL' : 'SSH-EXEC' .'] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
-			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom') : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom')) : '';
+			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom', true, $cmd_delay) : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom', $cmd_delay)) : '';
 			if (!empty($cpu_temp)) {
 				$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => 'Custom'];
 			}
@@ -2412,7 +2412,7 @@ class Monitoring extends eqLogic {
 				} else {
 					$cpu_temp_cmd = '';
 				}
-				$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-' . $id) : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-' . $id)) : '';
+				$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-' . $id, true, $cmd_delay) : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-' . $id, $cmd_delay)) : '';
 				if (!empty($cpu_temp)) {
 					$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => $id];
 					break;
@@ -3189,7 +3189,7 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	public function execSRV($cmd_srv = '', $cmdName_srv = '', $timeout_srv = true) {
+	public function execSRV($cmd_srv = '', $cmdName_srv = '', $timeout_srv = true, $cmd_delay = 0.0) {
 		$conf_timeoutSrv = $this->getConfiguration('timeoutsrv', 30);
 		$cmdResult_srv = '';
 	
@@ -3211,21 +3211,24 @@ class Monitoring extends eqLogic {
 				$cmdResult_srv = '';
 			}
 			if (!empty($cmdResult_srv)) {
-				$cmdResult_srv = trim($cmdResult_srv);
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Result :: ' . $cmdResult_srv);
-			}
-			
-		} catch (Exception $e) {
-			$cmdResult_srv = '';
+			$cmdResult_srv = trim($cmdResult_srv);
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
-			log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Exception :: ' . $e->getMessage());
-	
+			log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Result :: ' . $cmdResult_srv);
 		}
+
+		// Temporisation entre les commandes pour éviter la surcharge CPU
+		if ($cmd_delay > 0.0) {
+			usleep((int) ($cmd_delay * 1000000)); // Conversion en microsecondes
+		}
+		
+	} catch (Exception $e) {
+		$cmdResult_srv = '';
+		log::add('Monitoring', 'debug', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' :: ' . str_replace("\r\n", "\\r\\n", $_cmd));
+		log::add('Monitoring', 'error', '['. $this->getName() .'][LOCAL-EXEC] ' . $cmdName_srv . ' Exception :: ' . $e->getMessage());		}
 		return $cmdResult_srv;
 	}
 
-	public function execSSH($hostId, $cmd_ssh = '', $cmdName_ssh = '') {
+	public function execSSH($hostId, $cmd_ssh = '', $cmdName_ssh = '', $cmd_delay = 0.0) {
 		$cmdResult_ssh = '';
 		try {
 			$cmdResult_ssh = sshmanager::executeCmds($hostId, $cmd_ssh, $cmdName_ssh);
@@ -3233,6 +3236,12 @@ class Monitoring extends eqLogic {
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
 				log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' Result :: ' . $cmdResult_ssh);
 			}
+
+			// Temporisation entre les commandes pour éviter la surcharge CPU
+			if ($cmd_delay > 0.0) {
+				usleep((int) ($cmd_delay * 1000000)); // Conversion en microsecondes
+			}
+
 		} catch (SSHException $ex) {
 			$cmdResult_ssh = '';
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . $cmdName_ssh . ' :: ' . str_replace("\r\n", "\\r\\n", $cmd_ssh));
@@ -3630,6 +3639,11 @@ class Monitoring extends eqLogic {
 			// Configuration Locale ou Distante
 			$confLocalOrRemote = $this->getConfiguration('localoudistant');
 			
+			// Calcul de la temporisation entre les commandes (une seule fois)
+			$cmd_delay = (float) $this->getConfiguration('cmd_delay', 0.0);
+			if ($cmd_delay < 0.0) $cmd_delay = 0.0;
+			if ($cmd_delay > 1.0) $cmd_delay = 1.0;
+			
 			// Architecture Keys
 			$archKey = '';
 			$archSubKey = '';
@@ -3675,81 +3689,81 @@ class Monitoring extends eqLogic {
 					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId, $archKey);
 					$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, $cartesreseau_multi, 'remote');
 
-					$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]) : $ARMv;
+					$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv', $cmd_delay) : $commands['ARMv'][1]) : $ARMv;
 					
 					// Pour contourner le bug de la version du piCorePlayer qui n'est pas bonne dans le fichier /etc/os-release
 					if ($archKey == "piCorePlayer") {
-						$distri_name_value = $commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1];
+						$distri_name_value = $commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName', $cmd_delay) : $commands['distri_name'][1];
 					} else {
-						$distri_name_value = empty($distri_name_value) ? ($commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName') : $commands['distri_name'][1]) : $distri_name_value;
+						$distri_name_value = empty($distri_name_value) ? ($commands['distri_name'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_name'][1], 'DistriName', $cmd_delay) : $commands['distri_name'][1]) : $distri_name_value;
 					}
-					$distri_bits = $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits') : $commands['distri_bits'][1];
+					$distri_bits = $commands['distri_bits'][0] === 'cmd' ? $this->execSSH($hostId, $commands['distri_bits'][1], 'DistriBits', $cmd_delay) : $commands['distri_bits'][1];
 					
-					$os_version_value = $this->execSSH($hostId, $commands['os_version'], 'OsVersion');
+					$os_version_value = $this->execSSH($hostId, $commands['os_version'], 'OsVersion', $cmd_delay);
 
-					$uptime_value = $this->execSSH($hostId, $commands['uptime'], 'Uptime');
-					$load_avg_value = $this->execSSH($hostId, $commands['load_avg'], 'LoadAverage');
-					$memory_value = $this->execSSH($hostId, $commands['memory'], 'Memory');
-					$swap_value = $this->execSSH($hostId, $commands['swap'], 'Swap');
+					$uptime_value = $this->execSSH($hostId, $commands['uptime'], 'Uptime', $cmd_delay);
+					$load_avg_value = $this->execSSH($hostId, $commands['load_avg'], 'LoadAverage', $cmd_delay);
+					$memory_value = $this->execSSH($hostId, $commands['memory'], 'Memory', $cmd_delay);
+					$swap_value = $this->execSSH($hostId, $commands['swap'], 'Swap', $cmd_delay);
 					
 					// Récupération des infos HDD
-					extract($this->getHDD($commands['hdd'], $equipement, 'remote', $hostId));
+					extract($this->getHDD($commands['hdd'], $equipement, 'remote', $hostId, $cmd_delay));
 
-					$network_value = $this->execSSH($hostId, $commands['network'], 'ReseauRXTX');
-					$network_ip_value = $this->execSSH($hostId, $commands['network_ip'], 'ReseauIP');
+					$network_value = $this->execSSH($hostId, $commands['network'], 'ReseauRXTX', $cmd_delay);
+					$network_ip_value = $this->execSSH($hostId, $commands['network_ip'], 'ReseauIP', $cmd_delay);
 					
 					// Récupération des informations des cartes réseau supplémentaires (mode distant)
 					$multi_if_values = [];
 					if (!empty($cartesreseau_multi)) {
 						foreach ($cartesreseau_multi as $if_safe => $if_name) {
 							$multi_if_values[$if_safe] = [
-								'network_value' => $this->execSSH($hostId, $commands['network_' . $if_safe], 'ReseauRXTX_' . $if_name),
-								'network_ip_value' => $this->execSSH($hostId, $commands['network_ip_' . $if_safe], 'ReseauIP_' . $if_name)
+								'network_value' => $this->execSSH($hostId, $commands['network_' . $if_safe], 'ReseauRXTX_' . $if_name, $cmd_delay),
+								'network_ip_value' => $this->execSSH($hostId, $commands['network_ip_' . $if_safe], 'ReseauIP_' . $if_name, $cmd_delay)
 							];
 						}
 					}
 					
-					$cpu_nb = $this->execSSH($hostId, $commands['cpu_nb'], 'NbCPU');
+					$cpu_nb = $this->execSSH($hostId, $commands['cpu_nb'], 'NbCPU', $cmd_delay);
 					
-					extract($this->getCPUFreq($commands['cpu_freq'], $equipement, 'remote', $hostId));
-					extract($this->getCPUTemp($commands['cpu_temp'], $equipement, 'remote', $hostId));
+					extract($this->getCPUFreq($commands['cpu_freq'], $equipement, 'remote', $hostId, $cmd_delay));
+					extract($this->getCPUTemp($commands['cpu_temp'], $equipement, 'remote', $hostId, $cmd_delay));
 
 					if ($isSynology) {
 						$syno_model_cmd = $this->getConfiguration('syno_alt_name') == '1' ? $commands['syno_model_alt'] : $commands['syno_model'];
-						$syno_model = $this->execSSH($hostId, $syno_model_cmd, 'SynoModel');
+						$syno_model = $this->execSSH($hostId, $syno_model_cmd, 'SynoModel', $cmd_delay);
 
-						$syno_version_file = $this->execSSH($hostId, $commands['syno_version'], 'SynoVersion');
+						$syno_version_file = $this->execSSH($hostId, $commands['syno_version'], 'SynoVersion', $cmd_delay);
 						
-						$syno_hddv2_value = $this->getConfiguration('synologyv2') == '1' ? $this->execSSH($hostId, $commands['syno_hddv2'], 'SynoHDDv2') : '';
-						$syno_hddv3_value = $this->getConfiguration('synologyv3') == '1' ? $this->execSSH($hostId, $commands['syno_hddv3'], 'SynoHDDv3') : '';
-						$syno_hddv4_value = $this->getConfiguration('synologyv4') == '1' ? $this->execSSH($hostId, $commands['syno_hddv4'], 'SynoHDDv4') : '';
-						$syno_hddusb_value = $this->getConfiguration('synologyusb') == '1' ? $this->execSSH($hostId, $commands['syno_hddusb'], 'SynoHDDUSB') : '';
-						$syno_hddesata_value = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA') : '';
+						$syno_hddv2_value = $this->getConfiguration('synologyv2') == '1' ? $this->execSSH($hostId, $commands['syno_hddv2'], 'SynoHDDv2', $cmd_delay) : '';
+						$syno_hddv3_value = $this->getConfiguration('synologyv3') == '1' ? $this->execSSH($hostId, $commands['syno_hddv3'], 'SynoHDDv3', $cmd_delay) : '';
+						$syno_hddv4_value = $this->getConfiguration('synologyv4') == '1' ? $this->execSSH($hostId, $commands['syno_hddv4'], 'SynoHDDv4', $cmd_delay) : '';
+						$syno_hddusb_value = $this->getConfiguration('synologyusb') == '1' ? $this->execSSH($hostId, $commands['syno_hddusb'], 'SynoHDDUSB', $cmd_delay) : '';
+						$syno_hddesata_value = $this->getConfiguration('synologyesata') == '1' ? $this->execSSH($hostId, $commands['syno_hddesata'], 'SynoHDDeSATA', $cmd_delay) : '';
 					}
 
 					if ($isQNAP) {
-						$qnap_model_value = $this->execSSH($hostId, $commands['qnap_model'], 'QnapModel');
-						# $qnap_name_value = $this->execSSH($hostId, $commands['qnap_name'], 'QnapName');
-						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
-						$os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName');
+						$qnap_model_value = $this->execSSH($hostId, $commands['qnap_model'], 'QnapModel', $cmd_delay);
+						# $qnap_name_value = $this->execSSH($hostId, $commands['qnap_name'], 'QnapName', $cmd_delay);
+						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild', $cmd_delay);
+						$os_name_value = $this->execSSH($hostId, $commands['os_name'], 'OsName', $cmd_delay);
 					}
 
 					if ($isAsusWRT) {
-						$asus_model_value = $this->execSSH($hostId, $commands['asuswrt_model'], 'AsusWRTModel');
-						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild');
+						$asus_model_value = $this->execSSH($hostId, $commands['asuswrt_model'], 'AsusWRTModel', $cmd_delay);
+						$os_build_value = $this->execSSH($hostId, $commands['os_build'], 'OsBuild', $cmd_delay);
 
 						// Récupération du check du Firmware
-						$asus_fw_check_value = $this->execSSH($hostId, $commands['fw_check'], 'AsusWRT FW_Check');
+						$asus_fw_check_value = $this->execSSH($hostId, $commands['fw_check'], 'AsusWRT FW_Check', $cmd_delay);
 						// Récupération du nombre de la liste des clients WIFI au format JSON
-						$asus_clients_value = $this->execSSH($hostId, $commands['clients'], 'AsusWRT Clients');
+						$asus_clients_value = $this->execSSH($hostId, $commands['clients'], 'AsusWRT Clients', $cmd_delay);
 						// Récupération de la température des cartes Wifi
 						// Pour la 2.4G, si le champ de configuration est vide, on exécute la commande par défaut sinon en remplace la valeur eth1 par celle définie dans la conf
 						// Pour la 5G, si le champ de configuration est vide, on exécute la commande par défaut sinon en remplace la valeur eth2 par celle définie dans la conf
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Port WiFi 2.4Ghz :: ' . ($this->getConfiguration('asuswrt_wifi2g_if', '') == '' ? 'eth1 (défaut)' : $this->getConfiguration('asuswrt_wifi2g_if', '')));
 						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Port WiFi 5Ghz :: ' . ($this->getConfiguration('asuswrt_wifi5g_if', '') == '' ? 'eth2 (défaut)' : $this->getConfiguration('asuswrt_wifi5g_if', '')));
-						$asus_wifi2g_temp_value = $this->execSSH($hostId, $this->getConfiguration('asuswrt_wifi2g_if', '') == '' ? $commands['wifi2g_temp'] : str_replace('eth1', $this->getConfiguration('asuswrt_wifi2g_if', ''), $commands['wifi2g_temp']), 'AsusWRT WiFi 2.4G Temp');
-						$asus_wifi5g_temp_value = $this->execSSH($hostId, $this->getConfiguration('asuswrt_wifi5g_if', '') == '' ? $commands['wifi5g_temp'] : str_replace('eth2', $this->getConfiguration('asuswrt_wifi5g_if', ''), $commands['wifi5g_temp']), 'AsusWRT WiFi 5G Temp');
-						$asus_wan0_ip_value = $this->execSSH($hostId, $commands['wan0_ip'], 'AsusWRT WAN IP');
+						$asus_wifi2g_temp_value = $this->execSSH($hostId, $this->getConfiguration('asuswrt_wifi2g_if', '') == '' ? $commands['wifi2g_temp'] : str_replace('eth1', $this->getConfiguration('asuswrt_wifi2g_if', ''), $commands['wifi2g_temp']), 'AsusWRT WiFi 2.4G Temp', $cmd_delay);
+						$asus_wifi5g_temp_value = $this->execSSH($hostId, $this->getConfiguration('asuswrt_wifi5g_if', '') == '' ? $commands['wifi5g_temp'] : str_replace('eth2', $this->getConfiguration('asuswrt_wifi5g_if', ''), $commands['wifi5g_temp']), 'AsusWRT WiFi 5G Temp', $cmd_delay);
+						$asus_wan0_ip_value = $this->execSSH($hostId, $commands['wan0_ip'], 'AsusWRT WAN IP', $cmd_delay);
 					}
 
 					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
@@ -3806,19 +3820,19 @@ class Monitoring extends eqLogic {
 
 					// Perso1 Command
 					$perso1_cmd = $this->getCmdPerso('perso1');
-					$perso1 = !empty($perso1_cmd) ? $this->execSSH($hostId, $perso1_cmd, 'Perso1') : '';
+					$perso1 = !empty($perso1_cmd) ? $this->execSSH($hostId, $perso1_cmd, 'Perso1', $cmd_delay) : '';
 
 					// Perso2 Command
 					$perso2_cmd = $this->getCmdPerso('perso2');
-					$perso2 = !empty($perso2_cmd) ? $this->execSSH($hostId, $perso2_cmd, 'Perso2') : '';
+					$perso2 = !empty($perso2_cmd) ? $this->execSSH($hostId, $perso2_cmd, 'Perso2', $cmd_delay) : '';
 
 					// Perso3 Command
 					$perso3_cmd = $this->getCmdPerso('perso3');
-					$perso3 = !empty($perso3_cmd) ? $this->execSSH($hostId, $perso3_cmd, 'Perso3') : '';
+					$perso3 = !empty($perso3_cmd) ? $this->execSSH($hostId, $perso3_cmd, 'Perso3', $cmd_delay) : '';
 
 					// Perso4 Command
 					$perso4_cmd = $this->getCmdPerso('perso4');
-					$perso4 = !empty($perso4_cmd) ? $this->execSSH($hostId, $perso4_cmd, 'Perso4') : '';
+					$perso4 = !empty($perso4_cmd) ? $this->execSSH($hostId, $perso4_cmd, 'Perso4', $cmd_delay) : '';
 
 					// Fermeture explicite de la connexion SSH
 					if (class_exists('sshmanager') && method_exists('sshmanager', 'closeConnection')) {
@@ -3845,34 +3859,34 @@ class Monitoring extends eqLogic {
 				$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'local');
 				$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, $cartesreseau_multi, 'local');
 
-				$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSRV($commands['ARMv'][1], 'ARMv') : $commands['ARMv'][1]) : $ARMv;
+				$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSRV($commands['ARMv'][1], 'ARMv', true, $cmd_delay) : $commands['ARMv'][1]) : $ARMv;
 
-				$distri_bits = $this->execSRV($commands['distri_bits'], 'DistriBits');
-				$distri_name_value = $this->execSRV($commands['distri_name'], 'DistriName');
-				$os_version_value = $this->execSRV($commands['os_version'], 'OsVersion');
-				$uptime_value = $this->execSRV($commands['uptime'], 'Uptime');
-				$load_avg_value = $this->execSRV($commands['load_avg'], 'LoadAverage');
-				$memory_value = $this->execSRV($commands['memory'], 'Memory');
-				$swap_value = $this->execSRV($commands['swap'], 'Swap');
-				$network_value = $this->execSRV($commands['network'], 'ReseauRXTX');
-				$network_ip_value = $this->execSRV($commands['network_ip'], 'ReseauIP');
+				$distri_bits = $this->execSRV($commands['distri_bits'], 'DistriBits', true, $cmd_delay);
+				$distri_name_value = $this->execSRV($commands['distri_name'], 'DistriName', true, $cmd_delay);
+				$os_version_value = $this->execSRV($commands['os_version'], 'OsVersion', true, $cmd_delay);
+				$uptime_value = $this->execSRV($commands['uptime'], 'Uptime', true, $cmd_delay);
+				$load_avg_value = $this->execSRV($commands['load_avg'], 'LoadAverage', true, $cmd_delay);
+				$memory_value = $this->execSRV($commands['memory'], 'Memory', true, $cmd_delay);
+				$swap_value = $this->execSRV($commands['swap'], 'Swap', true, $cmd_delay);
+				$network_value = $this->execSRV($commands['network'], 'ReseauRXTX', true, $cmd_delay);
+				$network_ip_value = $this->execSRV($commands['network_ip'], 'ReseauIP', true, $cmd_delay);
 				
 				// Récupération des informations des cartes réseau supplémentaires (mode local)
 				$multi_if_values = [];
 				if (!empty($cartesreseau_multi)) {
 					foreach ($cartesreseau_multi as $if_safe => $if_name) {
 						$multi_if_values[$if_safe] = [
-							'network_value' => $this->execSRV($commands['network_' . $if_safe], 'ReseauRXTX_' . $if_name),
-							'network_ip_value' => $this->execSRV($commands['network_ip_' . $if_safe], 'ReseauIP_' . $if_name)
+							'network_value' => $this->execSRV($commands['network_' . $if_safe], 'ReseauRXTX_' . $if_name, true, $cmd_delay),
+							'network_ip_value' => $this->execSRV($commands['network_ip_' . $if_safe], 'ReseauIP_' . $if_name, true, $cmd_delay)
 						];
 					}
 				}
 				
-				$cpu_nb = $this->execSRV($commands['cpu_nb'], 'NbCPU');
+				$cpu_nb = $this->execSRV($commands['cpu_nb'], 'NbCPU', true, $cmd_delay);
 
-				extract($this->getHDD($commands['hdd'], $equipement));
-				extract($this->getCPUFreq($commands['cpu_freq'], $equipement));
-				extract($this->getCPUTemp($commands['cpu_temp'], $equipement));
+				extract($this->getHDD($commands['hdd'], $equipement, 'local', null, $cmd_delay));
+				extract($this->getCPUFreq($commands['cpu_freq'], $equipement, 'local', null, $cmd_delay));
+				extract($this->getCPUTemp($commands['cpu_temp'], $equipement, 'local', null, $cmd_delay));
 				
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriName :: ' . $distri_name_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriBits :: ' . $distri_bits);
@@ -3893,19 +3907,19 @@ class Monitoring extends eqLogic {
 
 				// Perso1 Command
 				$perso1_cmd = $this->getCmdPerso('perso1');
-				$perso1 = !empty($perso1_cmd) ? $this->execSRV($perso1_cmd, 'Perso1') : '';
+				$perso1 = !empty($perso1_cmd) ? $this->execSRV($perso1_cmd, 'Perso1', true, $cmd_delay) : '';
 
 				// Perso2 Command
 				$perso2_cmd = $this->getCmdPerso('perso2');
-				$perso2 = !empty($perso2_cmd) ? $this->execSRV($perso2_cmd, 'Perso2') : '';
+				$perso2 = !empty($perso2_cmd) ? $this->execSRV($perso2_cmd, 'Perso2', true, $cmd_delay) : '';
 
 				// Perso3 Command
 				$perso3_cmd = $this->getCmdPerso('perso3');
-				$perso3 = !empty($perso3_cmd) ? $this->execSRV($perso3_cmd, 'Perso3') : '';
+				$perso3 = !empty($perso3_cmd) ? $this->execSRV($perso3_cmd, 'Perso3', true, $cmd_delay) : '';
 
 				// Perso4 Command
 				$perso4_cmd = $this->getCmdPerso('perso4');
-				$perso4 = !empty($perso4_cmd) ? $this->execSRV($perso4_cmd, 'Perso4') : '';
+				$perso4 = !empty($perso4_cmd) ? $this->execSRV($perso4_cmd, 'Perso4', true, $cmd_delay) : '';
 			}
 	
 			// Traitement des données récupérées
