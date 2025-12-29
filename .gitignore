@@ -1,1 +1,54 @@
+# IDE & Editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
+# OS Generated Files
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editor Temporary Files
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+
+# PHP Temporary Files
+*.tmp
+*.cache
+
+# Environment & Configuration
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Temporary Directories
+tmp/
+temp/
+cache/
+
+# PHP Development Tools
+.php_cs.cache
+.php-cs-fixer.cache
+
+# PHPUnit
+/phpunit.xml
+/.phpunit.result.cache
+/coverage/
+
+# Build & Distribution
+/build/
+/dist/
+
+# Security & Credentials
+*.pem
+*.key
+id_rsa*
