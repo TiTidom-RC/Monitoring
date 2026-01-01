@@ -71,50 +71,68 @@
 		<span class="monitor-name-left">
 			<span class="cmd" id="iconSSH#id#"></span>
 			<script>
-				if ('#cnx_ssh#' == 'OK') {
-					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;" ></i>';
+			(() => {
+				'use strict'
+				const el = document.getElementById('iconSSH#id#')
+				if (!el) return
+				
+				if ('#cnx_ssh#' === 'OK') {
+					el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;" ></i>'
+				} else if ('#cnx_ssh#' === 'KO') {
+					el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
 				}
-				if ('#cnx_ssh#' == 'KO') {
-					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>';
-				}
+			})()
 			</script>
 			<span class="cmd" id="iconCron#id#"></span>
 			<script>
-				if ('#cron_status#' == '1') {
-					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
-					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
-					}
+			(() => {
+				'use strict'
+				const el = document.getElementById('iconCron#id#')
+				if (!el) return
+				
+				const isCustom = '#cron_status_custom#' === '1'
+				const color = isCustom ? 'var(--al-warning-color)' : (('#cron_status#' === '1') ? 'var(--al-success-color)' : 'var(--al-danger-color)')
+				const customLabel = isCustom ? ' (Custom)' : ' (Default)'
+				
+				if ('#cron_status#' === '1') {
+					el.innerHTML = `<i title="Cron ON${customLabel}" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
+				} else if ('#cron_status#' === '0') {
+					el.innerHTML = `<i title="Cron OFF${customLabel}" class="cmd fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
 				}
-				if ('#cron_status#' == '0') {
-					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="cmd fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
-					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="cmd fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
-					}
-				}
+			})()
 			</script>
 			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="fas fa-redo"></i>
 			</span>
 			<script>
-				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')?.addEventListener('click', function () {
-					if (confirm("Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?")) {
-						jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
+			(() => {
+				'use strict'
+				const btn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
+				if (!btn) return
+				
+				btn.addEventListener('click', () => {
+					if (confirm("Etes-vous sûr de vouloir redémarrer l'\u00e9quipement #name# ?")) {
+						jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
 					}
-				});
+				})
+			})()
 			</script>
 			<span class="cmd action poweroff cursor" title="Eteindre l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
 				<i class="fas fa-power-off"></i>
-				<script>
-					document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')?.addEventListener('click', function () {
-						if (confirm("Etes-vous sûr de vouloir éteindre l\'équipement #name# ?")) {
-							jeedom.cmd.execute({ id: '#cmd_poweroff_id#' });
-						}
-					});
-				</script>
 			</span>
+			<script>
+			(() => {
+				'use strict'
+				const btn = document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')
+				if (!btn) return
+				
+				btn.addEventListener('click', () => {
+					if (confirm("Etes-vous sûr de vouloir éteindre l'\u00e9quipement #name# ?")) {
+						jeedom.cmd.execute({ id: '#cmd_poweroff_id#' })
+					}
+				})
+			})()
+			</script>
 		</span>
 		<span class="monitor-name-center">
 			<span class="widget-name">
@@ -126,13 +144,16 @@
 				<i class="fas fa-sync"></i>
 			</span>
 			<script>
-				if ('#refresh_id#' != '') {
-					document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.addEventListener('click', function() {
+			(() => {
+				'use strict'
+				if ('#refresh_id#' !== '') {
+					document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.addEventListener('click', () => {
 						jeedom.cmd.execute({ id: '#refresh_id#' })
 					})
 				} else {
 					document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.remove()
 				}
+			})()
 			</script>
 		</span>
 	</span>
@@ -146,106 +167,137 @@
 			<span id="uptime#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('uptime#id#').innerHTML = '<span>#uptime#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			const el = document.getElementById('uptime#id#')
+			if (el) el.innerHTML = '<span>#uptime#</span>'
+		})()
 		</script>
 		<div class="tooltips" style="display: #load_avg_display#;">
 			<span title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
 			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#load_avg_1mn#' === '') {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#load_avg_1mn#') < parseFloat('#load_avg_1mn_colorlow#')) {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_1mn#</span>';
-				} else if ((parseFloat('#load_avg_1mn#') >= parseFloat('#load_avg_1mn_colorlow#')) && (parseFloat('#load_avg_1mn#') <= parseFloat('#load_avg_1mn_colorhigh#'))) {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_1mn#</span>';
-				} else if ((parseFloat('#load_avg_1mn#') > parseFloat('#load_avg_1mn_colorhigh#')) && '#load_avg_1mn_colorhigh#' !== '') {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_1mn#</span>';
-				} else {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span class="state">#load_avg_1mn#</span>';
-				}
-				if ('#load_avg_5mn#' === '') {
-					document.getElementById('load_avg_5mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#load_avg_5mn#') < parseFloat('#load_avg_5mn_colorlow#')) {
-					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_5mn#</span>';
-				} else if ((parseFloat('#load_avg_5mn#') >= parseFloat('#load_avg_5mn_colorlow#')) && (parseFloat('#load_avg_5mn#') <= parseFloat('#load_avg_5mn_colorhigh#'))) {
-					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_5mn#</span>';
-				} else if ((parseFloat('#load_avg_5mn#') > parseFloat('#load_avg_5mn_colorhigh#')) && '#load_avg_5mn_colorhigh#' !== '') {
-					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_5mn#</span>';
-				} else {
-					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span class="state">#load_avg_5mn#</span>';
-				}
-				if ('#load_avg_15mn#' === '') {
-					document.getElementById('load_avg_15mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#load_avg_15mn#') < parseFloat('#load_avg_15mn_colorlow#')) {
-					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-success-color) !important;">#load_avg_15mn#</span>';
-				} else if ((parseFloat('#load_avg_15mn#') >= parseFloat('#load_avg_15mn_colorlow#')) && (parseFloat('#load_avg_15mn#') <= parseFloat('#load_avg_15mn_colorhigh#'))) {
-					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-warning-color) !important;">#load_avg_15mn#</span>';
-				} else if ((parseFloat('#load_avg_15mn#') > parseFloat('#load_avg_15mn_colorhigh#')) && '#load_avg_15mn_colorhigh#' !== '') {
-					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state" style="color: var(--al-danger-color) !important;">#load_avg_15mn#</span>';
-				} else {
-					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span class="state">#load_avg_15mn#</span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const buildThresholdHTML = (value, low, high, prefix) => {
+				if (value === '') return '<span></span>'
+				
+				const val = parseFloat(value)
+				const lowNum = parseFloat(low)
+				const highNum = parseFloat(high)
+				
+				let color = ''
+				// Normal thresholds: lower = green, higher = red
+				if (val < lowNum) color = ' style="color: var(--al-success-color) !important;"'
+				else if (val >= lowNum && val <= highNum) color = ' style="color: var(--al-warning-color) !important;"'
+				else if (val > highNum && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+				
+				return `${prefix}<span class="state"${color}>${value}</span>`
 			}
+			
+			const el1mn = document.getElementById('load_avg_1mn#id#')
+			if (el1mn) el1mn.innerHTML = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
+			
+			const el5mn = document.getElementById('load_avg_5mn#id#')
+			if (el5mn) el5mn.innerHTML = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
+			
+			const el15mn = document.getElementById('load_avg_15mn#id#')
+			if (el15mn) el15mn.innerHTML = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
+		})()
 		</script>
 		<div class="tooltips" style="display: #memory_display#;">
 			<span title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
 			<span id="memory_available_percent#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#memory_available_percent#' === '') {
-					document.getElementById('memory_available_percent#id#').innerHTML = '<span>#memory#</span>';
-				} else if ((parseFloat('#memory_available_percent#') > parseFloat('#memory_available_percent_colorhigh#')) && '#memory_available_percent_colorhigh#' !== '') {
-					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-success-color) !important;">#memory_available_percent#</span><span>%</span>)';
-				} else if ((parseFloat('#memory_available_percent#') >= parseFloat('#memory_available_percent_colorlow#')) && (parseFloat('#memory_available_percent#') <= parseFloat('#memory_available_percent_colorhigh#'))) {
-					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-warning-color) !important;">#memory_available_percent#</span><span>%</span>)';
-				} else if (parseFloat('#memory_available_percent#') < parseFloat('#memory_available_percent_colorlow#')) {
-					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state" style="color: var(--al-danger-color) !important;">#memory_available_percent#</span><span>%</span>)';
-				} else {
-					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span class="state">#memory_available_percent#</span><span>%</span>)';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('memory_available_percent#id#')
+			if (!el) return
+			
+			const value = '#memory_available_percent#'
+			if (value === '') {
+				el.innerHTML = '<span>#memory#</span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#memory_available_percent_colorlow#')
+			const high = parseFloat('#memory_available_percent_colorhigh#')
+			
+			let color = ''
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#memory# (<span class="state"${color}>${value}</span><span>%</span>)`
+		})()
 		</script>
 		<div class="tooltips" style="display: #swap_display#;">
 			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
 			<span id="swap_free_percent#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#swap_free_percent#' === '') {
-					document.getElementById('swap_free_percent#id#').innerHTML = '<span>#swap#</span>';
-				} else if ((parseFloat('#swap_free_percent#') > parseFloat('#swap_free_percent_colorhigh#')) && '#swap_free_percent_colorhigh#' !== '') {
-					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-success-color) !important;">#swap_free_percent#</span><span>%</span>)';
-				} else if ((parseFloat('#swap_free_percent#') >= parseFloat('#swap_free_percent_colorlow#')) && (parseFloat('#swap_free_percent#') <= parseFloat('#swap_free_percentc_colorhigh#'))) {
-					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-warning-color) !important;">#swap_free_percent#</span><span>%</span>)';
-				} else if (parseFloat('#swap_free_percent#') < parseFloat('#swap_free_percent_colorlow#')) {
-					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state" style="color: var(--al-danger-color) !important;">#swap_free_percent#</span><span>%</span>)';
-				} else {
-					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span class="state">#swap_free_percent#</span><span>%</span>)';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('swap_free_percent#id#')
+			if (!el) return
+			
+			const value = '#swap_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span>#swap#</span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#swap_free_percent_colorlow#')
+			const high = parseFloat('#swap_free_percent_colorhigh#')
+			
+			let color = ''
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#swap# (<span class="state"${color}>${value}</span><span>%</span>)`
+		})()
 		</script>
 		<div class="tooltips" style="display: #network_infos_display#;">
 			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
 			<span id="network_infos#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('network_infos#id#').innerHTML = '<span>#network_infos#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('network_infos#id#')
+			if (!el) return
+			
+			el.innerHTML = '<span>#network_infos#</span>'
+		})()
 		</script>
 		<div class="tooltips" style="display: #network_display#;">
 			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
 			<span id="network#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('network#id#')
+			if (!el) return
+			
+			el.innerHTML = '<span>#network#</span>'
+		})()
 		</script>
 		<!-- Cartes réseau supplémentaires -->
 		#multi_network_cards#
@@ -254,220 +306,373 @@
 			<span id="hdd#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#hdd_free_percent#' === '') {
-					document.getElementById('hdd#id#').innerHTML = '<span></span>';
-				} else if ((parseFloat('#hdd_free_percent#') > parseFloat('#hdd_free_percent_colorhigh#')) && '#hdd_free_percent_colorhigh#' !== '') {
-					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-success-color) !important;">#hdd_free_percent#</span><span>%</span>)';
-				} else if ((parseFloat('#hdd_free_percent#') >= parseFloat('#hdd_free_percent_colorlow#')) && (parseFloat('#hdd_free_percent#') <= parseFloat('#hdd_free_percent_colorhigh#'))) {
-					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-warning-color) !important;">#hdd_free_percent#</span><span>%</span>)';
-				} else if (parseFloat('#hdd_free_percent#') < parseFloat('#hdd_free_percent_colorlow#')) {
-					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state" style="color: var(--al-danger-color) !important;">#hdd_free_percent#</span><span>%</span>)';
-				} else {
-					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span class="state">#hdd_free_percent#</span><span>%</span>)';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('hdd#id#')
+			if (!el) return
+			
+			const value = '#hdd_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#hdd_free_percent_colorlow#')
+			const high = parseFloat('#hdd_free_percent_colorhigh#')
+			
+			let color = ''
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#hdd# (<span class="state"${color}>${value}</span><span>%</span>)`
+		})()
 		</script>
 		<div id="syno_hddv2#id#"></div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddv2_display#' === 'block') {
-					document.getElementById('syno_hddv2#id#').innerHTML = '<div id="syno_hddv2#id#" class="tooltips" style="display: #syno_hddv2_display#;"><span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span></div>';
-					if ('#syno_hddv2_free_percent#' === '') {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddv2_free_percent#') > parseFloat('#syno_hddv2_free_percent_colorhigh#')) && '#syno_hddv2_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddv2_free_percent#') >= parseFloat('#syno_hddv2_free_percent_colorlow#')) && (parseFloat('#syno_hddv2_free_percent#') <= parseFloat('#syno_hddv2_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
-					} else if (parseFloat('#syno_hddv2_free_percent#') < parseFloat('#syno_hddv2_free_percent_colorlow#')) {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv2_free_percent#</span><span>%</span>)';
-					} else {
-						document.getElementById('syno_hddv2_free_percent#id#').innerHTML = '#syno_hddv2# (<span class="state">#syno_hddv2_free_percent#</span><span>%</span>)';
-					}
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			if ('#syno_hddv2_display#' !== 'block') return
+			
+			const container = document.getElementById('syno_hddv2#id#')
+			if (!container) return
+			
+			container.className = 'tooltips'
+			container.style.display = '#syno_hddv2_display#'
+			container.innerHTML = '<span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span>'
+			
+			const el = document.getElementById('syno_hddv2_free_percent#id#')
+			if (!el) return
+			
+			const value = '#syno_hddv2_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#syno_hddv2_free_percent_colorlow#')
+			const high = parseFloat('#syno_hddv2_free_percent_colorhigh#')
+			
+			let color = ''
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#syno_hddv2# (<span class="state"${color}>${value}</span><span>%</span>)`
+		})()
 		</script>
 		<div id="syno_hddv3#id#"></div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddv3_display#' === 'block') {
-					document.getElementById('syno_hddv3#id#').innerHTML = '<div id="syno_hddv3#id#" class="tooltips" style="display: #syno_hddv3_display#;"><span title="Syno Volume 3 (% Libre) || Date valeur : #syno_hddv3_value# || Date collecte : #syno_hddv3_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv3_icon#</span> <span id="syno_hddv3_free_percent#id#"></span></div>';
-					if ('#syno_hddv3_free_percent#' === '') {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddv3_free_percent#') > parseFloat('#syno_hddv3_free_percent_colorhigh#')) && '#syno_hddv3_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddv3_free_percent#') >= parseFloat('#syno_hddv3_free_percent_colorlow#')) && (parseFloat('#syno_hddv3_free_percent#') <= parseFloat('#syno_hddv3_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
-					} else if (parseFloat('#syno_hddv3_free_percent#') < parseFloat('#syno_hddv3_free_percent_colorlow#')) {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv3_free_percent#</span><span>%</span>)';
-					} else {
-						document.getElementById('syno_hddv3_free_percent#id#').innerHTML = '#syno_hddv3# (<span class="state">#syno_hddv3_free_percent#</span><span>%</span>)';
-					}
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			if ('#syno_hddv3_display#' !== 'block') return
+			
+			const container = document.getElementById('syno_hddv3#id#')
+			if (!container) return
+			
+			container.className = 'tooltips'
+			container.style.display = '#syno_hddv3_display#'
+			container.innerHTML = '<span title="Syno Volume 3 (% Libre) || Date valeur : #syno_hddv3_value# || Date collecte : #syno_hddv3_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv3_icon#</span> <span id="syno_hddv3_free_percent#id#"></span>'
+			
+			const el = document.getElementById('syno_hddv3_free_percent#id#')
+			if (!el) return
+			
+			const value = '#syno_hddv3_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#syno_hddv3_free_percent_colorlow#')
+			const high = parseFloat('#syno_hddv3_free_percent_colorhigh#')
+			
+			let color = ''
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#syno_hddv3# (<span class="state"${color}>${value}</span><span>%</span>)`
+		})()
 		</script>
 		<div id="syno_hddv4#id#"></div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddv4_display#' === 'block') {
-					document.getElementById('syno_hddv4#id#').innerHTML = '<div id="syno_hddv4#id#" class="tooltips" style="display: #syno_hddv4_display#;"><span title="Syno Volume 4 (% Libre) || Date valeur : #syno_hddv4_value# || Date collecte : #syno_hddv4_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv4_icon#</span> <span id="syno_hddv4_free_percent#id#"></span></div>';
-					if ('#syno_hddv4_free_percent#' === '') {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddv4_free_percent#') > parseFloat('#syno_hddv4_free_percent_colorhigh#')) && '#syno_hddv4_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddv4_free_percent#') >= parseFloat('#syno_hddv4_free_percent_colorlow#')) && (parseFloat('#syno_hddv4_free_percent#') <= parseFloat('#syno_hddv4_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
-					} else if (parseFloat('#syno_hddv4_free_percent#') < parseFloat('#syno_hddv4_free_percent_colorlow#')) {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddv4_free_percent#</span><span>%</span>)';
-					} else {
-						document.getElementById('syno_hddv4_free_percent#id#').innerHTML = '#syno_hddv4# (<span class="state">#syno_hddv4_free_percent#</span><span>%</span>)';
-					}
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			if ('#syno_hddv4_display#' !== 'block') return
+			
+			const container = document.getElementById('syno_hddv4#id#')
+			if (!container) return
+			
+			container.className = 'tooltips'
+			container.style.display = '#syno_hddv4_display#'
+			container.innerHTML = '<span title="Syno Volume 4 (% Libre) || Date valeur : #syno_hddv4_value# || Date collecte : #syno_hddv4_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv4_icon#</span> <span id="syno_hddv4_free_percent#id#"></span>'
+			
+			const el = document.getElementById('syno_hddv4_free_percent#id#')
+			if (!el) return
+			
+			const value = '#syno_hddv4_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#syno_hddv4_free_percent_colorlow#')
+			const high = parseFloat('#syno_hddv4_free_percent_colorhigh#')
+			
+			let color = ''
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#syno_hddv4# (<span class="state"${color}>${value}</span><span>%</span>)`
+		})()
 		</script>
 		<div id="syno_hddusb#id#"></div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddusb_display#' === 'block') {
-					document.getElementById('syno_hddusb#id#').innerHTML = '<div id="syno_hddusb#id#" class="tooltips" style="display: #syno_hddusb_display#;"><span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span></div>';
-					if ('#syno_hddusb_free_percent#' === '') {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddusb_free_percent#') > parseFloat('#syno_hddusb_free_percent_colorhigh#')) && '#syno_hddusb_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddusb_free_percent#') >= parseFloat('#syno_hddusb_free_percent_colorlow#')) && (parseFloat('#syno_hddusb_free_percent#') <= parseFloat('#syno_hddusb_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
-					} else if (parseFloat('#syno_hddusb_free_percent#') < parseFloat('#syno_hddusb_free_percent_colorlow#')) {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddusb_free_percent#</span><span>%</span>)';
-					} else {
-						document.getElementById('syno_hddusb_free_percent#id#').innerHTML = '#syno_hddusb# (<span class="state">#syno_hddusb_free_percent#</span><span>%</span>)';
-					}
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			if ('#syno_hddusb_display#' !== 'block') return
+			
+			const container = document.getElementById('syno_hddusb#id#')
+			if (!container) return
+			
+			container.className = 'tooltips'
+			container.style.display = '#syno_hddusb_display#'
+			container.innerHTML = '<span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span>'
+			
+			const el = document.getElementById('syno_hddusb_free_percent#id#')
+			if (!el) return
+			
+			const value = '#syno_hddusb_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#syno_hddusb_free_percent_colorlow#')
+			const high = parseFloat('#syno_hddusb_free_percent_colorhigh#')
+			
+			let color = ''
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#syno_hddusb# (<span class="state"${color}>${value}</span><span>%</span>)`
+		})()
 		</script>
 		<div id="syno_hddesata#id#"></div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#syno_hddesata_display#' === 'block') {
-					document.getElementById('syno_hddesata#id#').innerHTML = '<div id="syno_hddesata#id#" class="tooltips" style="display: #syno_hddesata_display#;"><span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span></div>';
-					if ('#syno_hddesata_free_percent#' === '') {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '<span></span>';
-					} else if ((parseFloat('#syno_hddesata_free_percent#') > parseFloat('#syno_hddesata_free_percent_colorhigh#')) && '#syno_hddesata_free_percent_colorhigh#' !== '') {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span class="state" style="color: var(--al-success-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
-					} else if ((parseFloat('#syno_hddesata_free_percent#') >= parseFloat('#syno_hddesata_free_percent_colorlow#')) && (parseFloat('#syno_hddesata_free_percent#') <= parseFloat('#syno_hddesata_free_percent_colorhigh#'))) {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span class="state" style="color: var(--al-warning-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
-					} else if (parseFloat('#syno_hddesata_free_percent#') < parseFloat('#syno_hddesata_free_percent_colorlow#')) {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span class="state" style="color: var(--al-danger-color) !important;">#syno_hddesata_free_percent#</span><span>%</span>)';
-					} else {
-						document.getElementById('syno_hddesata_free_percent#id#').innerHTML = '#syno_hddesata# (<span class="state">#syno_hddesata_free_percent#</span><span>%</span>)';
-					}
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			if ('#syno_hddesata_display#' !== 'block') return
+			
+			const container = document.getElementById('syno_hddesata#id#')
+			if (!container) return
+			
+			container.className = 'tooltips'
+			container.style.display = '#syno_hddesata_display#'
+			container.innerHTML = '<span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span>'
+			
+			const el = document.getElementById('syno_hddesata_free_percent#id#')
+			if (!el) return
+			
+			const value = '#syno_hddesata_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#syno_hddesata_free_percent_colorlow#')
+			const high = parseFloat('#syno_hddesata_free_percent_colorhigh#')
+			
+			let color = ''
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#syno_hddesata# (<span class="state"${color}>${value}</span><span>%</span>)`
+		})()
 		</script>
 		<div class="tooltips" style="display: #cpu_display#;">
 			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' === 'block') {
-					document.getElementById('cpu#id#').innerHTML = '<span>#cpu# </span>';
-					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
-						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state" style="color: var(--al-success-color) !important;">#cpu_temp#</span><span>°C</span>)';
-					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temp_colorlow#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temp_colorhigh#'))) {
-						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state" style="color: var(--al-warning-color) !important;">#cpu_temp#</span><span>°C</span>)';
-					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temp_colorhigh#')) && '#cpu_temp_colorhigh#' !== '') {
-						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state" style="color: var(--al-danger-color) !important;">#cpu_temp#</span><span>°C</span>)';
-					} else {
-						document.getElementById('cpu_temp#id#').innerHTML = ' (<span class="state">#cpu_temp#</span><span>°C</span>)';
-					}
-				} else {
-					document.getElementById('cpu#id#').innerHTML = '<span>#cpu#</span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const cpuEl = document.getElementById('cpu#id#')
+			const tempEl = document.getElementById('cpu_temp#id#')
+			if (!cpuEl || !tempEl) return
+			
+			const temp = '#cpu_temp#'
+			if (temp !== '' && '#cpu_temp_display#' === 'block') {
+				cpuEl.innerHTML = '<span>#cpu# </span>'
+				
+				const tempVal = parseFloat(temp)
+				const low = parseFloat('#cpu_temp_colorlow#')
+				const high = parseFloat('#cpu_temp_colorhigh#')
+				
+				let color = ''
+				if (tempVal < low) color = ' style="color: var(--al-success-color) !important;"'
+				else if (tempVal >= low && tempVal <= high) color = ' style="color: var(--al-warning-color) !important;"'
+				else if (tempVal > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+				
+				tempEl.innerHTML = ` (<span class="state"${color}>${temp}</span><span>°C</span>)`
+			} else {
+				cpuEl.innerHTML = '<span>#cpu#</span>'
 			}
+		})()
 		</script>
 		<div class="tooltips" style="display: #perso1_display#;">
 			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso1#' !== '') {
-					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso1#</span><span>#perso1_unite#</span>';
-					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#perso1_unite#</span>';
-					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && '#perso1_colorhigh#' !== '') {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#perso1_unite#</span>';
-					} else {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span>#perso1#</span><span>#perso1_unite#</span>';						
-					}
-				} else {
-					document.getElementById('perso1_unite#id#').innerHTML = '<span></span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('perso1_unite#id#')
+			if (!el) return
+			
+			const value = '#perso1#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#perso1_colorlow#')
+			const high = parseFloat('#perso1_colorhigh#')
+			
+			let color = ''
+			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			
+			if (color) {
+				el.innerHTML = `<span class="state"${color}>${value}</span><span>#perso1_unite#</span>`
+			} else {
+				el.innerHTML = '<span>' + value + '</span><span>#perso1_unite#</span>'
+			}
+		})()
 		</script>
 		<div class="tooltips" style="display: #perso2_display#;">
 			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso2#' !== '') {
-					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso2#</span><span>#perso2_unite#</span>';
-					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso2#</span><span>#perso2_unite#</span>';
-					} else if (parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#') && '#perso2_colorhigh#' !== '') {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso2#</span><span>#perso2_unite#</span>';
-					} else {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span>#perso2#</span><span>#perso2_unite#</span>';
-					}
-				} else {
-					document.getElementById('perso2_unite#id#').innerHTML = '<span></span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('perso2_unite#id#')
+			if (!el) return
+			
+			const value = '#perso2#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#perso2_colorlow#')
+			const high = parseFloat('#perso2_colorhigh#')
+			
+			let color = ''
+			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			
+			if (color) {
+				el.innerHTML = `<span class="state"${color}>${value}</span><span>#perso2_unite#</span>`
+			} else {
+				el.innerHTML = '<span>' + value + '</span><span>#perso2_unite#</span>'
+			}
+		})()
 		</script>
 		<div class="tooltips" style="display: #perso3_display#;">
 			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
 			<span id="perso3_unite#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso3#' !== '') {
-					if (parseFloat('#perso3#') < parseFloat('#perso3_colorlow#')) {
-						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
-					} else if ((parseFloat('#perso3#') >= parseFloat('#perso3_colorlow#')) && (parseFloat('#perso3#') <= parseFloat('#perso3_colorhigh#'))) {
-						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
-					} else if ((parseFloat('#perso3#') > parseFloat('#perso3_colorhigh#')) && '#perso3_colorhigh#' !== '') {
-						document.getElementById('perso3_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso3#</span><span>#perso3_unite#</span>';
-					} else {
-						document.getElementById('perso3_unite#id#').innerHTML = '<span>#perso3#</span><span>#perso3_unite#</span>';						
-					}
-				} else {
-					document.getElementById('perso3_unite#id#').innerHTML = '<span></span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('perso3_unite#id#')
+			if (!el) return
+			
+			const value = '#perso3#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#perso3_colorlow#')
+			const high = parseFloat('#perso3_colorhigh#')
+			
+			let color = ''
+			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			
+			if (color) {
+				el.innerHTML = `<span class="state"${color}>${value}</span><span>#perso3_unite#</span>`
+			} else {
+				el.innerHTML = '<span>' + value + '</span><span>#perso3_unite#</span>'
+			}
+		})()
 		</script>
 		<div class="tooltips" style="display: #perso4_display#;">
 			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
 			<span id="perso4_unite#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso4#' !== '') {
-					if (parseFloat('#perso4#') < parseFloat('#perso4_colorlow#')) {
-						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-success-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
-					} else if ((parseFloat('#perso4#') >= parseFloat('#perso4_colorlow#')) && (parseFloat('#perso4#') <= parseFloat('#perso4_colorhigh#'))) {
-						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-warning-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
-					} else if ((parseFloat('#perso4#') > parseFloat('#perso4_colorhigh#')) && '#perso4_colorhigh#' !== '') {
-						document.getElementById('perso4_unite#id#').innerHTML = '<span class="state" style="color: var(--al-danger-color) !important;">#perso4#</span><span>#perso4_unite#</span>';
-					} else {
-						document.getElementById('perso4_unite#id#').innerHTML = '<span>#perso4#</span><span>#perso4_unite#</span>';						
-					}
-				} else {
-					document.getElementById('perso4_unite#id#').innerHTML = '<span></span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('perso4_unite#id#')
+			if (!el) return
+			
+			const value = '#perso4#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#perso4_colorlow#')
+			const high = parseFloat('#perso4_colorhigh#')
+			
+			let color = ''
+			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			
+			if (color) {
+				el.innerHTML = `<span class="state"${color}>${value}</span><span>#perso4_unite#</span>`
+			} else {
+				el.innerHTML = '<span>' + value + '</span><span>#perso4_unite#</span>'
+			}
+		})()
 		</script>
 	</div>
 	#divGraphInfo#

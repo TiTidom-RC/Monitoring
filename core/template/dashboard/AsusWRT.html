@@ -75,64 +75,71 @@
 		<div class="monitor-name-left">
 			<span id="iconSSH#id#" class="cmd monitor-btn"></span>
 			<script>
-				if ('#cnx_ssh#' == 'OK') {
-					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH OK" class="cmd monitor-btn fas fa-check tooltips" style="color: var(--al-success-color) !important;"></i>';
+			(() => {
+				'use strict'
+				const el = document.getElementById('iconSSH#id#')
+				if (!el) return
+				
+				if ('#cnx_ssh#' === 'OK') {
+					el.innerHTML = '<i title="Connexion SSH OK" class="cmd monitor-btn fas fa-check tooltips" style="color: var(--al-success-color) !important;"></i>'
+				} else if ('#cnx_ssh#' === 'KO') {
+					el.innerHTML = '<i title="Connexion SSH KO" class="cmd monitor-btn fas fa-times-circle tooltips" style="color: var(--al-danger-color) !important;"></i>'
 				}
-				if ('#cnx_ssh#' == 'KO') {
-					document.getElementById('iconSSH#id#').innerHTML = '<i title="Connexion SSH KO" class="cmd monitor-btn fas fa-times-circle tooltips" style="color: var(--al-danger-color) !important;"></i>';
-				}
+			})()
 			</script>
 			<span id="iconCron#id#" class="cmd monitor-btn"></span>
 			<script>
-				if ('#cron_status#' == '1') {
-					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Custom)" class="cmd monitor-btn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
-					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron ON (Default)" class="cmd monitor-btn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: var(--al-success-color) !important;"></i>';
-					}
+			(() => {
+				'use strict'
+				const el = document.getElementById('iconCron#id#')
+				if (!el) return
+				
+				const isCustom = '#cron_status_custom#' === '1'
+				const color = isCustom ? 'var(--al-warning-color)' : (('#cron_status#' === '1') ? 'var(--al-success-color)' : 'var(--al-danger-color)')
+				const customLabel = isCustom ? ' (Custom)' : ' (Default)'
+				
+				if ('#cron_status#' === '1') {
+					el.innerHTML = `<i title="Cron ON${customLabel}" class="cmd monitor-btn fas fa-play-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
+				} else if ('#cron_status#' === '0') {
+					el.innerHTML = `<i title="Cron OFF${customLabel}" class="cmd monitor-btn fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
 				}
-				if ('#cron_status#' == '0') {
-					if ('#cron_status_custom#' == '1') {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Custom)" class="cmd monitor-btn fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-warning-color) !important;"></i>';
-					} else {
-						document.getElementById('iconCron#id#').innerHTML = '<i title="Cron OFF (Default)" class="cmd monitor-btn fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: var(--al-danger-color) !important;"></i>';
-					}
-				}
+			})()
 			</script>
 			<span id="iconCheckFirmware#id#" class="cmd monitor-btn"></span>
 			<script>
-				if ('#asus_fw_check#' == '1') {
-					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 1" class="cmd monitor-btn fas fa-bell tooltips" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>';
+			(() => {
+				'use strict'
+				const el = document.getElementById('iconCheckFirmware#id#')
+				if (!el) return
+				
+				if ('#asus_fw_check#' === '1') {
+					el.innerHTML = '<i title="Check du Firmware :: 1" class="cmd monitor-btn fas fa-bell tooltips" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>'
+				} else if ('#asus_fw_check#' === '0') {
+					el.innerHTML = '<i title="Check du Firmware :: 0" class="cmd monitor-btn fas fa-bell-slash tooltips" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>'
 				}
-				if ('#asus_fw_check#' == '0') {
-					document.getElementById('iconCheckFirmware#id#').innerHTML = '<i title="Check du Firmware :: 0" class="cmd monitor-btn fas fa-bell-slash tooltips" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>';
-				}
+			})()
 			</script>
 			<span class="cmd action reboot cursor" title="Redémarrer l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="cmd monitor-btn fas fa-redo"></i>
 			</span>
 			<script>
-				document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]').addEventListener('click', function () {
+			(() => {
+				'use strict'
+				const btn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
+				if (!btn) return
+				
+				btn.addEventListener('click', () => {
 					jeeDialog.confirm({
 						title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
 						message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
 						buttons: {
-							confirm: {
-								label: 'Redémarrer',
-								className: 'warning'
-							},
-							cancel: {
-								label: 'Annuler',
-								className: 'info'
-							}
+							confirm: { label: 'Redémarrer', className: 'warning' },
+							cancel: { label: 'Annuler', className: 'info' }
 						},
-						callback: function (result) {
-							if (result) {
-								jeedom.cmd.execute({ id: '#cmd_reboot_id#' });
-							}
-						}
-					});
-				});
+						callback: result => result && jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
+					})
+				})
+			})()
 			</script>
 		</div>
 		<div class="widget-name monitor-name-center">
@@ -145,13 +152,15 @@
 			</span>
 		</div>
 		<script>
-			if ('#refresh_id#' != '') {
-				document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.addEventListener('click', function() {
-					jeedom.cmd.execute({ id: '#refresh_id#' })
-			  	})
+		(() => {
+			'use strict'
+			if ('#refresh_id#' !== '') {
+				const btn = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
+				if (btn) btn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
 			} else {
 				document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.remove()
 			}
+		})()
 		</script>
 	</div>
 	<div class="monitor-cmds">
@@ -164,260 +173,373 @@
 			<span id="uptime#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('uptime#id#').innerHTML = '<span>#uptime#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			const el = document.getElementById('uptime#id#')
+			if (el) el.innerHTML = '<span>#uptime#</span>'
+		})()
 		</script>
 		<div class="tooltips" style="display: #load_avg_display#;">
 			<span title="Charge Système (Load Average)<br><i>Date de valeur : #load_avg_value#<br>Date de collecte : #load_avg_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
 			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#load_avg_1mn#' === '') {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#load_avg_1mn#') < parseFloat('#load_avg_1mn_colorlow#')) {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #load_avg_1mn_minHistory# | Moy : #load_avg_1mn_averageHistory# | Max : #load_avg_1mn_maxHistory#" data-cmd_id="#load_avg_1mn_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#load_avg_1mn##load_avg_1mn_tendance#</span>';
-				} else if ((parseFloat('#load_avg_1mn#') >= parseFloat('#load_avg_1mn_colorlow#')) && (parseFloat('#load_avg_1mn#') <= parseFloat('#load_avg_1mn_colorhigh#'))) {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #load_avg_1mn_minHistory# | Moy : #load_avg_1mn_averageHistory# | Max : #load_avg_1mn_maxHistory#" data-cmd_id="#load_avg_1mn_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#load_avg_1mn##load_avg_1mn_tendance#</span>';
-				} else if ((parseFloat('#load_avg_1mn#') > parseFloat('#load_avg_1mn_colorhigh#')) && '#load_avg_1mn_colorhigh#' !== '') {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #load_avg_1mn_minHistory# | Moy : #load_avg_1mn_averageHistory# | Max : #load_avg_1mn_maxHistory#" data-cmd_id="#load_avg_1mn_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#load_avg_1mn##load_avg_1mn_tendance#</span>';
-				} else {
-					document.getElementById('load_avg_1mn#id#').innerHTML = '1 min : <span title="Stats : Charge Système (1min)<br>Min: #load_avg_1mn_minHistory# | Moy : #load_avg_1mn_averageHistory# | Max : #load_avg_1mn_maxHistory#" data-cmd_id="#load_avg_1mn_id#" class="value history cursor tooltips">#load_avg_1mn##load_avg_1mn_tendance#</span>';
-				}
-
-				if ('#load_avg_5mn#' === '') {
-					document.getElementById('load_avg_5mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#load_avg_5mn#') < parseFloat('#load_avg_5mn_colorlow#')) {
-					
-					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #load_avg_5mn_minHistory# | Moy : #load_avg_5mn_averageHistory# | Max : #load_avg_5mn_maxHistory#" data-cmd_id="#load_avg_5mn_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#load_avg_5mn##load_avg_5mn_tendance#</span>';
-				} else if ((parseFloat('#load_avg_5mn#') >= parseFloat('#load_avg_5mn_colorlow#')) && (parseFloat('#load_avg_5mn#') <= parseFloat('#load_avg_5mn_colorhigh#'))) {
-					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #load_avg_5mn_minHistory# | Moy : #load_avg_5mn_averageHistory# | Max : #load_avg_5mn_maxHistory#" data-cmd_id="#load_avg_5mn_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#load_avg_5mn##load_avg_5mn_tendance#</span>';
-				} else if ((parseFloat('#load_avg_5mn#') > parseFloat('#load_avg_5mn_colorhigh#')) && '#load_avg_5mn_colorhigh#' !== '') {
-					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #load_avg_5mn_minHistory# | Moy : #load_avg_5mn_averageHistory# | Max : #load_avg_5mn_maxHistory#" data-cmd_id="#load_avg_5mn_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#load_avg_5mn##load_avg_5mn_tendance#</span>';
-				} else {
-					document.getElementById('load_avg_5mn#id#').innerHTML = ' - 5 min : <span title="Stats : Charge Système (5min)<br>Min: #load_avg_5mn_minHistory# | Moy : #load_avg_5mn_averageHistory# | Max : #load_avg_5mn_maxHistory#" data-cmd_id="#load_avg_5mn_id#" class="value history cursor tooltips">#load_avg_5mn# #load_avg_5mn_tendance#</span>';
-				}
-				if ('#load_avg_15mn#' === '') {
-					document.getElementById('load_avg_15mn#id#').innerHTML = '<span></span>';
-				} else if (parseFloat('#load_avg_15mn#') < parseFloat('#load_avg_15mn_colorlow#')) {
-					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #load_avg_15mn_minHistory# | Moy : #load_avg_15mn_averageHistory# | Max : #load_avg_15mn_maxHistory#" data-cmd_id="#load_avg_15mn_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#load_avg_15mn##load_avg_15mn_tendance#</span>';
-				} else if ((parseFloat('#load_avg_15mn#') >= parseFloat('#load_avg_15mn_colorlow#')) && (parseFloat('#load_avg_15mn#') <= parseFloat('#load_avg_15mn_colorhigh#'))) {
-					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #load_avg_15mn_minHistory# | Moy : #load_avg_15mn_averageHistory# | Max : #load_avg_15mn_maxHistory#" data-cmd_id="#load_avg_15mn_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#load_avg_15mn##load_avg_15mn_tendance#</span>';
-				} else if ((parseFloat('#load_avg_15mn#') > parseFloat('#load_avg_15mn_colorhigh#')) && '#load_avg_15mn_colorhigh#' !== '') {
-					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #load_avg_15mn_minHistory# | Moy : #load_avg_15mn_averageHistory# | Max : #load_avg_15mn_maxHistory#" data-cmd_id="#load_avg_15mn_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#load_avg_15mn##load_avg_15mn_tendance#</span>';
-				} else {
-					document.getElementById('load_avg_15mn#id#').innerHTML = ' - 15 min : <span title="Stats : Charge Système (15min)<br>Min: #load_avg_15mn_minHistory# | Moy : #load_avg_15mn_averageHistory# | Max : #load_avg_15mn_maxHistory#" data-cmd_id="#load_avg_15mn_id#" class="value history cursor tooltips">#load_avg_15mn##load_avg_15mn_tendance#</span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const buildThresholdHTML = (label, value, low, high, cmdId, stats, tendance, prefix = '') => {
+				if (value === '') return '<span></span>'
+				
+				const val = parseFloat(value)
+				const lowNum = parseFloat(low)
+				const highNum = parseFloat(high)
+				const title = `Stats : ${stats}<br>Min: #${label}_minHistory# | Moy : #${label}_averageHistory# | Max : #${label}_maxHistory#`
+				
+				let color = ''
+				// Normal thresholds: lower = green, higher = red
+				if (val < lowNum) color = ' style="color: var(--al-success-color) !important;"'
+				else if (val >= lowNum && val <= highNum) color = ' style="color: var(--al-warning-color) !important;"'
+				else if (val > highNum && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+				
+				return `${prefix}<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}${tendance}</span>`
 			}
+			
+			const el1mn = document.getElementById('load_avg_1mn#id#')
+			if (el1mn) {
+				el1mn.innerHTML = buildThresholdHTML('load_avg_1mn', '#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '#load_avg_1mn_id#', 'Charge Système (1min)', '#load_avg_1mn_tendance#', '1 min : ')
+			}
+			
+			const el5mn = document.getElementById('load_avg_5mn#id#')
+			if (el5mn) {
+				el5mn.innerHTML = buildThresholdHTML('load_avg_5mn', '#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', '#load_avg_5mn_id#', 'Charge Système (5min)', '#load_avg_5mn_tendance#', ' - 5 min : ')
+			}
+			
+			const el15mn = document.getElementById('load_avg_15mn#id#')
+			if (el15mn) {
+				el15mn.innerHTML = buildThresholdHTML('load_avg_15mn', '#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', '#load_avg_15mn_id#', 'Charge Système (15min)', '#load_avg_15mn_tendance#', ' - 15 min : ')
+			}
+		})()
 		</script>
 		<div class="tooltips" style="display: #memory_display#;">
 			<span title="Mémoire Vive (% Disponible)<br><i>Date de valeur : #memory_value#<br>Date de collecte : #memory_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
 			<span id="memory_available_percent#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#memory_available_percent#' === '') {
-					document.getElementById('memory_available_percent#id#').innerHTML = '<span>#memory#</span>';
-				} else if ((parseFloat('#memory_available_percent#') > parseFloat('#memory_available_percent_colorhigh#')) && '#memory_available_percent_colorhigh#' !== '') {
-					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#memory_available_percent#</span><span>%#memory_available_percent_tendance#</span>)';
-				} else if ((parseFloat('#memory_available_percent#') >= parseFloat('#memory_available_percent_colorlow#')) && (parseFloat('#memory_available_percent#') <= parseFloat('#memory_available_percent_colorhigh#'))) {
-					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#memory_available_percent#</span><span>%#memory_available_percent_tendance#</span>)';
-				} else if (parseFloat('#memory_available_percent#') < parseFloat('#memory_available_percent_colorlow#')) {
-					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#memory_available_percent#</span><span>%#memory_available_percent_tendance#</span>)';
-				} else {
-					document.getElementById('memory_available_percent#id#').innerHTML = '#memory# (<span title="Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips">#memory_available_percent#</span><span>%#memory_available_percent_tendance#</span>)';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('memory_available_percent#id#')
+			if (!el) return
+			
+			const value = '#memory_available_percent#'
+			if (value === '') {
+				el.innerHTML = '<span>#memory#</span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#memory_available_percent_colorlow#')
+			const high = parseFloat('#memory_available_percent_colorhigh#')
+			const title = 'Stats : Mémoire Vive (% Disponible)<br>Min: #memory_available_percent_minHistory# | Moy : #memory_available_percent_averageHistory# | Max : #memory_available_percent_maxHistory#'
+			
+			let color = ''
+			// Reversed thresholds: higher percentage = more available (green)
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#memory# (<span title="${title}" data-cmd_id="#memory_available_percent_id#" class="value history cursor tooltips"${color}>${value}</span><span>%#memory_available_percent_tendance#</span>)`
+		})()
 		</script>
 		<div class="tooltips" style="display: #swap_display#;">
 			<span title="Mémoire Swap (% Libre)<br><i>Date de valeur : #swap_value#<br>Date de collecte : #swap_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
 			<span id="swap_free_percent#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#swap_free_percent#' === '') {
-					document.getElementById('swap_free_percent#id#').innerHTML = '<span></span>';
-				} else if ((parseFloat('#swap_free_percent#') > parseFloat('#swap_free_percent_colorhigh#')) && '#swap_free_percent_colorhigh#' !== '') {
-					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#swap_free_percent#</span><span>%#swap_free_percent_tendance#</span>)';
-				} else if ((parseFloat('#swap_free_percent#') >= parseFloat('#swap_free_percent_colorlow#')) && (parseFloat('#swap_free_percent#') <= parseFloat('#swap_free_percent_colorhigh#'))) {
-					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#swap_free_percent#</span><span>%#swap_free_percent_tendance#</span>)';
-				} else if (parseFloat('#swap_free_percent#') < parseFloat('#swap_free_percent_colorlow#')) {
-					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#swap_free_percent#</span><span>%#swap_free_percent_tendance#</span>)';
-				} else {
-					document.getElementById('swap_free_percent#id#').innerHTML = '#swap# (<span title="Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips">#swap_free_percent#</span><span>%#swap_free_percent_tendance#</span>)';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('swap_free_percent#id#')
+			if (!el) return
+			
+			const value = '#swap_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#swap_free_percent_colorlow#')
+			const high = parseFloat('#swap_free_percent_colorhigh#')
+			const title = 'Stats : Mémoire Swap (% Libre)<br>Min: #swap_free_percent_minHistory# | Moy : #swap_free_percent_averageHistory# | Max : #swap_free_percent_maxHistory#'
+			
+			let color = ''
+			// Reversed thresholds: higher percentage = more free (green)
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#swap# (<span title="${title}" data-cmd_id="#swap_free_percent_id#" class="value history cursor tooltips"${color}>${value}</span><span>%#swap_free_percent_tendance#</span>)`
+		})()
 		</script>
 		<div class="tooltips" style="display: #network_infos_display#;">
 			<span title="Infos Réseau<br><i>Date de valeur : #network_infos_value#<br>Date de collecte : #network_infos_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
 			<span id="network_infos#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('network_infos#id#').innerHTML = '<span>#network_infos#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			const el = document.getElementById('network_infos#id#')
+			if (el) el.innerHTML = '<span>#network_infos#</span>'
+		})()
 		</script>
 		<div class="tooltips" style="display: #network_display#;">
 			<span title="Trafic Réseau (#network_name# / #network_ip#)<br><i>Date de valeur : #network_value#<br>Date de collecte : #network_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
 			<span id="network#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('network#id#').innerHTML = '<span>#network#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			const el = document.getElementById('network#id#')
+			if (el) el.innerHTML = '<span>#network#</span>'
+		})()
 		</script>
 		<div class="tooltips" style="display: #asus_clients_display#;">
 			<span title="Infos Clients<br><i>Date de valeur : #asus_clients_value#<br>Date de collecte : #asus_clients_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_clients_icon#</span>
 			<span id="asus_clients#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('asus_clients#id#').innerHTML = '<span>#asus_clients#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			const el = document.getElementById('asus_clients#id#')
+			if (el) el.innerHTML = '<span>#asus_clients#</span>'
+		})()
 		</script>
 		<div class="tooltips" style="display: #asus_wan0_ip_display#;">
 			<span title="Infos Internet (WAN)<br><i>Date de valeur : #asus_wan0_ip_value#<br>Date de collecte : #asus_wan0_ip_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_wan0_ip_icon#</span>
 			<span id="asus_wan0_ip#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('asus_wan0_ip#id#').innerHTML = '<span>IP (WAN) : #asus_wan0_ip#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			const el = document.getElementById('asus_wan0_ip#id#')
+			if (el) el.innerHTML = '<span>IP (WAN) : #asus_wan0_ip#</span>'
+		})()
 		</script>
 		<div class="tooltips" style="display: #asus_wifi_temp_display#;">
 			<span title="Infos Températures WiFi<br><i>Date de valeur : #asus_wifi_temp_value#<br>Date de collecte : #asus_wifi_temp_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#asus_wifi_temp_icon#</span>
 			<span id="asus_wifi_temp#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				document.getElementById('asus_wifi_temp#id#').innerHTML = '<span>#asus_wifi_temp#</span>';
-			}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			const el = document.getElementById('asus_wifi_temp#id#')
+			if (el) el.innerHTML = '<span>#asus_wifi_temp#</span>'
+		})()
 		</script>
 		<div class="tooltips" style="display: #hdd_display#;">
 			<span title="Espace Disque (% Libre)<br><i>Date de valeur : #hdd_value#<br>Date de collecte : #hdd_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#hdd_free_percent#' === '') {
-					document.getElementById('hdd#id#').innerHTML = '<span></span>';
-				} else if ((parseFloat('#hdd_free_percent#') > parseFloat('#hdd_free_percent_colorhigh#')) && '#hdd_free_percent_colorhigh#' !== '') {
-					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span title="Stats : Espace Disque (% Libre)<br>Min: #hdd_free_percent_minHistory# | Moy : #hdd_free_percent_averageHistory# | Max : #hdd_free_percent_maxHistory#" data-cmd_id="#hdd_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#hdd_free_percent#</span><span>%#hdd_free_percent_tendance#</span>)';
-				} else if ((parseFloat('#hdd_free_percent#') >= parseFloat('#hdd_free_percent_colorlow#')) && (parseFloat('#hdd_free_percent#') <= parseFloat('#hdd_free_percent_colorhigh#'))) {
-					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span title="Stats : Espace Disque (% Libre)<br>Min: #hdd_free_percent_minHistory# | Moy : #hdd_free_percent_averageHistory# | Max : #hdd_free_percent_maxHistory#" data-cmd_id="#hdd_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#hdd_free_percent#</span><span>%#hdd_free_percent_tendance#</span>)';	
-				} else if (parseFloat('#hdd_free_percent#') < parseFloat('#hdd_free_percent_colorlow#')) {
-					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span title="Stats : Espace Disque (% Libre)<br>Min: #hdd_free_percent_minHistory# | Moy : #hdd_free_percent_averageHistory# | Max : #hdd_free_percent_maxHistory#" data-cmd_id="#hdd_free_percent_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#hdd_free_percent#</span><span>%#hdd_free_percent_tendance#</span>)';
-				} else {
-					document.getElementById('hdd#id#').innerHTML = '#hdd# (<span title="Stats : Espace Disque (% Libre)<br>Min: #hdd_free_percent_minHistory# | Moy : #hdd_free_percent_averageHistory# | Max : #hdd_free_percent_maxHistory#" data-cmd_id="#hdd_free_percent_id#" class="value history cursor tooltips">#hdd_free_percent#</span><span>%#hdd_free_percent_tendance#</span>)';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('hdd#id#')
+			if (!el) return
+			
+			const value = '#hdd_free_percent#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#hdd_free_percent_colorlow#')
+			const high = parseFloat('#hdd_free_percent_colorhigh#')
+			const title = 'Stats : Espace Disque (% Libre)<br>Min: #hdd_free_percent_minHistory# | Moy : #hdd_free_percent_averageHistory# | Max : #hdd_free_percent_maxHistory#'
+			
+			let color = ''
+			// Reversed thresholds: higher percentage = more free (green)
+			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `#hdd# (<span title="${title}" data-cmd_id="#hdd_free_percent_id#" class="value history cursor tooltips"${color}>${value}</span><span>%#hdd_free_percent_tendance#</span>)`
+		})()
 		</script>
 		<div class="tooltips" style="display: #cpu_display#;">
 			<span title="Nombre CPU - Fréquence (Température)<br><i>Date de valeur : #cpu_value#<br>Date de collecte : #cpu_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' === 'block') {
-					document.getElementById('cpu#id#').innerHTML = '<span>#cpu# </span>';
-					if (parseFloat('#cpu_temp#') < parseFloat('#cpu_temp_colorlow#')) {
-						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
-					} else if ((parseFloat('#cpu_temp#') >= parseFloat('#cpu_temp_colorlow#')) && (parseFloat('#cpu_temp#') <= parseFloat('#cpu_temp_colorhigh#'))) {
-						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
-					} else if ((parseFloat('#cpu_temp#') > parseFloat('#cpu_temp_colorhigh#')) && '#cpu_temp_colorhigh#' !== '') {
-						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
-					} else {
-						document.getElementById('cpu_temp#id#').innerHTML = '(<span title="Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips">#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)';
-					}
-				} else {
-					document.getElementById('cpu#id#').innerHTML = '<span>#cpu#</span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const cpuEl = document.getElementById('cpu#id#')
+			if (!cpuEl) return
+			
+			if ('#cpu_temp#' !== '' && '#cpu_temp_display#' === 'block') {
+				cpuEl.innerHTML = '<span>#cpu# </span>'
+				
+				const tempEl = document.getElementById('cpu_temp#id#')
+				if (!tempEl) return
+				
+				const temp = parseFloat('#cpu_temp#')
+				const low = parseFloat('#cpu_temp_colorlow#')
+				const high = parseFloat('#cpu_temp_colorhigh#')
+				const title = 'Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#'
+				
+				let color = ''
+				// Normal thresholds: lower temp = green, higher temp = red
+				if (temp < low) color = ' style="color: var(--al-success-color) !important;"'
+				else if (temp >= low && temp <= high) color = ' style="color: var(--al-warning-color) !important;"'
+				else if (temp > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+				
+				tempEl.innerHTML = `(<span title="${title}" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips"${color}>#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)`
+			} else {
+				cpuEl.innerHTML = '<span>#cpu#</span>'
 			}
+		})()
 		</script>
 		<div class="tooltips" style="display: #perso1_display#;">
 			<span title="#perso1_name#<br><i>Date de valeur : #perso1_value#<br>Date de collecte : #perso1_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso1#' !== '') {
-					if (parseFloat('#perso1#') < parseFloat('#perso1_colorlow#')) {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
-					} else if ((parseFloat('#perso1#') >= parseFloat('#perso1_colorlow#')) && (parseFloat('#perso1#') <= parseFloat('#perso1_colorhigh#'))) {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
-					} else if ((parseFloat('#perso1#') > parseFloat('#perso1_colorhigh#')) && parseFloat('#perso1_colorhigh#') !== '') {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
-					} else {
-						document.getElementById('perso1_unite#id#').innerHTML = '<span title="Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#" data-cmd_id="#perso1_id#" class="value history cursor tooltips">#perso1#</span><span>#perso1_unite##perso1_tendance#</span>';
-					}
-				} else {
-					document.getElementById('perso1_unite#id#').innerHTML = '<span></span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('perso1_unite#id#')
+			if (!el) return
+			
+			const value = '#perso1#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#perso1_colorlow#')
+			const high = parseFloat('#perso1_colorhigh#')
+			const title = 'Stats : #perso1_name#<br>Min: #perso1_minHistory# | Moy : #perso1_averageHistory# | Max : #perso1_maxHistory#'
+			
+			let color = ''
+			// Normal thresholds: lower = green, higher = red
+			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `<span title="${title}" data-cmd_id="#perso1_id#" class="value history cursor tooltips"${color}>${value}</span><span>#perso1_unite##perso1_tendance#</span>`
+		})()
 		</script>
 		<div class="tooltips" style="display: #perso2_display#;">
 			<span title="#perso2_name#<br><i>Date de valeur : #perso2_value#<br>Date de collecte : #perso2_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso2#' !== '') {
-					if (parseFloat('#perso2#') < parseFloat('#perso2_colorlow#')) {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
-					} else if ((parseFloat('#perso2#') >= parseFloat('#perso2_colorlow#')) && (parseFloat('#perso2#') <= parseFloat('#perso2_colorhigh#'))) {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
-					} else if ((parseFloat('#perso2#') > parseFloat('#perso2_colorhigh#')) && parseFloat('#perso2_colorhigh#') !== '') {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
-					} else {
-						document.getElementById('perso2_unite#id#').innerHTML = '<span title="Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#" data-cmd_id="#perso2_id#" class="value history cursor tooltips">#perso2#</span><span>#perso2_unite##perso2_tendance#</span>';
-					}
-				} else {
-					document.getElementById('perso2_unite#id#').innerHTML = '<span></span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('perso2_unite#id#')
+			if (!el) return
+			
+			const value = '#perso2#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#perso2_colorlow#')
+			const high = parseFloat('#perso2_colorhigh#')
+			const title = 'Stats : #perso2_name#<br>Min: #perso2_minHistory# | Moy : #perso2_averageHistory# | Max : #perso2_maxHistory#'
+			
+			let color = ''
+			// Normal thresholds: lower = green, higher = red
+			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `<span title="${title}" data-cmd_id="#perso2_id#" class="value history cursor tooltips"${color}>${value}</span><span>#perso2_unite##perso2_tendance#</span>`
+		})()
 		</script>
 		<div class="tooltips" style="display: #perso3_display#;">
 			<span title="#perso3_name#<br><i>Date de valeur : #perso3_value#<br>Date de collecte : #perso3_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
 			<span id="perso3_unite#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso3#' !== '') {
-					if (parseFloat('#perso3#') < parseFloat('#perso3_colorlow#')) {
-						document.getElementById('perso3_unite#id#').innerHTML = '<span title="Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#" data-cmd_id="#perso3_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso3#</span><span>#perso3_unite##perso3_tendance#</span>';
-					} else if ((parseFloat('#perso3#') >= parseFloat('#perso3_colorlow#')) && (parseFloat('#perso3#') <= parseFloat('#perso3_colorhigh#'))) {
-						document.getElementById('perso3_unite#id#').innerHTML = '<span title="Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#" data-cmd_id="#perso3_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso3#</span><span>#perso3_unite##perso3_tendance#</span>';
-					} else if ((parseFloat('#perso3#') > parseFloat('#perso3_colorhigh#')) && parseFloat('#perso3_colorhigh#') !== '') {
-						document.getElementById('perso3_unite#id#').innerHTML = '<span title="Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#" data-cmd_id="#perso3_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso3#</span><span>#perso3_unite##perso3_tendance#</span>';
-					} else {
-						document.getElementById('perso3_unite#id#').innerHTML = '<span title="Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#" data-cmd_id="#perso3_id#" class="value history cursor tooltips">#perso3#</span><span>#perso3_unite##perso3_tendance#</span>';
-					}
-				} else {
-					document.getElementById('perso3_unite#id#').innerHTML = '<span></span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('perso3_unite#id#')
+			if (!el) return
+			
+			const value = '#perso3#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#perso3_colorlow#')
+			const high = parseFloat('#perso3_colorhigh#')
+			const title = 'Stats : #perso3_name#<br>Min: #perso3_minHistory# | Moy : #perso3_averageHistory# | Max : #perso3_maxHistory#'
+			
+			let color = ''
+			// Normal thresholds: lower = green, higher = red
+			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `<span title="${title}" data-cmd_id="#perso3_id#" class="value history cursor tooltips"${color}>${value}</span><span>#perso3_unite##perso3_tendance#</span>`
+		})()
 		</script>
 		<div class="tooltips" style="display: #perso4_display#;">
 			<span title="#perso4_name#<br><i>Date de valeur : #perso4_value#<br>Date de collecte : #perso4_collect#</i>" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
 			<span id="perso4_unite#id#"></span>
 		</div>
 		<script>
-			if ('#cnx_ssh#' == 'OK' || '#cnx_ssh#' == 'No') {
-				if ('#perso4#' !== '') {
-					if (parseFloat('#perso4#') < parseFloat('#perso4_colorlow#')) {
-						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips" style="color: var(--al-success-color) !important;">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
-					} else if ((parseFloat('#perso4#') >= parseFloat('#perso4_colorlow#')) && (parseFloat('#perso4#') <= parseFloat('#perso4_colorhigh#'))) {
-						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips" style="color: var(--al-warning-color) !important;">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
-					} else if ((parseFloat('#perso4#') > parseFloat('#perso4_colorhigh#')) && parseFloat('#perso4_colorhigh#') !== '') {
-						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips" style="color: var(--al-danger-color) !important;">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
-					} else {	
-						document.getElementById('perso4_unite#id#').innerHTML = '<span title="Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#" data-cmd_id="#perso4_id#" class="value history cursor tooltips">#perso4#</span><span>#perso4_unite##perso4_tendance#</span>';
-					}	
-				} else {
-					document.getElementById('perso4_unite#id#').innerHTML = '<span></span>';
-				}
+		(() => {
+			'use strict'
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('perso4_unite#id#')
+			if (!el) return
+			
+			const value = '#perso4#'
+			if (value === '') {
+				el.innerHTML = '<span></span>'
+				return
 			}
+			
+			const val = parseFloat(value)
+			const low = parseFloat('#perso4_colorlow#')
+			const high = parseFloat('#perso4_colorhigh#')
+			const title = 'Stats : #perso4_name#<br>Min: #perso4_minHistory# | Moy : #perso4_averageHistory# | Max : #perso4_maxHistory#'
+			
+			let color = ''
+			// Normal thresholds: lower = green, higher = red
+			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
+			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
+			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			
+			el.innerHTML = `<span title="${title}" data-cmd_id="#perso4_id#" class="value history cursor tooltips"${color}>${value}</span><span>#perso4_unite##perso4_tendance#</span>`
+		})()
 		</script>
 	</div>
 	#divGraphInfo#
