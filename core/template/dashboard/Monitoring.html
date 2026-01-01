@@ -102,7 +102,7 @@
 				const label = isOn ? 'ON' : 'OFF'
 				const customLabel = isCustom ? 'Custom' : 'Default'
 				const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
-				
+			
 				iconCron.innerHTML = `<i title="Cron ${label} (${customLabel})" class="cmd monitor-btn fas fa-${icon} tooltips" style="display: ${display};color: var(${color}) !important;"></i>`
 			})()
 			</script>
@@ -110,22 +110,22 @@
 				<i class="cmd monitor-btn fas fa-redo"></i>
 			</span>
 			<script>
-			(() => {
-				'use strict'
-				const rebootBtn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
-				rebootBtn?.addEventListener('click', () => {
-					jeeDialog.confirm({
-						title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
-						message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
-						buttons: {
-							confirm: { label: 'Redémarrer', className: 'warning' },
-							cancel: { label: 'Annuler', className: 'info' }
-						},
-						callback: (result) => {
-							if (result) jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
-						}
+				(() => {
+					'use strict'
+					const rebootBtn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
+					rebootBtn?.addEventListener('click', () => {
+						jeeDialog.confirm({
+							title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
+							message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
+							buttons: {
+								confirm: { label: 'Redémarrer', className: 'warning' },
+								cancel: { label: 'Annuler', className: 'info' }
+							},
+							callback: (result) => {
+								if (result) jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
+							}
+						})
 					})
-				})
 			})()
 			</script>
 			<span class="cmd action poweroff cursor" title="Eteindre l'équipement"  data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">

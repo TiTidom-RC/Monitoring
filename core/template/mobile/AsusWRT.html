@@ -94,11 +94,11 @@
 				const isCustom = '#cron_status_custom#' === '1'
 				
 				if (status === '1') {
-					const color = isCustom ? 'var(--al-warning-color)' : 'var(--al-success-color)'
-					const label = isCustom ? 'Cron ON (Custom)' : 'Cron ON (Default)'
-					el.innerHTML = `<i title="${label}" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
-				} else if (status === '0') {
-					const color = isCustom ? 'var(--al-warning-color)' : 'var(--al-danger-color)'
+				const color = isCustom ? 'var(--al-warning-color)' : 'var(--al-success-color)'
+				const label = isCustom ? 'Cron ON (Custom)' : 'Cron ON (Default)'
+				el.innerHTML = `<i title="${label}" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
+			} else if (status === '0') {
+				const color = isCustom ? 'var(--al-warning-color)' : 'var(--al-danger-color)'
 					const label = isCustom ? 'Cron OFF (Custom)' : 'Cron OFF (Default)'
 					el.innerHTML = `<i title="${label}" class="cmd fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
 				}

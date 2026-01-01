@@ -89,10 +89,11 @@
 				'use strict'
 				const el = document.getElementById('iconCron#id#')
 				if (!el) return
-				
-				const isCustom = '#cron_status_custom#' === '1'
-				const color = isCustom ? 'var(--al-warning-color)' : (('#cron_status#' === '1') ? 'var(--al-success-color)' : 'var(--al-danger-color)')
-				const customLabel = isCustom ? ' (Custom)' : ' (Default)'
+			
+			const isCustom = '#cron_status_custom#' === '1'
+			const color = isCustom ? 'var(--al-warning-color)' : (('#cron_status#' === '1') ? 'var(--al-success-color)' : 'var(--al-danger-color)')
+			const customLabel = isCustom ? ' (Custom)' : ' (Default)'
+			
 				
 				if ('#cron_status#' === '1') {
 					el.innerHTML = `<i title="Cron ON${customLabel}" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
