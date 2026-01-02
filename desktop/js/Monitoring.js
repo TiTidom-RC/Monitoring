@@ -15,7 +15,7 @@
  */
 
 // Protect against multiple script loads (Jeedom SPA navigation, cache, etc.)
-(function() {
+(() => {
 'use strict'
 
 // DOM Selectors constants (better minification + no string repetition + immutable)
@@ -426,8 +426,35 @@ function toggleSSHButtons(event) {
   }
 }
 
+// Health button click handler
+const healthButton = document.querySelector('#bt_healthMonitoring')
+if (healthButton) {
+  healthButton.addEventListener('click', function() {
+    jeeDialog.dialog({
+      id: 'md_healthMonitoring',
+      title: '{{Santé des équipements Monitoring}}',
+      width: '95%',
+      height: '90%',
+      top: '5vh',
+      contentUrl: 'index.php?v=d&plugin=Monitoring&modal=health.monitoring',
+      buttons: {
+        close: {
+          label: '{{Fermer}}',
+          className: 'warning',
+          callback: {
+            click: function() {
+              jeeDialog.get('#md_healthMonitoring').destroy()
+            }
+          }
+        }
+      }
+    })
+  })
+}
+
 // Expose functions globally for Jeedom to call them
 window.addCmdToTable = addCmdToTable
 window.printEqLogic = printEqLogic
 
 })() // End of IIFE protection
+

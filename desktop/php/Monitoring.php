@@ -51,6 +51,11 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 				        <br>
 				        <span style="color:var(--txt-color)">{{Configuration}}</span>
 			        </div>
+			        <div class="cursor logoSecondary" id="bt_healthMonitoring">
+				        <i class="fas fa-heartbeat icon_orange"></i>
+				        <br>
+				        <span style="color:var(--txt-color)">{{Santé}}</span>
+			        </div>
                     <div class="cursor pluginAction logoSecondary" data-action="openLocation" data-location="<?= $plugin->getDocumentation() ?>">
 				        <i class="fas fa-book icon_blue"></i>
 				        <br>

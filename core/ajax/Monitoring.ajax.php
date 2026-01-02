@@ -41,6 +41,58 @@ try {
         }
     }
 
+    if (init('action') == 'getHealthData') {
+        $eqLogics = eqLogic::byType('Monitoring');
+        $healthData = array();
+        
+        foreach ($eqLogics as $eqLogic) {
+            $eqData = array(
+                'id' => $eqLogic->getId(),
+                'name' => $eqLogic->getName(),
+                'isEnable' => $eqLogic->getIsEnable(),
+                'isVisible' => $eqLogic->getIsVisible(),
+                'type' => $eqLogic->getConfiguration('localoudistant', 'local'),
+                'sshHostId' => $eqLogic->getConfiguration('SSHHostId', ''),
+                'sshHostName' => '',
+                'commands' => array()
+            );
+            
+            // Get SSH host name if distant
+            if ($eqData['type'] === 'distant' && $eqData['sshHostId'] !== '') {
+                $sshHost = eqLogic::byId($eqData['sshHostId']);
+                if (is_object($sshHost)) {
+                    $eqData['sshHostName'] = $sshHost->getName();
+                }
+            }
+            
+            // Get specific commands values
+            $cmdNames = array(
+                'sshStatus' => 'SSH Status',
+                'cronStatus' => 'Cron Status',
+                'uptime' => 'Uptime',
+                'loadAvg1' => 'Charge Système 1 min',
+                'ip' => 'Adresse IP'
+            );
+            
+            foreach ($cmdNames as $key => $cmdName) {
+                $cmd = $eqLogic->getCmd('info', $cmdName);
+                if (is_object($cmd)) {
+                    $eqData['commands'][$key] = array(
+                        'id' => $cmd->getId(),
+                        'value' => $cmd->execCmd(),
+                        'unit' => $cmd->getUnite()
+                    );
+                } else {
+                    $eqData['commands'][$key] = null;
+                }
+            }
+            
+            $healthData[] = $eqData;
+        }
+        
+        ajax::success($healthData);
+    }
+
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
