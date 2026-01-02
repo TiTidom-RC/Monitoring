@@ -24,12 +24,12 @@ if (!isConnect()) {
 
 <style>
 @keyframes healthCmdUpdate {
-    0% { background-color: rgba(255, 193, 7, 0.4); }
+    0% { background-color: rgba(255, 193, 7, 0.7); }
     100% { background-color: transparent; }
 }
 
 .cmd-updated {
-    animation: healthCmdUpdate 2s ease-out;
+    animation: healthCmdUpdate 4s ease-out;
 }
 
 #table_healthMonitoring .cmd {
