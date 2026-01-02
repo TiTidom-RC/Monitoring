@@ -180,7 +180,7 @@ const updateCheckboxGroup = (checkbox, showElements = [], hideElements = [], unc
   if (checkbox.checked) {
     showElements.forEach(el => el?.seen())
     hideElements.forEach(el => el?.unseen())
-    uncheckElements.forEach(el => el?.value(0))
+    uncheckElements.forEach(el => el?.jeeValue(0))
   } else {
     showElements.forEach(el => el?.unseen())
     hideElements.forEach(el => el?.unseen())
@@ -188,9 +188,9 @@ const updateCheckboxGroup = (checkbox, showElements = [], hideElements = [], unc
 }
 
 // Handlers nommés pour pouvoir les remove/add proprement (spécifiques à chaque équipement)
-const handleSynologyChange = function() {
+const handleSynologyChange = function(event) {
   updateCheckboxGroup(
-    this,
+    event.currentTarget,
     [document.querySelector(SELECTORS.SYNO_CONF)],
     [document.querySelector(SELECTORS.ASUS_CONF)],
     [document.querySelector(SELECTORS.ASUS_CHECKBOX), document.querySelector(SELECTORS.QNAP_CHECKBOX)]
@@ -204,8 +204,8 @@ const handleQnapChange = function(event) {
     const synoConf = document.querySelector(SELECTORS.SYNO_CONF)
     const asusConf = document.querySelector(SELECTORS.ASUS_CONF)
     
-    asusCheckbox?.value(0)
-    synoCheckbox?.value(0)
+    asusCheckbox?.jeeValue(0)
+    synoCheckbox?.jeeValue(0)
     synoConf?.unseen()
     asusConf?.unseen()
   }
