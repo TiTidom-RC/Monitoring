@@ -97,14 +97,14 @@ const displayHealthData = (healthData) => {
         <td style="text-align:center;">${isVisible ? '<i class="fas fa-eye text-success"></i>' : '<i class="fas fa-eye-slash text-muted"></i>'}</td>
         <td style="text-align:center;">${typeLabel}</td>
         <td>${eqLogic.sshHostName || '<span class="text-muted">-</span>'}</td>
-        <td style="text-align:center;"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}" data-cmd-type="ssh" title="${formatTooltip('SSH Status', eqLogic.commands?.sshStatus)}">${formatCmdValue(eqLogic.commands?.sshStatus, 'ssh')}</span></td>
-        <td style="text-align:center;"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}" data-cmd-type="cron" data-eq-type="${eqLogic.type}" data-cron-custom="${eqLogic.commands?.cronCustom?.value || '0'}" title="${formatTooltip('Cron Status', eqLogic.commands?.cronStatus)}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
-        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}" title="${formatTooltip('Uptime', eqLogic.commands?.uptime)}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
-        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}" title="${formatTooltip('Charge 1min', eqLogic.commands?.loadAvg1)}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
-        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg5?.id || ''}" title="${formatTooltip('Charge 5min', eqLogic.commands?.loadAvg5)}">${formatCmdValue(eqLogic.commands?.loadAvg5)}</span></td>
-        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg15?.id || ''}" title="${formatTooltip('Charge 15min', eqLogic.commands?.loadAvg15)}">${formatCmdValue(eqLogic.commands?.loadAvg15)}</span></td>
-        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.ip?.id || ''}" title="${formatTooltip('Adresse IP', eqLogic.commands?.ip)}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
-        <td>${formatDate(eqLogic.lastRefresh, eqLogic.type)}</td>
+        <td style="text-align:center;"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}" data-eq-id="${eqLogic.id}" data-cmd-type="ssh" title="${formatTooltip('SSH Status', eqLogic.commands?.sshStatus)}">${formatCmdValue(eqLogic.commands?.sshStatus, 'ssh')}</span></td>
+        <td style="text-align:center;"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}" data-eq-id="${eqLogic.id}" data-cmd-type="cron" data-eq-type="${eqLogic.type}" data-cron-custom="${eqLogic.commands?.cronCustom?.value || '0'}" title="${formatTooltip('Cron Status', eqLogic.commands?.cronStatus)}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Uptime', eqLogic.commands?.uptime)}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 1min', eqLogic.commands?.loadAvg1)}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg5?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 5min', eqLogic.commands?.loadAvg5)}">${formatCmdValue(eqLogic.commands?.loadAvg5)}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg15?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 15min', eqLogic.commands?.loadAvg15)}">${formatCmdValue(eqLogic.commands?.loadAvg15)}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.ip?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Adresse IP', eqLogic.commands?.ip)}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
+        <td class="lastComm" data-eq-id="${eqLogic.id}" data-eq-type="${eqLogic.type}">${formatDate(eqLogic.lastRefresh, eqLogic.type)}</td>
       </tr>
     `
   }).join('')
@@ -116,6 +116,16 @@ const displayHealthData = (healthData) => {
 
   // Initialize Jeedom's automatic command update system for dynamically inserted elements
   const cmdElements = tbody.querySelectorAll('.cmd[data-cmd_id]')
+  
+  // Create a mapping of equipment ID to last communication cell for efficient updates
+  const eqLastCommMap = new Map()
+  tbody.querySelectorAll('.lastComm[data-eq-id]').forEach(cell => {
+    const eqId = cell.getAttribute('data-eq-id')
+    if (eqId) {
+      eqLastCommMap.set(eqId, cell)
+    }
+  })
+  
   if (cmdElements.length > 0) {
     jeedom.cmd.refreshValue(cmdElements)
     
@@ -145,6 +155,18 @@ const displayHealthData = (healthData) => {
           // Force reflow to restart animation
           void element.offsetWidth
           element.classList.add('cmd-updated')
+          
+          // Update last communication date using direct mapping
+          if (event.collectDate) {
+            const eqId = element.getAttribute('data-eq-id')
+            if (eqId) {
+              const lastCommCell = eqLastCommMap.get(eqId)
+              if (lastCommCell) {
+                const eqType = lastCommCell.getAttribute('data-eq-type')
+                lastCommCell.innerHTML = formatDate(event.collectDate, eqType)
+              }
+            }
+          }
         }
       }
     })
