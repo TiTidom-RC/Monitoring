@@ -197,8 +197,8 @@ const handleSynologyChange = function() {
   )
 }
 
-const handleQnapChange = function() {
-  if (this.checked) {
+const handleQnapChange = function(event) {
+  if (event.currentTarget.checked) {
     const asusCheckbox = document.querySelector(SELECTORS.ASUS_CHECKBOX)
     const synoCheckbox = document.querySelector(SELECTORS.SYNO_CHECKBOX)
     const synoConf = document.querySelector(SELECTORS.SYNO_CONF)
@@ -211,56 +211,57 @@ const handleQnapChange = function() {
   }
 }
 
-const handleAsusChange = function() {
+const handleAsusChange = function(event) {
   updateCheckboxGroup(
-    this,
+    event.currentTarget,
     [document.querySelector(SELECTORS.ASUS_CONF)],
     [document.querySelector(SELECTORS.SYNO_CONF)],
     [document.querySelector(SELECTORS.QNAP_CHECKBOX), document.querySelector(SELECTORS.SYNO_CHECKBOX)]
   )
 }
 
-const handleSynoTempPath = function() {
+const handleSynoTempPath = function(event) {
   const tempPath = document.querySelector('.syno_conf_temppath')
-  if (this.checked) {
+  if (event.currentTarget.checked) {
     tempPath?.seen()
   } else {
     tempPath?.unseen()
   }
 }
 
-const handleLinuxTempCmd = function() {
+const handleLinuxTempCmd = function(event) {
   const tempCmd = document.querySelector('.linux_class_temp_cmd')
-  if (this.checked) {
+  if (event.currentTarget.checked) {
     tempCmd?.seen()
   } else {
     tempCmd?.unseen()
   }
 }
 
-const handlePullCustom = function() {
+const handlePullCustom = function(event) {
   const pullClass = document.querySelector('.pull_class')
-  if (this.checked) {
+  if (event.currentTarget.checked) {
     pullClass?.seen()
   } else {
     pullClass?.unseen()
   }
 }
 
-const handleMultiIf = function() {
+const handleMultiIf = function(event) {
   const multiIfConf = document.querySelector('.multi_if_conf')
-  if (this.checked) {
+  if (event.currentTarget.checked) {
     multiIfConf?.seen()
   } else {
     multiIfConf?.unseen()
   }
 }
 
-const handleLocalDistant = function() {
+const handleLocalDistant = function(event) {
   const distantDiv = document.querySelector('.distant')
   const localDiv = document.querySelector('.local')
+  const selectedValue = event.currentTarget.value
   
-  if (this.selectedIndex === 1) {
+  if (selectedValue === 'distant') {
     distantDiv?.seen()
     localDiv?.unseen()
   } else {
