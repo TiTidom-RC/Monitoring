@@ -177,13 +177,14 @@ function addCmdToTable(_cmd) {
 const updateCheckboxGroup = (checkbox, showElements = [], hideElements = [], uncheckElements = []) => {
   if (!checkbox) return
   
+  // hideElements sont toujours masqués (les autres options exclusives)
+  hideElements.forEach(el => el?.unseen())
+  
   if (checkbox.checked) {
     showElements.forEach(el => el?.seen())
-    hideElements.forEach(el => el?.unseen())
     uncheckElements.forEach(el => el?.jeeValue(0))
   } else {
     showElements.forEach(el => el?.unseen())
-    hideElements.forEach(el => el?.unseen())
   }
 }
 
@@ -310,6 +311,15 @@ function printEqLogic(_eqLogic) {
   if (elements.synoCheckbox) {
     elements.synoCheckbox.removeEventListener('change', handleSynologyChange)
     elements.synoCheckbox.addEventListener('change', handleSynologyChange)
+    // Initialiser l'affichage au chargement
+    if (elements.synoCheckbox.checked) {
+      elements.synoConf?.seen()
+      elements.asusConf?.unseen()
+      elements.asusCheckbox?.jeeValue(0)
+      elements.qnapCheckbox?.jeeValue(0)
+    } else {
+      elements.synoConf?.unseen()
+    }
   }
   
   if (elements.qnapCheckbox) {
@@ -320,6 +330,15 @@ function printEqLogic(_eqLogic) {
   if (elements.asusCheckbox) {
     elements.asusCheckbox.removeEventListener('change', handleAsusChange)
     elements.asusCheckbox.addEventListener('change', handleAsusChange)
+    // Initialiser l'affichage au chargement
+    if (elements.asusCheckbox.checked) {
+      elements.asusConf?.seen()
+      elements.synoConf?.unseen()
+      elements.qnapCheckbox?.jeeValue(0)
+      elements.synoCheckbox?.jeeValue(0)
+    } else {
+      elements.asusConf?.unseen()
+    }
   }
   
   if (elements.synoTempPath) {
@@ -377,18 +396,6 @@ function printEqLogic(_eqLogic) {
       elements.distantDiv?.unseen()
       elements.localDiv?.seen()
     }
-  }
-  
-  // Initialiser l'affichage des sections Synology/QNAP/Asus au chargement
-  if (elements.synoCheckbox?.checked) {
-    elements.synoConf?.seen()
-    elements.asusConf?.unseen()
-  } else if (elements.asusCheckbox?.checked) {
-    elements.asusConf?.seen()
-    elements.synoConf?.unseen()
-  } else {
-    elements.synoConf?.unseen()
-    elements.asusConf?.unseen()
   }
   
   buildSelectHost(_eqLogic.configuration.SSHHostId)
