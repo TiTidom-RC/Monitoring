@@ -40,8 +40,8 @@ if (!isConnect()) {
                 <th style="text-align:center;">{{Visible}}</th>
                 <th style="text-align:center;">{{Type}}</th>
                 <th style="white-space:nowrap;">{{Hôte SSH}}</th>
-                <th>{{SSH Status}}</th>
-                <th>{{Cron Status}}</th>
+                <th style="text-align:center;">{{SSH Status}}</th>
+                <th style="text-align:center;">{{Cron Status}}</th>
                 <th style="white-space:nowrap;">{{Uptime}}</th>
                 <th>{{Charge 1min}}</th>
                 <th>{{Charge 5min}}</th>
