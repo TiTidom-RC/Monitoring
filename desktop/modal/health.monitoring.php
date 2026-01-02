@@ -29,7 +29,7 @@ if (!isConnect()) {
 }
 
 .cmd-updated {
-    animation: healthCmdUpdate 4s ease-out;
+    animation: healthCmdUpdate 3s ease-out;
 }
 
 #table_healthMonitoring .cmd {
