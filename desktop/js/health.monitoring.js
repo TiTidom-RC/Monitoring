@@ -105,12 +105,16 @@ const displayHealthData = (healthData) => {
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg15?.id || ''}" title="${formatTooltip('Charge 15min', eqLogic.commands?.loadAvg15)}">${formatCmdValue(eqLogic.commands?.loadAvg15)}</span></td>
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.ip?.id || ''}" title="${formatTooltip('Adresse IP', eqLogic.commands?.ip)}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
         <td>${formatDate(eqLogic.lastRefresh, eqLogic.type)}</td>
-        <td>${getLastValueDate(eqLogic.commands, eqLogic.type)}</td>
       </tr>
     `
   }).join('')
 
   tbody.innerHTML = html
+
+  // Initialize Bootstrap tooltips for dynamically inserted elements
+  document.querySelectorAll('#table_healthMonitoring .tooltips').forEach(element => {
+    new bootstrap.Tooltip(element, { html: true })
+  })
 
   // Initialize Jeedom's automatic command update system for dynamically inserted elements
   const cmdElements = tbody.querySelectorAll('.cmd[data-cmd_id]')
@@ -161,7 +165,7 @@ const formatTooltip = (label, cmdData) => {
   const valueDate = cmdData.valueDate || '-'
   const collectDate = cmdData.collectDate || '-'
   
-  return `${label}\nDate de valeur : ${valueDate}\nDate de collecte : ${collectDate}`
+  return `${label}<br><i>Date de valeur : ${valueDate}<br>Date de collecte : ${collectDate}</i>`
 }
 
 /**
@@ -261,38 +265,6 @@ const formatDate = (dateStr, eqType = null) => {
   } catch (e) {
     return '<span class="text-muted">-</span>'
   }
-}
-
-/**
- * Get the most recent valueDate from all commands
- * @param {Object} commands - Commands object
- * @param {string} eqType - Equipment type ('local' or 'distant')
- * @returns {string} Formatted most recent date
- */
-const getLastValueDate = (commands, eqType = null) => {
-  if (!commands) {
-    return '<span class="text-muted">-</span>'
-  }
-  
-  let mostRecentDate = null
-  
-  // Check all commands for the most recent valueDate
-  Object.values(commands).forEach(cmd => {
-    if (cmd && cmd.valueDate && cmd.valueDate !== '' && cmd.valueDate !== '0000-00-00 00:00:00') {
-      const cmdDate = new Date(cmd.valueDate)
-      if (!isNaN(cmdDate.getTime())) {
-        if (!mostRecentDate || cmdDate > mostRecentDate) {
-          mostRecentDate = cmdDate
-        }
-      }
-    }
-  })
-  
-  if (!mostRecentDate) {
-    return '<span class="text-muted">-</span>'
-  }
-  
-  return formatDate(mostRecentDate.toISOString().slice(0, 19).replace('T', ' '), eqType)
 }
 
 // ========================================

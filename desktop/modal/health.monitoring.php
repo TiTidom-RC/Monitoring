@@ -48,12 +48,11 @@ if (!isConnect()) {
                 <th>{{Charge 15min}}</th>
                 <th style="white-space:nowrap;">{{Adresse IP}}</th>
                 <th style="white-space:nowrap;">{{Dernière Communication}}</th>
-                <th style="white-space:nowrap;">{{Dernière Valeur}}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td colspan="14" class="text-center">
+                <td colspan="13" class="text-center">
                     <i class="fas fa-spinner fa-spin"></i> {{Chargement des données...}}
                 </td>
             </tr>
