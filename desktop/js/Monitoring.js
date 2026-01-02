@@ -177,14 +177,12 @@ function addCmdToTable(_cmd) {
 const updateCheckboxGroup = (checkbox, showElements = [], hideElements = [], uncheckElements = []) => {
   if (!checkbox) return
   
-  // hideElements sont toujours masqués (les autres options exclusives)
-  hideElements.forEach(el => el?.unseen())
-  
   if (checkbox.checked) {
     showElements.forEach(el => el?.seen())
-    uncheckElements.forEach(el => el?.jeeValue(0))
+    hideElements.forEach(el => el?.unseen())  // Masquer les blocs des autres options
+    uncheckElements.forEach(el => el?.jeeValue(0))  // Décocher les autres options
   } else {
-    showElements.forEach(el => el?.unseen())
+    showElements.forEach(el => el?.unseen())  // Masquer le bloc de cette option
   }
 }
 
