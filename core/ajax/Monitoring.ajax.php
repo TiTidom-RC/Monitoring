@@ -73,7 +73,7 @@ try {
                 'cronCustom' => 'cron_status_custom',
                 'uptime' => 'uptime',
                 'loadAvg1' => 'load_avg_1mn',
-                'ip' => 'ip'
+                'ip' => 'network_ip'
             );
             
             foreach ($cmdLogicalIds as $key => $logicalId) {
