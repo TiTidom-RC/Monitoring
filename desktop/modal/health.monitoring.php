@@ -31,6 +31,11 @@ if (!isConnect()) {
 .cmd-updated {
     animation: healthCmdUpdate 2s ease-out;
 }
+
+#table_healthMonitoring .cmd {
+    font-family: inherit;
+    font-size: inherit;
+}
 </style>
 
 <div style="display: none;" id="md_modal"></div>
