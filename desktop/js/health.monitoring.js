@@ -164,6 +164,11 @@ const displayHealthData = (healthData) => {
               if (lastCommCell) {
                 const eqType = lastCommCell.getAttribute('data-eq-type')
                 lastCommCell.innerHTML = formatDate(event.collectDate, eqType)
+                
+                // Add visual feedback for date update
+                lastCommCell.classList.remove('cmd-updated')
+                void lastCommCell.offsetWidth
+                lastCommCell.classList.add('cmd-updated')
               }
             }
           }
