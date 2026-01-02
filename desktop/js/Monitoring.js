@@ -440,12 +440,7 @@ if (healthButton) {
       buttons: {
         close: {
           label: '{{Fermer}}',
-          className: 'warning',
-          callback: {
-            click: function() {
-              jeeDialog.get('#md_healthMonitoring').destroy()
-            }
-          }
+          className: 'warning'
         }
       }
     })
