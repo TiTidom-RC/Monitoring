@@ -46,12 +46,13 @@ try {
         $healthData = array();
         
         foreach ($eqLogics as $eqLogic) {
+            $type = $eqLogic->getConfiguration('localoudistant', '');
             $eqData = array(
                 'id' => $eqLogic->getId(),
                 'name' => $eqLogic->getName(),
-                'isEnable' => $eqLogic->getIsEnable(),
-                'isVisible' => $eqLogic->getIsVisible(),
-                'type' => $eqLogic->getConfiguration('localoudistant', 'local'),
+                'isEnable' => (int)$eqLogic->getIsEnable(),
+                'isVisible' => (int)$eqLogic->getIsVisible(),
+                'type' => $type !== '' ? $type : 'unconfigured',
                 'sshHostId' => $eqLogic->getConfiguration('SSHHostId', ''),
                 'sshHostName' => '',
                 'commands' => array()
@@ -65,17 +66,17 @@ try {
                 }
             }
             
-            // Get specific commands values
-            $cmdNames = array(
-                'sshStatus' => 'SSH Status',
-                'cronStatus' => 'Cron Status',
-                'uptime' => 'Uptime',
-                'loadAvg1' => 'Charge Système 1 min',
-                'ip' => 'Adresse IP'
+            // Get specific commands values by logicalId
+            $cmdLogicalIds = array(
+                'sshStatus' => 'cnx_ssh',
+                'cronStatus' => 'cron_status',
+                'uptime' => 'uptime',
+                'loadAvg1' => 'load_avg_1mn',
+                'ip' => 'ip'
             );
             
-            foreach ($cmdNames as $key => $cmdName) {
-                $cmd = $eqLogic->getCmd('info', $cmdName);
+            foreach ($cmdLogicalIds as $key => $logicalId) {
+                $cmd = $eqLogic->getCmd('info', $logicalId);
                 if (is_object($cmd)) {
                     $eqData['commands'][$key] = array(
                         'id' => $cmd->getId(),

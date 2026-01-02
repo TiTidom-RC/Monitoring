@@ -71,77 +71,40 @@ const displayHealthData = (healthData) => {
     return
   }
 
-  let html = ''
+  const html = healthData.map(eqLogic => {
+    const isActive = eqLogic.isEnable === 1
+    const isVisible = eqLogic.isVisible === 1
+    
+    let typeLabel = ''
+    switch (eqLogic.type) {
+      case 'local':
+        typeLabel = '<span class="label label-info">Local</span>'
+        break
+      case 'distant':
+        typeLabel = '<span class="label label-warning">Distant</span>'
+        break
+      case 'unconfigured':
+        typeLabel = '<span class="label label-default">{{Non configuré}}</span>'
+        break
+      default:
+        typeLabel = '<span class="text-muted">-</span>'
+    }
 
-  healthData.forEach(eqLogic => {
-    const isActive = eqLogic.isEnable === '1' || eqLogic.isEnable === 1
-    const isVisible = eqLogic.isVisible === '1' || eqLogic.isVisible === 1
-    const isLocal = eqLogic.type === 'local'
-
-    html += '<tr>'
-
-    // Nom
-    html += `<td><a href="index.php?v=d&p=Monitoring&m=Monitoring&id=${eqLogic.id}" target="_blank">${eqLogic.name}</a></td>`
-
-    // Actif
-    html += '<td style="text-align:center;">'
-    html += isActive ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'
-    html += '</td>'
-
-    // Visible
-    html += '<td style="text-align:center;">'
-    html += isVisible ? '<i class="fas fa-eye text-success"></i>' : '<i class="fas fa-eye-slash text-muted"></i>'
-    html += '</td>'
-
-    // Type (Local/Distant)
-    html += '<td style="text-align:center;">'
-    html += isLocal 
-      ? '<span class="label label-info">Local</span>' 
-      : '<span class="label label-warning">Distant</span>'
-    html += '</td>'
-
-    // Hôte SSH
-    html += '<td>'
-    html += eqLogic.sshHostName || '<span class="text-muted">-</span>'
-    html += '</td>'
-
-    // SSH Status
-    html += '<td>'
-    html += `<span class="cmd" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}">`
-    html += formatCmdValue(eqLogic.commands?.sshStatus)
-    html += '</span>'
-    html += '</td>'
-
-    // Cron Status
-    html += '<td>'
-    html += `<span class="cmd" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}">`
-    html += formatCmdValue(eqLogic.commands?.cronStatus)
-    html += '</span>'
-    html += '</td>'
-
-    // Uptime
-    html += '<td>'
-    html += `<span class="cmd" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}">`
-    html += formatCmdValue(eqLogic.commands?.uptime)
-    html += '</span>'
-    html += '</td>'
-
-    // Charge système 1 min
-    html += '<td>'
-    html += `<span class="cmd" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}">`
-    html += formatCmdValue(eqLogic.commands?.loadAvg1)
-    html += '</span>'
-    html += '</td>'
-
-    // Adresse IP
-    html += '<td>'
-    html += `<span class="cmd" data-cmd_id="${eqLogic.commands?.ip?.id || ''}">`
-    html += formatCmdValue(eqLogic.commands?.ip)
-    html += '</span>'
-    html += '</td>'
-
-    html += '</tr>'
-  })
+    return `
+      <tr>
+        <td><a href="index.php?v=d&p=Monitoring&m=Monitoring&id=${eqLogic.id}" target="_blank">${eqLogic.name}</a></td>
+        <td style="text-align:center;">${isActive ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
+        <td style="text-align:center;">${isVisible ? '<i class="fas fa-eye text-success"></i>' : '<i class="fas fa-eye-slash text-muted"></i>'}</td>
+        <td style="text-align:center;">${typeLabel}</td>
+        <td>${eqLogic.sshHostName || '<span class="text-muted">-</span>'}</td>
+        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}">${formatCmdValue(eqLogic.commands?.sshStatus)}</span></td>
+        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}">${formatCmdValue(eqLogic.commands?.cronStatus)}</span></td>
+        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
+        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
+        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.ip?.id || ''}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
+      </tr>
+    `
+  }).join('')
 
   tbody.innerHTML = html
 

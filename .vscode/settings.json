@@ -104,6 +104,7 @@
         "timeoutssh",
         "totalsize",
         "txrx",
+        "unconfigured",
         "upnpmodelname",
         "virt",
         "wlan",
