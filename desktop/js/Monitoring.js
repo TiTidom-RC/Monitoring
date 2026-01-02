@@ -370,7 +370,7 @@ function printEqLogic(_eqLogic) {
     elements.localDistant.removeEventListener('change', handleLocalDistant)
     elements.localDistant.addEventListener('change', handleLocalDistant)
     // Initialiser l'affichage au chargement
-    if (elements.localDistant.selectedIndex === 1) {
+    if (elements.localDistant.value === 'distant') {
       elements.distantDiv?.seen()
       elements.localDiv?.unseen()
     } else {
