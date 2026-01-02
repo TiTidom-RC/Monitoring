@@ -82,6 +82,8 @@ try {
                 'cronCustom' => 'cron_status_custom',
                 'uptime' => 'uptime',
                 'loadAvg1' => 'load_avg_1mn',
+                'loadAvg5' => 'load_avg_5mn',
+                'loadAvg15' => 'load_avg_15mn',
                 'ip' => 'network_ip'
             );
             

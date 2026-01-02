@@ -49,7 +49,7 @@ const loadHealthData = () => {
     error: (error) => {
       const tbody = document.querySelector(SELECTORS.TABLE_BODY)
       if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="12" class="text-center text-danger"><i class="fas fa-exclamation-triangle"></i> ${error.message}</td></tr>`
+        tbody.innerHTML = `<tr><td colspan="14" class="text-center text-danger"><i class="fas fa-exclamation-triangle"></i> ${error.message}</td></tr>`
       }
     },
     success: (data) => {
@@ -67,7 +67,7 @@ const displayHealthData = (healthData) => {
   if (!tbody) return
 
   if (!healthData || healthData.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="12" class="text-center">{{Aucun équipement trouvé}}</td></tr>'
+    tbody.innerHTML = '<tr><td colspan="14" class="text-center">{{Aucun équipement trouvé}}</td></tr>'
     return
   }
 
@@ -101,6 +101,8 @@ const displayHealthData = (healthData) => {
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}" data-cmd-type="cron" data-eq-type="${eqLogic.type}" data-cron-custom="${eqLogic.commands?.cronCustom?.value || '0'}" title="${formatTooltip('Cron Status', eqLogic.commands?.cronStatus)}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}" title="${formatTooltip('Uptime', eqLogic.commands?.uptime)}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}" title="${formatTooltip('Charge 1min', eqLogic.commands?.loadAvg1)}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg5?.id || ''}" title="${formatTooltip('Charge 5min', eqLogic.commands?.loadAvg5)}">${formatCmdValue(eqLogic.commands?.loadAvg5)}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg15?.id || ''}" title="${formatTooltip('Charge 15min', eqLogic.commands?.loadAvg15)}">${formatCmdValue(eqLogic.commands?.loadAvg15)}</span></td>
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.ip?.id || ''}" title="${formatTooltip('Adresse IP', eqLogic.commands?.ip)}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
         <td>${formatDate(eqLogic.lastRefresh, eqLogic.type)}</td>
         <td>${getLastValueDate(eqLogic.commands, eqLogic.type)}</td>

@@ -35,23 +35,25 @@ if (!isConnect()) {
     <table class="table table-condensed table-bordered" id="table_healthMonitoring">
         <thead>
             <tr>
-                <th style="width:200px;">{{Nom}}</th>
-                <th style="width:80px;text-align:center;">{{Actif}}</th>
-                <th style="width:80px;text-align:center;">{{Visible}}</th>
-                <th style="width:100px;text-align:center;">{{Type}}</th>
-                <th style="width:150px;">{{Hôte SSH}}</th>
-                <th style="width:120px;">{{SSH Status}}</th>
-                <th style="width:120px;">{{Cron Status}}</th>
-                <th style="width:100px;">{{Uptime}}</th>
-                <th style="width:120px;">{{Charge 1min}}</th>
-                <th style="width:120px;">{{Adresse IP}}</th>
-                <th style="width:150px;">{{Dernière Communication}}</th>
-                <th style="width:150px;">{{Dernière Valeur}}</th>
+                <th style="white-space:nowrap;">{{Nom}}</th>
+                <th style="text-align:center;">{{Actif}}</th>
+                <th style="text-align:center;">{{Visible}}</th>
+                <th style="text-align:center;">{{Type}}</th>
+                <th style="white-space:nowrap;">{{Hôte SSH}}</th>
+                <th>{{SSH Status}}</th>
+                <th>{{Cron Status}}</th>
+                <th style="white-space:nowrap;">{{Uptime}}</th>
+                <th>{{Charge 1min}}</th>
+                <th>{{Charge 5min}}</th>
+                <th>{{Charge 15min}}</th>
+                <th style="white-space:nowrap;">{{Adresse IP}}</th>
+                <th style="white-space:nowrap;">{{Dernière Communication}}</th>
+                <th style="white-space:nowrap;">{{Dernière Valeur}}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td colspan="12" class="text-center">
+                <td colspan="14" class="text-center">
                     <i class="fas fa-spinner fa-spin"></i> {{Chargement des données...}}
                 </td>
             </tr>
