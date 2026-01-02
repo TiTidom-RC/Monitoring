@@ -111,11 +111,6 @@ const displayHealthData = (healthData) => {
 
   tbody.innerHTML = html
 
-  // Initialize Bootstrap tooltips for dynamically inserted elements
-  document.querySelectorAll('#table_healthMonitoring .tooltips').forEach(element => {
-    new bootstrap.Tooltip(element, { html: true })
-  })
-
   // Initialize Jeedom's automatic command update system for dynamically inserted elements
   const cmdElements = tbody.querySelectorAll('.cmd[data-cmd_id]')
   if (cmdElements.length > 0) {
