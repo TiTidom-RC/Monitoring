@@ -52,7 +52,7 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 				        <span style="color:var(--txt-color)">{{Configuration}}</span>
 			        </div>
 			        <div class="cursor logoSecondary" id="bt_healthMonitoring">
-				        <i class="fas fa-heartbeat icon_orange"></i>
+				        <i class="fas fa-heartbeat icon_blue"></i>
 				        <br>
 				        <span style="color:var(--txt-color)">{{Santé}}</span>
 			        </div>

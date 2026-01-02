@@ -41,11 +41,11 @@ if (!isConnect()) {
 <div style="display: none;" id="md_modal"></div>
 
 <div class="healthMonitoring" style="width:100%;height:100%;overflow:auto;">
-    <legend><i class="fas fa-heartbeat"></i> {{Santé des équipements Monitoring}}</legend>
+    <legend><i class="fas fa-heartbeat text-info"></i> {{Santé des équipements Monitoring}}</legend>
     <br/>
     
     <div class="alert alert-info">
-        <i class="fas fa-info-circle"></i> {{Résumé de l'état de santé de tous vos équipements Monitoring}}
+        <i class="fas fa-info-circle text-info"></i> {{Résumé de l'état de santé de tous vos équipements Monitoring}}
     </div>
     
     <table class="table table-condensed table-bordered" id="table_healthMonitoring">
