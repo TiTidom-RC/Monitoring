@@ -97,13 +97,13 @@ const displayHealthData = (healthData) => {
         <td style="text-align:center;">${isVisible ? '<i class="fas fa-eye text-success"></i>' : '<i class="fas fa-eye-slash text-muted"></i>'}</td>
         <td style="text-align:center;">${typeLabel}</td>
         <td>${eqLogic.sshHostName || '<span class="text-muted">-</span>'}</td>
-        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}" title="${formatTooltip('SSH Status', eqLogic.commands?.sshStatus)}">${formatCmdValue(eqLogic.commands?.sshStatus, 'ssh')}</span></td>
-        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}" title="${formatTooltip('Cron Status', eqLogic.commands?.cronStatus)}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}" data-cmd-type="ssh" title="${formatTooltip('SSH Status', eqLogic.commands?.sshStatus)}">${formatCmdValue(eqLogic.commands?.sshStatus, 'ssh')}</span></td>
+        <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}" data-cmd-type="cron" data-eq-type="${eqLogic.type}" data-cron-custom="${eqLogic.commands?.cronCustom?.value || '0'}" title="${formatTooltip('Cron Status', eqLogic.commands?.cronStatus)}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}" title="${formatTooltip('Uptime', eqLogic.commands?.uptime)}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}" title="${formatTooltip('Charge 1min', eqLogic.commands?.loadAvg1)}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.ip?.id || ''}" title="${formatTooltip('Adresse IP', eqLogic.commands?.ip)}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
-        <td>${formatDate(eqLogic.lastRefresh)}</td>
-        <td>${getLastValueDate(eqLogic.commands)}</td>
+        <td>${formatDate(eqLogic.lastRefresh, eqLogic.type)}</td>
+        <td>${getLastValueDate(eqLogic.commands, eqLogic.type)}</td>
       </tr>
     `
   }).join('')
@@ -120,7 +120,21 @@ const displayHealthData = (healthData) => {
       const cmdId = element.getAttribute('data-cmd_id')
       if (cmdId && cmdId !== '') {
         jeedom.cmd.update[cmdId] = function(event) {
-          element.textContent = event.display_value || event.value || '-'
+          const cmdType = element.getAttribute('data-cmd-type')
+          const value = event.display_value || event.value
+          
+          // Format value based on command type
+          if (cmdType === 'ssh') {
+            element.innerHTML = formatCmdValue({ value: value }, 'ssh')
+          } else if (cmdType === 'cron') {
+            const eqType = element.getAttribute('data-eq-type')
+            const cronCustomValue = element.getAttribute('data-cron-custom')
+            const cronCustomData = cronCustomValue ? { value: cronCustomValue } : null
+            element.innerHTML = formatCmdValue({ value: value }, 'cron', eqType, cronCustomData)
+          } else {
+            // Standard display for other commands
+            element.innerHTML = formatCmdValue({ value: value })
+          }
         }
       }
     })
@@ -211,9 +225,10 @@ const formatCmdValue = (cmdData, type = null, eqType = null, cronCustomData = nu
 /**
  * Format date for display
  * @param {string} dateStr - Date string to format
+ * @param {string} eqType - Equipment type ('local' or 'distant')
  * @returns {string} Formatted date or dash if invalid
  */
-const formatDate = (dateStr) => {
+const formatDate = (dateStr, eqType = null) => {
   if (!dateStr || dateStr === '' || dateStr === '0000-00-00 00:00:00') {
     return '<span class="text-muted">-</span>'
   }
@@ -228,23 +243,18 @@ const formatDate = (dateStr) => {
     const diffMs = now - date
     const diffMins = Math.floor(diffMs / 60000)
     
-    // Less than 1 minute
-    if (diffMins < 1) {
-      return '<span class="text-success">{{À l\'instant}}</span>'
-    }
-    // Less than 60 minutes
-    else if (diffMins < 60) {
-      return `<span class="text-success">{{Il y a}} ${diffMins} {{min}}</span>`
-    }
-    // Less than 24 hours
-    else if (diffMins < 1440) {
-      const hours = Math.floor(diffMins / 60)
-      return `<span class="text-warning">{{Il y a}} ${hours} {{h}}</span>`
-    }
-    // More than 24 hours
-    else {
-      const days = Math.floor(diffMins / 1440)
-      return `<span class="text-danger">{{Il y a}} ${days} {{j}}</span>`
+    // Color based on age and equipment type
+    const formattedDate = dateStr.slice(0, 19).replace('T', ' ')
+    
+    // Green threshold varies: local <= 5min, distant <= 15min
+    const greenThreshold = (eqType === 'local') ? 5 : 15
+    
+    if (diffMins <= greenThreshold) {
+      return `<span class="text-success">${formattedDate}</span>`
+    } else if (diffMins <= 30) {
+      return `<span class="text-warning">${formattedDate}</span>`
+    } else {
+      return `<span class="text-danger">${formattedDate}</span>`
     }
   } catch (e) {
     return '<span class="text-muted">-</span>'
@@ -254,9 +264,10 @@ const formatDate = (dateStr) => {
 /**
  * Get the most recent valueDate from all commands
  * @param {Object} commands - Commands object
+ * @param {string} eqType - Equipment type ('local' or 'distant')
  * @returns {string} Formatted most recent date
  */
-const getLastValueDate = (commands) => {
+const getLastValueDate = (commands, eqType = null) => {
   if (!commands) {
     return '<span class="text-muted">-</span>'
   }
@@ -279,7 +290,7 @@ const getLastValueDate = (commands) => {
     return '<span class="text-muted">-</span>'
   }
   
-  return formatDate(mostRecentDate.toISOString().slice(0, 19).replace('T', ' '))
+  return formatDate(mostRecentDate.toISOString().slice(0, 19).replace('T', ' '), eqType)
 }
 
 // ========================================
