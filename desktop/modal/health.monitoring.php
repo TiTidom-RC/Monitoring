@@ -22,6 +22,17 @@ if (!isConnect()) {
 
 ?>
 
+<style>
+@keyframes healthCmdUpdate {
+    0% { background-color: rgba(255, 193, 7, 0.4); }
+    100% { background-color: transparent; }
+}
+
+.cmd-updated {
+    animation: healthCmdUpdate 2s ease-out;
+}
+</style>
+
 <div style="display: none;" id="md_modal"></div>
 
 <div class="healthMonitoring" style="width:100%;height:100%;overflow:auto;">

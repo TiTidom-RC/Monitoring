@@ -139,6 +139,12 @@ const displayHealthData = (healthData) => {
             // Standard display for other commands
             element.innerHTML = formatCmdValue({ value: value })
           }
+          
+          // Add visual feedback for update
+          element.classList.remove('cmd-updated')
+          // Force reflow to restart animation
+          void element.offsetWidth
+          element.classList.add('cmd-updated')
         }
       }
     })
