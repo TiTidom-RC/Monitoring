@@ -70,70 +70,13 @@
 	<span class="monitor-name-flex">
 		<span class="monitor-name-left">
 			<span class="cmd" id="iconSSH#id#"></span>
-			<script>
-			(() => {
-				'use strict'
-				const el = document.getElementById('iconSSH#id#')
-				if (!el) return
-				
-				if ('#cnx_ssh#' === 'OK') {
-					el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;" ></i>'
-				} else if ('#cnx_ssh#' === 'KO') {
-					el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
-				}
-			})()
-			</script>
 			<span class="cmd" id="iconCron#id#"></span>
-			<script>
-			(() => {
-				'use strict'
-				const el = document.getElementById('iconCron#id#')
-				if (!el) return
-			
-			const isCustom = '#cron_status_custom#' === '1'
-			const color = isCustom ? 'var(--al-warning-color)' : (('#cron_status#' === '1') ? 'var(--al-success-color)' : 'var(--al-danger-color)')
-			const customLabel = isCustom ? ' (Custom)' : ' (Default)'
-			
-				
-				if ('#cron_status#' === '1') {
-					el.innerHTML = `<i title="Cron ON${customLabel}" class="fas fa-play-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
-				} else if ('#cron_status#' === '0') {
-					el.innerHTML = `<i title="Cron OFF${customLabel}" class="cmd fas fa-pause-circle tooltips" style="display: #cron_status_display#;color: ${color} !important;"></i>`
-				}
-			})()
-			</script>
 			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="fas fa-redo"></i>
 			</span>
-			<script>
-			(() => {
-				'use strict'
-				const btn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
-				if (!btn) return
-				
-				btn.addEventListener('click', () => {
-					if (confirm("Etes-vous sûr de vouloir redémarrer l'\u00e9quipement #name# ?")) {
-						jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
-					}
-				})
-			})()
-			</script>
 			<span class="cmd action poweroff cursor" title="Eteindre l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
 				<i class="fas fa-power-off"></i>
 			</span>
-			<script>
-			(() => {
-				'use strict'
-				const btn = document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')
-				if (!btn) return
-				
-				btn.addEventListener('click', () => {
-					if (confirm("Etes-vous sûr de vouloir éteindre l'\u00e9quipement #name# ?")) {
-						jeedom.cmd.execute({ id: '#cmd_poweroff_id#' })
-					}
-				})
-			})()
-			</script>
 		</span>
 		<span class="monitor-name-center">
 			<span class="widget-name">
@@ -144,18 +87,6 @@
 			<span class="cmd refresh cursor" data-cmd_id="#refresh_id#">
 				<i class="fas fa-sync"></i>
 			</span>
-			<script>
-			(() => {
-				'use strict'
-				if ('#refresh_id#' !== '') {
-					document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.addEventListener('click', () => {
-						jeedom.cmd.execute({ id: '#refresh_id#' })
-					})
-				} else {
-					document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')?.remove()
-				}
-			})()
-			</script>
 		</span>
 	</span>
 	<div class="monitor-cmds">
@@ -167,56 +98,362 @@
 			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
 			<span id="uptime#id#"></span>
 		</div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			const el = document.getElementById('uptime#id#')
-			if (el) el.innerHTML = '<span>#uptime#</span>'
-		})()
-		</script>
 		<div class="tooltips" style="display: #load_avg_display#;">
 			<span title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
 			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const buildThresholdHTML = (value, low, high, prefix) => {
-				if (value === '') return '<span></span>'
-				
-				const val = parseFloat(value)
-				const lowNum = parseFloat(low)
-				const highNum = parseFloat(high)
-				
-				let color = ''
-				// Normal thresholds: lower = green, higher = red
-				if (val < lowNum) color = ' style="color: var(--al-success-color) !important;"'
-				else if (val >= lowNum && val <= highNum) color = ' style="color: var(--al-warning-color) !important;"'
-				else if (val > highNum && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
-				
-				return `${prefix}<span class="state"${color}>${value}</span>`
-			}
-			
-			const el1mn = document.getElementById('load_avg_1mn#id#')
-			if (el1mn) el1mn.innerHTML = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
-			
-			const el5mn = document.getElementById('load_avg_5mn#id#')
-			if (el5mn) el5mn.innerHTML = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
-			
-			const el15mn = document.getElementById('load_avg_15mn#id#')
-			if (el15mn) el15mn.innerHTML = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
-		})()
-		</script>
 		<div class="tooltips" style="display: #memory_display#;">
 			<span title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
 			<span id="memory_available_percent#id#"></span>
 		</div>
-		<script>
-		(() => {
-			'use strict'
+		<div class="tooltips" style="display: #swap_display#;">
+			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
+			<span id="swap_free_percent#id#"></span>
+		</div>
+		<div class="tooltips" style="display: #network_infos_display#;">
+			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
+			<span id="network_infos#id#"></span>
+		</div>
+		<div class="tooltips" style="display: #network_display#;">
+			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
+			<span id="network#id#"></span>
+		</div>
+		<!-- Cartes réseau supplémentaires -->
+		#multi_network_cards#
+		<div class="tooltips" style="display: #hdd_display#;">
+			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
+			<span id="hdd#id#"></span>
+		</div>
+		<div id="syno_hddv2#id#"
+		     data-syno-id="syno_hddv2"
+		     data-syno-name="Syno Volume 2"
+		     data-syno-display="#syno_hddv2_display#"
+		     data-syno-value="#syno_hddv2#"
+		     data-syno-date-value="#syno_hddv2_value#"
+		     data-syno-collect="#syno_hddv2_collect#"
+		     data-syno-icon="#syno_hddv2_icon#"
+		     data-syno-percent="#syno_hddv2_free_percent#"
+		     data-syno-low="#syno_hddv2_free_percent_colorlow#"
+		     data-syno-high="#syno_hddv2_free_percent_colorhigh#"></div>
+		<div id="syno_hddv3#id#"
+		     data-syno-id="syno_hddv3"
+		     data-syno-name="Syno Volume 3"
+		     data-syno-display="#syno_hddv3_display#"
+		     data-syno-value="#syno_hddv3#"
+		     data-syno-date-value="#syno_hddv3_value#"
+		     data-syno-collect="#syno_hddv3_collect#"
+		     data-syno-icon="#syno_hddv3_icon#"
+		     data-syno-percent="#syno_hddv3_free_percent#"
+		     data-syno-low="#syno_hddv3_free_percent_colorlow#"
+		     data-syno-high="#syno_hddv3_free_percent_colorhigh#"></div>
+		<div id="syno_hddv4#id#"
+		     data-syno-id="syno_hddv4"
+		     data-syno-name="Syno Volume 4"
+		     data-syno-display="#syno_hddv4_display#"
+		     data-syno-value="#syno_hddv4#"
+		     data-syno-date-value="#syno_hddv4_value#"
+		     data-syno-collect="#syno_hddv4_collect#"
+		     data-syno-icon="#syno_hddv4_icon#"
+		     data-syno-percent="#syno_hddv4_free_percent#"
+		     data-syno-low="#syno_hddv4_free_percent_colorlow#"
+		     data-syno-high="#syno_hddv4_free_percent_colorhigh#"></div>
+		<div id="syno_hddusb#id#"
+		     data-syno-id="syno_hddusb"
+		     data-syno-name="Syno Volume USB"
+		     data-syno-display="#syno_hddusb_display#"
+		     data-syno-value="#syno_hddusb#"
+		     data-syno-date-value="#syno_hddusb_value#"
+		     data-syno-collect="#syno_hddusb_collect#"
+		     data-syno-icon="#syno_hddusb_icon#"
+		     data-syno-percent="#syno_hddusb_free_percent#"
+		     data-syno-low="#syno_hddusb_free_percent_colorlow#"
+		     data-syno-high="#syno_hddusb_free_percent_colorhigh#"></div>
+		<div id="syno_hddesata#id#"
+		     data-syno-id="syno_hddesata"
+		     data-syno-name="Syno Volume eSATA"
+		     data-syno-display="#syno_hddesata_display#"
+		     data-syno-value="#syno_hddesata#"
+		     data-syno-date-value="#syno_hddesata_value#"
+		     data-syno-collect="#syno_hddesata_collect#"
+		     data-syno-icon="#syno_hddesata_icon#"
+		     data-syno-percent="#syno_hddesata_free_percent#"
+		     data-syno-low="#syno_hddesata_free_percent_colorlow#"
+		     data-syno-high="#syno_hddesata_free_percent_colorhigh#"></div>
+		<div class="tooltips" style="display: #cpu_display#;">
+			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
+			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
+		</div>
+		<div class="tooltips" style="display: #perso1_display#;"
+		     data-perso-id="perso1"
+		     data-perso-value="#perso1#"
+		     data-perso-name="#perso1_name#"
+		     data-perso-date-value="#perso1_value#"
+		     data-perso-collect="#perso1_collect#"
+		     data-perso-icon="#perso1_icon#"
+		     data-perso-low="#perso1_colorlow#"
+		     data-perso-high="#perso1_colorhigh#"
+		     data-perso-unite="#perso1_unite#">
+			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
+			<span id="perso1_unite#id#"></span>
+		</div>
+		<div class="tooltips" style="display: #perso2_display#;"
+		     data-perso-id="perso2"
+		     data-perso-value="#perso2#"
+		     data-perso-name="#perso2_name#"
+		     data-perso-date-value="#perso2_value#"
+		     data-perso-collect="#perso2_collect#"
+		     data-perso-icon="#perso2_icon#"
+		     data-perso-low="#perso2_colorlow#"
+		     data-perso-high="#perso2_colorhigh#"
+		     data-perso-unite="#perso2_unite#">
+			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
+			<span id="perso2_unite#id#"></span>
+		</div>
+		<div class="tooltips" style="display: #perso3_display#;"
+		     data-perso-id="perso3"
+		     data-perso-value="#perso3#"
+		     data-perso-name="#perso3_name#"
+		     data-perso-date-value="#perso3_value#"
+		     data-perso-collect="#perso3_collect#"
+		     data-perso-icon="#perso3_icon#"
+		     data-perso-low="#perso3_colorlow#"
+		     data-perso-high="#perso3_colorhigh#"
+		     data-perso-unite="#perso3_unite#">
+			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
+			<span id="perso3_unite#id#"></span>
+		</div>
+		<div class="tooltips" style="display: #perso4_display#;"
+		     data-perso-id="perso4"
+		     data-perso-value="#perso4#"
+		     data-perso-name="#perso4_name#"
+		     data-perso-date-value="#perso4_value#"
+		     data-perso-collect="#perso4_collect#"
+		     data-perso-icon="#perso4_icon#"
+		     data-perso-low="#perso4_colorlow#"
+		     data-perso-high="#perso4_colorhigh#"
+		     data-perso-unite="#perso4_unite#">
+			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
+			<span id="perso4_unite#id#"></span>
+		</div>
+	</div>
+	<script>
+	(() => {
+		'use strict'
+		
+		// ========================================
+		// === UTILITY FUNCTIONS ===
+		// ========================================
+		
+		/**
+		 * Get color style based on value and thresholds (mobile optimized)
+		 * @param {number} val - Numeric value to evaluate
+		 * @param {number} low - Low threshold
+		 * @param {number} high - High threshold
+		 * @param {boolean} reversed - If true, higher values are better (green)
+		 * @returns {string} Inline style string for color
+		 */
+		const getColorStyle = (val, low, high, reversed) => {
+			if (reversed === void 0) reversed = false
+			if (reversed) {
+				// Reversed: higher is better (e.g., % free)
+				if (val > high && high !== '') return ' style="color: var(--al-success-color) !important;"'
+				if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
+				if (val < low) return ' style="color: var(--al-danger-color) !important;"'
+			} else {
+				// Normal: lower is better (e.g., temperature, load)
+				if (val < low) return ' style="color: var(--al-success-color) !important;"'
+				if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
+				if (val > high && high !== '') return ' style="color: var(--al-danger-color) !important;"'
+			}
+			return ''
+		}
+		
+		/**
+		 * Build HTML for threshold-based value with color (mobile version - no history)
+		 */
+		const buildThresholdHTML = (value, lowThreshold, highThreshold, prefix, reversed) => {
+			if (reversed === void 0) reversed = false
+			if (value === '') return '<span></span>'
+			
+			const val = parseFloat(value)
+			const low = parseFloat(lowThreshold)
+			const high = parseFloat(highThreshold)
+			const color = getColorStyle(val, low, high, reversed)
+			
+			return prefix + '<span class="state"' + color + '>' + value + '</span>'
+		}
+		
+		/**
+		 * Build HTML for percentage-based value with color and unit (mobile version)
+		 */
+		const buildPercentageHTML = (value, lowThreshold, highThreshold, prefix, unit, reversed) => {
+			if (reversed === void 0) reversed = false
+			if (value === '') return prefix ? '<span></span>' : ''
+			
+			const val = parseFloat(value)
+			const low = parseFloat(lowThreshold)
+			const high = parseFloat(highThreshold)
+			const color = getColorStyle(val, low, high, reversed)
+			
+			const valueSpan = '<span class="state"' + color + '>' + value + '</span>'
+			const unitSpan = '<span>' + unit + '</span>'
+			
+			return prefix ? prefix + valueSpan + unitSpan + ')' : valueSpan + unitSpan
+		}
+		
+		// ========================================
+		// === ICON HANDLERS ===
+		// ========================================
+		
+		/**
+		 * Initialize SSH connection status icon
+		 */
+		const initIconSSH = () => {
+			const el = document.getElementById('iconSSH#id#')
+			if (!el) return
+			
+			if ('#cnx_ssh#' === 'OK') {
+				el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
+			} else if ('#cnx_ssh#' === 'KO') {
+				el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
+			}
+		}
+		
+		/**
+		 * Initialize Cron status icon
+		 */
+		const initIconCron = () => {
+			const el = document.getElementById('iconCron#id#')
+			if (!el) return
+			
+			const isOn = '#cron_status#' === '1'
+			const isCustom = '#cron_status_custom#' === '1'
+			const display = '#cron_status_display#'
+			
+			const icon = isOn ? 'play-circle' : 'pause-circle'
+			const label = isOn ? 'ON' : 'OFF'
+			const customLabel = isCustom ? ' (Custom)' : ' (Default)'
+			const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
+			
+			el.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
+		}
+		
+		// ========================================
+		// === BUTTON HANDLERS ===
+		// ========================================
+		
+		/**
+		 * Initialize Reboot button with native confirm (mobile optimized)
+		 */
+		const initRebootButton = () => {
+			const btn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
+			if (!btn) return
+			
+			btn.addEventListener('click', () => {
+				if (confirm("Etes-vous sûr de vouloir redémarrer l'équipement #name# ?")) {
+					jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
+				}
+			})
+		}
+		
+		/**
+		 * Initialize Poweroff button with native confirm (mobile optimized)
+		 */
+		const initPoweroffButton = () => {
+			const btn = document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')
+			if (!btn) return
+			
+			btn.addEventListener('click', () => {
+				if (confirm("Etes-vous sûr de vouloir éteindre l'équipement #name# ?")) {
+					jeedom.cmd.execute({ id: '#cmd_poweroff_id#' })
+				}
+			})
+		}
+		
+		/**
+		 * Initialize Refresh button
+		 */
+		const initRefreshButton = () => {
+			const btn = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
+			if (!btn) return
+			
+			if ('#refresh_id#' !== '') {
+				btn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
+			} else {
+				btn.remove()
+			}
+		}
+		
+		// ========================================
+		// === VALUE DISPLAYS - Simple ===
+		// ========================================
+		
+		/**
+		 * Initialize Uptime display
+		 */
+		const initUptime = () => {
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('uptime#id#')
+			if (el) el.innerHTML = '<span>#uptime#</span>'
+		}
+		
+		/**
+		 * Initialize Network Infos display
+		 */
+		const initNetworkInfos = () => {
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('network_infos#id#')
+			if (el) el.innerHTML = '<span>#network_infos#</span>'
+		}
+		
+		/**
+		 * Initialize Network Traffic display
+		 */
+		const initNetwork = () => {
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			const el = document.getElementById('network#id#')
+			if (el) el.innerHTML = '<span>#network#</span>'
+		}
+		
+		// ========================================
+		// === VALUE DISPLAYS - With Thresholds ===
+		// ========================================
+		
+		/**
+		 * Initialize Load Average displays (1mn, 5mn, 15mn)
+		 */
+		const initLoadAverage = () => {
+			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			
+			// Load avg 1mn
+			const loadAvg1mn = document.getElementById('load_avg_1mn#id#')
+			if (loadAvg1mn) {
+				const html = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
+				loadAvg1mn.innerHTML = html
+			}
+			
+			// Load avg 5mn
+			const loadAvg5mn = document.getElementById('load_avg_5mn#id#')
+			if (loadAvg5mn) {
+				const html = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
+				loadAvg5mn.innerHTML = html
+			}
+			
+			// Load avg 15mn
+			const loadAvg15mn = document.getElementById('load_avg_15mn#id#')
+			if (loadAvg15mn) {
+				const html = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
+				loadAvg15mn.innerHTML = html
+			}
+		}
+		
+		/**
+		 * Initialize Memory display with percentage
+		 */
+		const initMemory = () => {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
 			const el = document.getElementById('memory_available_percent#id#')
@@ -228,25 +465,13 @@
 				return
 			}
 			
-			const val = parseFloat(value)
-			const low = parseFloat('#memory_available_percent_colorlow#')
-			const high = parseFloat('#memory_available_percent_colorhigh#')
-			
-			let color = ''
-			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
-			
-			el.innerHTML = `#memory# (<span class="state"${color}>${value}</span><span>%</span>)`
-		})()
-		</script>
-		<div class="tooltips" style="display: #swap_display#;">
-			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
-			<span id="swap_free_percent#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
+			el.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
+		}
+		
+		/**
+		 * Initialize Swap display with percentage
+		 */
+		const initSwap = () => {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
 			const el = document.getElementById('swap_free_percent#id#')
@@ -258,57 +483,13 @@
 				return
 			}
 			
-			const val = parseFloat(value)
-			const low = parseFloat('#swap_free_percent_colorlow#')
-			const high = parseFloat('#swap_free_percent_colorhigh#')
-			
-			let color = ''
-			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
-			
-			el.innerHTML = `#swap# (<span class="state"${color}>${value}</span><span>%</span>)`
-		})()
-		</script>
-		<div class="tooltips" style="display: #network_infos_display#;">
-			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
-			<span id="network_infos#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('network_infos#id#')
-			if (!el) return
-			
-			el.innerHTML = '<span>#network_infos#</span>'
-		})()
-		</script>
-		<div class="tooltips" style="display: #network_display#;">
-			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
-			<span id="network#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('network#id#')
-			if (!el) return
-			
-			el.innerHTML = '<span>#network#</span>'
-		})()
-		</script>
-		<!-- Cartes réseau supplémentaires -->
-		#multi_network_cards#
-		<div class="tooltips" style="display: #hdd_display#;">
-			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
-			<span id="hdd#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
+			el.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
+		}
+		
+		/**
+		 * Initialize HDD display with percentage
+		 */
+		const initHDD = () => {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
 			const el = document.getElementById('hdd#id#')
@@ -320,200 +501,13 @@
 				return
 			}
 			
-			const val = parseFloat(value)
-			const low = parseFloat('#hdd_free_percent_colorlow#')
-			const high = parseFloat('#hdd_free_percent_colorhigh#')
-			
-			let color = ''
-			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
-			
-			el.innerHTML = `#hdd# (<span class="state"${color}>${value}</span><span>%</span>)`
-		})()
-		</script>
-		<div id="syno_hddv2#id#"></div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			if ('#syno_hddv2_display#' !== 'block') return
-			
-			const container = document.getElementById('syno_hddv2#id#')
-			if (!container) return
-			
-			container.className = 'tooltips'
-			container.style.display = '#syno_hddv2_display#'
-			container.innerHTML = '<span title="Syno Volume 2 (% Libre) || Date valeur : #syno_hddv2_value# || Date collecte : #syno_hddv2_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv2_icon#</span> <span id="syno_hddv2_free_percent#id#"></span>'
-			
-			const el = document.getElementById('syno_hddv2_free_percent#id#')
-			if (!el) return
-			
-			const value = '#syno_hddv2_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
-			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat('#syno_hddv2_free_percent_colorlow#')
-			const high = parseFloat('#syno_hddv2_free_percent_colorhigh#')
-			
-			let color = ''
-			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
-			
-			el.innerHTML = `#syno_hddv2# (<span class="state"${color}>${value}</span><span>%</span>)`
-		})()
-		</script>
-		<div id="syno_hddv3#id#"></div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			if ('#syno_hddv3_display#' !== 'block') return
-			
-			const container = document.getElementById('syno_hddv3#id#')
-			if (!container) return
-			
-			container.className = 'tooltips'
-			container.style.display = '#syno_hddv3_display#'
-			container.innerHTML = '<span title="Syno Volume 3 (% Libre) || Date valeur : #syno_hddv3_value# || Date collecte : #syno_hddv3_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv3_icon#</span> <span id="syno_hddv3_free_percent#id#"></span>'
-			
-			const el = document.getElementById('syno_hddv3_free_percent#id#')
-			if (!el) return
-			
-			const value = '#syno_hddv3_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
-			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat('#syno_hddv3_free_percent_colorlow#')
-			const high = parseFloat('#syno_hddv3_free_percent_colorhigh#')
-			
-			let color = ''
-			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
-			
-			el.innerHTML = `#syno_hddv3# (<span class="state"${color}>${value}</span><span>%</span>)`
-		})()
-		</script>
-		<div id="syno_hddv4#id#"></div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			if ('#syno_hddv4_display#' !== 'block') return
-			
-			const container = document.getElementById('syno_hddv4#id#')
-			if (!container) return
-			
-			container.className = 'tooltips'
-			container.style.display = '#syno_hddv4_display#'
-			container.innerHTML = '<span title="Syno Volume 4 (% Libre) || Date valeur : #syno_hddv4_value# || Date collecte : #syno_hddv4_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddv4_icon#</span> <span id="syno_hddv4_free_percent#id#"></span>'
-			
-			const el = document.getElementById('syno_hddv4_free_percent#id#')
-			if (!el) return
-			
-			const value = '#syno_hddv4_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
-			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat('#syno_hddv4_free_percent_colorlow#')
-			const high = parseFloat('#syno_hddv4_free_percent_colorhigh#')
-			
-			let color = ''
-			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
-			
-			el.innerHTML = `#syno_hddv4# (<span class="state"${color}>${value}</span><span>%</span>)`
-		})()
-		</script>
-		<div id="syno_hddusb#id#"></div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			if ('#syno_hddusb_display#' !== 'block') return
-			
-			const container = document.getElementById('syno_hddusb#id#')
-			if (!container) return
-			
-			container.className = 'tooltips'
-			container.style.display = '#syno_hddusb_display#'
-			container.innerHTML = '<span title="Syno Volume USB (% Libre) || Date valeur : #syno_hddusb_value# || Date collecte : #syno_hddusb_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddusb_icon#</span> <span id="syno_hddusb_free_percent#id#"></span>'
-			
-			const el = document.getElementById('syno_hddusb_free_percent#id#')
-			if (!el) return
-			
-			const value = '#syno_hddusb_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
-			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat('#syno_hddusb_free_percent_colorlow#')
-			const high = parseFloat('#syno_hddusb_free_percent_colorhigh#')
-			
-			let color = ''
-			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
-			
-			el.innerHTML = `#syno_hddusb# (<span class="state"${color}>${value}</span><span>%</span>)`
-		})()
-		</script>
-		<div id="syno_hddesata#id#"></div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			if ('#syno_hddesata_display#' !== 'block') return
-			
-			const container = document.getElementById('syno_hddesata#id#')
-			if (!container) return
-			
-			container.className = 'tooltips'
-			container.style.display = '#syno_hddesata_display#'
-			container.innerHTML = '<span title="Syno Volume eSATA (% Libre) || Date valeur : #syno_hddesata_value# || Date collecte : #syno_hddesata_collect#" style="width:15px;max-width:15px;max-height:15px;">#syno_hddesata_icon#</span> <span id="syno_hddesata_free_percent#id#"></span>'
-			
-			const el = document.getElementById('syno_hddesata_free_percent#id#')
-			if (!el) return
-			
-			const value = '#syno_hddesata_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
-			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat('#syno_hddesata_free_percent_colorlow#')
-			const high = parseFloat('#syno_hddesata_free_percent_colorhigh#')
-			
-			let color = ''
-			if (val > high && high !== '') color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val < low) color = ' style="color: var(--al-danger-color) !important;"'
-			
-			el.innerHTML = `#syno_hddesata# (<span class="state"${color}>${value}</span><span>%</span>)`
-		})()
-		</script>
-		<div class="tooltips" style="display: #cpu_display#;">
-			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
-			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
+			el.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
+		}
+		
+		/**
+		 * Initialize CPU display with optional temperature
+		 */
+		const initCPU = () => {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
 			const cpuEl = document.getElementById('cpu#id#')
@@ -527,154 +521,116 @@
 				const tempVal = parseFloat(temp)
 				const low = parseFloat('#cpu_temp_colorlow#')
 				const high = parseFloat('#cpu_temp_colorhigh#')
+				const color = getColorStyle(tempVal, low, high, false)
 				
-				let color = ''
-				if (tempVal < low) color = ' style="color: var(--al-success-color) !important;"'
-				else if (tempVal >= low && tempVal <= high) color = ' style="color: var(--al-warning-color) !important;"'
-				else if (tempVal > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
-				
-				tempEl.innerHTML = ` (<span class="state"${color}>${temp}</span><span>°C</span>)`
+				tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C</span>)'
 			} else {
 				cpuEl.innerHTML = '<span>#cpu#</span>'
 			}
-		})()
-		</script>
-		<div class="tooltips" style="display: #perso1_display#;">
-			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
-			<span id="perso1_unite#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
+		}
+		
+		/**
+		 * Initialize Synology volume display using data attributes (mobile version)
+		 * @param {HTMLElement} container - The container div with data-syno-* attributes
+		 */
+		const initSynoVolume = (container) => {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			if (container.dataset.synoDisplay !== 'block') return
 			
-			const el = document.getElementById('perso1_unite#id#')
+			const dataset = container.dataset
+			const synoId = dataset.synoId
+			
+			// Setup container
+			container.className = 'tooltips'
+			container.style.display = dataset.synoDisplay
+			
+			// Build HTML with tooltip (mobile format with ||)
+			const title = dataset.synoName + ' (% Libre) || Date valeur : ' + dataset.synoDateValue + ' || Date collecte : ' + dataset.synoCollect
+			container.innerHTML = '<span title="' + title + '" style="width:15px;max-width:15px;max-height:15px;">' + dataset.synoIcon + '</span> <span id="' + synoId + '_free_percent#id#"></span>'
+			
+			// Set percentage value with color
+			const el = document.getElementById(synoId + '_free_percent#id#')
 			if (!el) return
 			
-			const value = '#perso1#'
+			const value = dataset.synoPercent
 			if (value === '') {
 				el.innerHTML = '<span></span>'
 				return
 			}
 			
 			const val = parseFloat(value)
-			const low = parseFloat('#perso1_colorlow#')
-			const high = parseFloat('#perso1_colorhigh#')
+			const low = parseFloat(dataset.synoLow)
+			const high = parseFloat(dataset.synoHigh)
+			const color = getColorStyle(val, low, high, true)
 			
-			let color = ''
-			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
-			
-			if (color) {
-				el.innerHTML = `<span class="state"${color}>${value}</span><span>#perso1_unite#</span>`
-			} else {
-				el.innerHTML = '<span>' + value + '</span><span>#perso1_unite#</span>'
-			}
-		})()
-		</script>
-		<div class="tooltips" style="display: #perso2_display#;">
-			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
-			<span id="perso2_unite#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
+			el.innerHTML = dataset.synoValue + ' (<span class="state"' + color + '>' + value + '</span><span>%</span>)'
+		}
+		
+		/**
+		 * Initialize custom command display (perso1-4) using data attributes (mobile version)
+		 * @param {HTMLElement} container - The container div with data-perso-* attributes
+		 */
+		const initPerso = (container) => {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const el = document.getElementById('perso2_unite#id#')
+			const dataset = container.dataset
+			const persoId = dataset.persoId
+			const el = document.getElementById(persoId + '_unite#id#')
 			if (!el) return
 			
-			const value = '#perso2#'
+			const value = dataset.persoValue
 			if (value === '') {
 				el.innerHTML = '<span></span>'
 				return
 			}
 			
 			const val = parseFloat(value)
-			const low = parseFloat('#perso2_colorlow#')
-			const high = parseFloat('#perso2_colorhigh#')
-			
-			let color = ''
-			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			const low = parseFloat(dataset.persoLow)
+			const high = parseFloat(dataset.persoHigh)
+			const color = getColorStyle(val, low, high, false)
 			
 			if (color) {
-				el.innerHTML = `<span class="state"${color}>${value}</span><span>#perso2_unite#</span>`
+				el.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
 			} else {
-				el.innerHTML = '<span>' + value + '</span><span>#perso2_unite#</span>'
+				el.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
 			}
-		})()
-		</script>
-		<div class="tooltips" style="display: #perso3_display#;">
-			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
-			<span id="perso3_unite#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+		}
+		
+		// ========================================
+		// === INITIALIZATION ===
+		// ========================================
+		
+		// Only initialize if template is properly instantiated
+		if ('#uid#') {
+			// Icon handlers
+			initIconSSH()
+			initIconCron()
 			
-			const el = document.getElementById('perso3_unite#id#')
-			if (!el) return
+			// Button handlers
+			initRebootButton()
+			initPoweroffButton()
+			initRefreshButton()
 			
-			const value = '#perso3#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
-			}
+			// Simple value displays
+			initUptime()
+			initNetworkInfos()
+			initNetwork()
 			
-			const val = parseFloat(value)
-			const low = parseFloat('#perso3_colorlow#')
-			const high = parseFloat('#perso3_colorhigh#')
+			// Value displays with thresholds
+			initLoadAverage()
+			initMemory()
+			initSwap()
+			initHDD()
 			
-			let color = ''
-			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
+			// CPU with temperature
+			initCPU()
 			
-			if (color) {
-				el.innerHTML = `<span class="state"${color}>${value}</span><span>#perso3_unite#</span>`
-			} else {
-				el.innerHTML = '<span>' + value + '</span><span>#perso3_unite#</span>'
-			}
-		})()
-		</script>
-		<div class="tooltips" style="display: #perso4_display#;">
-			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
-			<span id="perso4_unite#id#"></span>
-		</div>
-		<script>
-		(() => {
-			'use strict'
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+			// Synology volumes - generic initialization using data attributes
+			document.querySelectorAll('[data-syno-id]').forEach(initSynoVolume)
 			
-			const el = document.getElementById('perso4_unite#id#')
-			if (!el) return
-			
-			const value = '#perso4#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
-			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat('#perso4_colorlow#')
-			const high = parseFloat('#perso4_colorhigh#')
-			
-			let color = ''
-			if (val < low) color = ' style="color: var(--al-success-color) !important;"'
-			else if (val >= low && val <= high) color = ' style="color: var(--al-warning-color) !important;"'
-			else if (val > high && high !== '') color = ' style="color: var(--al-danger-color) !important;"'
-			
-			if (color) {
-				el.innerHTML = `<span class="state"${color}>${value}</span><span>#perso4_unite#</span>`
-			} else {
-				el.innerHTML = '<span>' + value + '</span><span>#perso4_unite#</span>'
-			}
-		})()
-		</script>
-	</div>
-	#divGraphInfo#
+			// Custom commands - generic initialization using data attributes
+			document.querySelectorAll('[data-perso-id]').forEach(initPerso)
+		}
+	})()
+	</script>
 </div>
