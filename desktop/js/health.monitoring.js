@@ -111,6 +111,9 @@ const displayHealthData = (healthData) => {
 
   tbody.innerHTML = html
 
+  // Initialize Jeedom tooltips with HTML support
+  initTooltips()
+
   // Initialize Jeedom's automatic command update system for dynamically inserted elements
   const cmdElements = tbody.querySelectorAll('.cmd[data-cmd_id]')
   if (cmdElements.length > 0) {
