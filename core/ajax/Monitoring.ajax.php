@@ -70,6 +70,7 @@ try {
             $cmdLogicalIds = array(
                 'sshStatus' => 'cnx_ssh',
                 'cronStatus' => 'cron_status',
+                'cronCustom' => 'cron_status_custom',
                 'uptime' => 'uptime',
                 'loadAvg1' => 'load_avg_1mn',
                 'ip' => 'ip'

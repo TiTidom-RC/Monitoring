@@ -84,7 +84,7 @@ const displayHealthData = (healthData) => {
         typeLabel = '<span class="label label-warning">Distant</span>'
         break
       case 'unconfigured':
-        typeLabel = '<span class="label label-default">{{Non configuré}}</span>'
+        typeLabel = '<span class="label label-danger">{{Non configuré}}</span>'
         break
       default:
         typeLabel = '<span class="text-muted">-</span>'
@@ -98,7 +98,7 @@ const displayHealthData = (healthData) => {
         <td style="text-align:center;">${typeLabel}</td>
         <td>${eqLogic.sshHostName || '<span class="text-muted">-</span>'}</td>
         <td><span class="cmd" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}">${formatCmdValue(eqLogic.commands?.sshStatus)}</span></td>
-        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}">${formatCmdValue(eqLogic.commands?.cronStatus)}</span></td>
+        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
         <td><span class="cmd" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
         <td><span class="cmd" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
         <td><span class="cmd" data-cmd_id="${eqLogic.commands?.ip?.id || ''}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
@@ -119,9 +119,12 @@ const displayHealthData = (healthData) => {
 /**
  * Format command value for display
  * @param {Object} cmdData - Command data object
+ * @param {string} type - Type of command (optional, e.g., 'cron')
+ * @param {string} eqType - Equipment type (optional, e.g., 'local', 'distant')
+ * @param {Object} cronCustomData - Cron custom status data (optional)
  * @returns {string} Formatted HTML
  */
-const formatCmdValue = (cmdData) => {
+const formatCmdValue = (cmdData, type = null, eqType = null, cronCustomData = null) => {
   if (!cmdData || cmdData.value === null || cmdData.value === undefined || cmdData.value === '') {
     return '<span class="text-muted">-</span>'
   }
@@ -129,7 +132,30 @@ const formatCmdValue = (cmdData) => {
   const value = cmdData.value
   const unit = cmdData.unit || ''
 
-  // Format special values
+  // Special handling for Cron Status
+  if (type === 'cron') {
+    const isOn = value === '1' || value === 1 || value === 'Yes'
+    const isCustom = cronCustomData && (cronCustomData.value === '1' || cronCustomData.value === 1)
+    
+    // Custom ON = orange badge with play icon
+    if (isCustom && isOn) {
+      return '<span class="label label-warning"><i class="fas fa-play-circle"></i> ON <small>(Custom)</small></span>'
+    }
+    // Custom OFF = orange badge with pause icon
+    else if (isCustom && !isOn) {
+      return '<span class="label label-warning"><i class="fas fa-pause-circle"></i> OFF <small>(Custom)</small></span>'
+    }
+    // Default ON = green badge with play icon
+    else if (isOn) {
+      return '<span class="label label-success"><i class="fas fa-play-circle"></i> ON</span>'
+    }
+    // Default OFF = red badge with pause icon
+    else {
+      return '<span class="label label-danger"><i class="fas fa-pause-circle"></i> OFF</span>'
+    }
+  }
+
+  // Format other special values
   if (value === 'OK' || value === 'Running') {
     return `<span class="label label-success">${value}</span>`
   } else if (value === 'KO' || value === 'Stopped') {
