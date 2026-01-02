@@ -97,7 +97,7 @@ const displayHealthData = (healthData) => {
         <td style="text-align:center;">${isVisible ? '<i class="fas fa-eye text-success"></i>' : '<i class="fas fa-eye-slash text-muted"></i>'}</td>
         <td style="text-align:center;">${typeLabel}</td>
         <td>${eqLogic.sshHostName || '<span class="text-muted">-</span>'}</td>
-        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}">${formatCmdValue(eqLogic.commands?.sshStatus)}</span></td>
+        <td><span class="cmd" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}">${formatCmdValue(eqLogic.commands?.sshStatus, 'ssh')}</span></td>
         <td><span class="cmd" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
         <td><span class="cmd" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
         <td><span class="cmd" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
@@ -131,6 +131,17 @@ const formatCmdValue = (cmdData, type = null, eqType = null, cronCustomData = nu
 
   const value = cmdData.value
   const unit = cmdData.unit || ''
+
+  // Special handling for SSH Status
+  if (type === 'ssh') {
+    if (value === 'OK') {
+      return '<span class="label label-success"><i class="fas fa-check"></i> OK</span>'
+    } else if (value === 'KO') {
+      return '<span class="label label-danger"><i class="fas fa-times-circle"></i> KO</span>'
+    } else if (value === 'No') {
+      return '<span class="text-muted">-</span>'
+    }
+  }
 
   // Special handling for Cron Status
   if (type === 'cron') {
