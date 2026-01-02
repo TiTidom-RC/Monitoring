@@ -224,6 +224,9 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                                     <a class="btn btn-default cursor roundedRight sshmanagerHelper" data-helper="add" title="{{Ajouter un nouvel hôte SSH}}">
                                                         <i class="fas fa-plus-circle"></i>
                                                     </a>
+                                                    <a class="btn btn-default cursor roundedRight sshmanagerHelper" data-helper="edit" title="{{Éditer cet hôte SSH}}" style="display:none;">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                    </a>
                                                 </span>
                                             </div>
                                         </div>

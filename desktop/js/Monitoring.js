@@ -397,6 +397,33 @@ function printEqLogic(_eqLogic) {
   }
   
   buildSelectHost(_eqLogic.configuration.SSHHostId)
+  
+  // Toggle add/edit button based on SSH host selection
+  const sshHostSelect = document.querySelector('.sshmanagerHelper[data-helper="list"]')
+  if (sshHostSelect) {
+    sshHostSelect.addEventListener('change', toggleSSHButtons)
+    // Initialize button display
+    toggleSSHButtons({ currentTarget: sshHostSelect })
+  }
+}
+
+/**
+ * Toggle between add and edit SSH buttons based on selection
+ */
+function toggleSSHButtons(event) {
+  const selectedValue = event.currentTarget.value
+  const addBtn = document.querySelector('.sshmanagerHelper[data-helper="add"]')
+  const editBtn = document.querySelector('.sshmanagerHelper[data-helper="edit"]')
+  
+  if (selectedValue && selectedValue !== '') {
+    // Host selected → show edit, hide add
+    addBtn?.unseen()
+    editBtn?.seen()
+  } else {
+    // No host selected → show add, hide edit
+    addBtn?.seen()
+    editBtn?.unseen()
+  }
 }
 
 // Expose functions globally for Jeedom to call them
