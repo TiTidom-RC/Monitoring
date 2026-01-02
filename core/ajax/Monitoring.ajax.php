@@ -47,6 +47,14 @@ try {
         
         foreach ($eqLogics as $eqLogic) {
             $type = $eqLogic->getConfiguration('localoudistant', '');
+            
+            // Get last refresh from uptime command collectDate
+            $uptimeCmd = $eqLogic->getCmd('info', 'uptime');
+            $lastUptime = null;
+            if (is_object($uptimeCmd)) {
+                $lastUptime = $uptimeCmd->getCollectDate();
+            }
+            
             $eqData = array(
                 'id' => $eqLogic->getId(),
                 'name' => $eqLogic->getName(),
@@ -55,6 +63,7 @@ try {
                 'type' => $type !== '' ? $type : 'unconfigured',
                 'sshHostId' => $eqLogic->getConfiguration('SSHHostId', ''),
                 'sshHostName' => '',
+                'lastRefresh' => $lastUptime,
                 'commands' => array()
             );
             
@@ -82,7 +91,9 @@ try {
                     $eqData['commands'][$key] = array(
                         'id' => $cmd->getId(),
                         'value' => $cmd->execCmd(),
-                        'unit' => $cmd->getUnite()
+                        'unit' => $cmd->getUnite(),
+                        'collectDate' => $cmd->getCollectDate(),
+                        'valueDate' => $cmd->getValueDate()
                     );
                 } else {
                     $eqData['commands'][$key] = null;

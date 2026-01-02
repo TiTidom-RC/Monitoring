@@ -45,11 +45,13 @@ if (!isConnect()) {
                 <th style="width:100px;">{{Uptime}}</th>
                 <th style="width:120px;">{{Charge 1min}}</th>
                 <th style="width:120px;">{{Adresse IP}}</th>
+                <th style="width:150px;">{{Dernière Communication}}</th>
+                <th style="width:150px;">{{Dernière Valeur}}</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td colspan="10" class="text-center">
+                <td colspan="12" class="text-center">
                     <i class="fas fa-spinner fa-spin"></i> {{Chargement des données...}}
                 </td>
             </tr>
