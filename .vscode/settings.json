@@ -2,7 +2,7 @@
     "cSpell.customDictionaries": {
         "project-words": {
             "name": "project-words",
-            "path": "${workspaceRoot}/.vscode/cspell.json",
+            "path": "${workspaceFolder}/.vscode/cspell.json",
             "addWords": true,
             "scope": "folder"
         }

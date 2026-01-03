@@ -2,6 +2,7 @@
 .vscode/*
 !.vscode/extensions.json
 !.vscode/cspell.json
+!.vscode/settings.json
 
 # OS Generated Files
 # Windows
