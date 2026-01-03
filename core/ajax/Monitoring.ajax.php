@@ -64,6 +64,7 @@ try {
                 'sshHostId' => $eqLogic->getConfiguration('SSHHostId', ''),
                 'sshHostName' => '',
                 'lastRefresh' => $lastUptime,
+                'cronCustom' => (int)$eqLogic->getConfiguration('pull_use_custom', 0),
                 'commands' => array()
             );
             
@@ -79,7 +80,6 @@ try {
             $cmdLogicalIds = array(
                 'sshStatus' => 'cnx_ssh',
                 'cronStatus' => 'cron_status',
-                'cronCustom' => 'cron_status_custom',
                 'uptime' => 'uptime',
                 'loadAvg1' => 'load_avg_1mn',
                 'loadAvg5' => 'load_avg_5mn',

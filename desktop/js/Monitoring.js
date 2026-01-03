@@ -437,10 +437,9 @@ if (healthButton) {
       height: '90%',
       top: '5vh',
       contentUrl: 'index.php?v=d&plugin=Monitoring&modal=health.monitoring',
-      buttons: {
-        close: {
-          label: '{{Fermer}}',
-          className: 'warning'
+      callback: function() {
+        if (typeof initModalHealthMonitoring === 'function') {
+          initModalHealthMonitoring()
         }
       }
     })

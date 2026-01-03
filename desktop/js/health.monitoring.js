@@ -96,28 +96,44 @@ const displayHealthData = (healthData) => {
     // Prepare searchable values
     const sshStatusSearch = eqLogic.commands?.sshStatus?.value === 'OK' ? 'OK' : eqLogic.commands?.sshStatus?.value === 'KO' ? 'KO' : ''
     const cronValue = eqLogic.commands?.cronStatus?.value
-    const cronStatusSearch = (cronValue === '1' || cronValue === 1 || cronValue === 'Yes') ? 'ON' : 'OFF'
+    const cronStatusSearch = cronValue ? ((cronValue === '1' || cronValue === 1 || cronValue === 'Yes') ? 'ON' : 'OFF') : ''
+    
+    // Prepare cron custom data
+    const cronCustomValue = eqLogic.cronCustom || 0
+    const cronCustomData = { value: cronCustomValue }
     
     return `
       <tr>
         <td data-search="${eqLogic.name}"><span><a href="index.php?v=d&p=Monitoring&m=Monitoring&id=${eqLogic.id}" target="_blank">${eqLogic.name}</a></span></td>
-        <td style="text-align:center;" data-search="${isActive ? 'actif' : 'inactif'}"><span>${isActive ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</span></td>
-        <td style="text-align:center;" data-search="${isVisible ? 'visible' : 'masque'}"><span>${isVisible ? '<i class="fas fa-eye text-success"></i>' : '<i class="fas fa-eye-slash text-muted"></i>'}</span></td>
-        <td style="text-align:center;" data-search="${eqLogic.type}"><span>${typeLabel}</span></td>
+        <td style="text-align:center;" data-search="${isActive ? 'actif' : 'inactif'}" data-type="status"><span>${isActive ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</span></td>
+        <td style="text-align:center;" data-search="${isVisible ? 'visible' : 'invisible'}" data-type="status"><span>${isVisible ? '<i class="fas fa-eye text-success"></i>' : '<i class="fas fa-eye-slash text-muted"></i>'}</span></td>
+        <td style="text-align:center;" data-search="${eqLogic.type} ${eqLogic.type === 'local' ? 'Local' : eqLogic.type === 'distant' ? 'Distant' : 'Non configuré'}"><span>${typeLabel}</span></td>
         <td data-search="${eqLogic.sshHostName || ''}"><span>${eqLogic.sshHostName || '<span class="text-muted">-</span>'}</span></td>
-        <td style="text-align:center;" data-search="${sshStatusSearch}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}" data-eq-id="${eqLogic.id}" data-cmd-type="ssh" title="${formatTooltip('SSH Status', eqLogic.commands?.sshStatus)}">${formatCmdValue(eqLogic.commands?.sshStatus, 'ssh')}</span></td>
-        <td style="text-align:center;" data-search="${cronStatusSearch}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}" data-eq-id="${eqLogic.id}" data-cmd-type="cron" data-eq-type="${eqLogic.type}" data-cron-custom="${eqLogic.commands?.cronCustom?.value || '0'}" title="${formatTooltip('Cron Status', eqLogic.commands?.cronStatus)}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
-        <td data-search="${eqLogic.commands?.uptime?.value || ''}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Uptime', eqLogic.commands?.uptime)}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
-        <td data-search="${eqLogic.commands?.loadAvg1?.value || ''}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 1min', eqLogic.commands?.loadAvg1)}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
-        <td data-search="${eqLogic.commands?.loadAvg5?.value || ''}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg5?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 5min', eqLogic.commands?.loadAvg5)}">${formatCmdValue(eqLogic.commands?.loadAvg5)}</span></td>
-        <td data-search="${eqLogic.commands?.loadAvg15?.value || ''}" ><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg15?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 15min', eqLogic.commands?.loadAvg15)}">${formatCmdValue(eqLogic.commands?.loadAvg15)}</span></td>
-        <td data-search="${eqLogic.commands?.ip?.value || ''}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.ip?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Adresse IP', eqLogic.commands?.ip)}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
-        <td class="lastComm" data-eq-id="${eqLogic.id}" data-eq-type="${eqLogic.type}"><span>${formatDate(eqLogic.lastRefresh, eqLogic.type)}</span></td>
+        <td style="text-align:center;" data-search="${sshStatusSearch}" data-type="status"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}" data-eq-id="${eqLogic.id}" data-cmd-type="ssh" title="${formatTooltip('SSH Status', eqLogic.commands?.sshStatus)}">${formatCmdValue(eqLogic.commands?.sshStatus, 'ssh')}</span></td>
+        <td style="text-align:center;" data-search="${cronStatusSearch}" data-type="status"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}" data-eq-id="${eqLogic.id}" data-cmd-type="cron" data-eq-type="${eqLogic.type}" data-cron-custom="${cronCustomValue}" title="${formatTooltip('Cron Status', eqLogic.commands?.cronStatus)}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, cronCustomData)}</span></td>
+        <td data-search="${eqLogic.commands?.uptime?.value || ''}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Uptime', eqLogic.commands?.uptime)}" data-value="${eqLogic.commands?.uptime?.value || ''}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
+        <td data-search="${eqLogic.commands?.loadAvg1?.value || ''}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg1?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 1min', eqLogic.commands?.loadAvg1)}" data-value="${eqLogic.commands?.loadAvg1?.value || ''}">${formatCmdValue(eqLogic.commands?.loadAvg1)}</span></td>
+        <td data-search="${eqLogic.commands?.loadAvg5?.value || ''}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg5?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 5min', eqLogic.commands?.loadAvg5)}" data-value="${eqLogic.commands?.loadAvg5?.value || ''}">${formatCmdValue(eqLogic.commands?.loadAvg5)}</span></td>
+        <td data-search="${eqLogic.commands?.loadAvg15?.value || ''}" ><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.loadAvg15?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Charge 15min', eqLogic.commands?.loadAvg15)}" data-value="${eqLogic.commands?.loadAvg15?.value || ''}">${formatCmdValue(eqLogic.commands?.loadAvg15)}</span></td>
+        <td data-search="${eqLogic.commands?.ip?.value || ''}"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.ip?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Adresse IP', eqLogic.commands?.ip)}" data-value="${eqLogic.commands?.ip?.value || ''}">${formatCmdValue(eqLogic.commands?.ip)}</span></td>
+        <td class="lastComm" data-eq-id="${eqLogic.id}" data-eq-type="${eqLogic.type}" data-search=""><span>${formatDate(eqLogic.lastRefresh, eqLogic.type)}</span></td>
       </tr>
     `
   }).join('')
 
   tbody.innerHTML = html
+
+  // Enrich data-search with formatted text for cells with formatted content
+  // Exclude status cells to preserve exact match
+  tbody.querySelectorAll('td[data-search]:not([data-type="status"])').forEach(cell => {
+    const currentSearch = cell.getAttribute('data-search')
+    const textContent = cell.textContent.trim()
+    
+    // If textContent is different from data-search, add it
+    if (textContent && textContent !== currentSearch && textContent !== '-') {
+      cell.setAttribute('data-search', `${currentSearch} ${textContent}`)
+    }
+  })
 
   // Initialize Jeedom tooltips with HTML support
   initTooltips()
@@ -129,37 +145,61 @@ const displayHealthData = (healthData) => {
   const searchInput = document.getElementById('healthSearchInput')
   const tableRows = tbody.querySelectorAll('tr')
   
-  if (searchInput) {
-    searchInput.addEventListener('keyup', function() {
-      const searchTerm = this.value.toLowerCase().trim()
+  // Reusable search function
+  const performSearch = () => {
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : ''
+    
+    tableRows.forEach(row => {
+      if (searchTerm === '') {
+        row.style.display = ''
+        return
+      }
       
-      tableRows.forEach(row => {
-        if (searchTerm === '') {
-          row.style.display = ''
-          return
+      // List of status keywords that need exact match
+      const statusKeywords = ['on', 'off', 'ok', 'ko', 'actif', 'inactif', 'visible', 'invisible']
+      const isStatusKeyword = statusKeywords.includes(searchTerm)
+      
+      const cells = row.querySelectorAll('td')
+      let found = false
+      
+      for (let cell of cells) {
+        const isStatusCell = cell.getAttribute('data-type') === 'status'
+        const searchValue = cell.getAttribute('data-search')
+        
+        if (!searchValue) continue
+        
+        const searchLower = searchValue.toLowerCase()
+        
+        // For status keywords: only search in status cells with exact match
+        if (isStatusKeyword) {
+          if (isStatusCell && searchLower === searchTerm) {
+            found = true
+            break
+          }
         }
-        
-        // Search in data-search attributes AND visible text (contains search)
-        const cells = row.querySelectorAll('td')
-        let found = false
-        
-        cells.forEach(cell => {
-          // Check data-search attribute
-          const searchValue = cell.getAttribute('data-search')
-          if (searchValue && searchValue.toLowerCase().includes(searchTerm)) {
+        // For non-status keywords: contains search ONLY in non-status cells
+        else if (!isStatusCell) {
+          if (searchLower.includes(searchTerm)) {
             found = true
-            return
+            break
           }
-          
-          // Check visible text content
-          const textContent = cell.textContent.toLowerCase()
-          if (textContent.includes(searchTerm)) {
-            found = true
-          }
-        })
-        
-        row.style.display = found ? '' : 'none'
-      })
+        }
+      }
+      
+      row.style.display = found ? '' : 'none'
+    })
+  }
+  
+  if (searchInput) {
+    searchInput.addEventListener('keyup', performSearch)
+  }
+
+  // Clear search button
+  const clearButton = document.getElementById('healthSearchClear')
+  if (clearButton && searchInput) {
+    clearButton.addEventListener('click', function() {
+      searchInput.value = ''
+      performSearch()
     })
   }
 
@@ -208,17 +248,41 @@ const displayHealthData = (healthData) => {
       const cmdType = element.getAttribute('data-cmd-type')
       const value = event.display_value || event.value
       
+      // Update data-value attribute
+      element.setAttribute('data-value', value)
+      
+      // Get parent cell to update data-search
+      const parentCell = element.closest('td')
+      
       // Format value based on command type
       if (cmdType === 'ssh') {
         element.innerHTML = formatCmdValue({ value: value }, 'ssh')
+        // Update data-search for status cell (exact match values)
+        if (parentCell) {
+          const searchValue = value === 'OK' ? 'OK' : value === 'KO' ? 'KO' : ''
+          parentCell.setAttribute('data-search', searchValue)
+        }
       } else if (cmdType === 'cron') {
         const eqType = element.getAttribute('data-eq-type')
         const cronCustomValue = element.getAttribute('data-cron-custom')
         const cronCustomData = cronCustomValue ? { value: cronCustomValue } : null
         element.innerHTML = formatCmdValue({ value: value }, 'cron', eqType, cronCustomData)
+        // Update data-search for status cell (exact match values)
+        if (parentCell) {
+          const searchValue = (value === '1' || value === 1 || value === 'Yes') ? 'ON' : 'OFF'
+          parentCell.setAttribute('data-search', searchValue)
+        }
       } else {
         element.innerHTML = formatCmdValue({ value: value })
+        // Update data-search for non-status cells (include formatted text)
+        if (parentCell && !parentCell.getAttribute('data-type')) {
+          const formattedText = element.textContent.trim()
+          parentCell.setAttribute('data-search', `${value} ${formattedText}`)
+        }
       }
+      
+      // Refresh search after data-search update
+      performSearch()
       
       // Add visual feedback for update
       element.classList.remove('cmd-updated')
@@ -235,14 +299,26 @@ const displayHealthData = (healthData) => {
           const lastCommCell = eqLastCommMap.get(eqId)
           if (lastCommCell) {
             const eqType = lastCommCell.getAttribute('data-eq-type')
-            lastCommCell.innerHTML = formatDate(event.collectDate, eqType)
+            const formattedDate = formatDate(event.collectDate, eqType)
+            const lastCommSpan = lastCommCell.querySelector('span')
             
-            lastCommCell.classList.remove('cmd-updated')
-            void lastCommCell.offsetWidth
-            lastCommCell.classList.add('cmd-updated')
-            
-            // Remove class after animation completes
-            setTimeout(() => lastCommCell.classList.remove('cmd-updated'), 2000)
+            if (lastCommSpan) {
+              lastCommSpan.innerHTML = formattedDate
+              
+              // Update data-search with formatted date text
+              const dateText = lastCommSpan.textContent.trim()
+              lastCommCell.setAttribute('data-search', dateText)
+              
+              // Refresh search after data-search update
+              performSearch()
+              
+              lastCommSpan.classList.remove('cmd-updated')
+              void lastCommSpan.offsetWidth
+              lastCommSpan.classList.add('cmd-updated')
+              
+              // Remove class after animation completes
+              setTimeout(() => lastCommSpan.classList.remove('cmd-updated'), 2000)
+            }
           }
         }
       }
@@ -307,11 +383,11 @@ const formatCmdValue = (cmdData, type = null, eqType = null, cronCustomData = nu
     
     // Custom ON = orange badge with play icon
     if (isCustom && isOn) {
-      return '<span class="label label-warning"><i class="fas fa-play-circle"></i> ON <small>(Custom)</small></span>'
+      return '<span class="label label-warning"><i class="fas fa-play-circle"></i> ON</span>'
     }
     // Custom OFF = orange badge with pause icon
     else if (isCustom && !isOn) {
-      return '<span class="label label-warning"><i class="fas fa-pause-circle"></i> OFF <small>(Custom)</small></span>'
+      return '<span class="label label-warning"><i class="fas fa-pause-circle"></i> OFF</span>'
     }
     // Default ON = green badge with play icon
     else if (isOn) {

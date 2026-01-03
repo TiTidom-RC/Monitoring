@@ -36,36 +36,101 @@ if (!isConnect()) {
     font-family: inherit;
     font-size: inherit;
 }
+
+#healthMonitoringContainer {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#table_healthMonitoring {
+    width: 100%;
+    table-layout: auto;
+    min-width: 1400px;
+}
+
+#table_healthMonitoring th,
+#table_healthMonitoring td {
+    white-space: nowrap;
+    padding: 4px 8px;
+    vertical-align: middle;
+    line-height: 1.2;
+    height: auto;
+}
+
+#table_healthMonitoring tbody tr {
+    height: 32px;
+}
+
+#table_healthMonitoring th {
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-color, #fff);
+    z-index: 10;
+    height: 36px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1600px) {
+    #table_healthMonitoring {
+        font-size: 0.9em;
+    }
+    
+    #table_healthMonitoring th,
+    #table_healthMonitoring td {
+        padding: 3px 6px;
+    }
+}
+
+@media (max-width: 1400px) {
+    #table_healthMonitoring {
+        font-size: 0.85em;
+    }
+    
+    #table_healthMonitoring th,
+    #table_healthMonitoring td {
+        padding: 2px 4px;
+    }
+}
 </style>
 
 <div style="display: none;" id="md_modal"></div>
 
-<div class="healthMonitoring" id="healthMonitoringContainer" style="width:100%;height:100%;overflow:auto;">
+<div class="healthMonitoring" id="healthMonitoringContainer">
     
     <div class="alert alert-info">
         <i class="fas fa-info-circle"></i> {{Résumé de l'état de santé de tous vos équipements Monitoring}}
     </div>
     
-    <div style="margin-bottom:10px;">
-        <input type="text" id="healthSearchInput" class="form-control" placeholder="{{Rechercher...}}" style="width:300px;display:inline-block;">
+    <div style="margin-bottom:10px;display:flex;align-items:center;gap:10px;">
+        <div class="input-group" style="width:300px;">
+            <input type="text" id="healthSearchInput" class="form-control roundedLeft" placeholder="{{Rechercher...}}">
+            <span class="input-group-btn">
+                <button class="btn btn-default roundedRight" type="button" id="healthSearchClear" title="{{Effacer la recherche}}">
+                    <i class="fas fa-times"></i>
+                </button>
+            </span>
+        </div>
+        <i class="fas fa-filter icon_blue tooltips" style="font-size:1.2em;cursor:help;" 
+           title="<b>{{Filtres de statut disponibles}}</b><br><br><b>on</b> / <b>off</b> : {{Statut du cron}}<br><b>ok</b> / <b>ko</b> : {{Statut SSH}}<br><b>actif</b> / <b>inactif</b> : {{Équipement actif}}<br><b>visible</b> / <b>invisible</b> : {{Équipement visible}}<br><br>{{Autres termes : recherche par nom, IP, charge, etc.}}"></i>
     </div>
     
     <table class="table table-condensed table-bordered dataTable" id="table_healthMonitoring">
         <thead>
             <tr>
-                <th style="white-space:nowrap;">{{Nom}}</th>
+                <th>{{Nom}}</th>
                 <th style="text-align:center;" data-sortable="false">{{Actif}}</th>
                 <th style="text-align:center;" data-sortable="false">{{Visible}}</th>
                 <th style="text-align:center;">{{Type}}</th>
-                <th style="white-space:nowrap;">{{Hôte SSH}}</th>
+                <th>{{Hôte SSH}}</th>
                 <th style="text-align:center;">{{SSH Status}}</th>
                 <th style="text-align:center;">{{Cron Status}}</th>
-                <th style="white-space:nowrap;">{{Uptime}}</th>
+                <th>{{Uptime}}</th>
                 <th>{{Charge 1min}}</th>
                 <th>{{Charge 5min}}</th>
                 <th>{{Charge 15min}}</th>
-                <th style="white-space:nowrap;">{{Adresse IP}}</th>
-                <th style="white-space:nowrap;">{{Dernière Communication}}</th>
+                <th>{{Adresse IP}}</th>
+                <th>{{Dernière Communication}}</th>
             </tr>
         </thead>
         <tbody>
