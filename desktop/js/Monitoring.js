@@ -437,6 +437,18 @@ if (healthButton) {
       height: '90%',
       top: '5vh',
       contentUrl: 'index.php?v=d&plugin=Monitoring&modal=health.monitoring',
+      defaultButtons: {},
+      buttons: {
+        close: {
+          label: '<i class="fas fa-times"></i> {{Fermer}}',
+          className: 'success',
+          callback: {
+            click: function(event) {
+              event.target.closest('div.jeeDialog')._jeeDialog.close()
+            }
+          }
+        }
+      },
       callback: function() {
         if (typeof initModalHealthMonitoring === 'function') {
           initModalHealthMonitoring()
