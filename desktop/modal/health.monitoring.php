@@ -46,12 +46,12 @@ if (!isConnect()) {
         <i class="fas fa-info-circle"></i> {{Résumé de l'état de santé de tous vos équipements Monitoring}}
     </div>
     
-    <table class="table table-condensed table-bordered" id="table_healthMonitoring">
+    <table class="table table-condensed table-bordered dataTable" id="table_healthMonitoring">
         <thead>
             <tr>
                 <th style="white-space:nowrap;">{{Nom}}</th>
-                <th style="text-align:center;">{{Actif}}</th>
-                <th style="text-align:center;">{{Visible}}</th>
+                <th style="text-align:center;" data-sortable="false">{{Actif}}</th>
+                <th style="text-align:center;" data-sortable="false">{{Visible}}</th>
                 <th style="text-align:center;">{{Type}}</th>
                 <th style="white-space:nowrap;">{{Hôte SSH}}</th>
                 <th style="text-align:center;">{{SSH Status}}</th>
