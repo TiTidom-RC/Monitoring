@@ -41,6 +41,73 @@ try {
         }
     }
 
+    if (init('action') == 'getHealthData') {
+        $eqLogics = eqLogic::byType('Monitoring');
+        $healthData = array();
+        
+        foreach ($eqLogics as $eqLogic) {
+            $type = $eqLogic->getConfiguration('localoudistant', '');
+            
+            // Get last refresh from uptime command collectDate
+            $uptimeCmd = $eqLogic->getCmd('info', 'uptime');
+            $lastUptime = null;
+            if (is_object($uptimeCmd)) {
+                $lastUptime = $uptimeCmd->getCollectDate();
+            }
+            
+            $eqData = array(
+                'id' => $eqLogic->getId(),
+                'name' => $eqLogic->getName(),
+                'isEnable' => (int)$eqLogic->getIsEnable(),
+                'isVisible' => (int)$eqLogic->getIsVisible(),
+                'type' => $type !== '' ? $type : 'unconfigured',
+                'sshHostId' => $eqLogic->getConfiguration('SSHHostId', ''),
+                'sshHostName' => '',
+                'lastRefresh' => $lastUptime,
+                'cronCustom' => (int)$eqLogic->getConfiguration('pull_use_custom', 0),
+                'commands' => array()
+            );
+            
+            // Get SSH host name if distant
+            if ($eqData['type'] === 'distant' && $eqData['sshHostId'] !== '') {
+                $sshHost = eqLogic::byId($eqData['sshHostId']);
+                if (is_object($sshHost)) {
+                    $eqData['sshHostName'] = $sshHost->getName();
+                }
+            }
+            
+            // Get specific commands values by logicalId
+            $cmdLogicalIds = array(
+                'sshStatus' => 'cnx_ssh',
+                'cronStatus' => 'cron_status',
+                'uptime' => 'uptime',
+                'loadAvg1' => 'load_avg_1mn',
+                'loadAvg5' => 'load_avg_5mn',
+                'loadAvg15' => 'load_avg_15mn',
+                'ip' => 'network_ip'
+            );
+            
+            foreach ($cmdLogicalIds as $key => $logicalId) {
+                $cmd = $eqLogic->getCmd('info', $logicalId);
+                if (is_object($cmd)) {
+                    $eqData['commands'][$key] = array(
+                        'id' => $cmd->getId(),
+                        'value' => $cmd->execCmd(),
+                        'unit' => $cmd->getUnite(),
+                        'collectDate' => $cmd->getCollectDate(),
+                        'valueDate' => $cmd->getValueDate()
+                    );
+                } else {
+                    $eqData['commands'][$key] = null;
+                }
+            }
+            
+            $healthData[] = $eqData;
+        }
+        
+        ajax::success($healthData);
+    }
+
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {

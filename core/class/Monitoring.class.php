@@ -2287,18 +2287,26 @@ class Monitoring extends eqLogic {
 									<span id="network_infos_' . $if_safe . '#id#"></span>
 								</div>
 								<script>
-									if (\'#cnx_ssh#\' == \'OK\' || \'#cnx_ssh#\' == \'No\') {
-										document.getElementById(\'network_infos_' . $if_safe . '#id#\').innerHTML = \'<span>#network_infos_' . $if_safe . '#</span>\';
-									}
+								(() => {
+									\'use strict\'
+									if (\'#cnx_ssh#\' !== \'OK\' && \'#cnx_ssh#\' !== \'No\') return
+									
+									const el = document.getElementById(\'network_infos_' . $if_safe . '#id#\')
+									if (el) el.innerHTML = \'<span>#network_infos_' . $if_safe . '#</span>\'
+								})()
 								</script>
 								<div class="tooltips" style="display: #network_' . $if_safe . '_display#;">
 									<span title="' . $title_network . '" style="width:15px;max-width:15px;max-height:15px;">#network_' . $if_safe . '_icon#</span>
 									<span id="network_' . $if_safe . '#id#"></span>
 								</div>
 								<script>
-									if (\'#cnx_ssh#\' == \'OK\' || \'#cnx_ssh#\' == \'No\') {
-										document.getElementById(\'network_' . $if_safe . '#id#\').innerHTML = \'<span>#network_' . $if_safe . '#</span>\';
-									}
+								(() => {
+									\'use strict\'
+									if (\'#cnx_ssh#\' !== \'OK\' && \'#cnx_ssh#\' !== \'No\') return
+									
+									const el = document.getElementById(\'network_' . $if_safe . '#id#\')
+									if (el) el.innerHTML = \'<span>#network_' . $if_safe . '#</span>\'
+								})()
 								</script>';
 						}
 					}

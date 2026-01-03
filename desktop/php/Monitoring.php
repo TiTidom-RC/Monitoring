@@ -51,6 +51,11 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
 				        <br>
 				        <span style="color:var(--txt-color)">{{Configuration}}</span>
 			        </div>
+			        <div class="cursor logoSecondary" id="bt_healthMonitoring">
+				        <i class="fas fa-heartbeat icon_blue"></i>
+				        <br>
+				        <span style="color:var(--txt-color)">{{Santé}}</span>
+			        </div>
                     <div class="cursor pluginAction logoSecondary" data-action="openLocation" data-location="<?= $plugin->getDocumentation() ?>">
 				        <i class="fas fa-book icon_blue"></i>
 				        <br>
@@ -223,6 +228,9 @@ if (version_compare(jeedom::version(), '4.4', '<')) {
                                                 <span class="input-group-btn">
                                                     <a class="btn btn-default cursor roundedRight sshmanagerHelper" data-helper="add" title="{{Ajouter un nouvel hôte SSH}}">
                                                         <i class="fas fa-plus-circle"></i>
+                                                    </a>
+                                                    <a class="btn btn-default cursor roundedRight sshmanagerHelper" data-helper="edit" title="{{Éditer cet hôte SSH}}" style="display:none;">
+                                                        <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                 </span>
                                             </div>

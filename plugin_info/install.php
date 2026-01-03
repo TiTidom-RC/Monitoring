@@ -188,7 +188,6 @@ function Monitoring_update() {
     try {
         $dirToDelete = array(
             __DIR__ . '/../ressources',
-            __DIR__ . '/../desktop/modal',
             __DIR__ . '/../mobile',
             __DIR__ . '/../core/img',
             __DIR__ . '/../resources',
