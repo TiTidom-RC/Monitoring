@@ -139,13 +139,21 @@ const displayHealthData = (healthData) => {
           return
         }
         
-        // Search in data-search attributes (contains search)
-        const cells = row.querySelectorAll('td[data-search]')
+        // Search in data-search attributes AND visible text (contains search)
+        const cells = row.querySelectorAll('td')
         let found = false
         
         cells.forEach(cell => {
-          const searchValue = cell.getAttribute('data-search').toLowerCase()
-          if (searchValue.includes(searchTerm)) {
+          // Check data-search attribute
+          const searchValue = cell.getAttribute('data-search')
+          if (searchValue && searchValue.toLowerCase().includes(searchTerm)) {
+            found = true
+            return
+          }
+          
+          // Check visible text content
+          const textContent = cell.textContent.toLowerCase()
+          if (textContent.includes(searchTerm)) {
             found = true
           }
         })
