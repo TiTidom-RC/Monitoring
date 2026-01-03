@@ -1,7 +1,7 @@
 # IDE & Editors
 .vscode/*
-!.vscode/settings.json
 !.vscode/extensions.json
+!.vscode/cspell.json
 
 # OS Generated Files
 # Windows
