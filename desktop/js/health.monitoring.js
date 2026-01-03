@@ -25,6 +25,9 @@ const SELECTORS = {
   TABLE_BODY: '#table_healthMonitoring tbody'
 }
 
+// Global handler reference to ensure single event listener
+let healthCmdUpdateHandler = null
+
 // ========================================
 // === CORE FUNCTIONS ===
 // ========================================
@@ -114,14 +117,23 @@ const displayHealthData = (healthData) => {
   // Initialize Jeedom tooltips with HTML support
   initTooltips()
   
-  // Initialize DataTables for sorting (Jeedom native)
-  jeedomUtils.initDataTables('#table_healthMonitoring')
+  // Initialize DataTables for sorting (Jeedom native) - use container selector like Jeedom does
+  jeedomUtils.initDataTables('.healthMonitoring')
 
   // Initialize Jeedom's automatic command update system for dynamically inserted elements
   const cmdElements = tbody.querySelectorAll('.cmd[data-cmd_id]')
   
-  // Create a mapping of equipment ID to last communication cell for efficient updates
-  const eqLastCommMap = new Map()
+  // Create mappings for efficient updates
+  const cmdMap = new Map()  // cmd_id -> element
+  const eqLastCommMap = new Map()  // eq_id -> last comm cell
+  
+  cmdElements.forEach(element => {
+    const cmdId = element.getAttribute('data-cmd_id')
+    if (cmdId && cmdId !== '') {
+      cmdMap.set(cmdId, element)
+    }
+  })
+  
   tbody.querySelectorAll('.lastComm[data-eq-id]').forEach(cell => {
     const eqId = cell.getAttribute('data-eq-id')
     if (eqId) {
@@ -131,54 +143,64 @@ const displayHealthData = (healthData) => {
   
   if (cmdElements.length > 0) {
     jeedom.cmd.refreshValue(cmdElements)
+  }
+  
+  // Remove previous event listener if exists to avoid duplicates
+  if (healthCmdUpdateHandler) {
+    document.body.removeEventListener('cmd::update', healthCmdUpdateHandler)
+  }
+  
+  // Single global event listener for cmd::update (performance optimization)
+  healthCmdUpdateHandler = (e) => {
+    if (!e.detail) return
     
-    // Register update listeners for real-time updates via WebSocket
-    cmdElements.forEach(element => {
-      const cmdId = element.getAttribute('data-cmd_id')
-      if (cmdId && cmdId !== '') {
-        jeedom.cmd.update[cmdId] = function(event) {
-          const cmdType = element.getAttribute('data-cmd-type')
-          const value = event.display_value || event.value
-          
-          // Format value based on command type
-          if (cmdType === 'ssh') {
-            element.innerHTML = formatCmdValue({ value: value }, 'ssh')
-          } else if (cmdType === 'cron') {
-            const eqType = element.getAttribute('data-eq-type')
-            const cronCustomValue = element.getAttribute('data-cron-custom')
-            const cronCustomData = cronCustomValue ? { value: cronCustomValue } : null
-            element.innerHTML = formatCmdValue({ value: value }, 'cron', eqType, cronCustomData)
-          } else {
-            // Standard display for other commands
-            element.innerHTML = formatCmdValue({ value: value })
-          }
-          
-          // Add visual feedback for update
-          element.classList.remove('cmd-updated')
-          // Force reflow to restart animation
-          void element.offsetWidth
-          element.classList.add('cmd-updated')
-          
-          // Update last communication date using direct mapping
-          if (event.collectDate) {
-            const eqId = element.getAttribute('data-eq-id')
-            if (eqId) {
-              const lastCommCell = eqLastCommMap.get(eqId)
-              if (lastCommCell) {
-                const eqType = lastCommCell.getAttribute('data-eq-type')
-                lastCommCell.innerHTML = formatDate(event.collectDate, eqType)
-                
-                // Add visual feedback for date update
-                lastCommCell.classList.remove('cmd-updated')
-                void lastCommCell.offsetWidth
-                lastCommCell.classList.add('cmd-updated')
-              }
-            }
+    const updates = Array.isArray(e.detail) ? e.detail : [e.detail]
+    
+    updates.forEach(event => {
+      const cmdId = String(event.cmd_id || event.id)
+      const element = cmdMap.get(cmdId)
+      
+      if (!element) return
+      
+      const cmdType = element.getAttribute('data-cmd-type')
+      const value = event.display_value || event.value
+      
+      // Format value based on command type
+      if (cmdType === 'ssh') {
+        element.innerHTML = formatCmdValue({ value: value }, 'ssh')
+      } else if (cmdType === 'cron') {
+        const eqType = element.getAttribute('data-eq-type')
+        const cronCustomValue = element.getAttribute('data-cron-custom')
+        const cronCustomData = cronCustomValue ? { value: cronCustomValue } : null
+        element.innerHTML = formatCmdValue({ value: value }, 'cron', eqType, cronCustomData)
+      } else {
+        element.innerHTML = formatCmdValue({ value: value })
+      }
+      
+      // Add visual feedback for update
+      element.classList.remove('cmd-updated')
+      void element.offsetWidth
+      element.classList.add('cmd-updated')
+      
+      // Update last communication date using direct mapping
+      if (event.collectDate) {
+        const eqId = element.getAttribute('data-eq-id')
+        if (eqId) {
+          const lastCommCell = eqLastCommMap.get(eqId)
+          if (lastCommCell) {
+            const eqType = lastCommCell.getAttribute('data-eq-type')
+            lastCommCell.innerHTML = formatDate(event.collectDate, eqType)
+            
+            lastCommCell.classList.remove('cmd-updated')
+            void lastCommCell.offsetWidth
+            lastCommCell.classList.add('cmd-updated')
           }
         }
       }
     })
   }
+  
+  document.body.addEventListener('cmd::update', healthCmdUpdateHandler)
 }
 
 // ========================================
