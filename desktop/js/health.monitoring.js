@@ -113,6 +113,9 @@ const displayHealthData = (healthData) => {
 
   // Initialize Jeedom tooltips with HTML support
   initTooltips()
+  
+  // Initialize DataTables for sorting (Jeedom native)
+  jeedomUtils.initDataTables('#table_healthMonitoring')
 
   // Initialize Jeedom's automatic command update system for dynamically inserted elements
   const cmdElements = tbody.querySelectorAll('.cmd[data-cmd_id]')
