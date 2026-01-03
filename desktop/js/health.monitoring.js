@@ -117,7 +117,7 @@ const displayHealthData = (healthData) => {
   // Initialize Jeedom tooltips with HTML support
   initTooltips()
   
-  // Initialize DataTables for sorting (Jeedom native) - use container selector like Jeedom does
+  // Initialize DataTables for sorting and search (Jeedom native)
   jeedomUtils.initDataTables('.healthMonitoring')
 
   // Initialize Jeedom's automatic command update system for dynamically inserted elements
