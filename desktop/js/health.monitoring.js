@@ -41,6 +41,22 @@ const initModalHealthMonitoring = () => {
 }
 
 /**
+ * Clean up resources when modal is closed
+ * Removes event listeners to prevent memory leaks
+ */
+const cleanupHealthMonitoring = () => {
+  // Remove WebSocket event listener
+  if (healthCmdUpdateHandler) {
+    document.body.removeEventListener('cmd::update', healthCmdUpdateHandler)
+    healthCmdUpdateHandler = null
+  }
+  
+  // Clear search input event listeners (handled by DOM removal)
+  // Clear button event listeners (handled by DOM removal)
+  // Table elements are automatically cleaned when modal DOM is removed
+}
+
+/**
  * Load health data from backend
  */
 const loadHealthData = () => {
@@ -452,8 +468,9 @@ const formatDate = (dateStr, eqType = null) => {
 // === GLOBAL EXPOSURE ===
 // ========================================
 
-// Expose function globally for modal to call
+// Expose functions globally for modal to call
 window.initModalHealthMonitoring = initModalHealthMonitoring
+window.cleanupHealthMonitoring = cleanupHealthMonitoring
 
 })() // End of IIFE protection
 

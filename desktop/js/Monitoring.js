@@ -453,6 +453,12 @@ if (healthButton) {
         if (typeof initModalHealthMonitoring === 'function') {
           initModalHealthMonitoring()
         }
+      },
+      onClose: function() {
+        // Clean up resources when modal is closed
+        if (typeof cleanupHealthMonitoring === 'function') {
+          cleanupHealthMonitoring()
+        }
       }
     })
   })
