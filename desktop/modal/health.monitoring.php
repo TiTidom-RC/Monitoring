@@ -29,7 +29,7 @@ if (!isConnect()) {
 }
 
 .cmd-updated {
-    animation: healthCmdUpdate 3s ease-out;
+    animation: healthCmdUpdate 2s ease-out forwards;
 }
 
 #table_healthMonitoring .cmd {
@@ -40,10 +40,14 @@ if (!isConnect()) {
 
 <div style="display: none;" id="md_modal"></div>
 
-<div class="healthMonitoring" style="width:100%;height:100%;overflow:auto;">
+<div class="healthMonitoring" id="healthMonitoringContainer" style="width:100%;height:100%;overflow:auto;">
     
     <div class="alert alert-info">
         <i class="fas fa-info-circle"></i> {{Résumé de l'état de santé de tous vos équipements Monitoring}}
+    </div>
+    
+    <div style="margin-bottom:10px;">
+        <input type="text" id="healthSearchInput" class="form-control" placeholder="{{Rechercher...}}" style="width:300px;display:inline-block;">
     </div>
     
     <table class="table table-condensed table-bordered dataTable" id="table_healthMonitoring">
