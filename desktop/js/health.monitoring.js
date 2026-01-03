@@ -99,7 +99,7 @@ const displayHealthData = (healthData) => {
         <td style="text-align:center;">${isActive ? '<i class="fas fa-check text-success"></i>' : '<i class="fas fa-times text-danger"></i>'}</td>
         <td style="text-align:center;">${isVisible ? '<i class="fas fa-eye text-success"></i>' : '<i class="fas fa-eye-slash text-muted"></i>'}</td>
         <td style="text-align:center;">${typeLabel}</td>
-        <td>${eqLogic.sshHostName || '<span class="text-muted">-</span>'}</td>
+        <td data-search="${eqLogic.sshHostName || '-'}">${eqLogic.sshHostName || '<span class="text-muted">-</span>'}</td>
         <td style="text-align:center;"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.sshStatus?.id || ''}" data-eq-id="${eqLogic.id}" data-cmd-type="ssh" title="${formatTooltip('SSH Status', eqLogic.commands?.sshStatus)}">${formatCmdValue(eqLogic.commands?.sshStatus, 'ssh')}</span></td>
         <td style="text-align:center;"><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.cronStatus?.id || ''}" data-eq-id="${eqLogic.id}" data-cmd-type="cron" data-eq-type="${eqLogic.type}" data-cron-custom="${eqLogic.commands?.cronCustom?.value || '0'}" title="${formatTooltip('Cron Status', eqLogic.commands?.cronStatus)}">${formatCmdValue(eqLogic.commands?.cronStatus, 'cron', eqLogic.type, eqLogic.commands?.cronCustom)}</span></td>
         <td><span class="cmd tooltips" data-cmd_id="${eqLogic.commands?.uptime?.id || ''}" data-eq-id="${eqLogic.id}" title="${formatTooltip('Uptime', eqLogic.commands?.uptime)}">${formatCmdValue(eqLogic.commands?.uptime)}</span></td>
@@ -118,7 +118,8 @@ const displayHealthData = (healthData) => {
   initTooltips()
   
   // Initialize DataTables for sorting and search (Jeedom native)
-  jeedomUtils.initDataTables('.healthMonitoring')
+  // Parameters: selector, paging (false), searching (true), init config (sort by name)
+  jeedomUtils.initDataTables('.healthMonitoring', false, true, [{ select: 0, sort: "asc" }])
 
   // Initialize Jeedom's automatic command update system for dynamically inserted elements
   const cmdElements = tbody.querySelectorAll('.cmd[data-cmd_id]')

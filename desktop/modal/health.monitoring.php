@@ -46,11 +46,6 @@ if (!isConnect()) {
         <i class="fas fa-info-circle"></i> {{Résumé de l'état de santé de tous vos équipements Monitoring}}
     </div>
     
-    <div class="input-group" style="margin-bottom:10px;">
-        <span class="input-group-addon roundedLeft" style="width:80px">{{Recherche}}</span>
-        <input class="form-control roundedRight" id="in_searchHealthMonitoring" placeholder="{{Rechercher...}}" />
-    </div>
-    
     <table class="table table-condensed table-bordered dataTable" id="table_healthMonitoring">
         <thead>
             <tr>
