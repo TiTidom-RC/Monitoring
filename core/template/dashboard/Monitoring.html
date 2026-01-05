@@ -701,26 +701,26 @@
 						synoHistoryMin: historyMin, synoHistoryAvg: historyAvg, synoHistoryMax: historyMax,
 						synoValuedate: valueDate, synoCollectdate: collectDate } = volumeEl.dataset
 					
-					// Si la valeur est un placeholder, ne pas afficher ce volume
-				if (!value || value === '' || value.startsWith('#')) {
-					volumeEl.style.display = 'none'
-					return
-				}
+					// Vérifier d'abord la valeur (pas d'opération DOM si invalide)
+					if (!value || value === '' || value.startsWith('#')) {
+						volumeEl.style.display = 'none'
+						return
+					}
 
-				// Récupérer l'icône depuis le premier span
-				const iconSpan = volumeEl.querySelector('span:first-child')
-				if (!iconSpan) return
-				
-				const icon = iconSpan.innerHTML.trim()
-				// Si l'icône est un placeholder, ne pas afficher ce volume
-				if (!icon || icon === '' || icon.startsWith('#')) {
-					volumeEl.style.display = 'none'
-					return
-				}
+					// Récupérer l'icône uniquement si value est valide
+					const iconSpan = volumeEl.querySelector('span:first-child')
+					const icon = iconSpan?.innerHTML.trim()
+					
+					// Vérifier l'icône
+					if (!iconSpan || !icon || icon === '' || icon.startsWith('#')) {
+						volumeEl.style.display = 'none'
+						return
+					}
+
+					// Construire le contenu (tout est valide)
 					const history = { min: historyMin || '-', avg: historyAvg || '-', max: historyMax || '-' }
 					const percentageHTML = buildPercentageHTML(value, low, high, label, cmdId, history, tendance, prefix, '%', true)
-					
-					// Ajouter le tooltip à l'icône
+				
 					iconSpan.setAttribute('title', `${synoTitle}<br><i>Date de valeur : ${valueDate}<br>Date de collecte : ${collectDate}</i>`)
 					
 					// Ajouter le pourcentage dans le deuxième span
