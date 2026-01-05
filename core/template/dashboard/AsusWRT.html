@@ -268,7 +268,7 @@
 			 * @returns {string} HTML string
 			 */
 			const buildThresholdHTML = (value, lowThreshold, highThreshold, label, cmdId, history, tendance, reversed = false) => {
-				if (value === '' || value.startsWith('#')) return '<span></span>'
+				if (!value || value === '' || value.startsWith('#')) return '<span></span>'
 
 				const val = parseFloat(value)
 				const low = parseFloat(lowThreshold)
@@ -295,7 +295,7 @@
 			 * @returns {string} HTML string
 			 */
 			const buildPercentageHTML = (value, lowThreshold, highThreshold, label, cmdId, history, tendance, prefix, unit, reversed = false) => {
-				if (value === '' || value.startsWith('#')) return '<span></span>'
+				if (!value || value === '' || value.startsWith('#')) return '<span></span>'
 
 				const val = parseFloat(value)
 				const low = parseFloat(lowThreshold)
