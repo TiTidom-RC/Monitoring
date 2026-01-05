@@ -259,9 +259,29 @@
 	(() => {
 		'use strict'
 		
+		// Get reference to this specific widget container
+		const widgetRoot = document.querySelector('.eqLogic-widget[data-eqLogic_uid="#uid#"]')
+		if (!widgetRoot) return
+		
 		// ========================================
 		// === UTILITY FUNCTIONS ===
 		// ========================================
+		
+		/**
+		 * Safely parse JSON from data attribute
+		 * @param {string} jsonString - JSON string to parse
+		 * @param {object} fallback - Fallback value if parsing fails
+		 * @returns {object} Parsed object or fallback
+		 */
+		const safeJSONParse = (jsonString, fallback = {min: '-', avg: '-', max: '-'}) => {
+			if (!jsonString || jsonString === 'undefined' || jsonString === '') return fallback
+			try {
+				return JSON.parse(jsonString)
+			} catch (e) {
+				console.warn('[Monitoring] JSON parse error:', e, 'Input:', jsonString)
+				return fallback
+			}
+		}
 		
 		/**
 		 * Calculate color style based on thresholds
@@ -347,13 +367,17 @@
 		 * Initialize SSH connection status icon
 		 */
 		const initIconSSH = () => {
-			const iconSSH = document.getElementById('iconSSH#id#')
-			if (!iconSSH) return
-			
-			if ('#cnx_ssh#' === 'OK') {
-				iconSSH.innerHTML = '<i title="Connexion SSH OK" class="cmd monitor-btn fas fa-check tooltips" style="color: var(--al-success-color) !important;"></i>'
-			} else if ('#cnx_ssh#' === 'KO') {
-				iconSSH.innerHTML = '<i title="Connexion SSH KO" class="cmd monitor-btn fas fa-times-circle tooltips" style="color: var(--al-danger-color) !important;"></i>'
+			try {
+				const iconSSH = widgetRoot.querySelector('#iconSSH#id#')
+				if (!iconSSH) return
+				
+				if ('#cnx_ssh#' === 'OK') {
+					iconSSH.innerHTML = '<i title="Connexion SSH OK" class="cmd monitor-btn fas fa-check tooltips" style="color: var(--al-success-color) !important;"></i>'
+				} else if ('#cnx_ssh#' === 'KO') {
+					iconSSH.innerHTML = '<i title="Connexion SSH KO" class="cmd monitor-btn fas fa-times-circle tooltips" style="color: var(--al-danger-color) !important;"></i>'
+				}
+			} catch (e) {
+				console.error('[Monitoring] Error in initIconSSH:', e)
 			}
 		}
 		
@@ -361,19 +385,23 @@
 		 * Initialize Cron status icon
 		 */
 		const initIconCron = () => {
-			const iconCron = document.getElementById('iconCron#id#')
-			if (!iconCron) return
+			try {
+				const iconCron = widgetRoot.querySelector('#iconCron#id#')
+				if (!iconCron) return
+				
+				const isOn = '#cron_status#' === '1'
+				const isCustom = '#cron_status_custom#' === '1'
+				const display = '#cron_status_display#'
+				
+				const icon = isOn ? 'play-circle' : 'pause-circle'
+				const label = isOn ? 'ON' : 'OFF'
+				const customLabel = isCustom ? 'Custom' : 'Default'
+				const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
 			
-			const isOn = '#cron_status#' === '1'
-			const isCustom = '#cron_status_custom#' === '1'
-			const display = '#cron_status_display#'
-			
-			const icon = isOn ? 'play-circle' : 'pause-circle'
-			const label = isOn ? 'ON' : 'OFF'
-			const customLabel = isCustom ? 'Custom' : 'Default'
-			const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
-		
-			iconCron.innerHTML = `<i title="Cron ${label} (${customLabel})" class="cmd monitor-btn fas fa-${icon} tooltips" style="display: ${display};color: var(${color}) !important;"></i>`
+				iconCron.innerHTML = `<i title="Cron ${label} (${customLabel})" class="cmd monitor-btn fas fa-${icon} tooltips" style="display: ${display};color: var(${color}) !important;"></i>`
+			} catch (e) {
+				console.error('[Monitoring] Error in initIconCron:', e)
+			}
 		}
 		
 		// ========================================
@@ -384,53 +412,65 @@
 		 * Initialize Reboot button with confirmation dialog
 		 */
 		const initRebootButton = () => {
-			const rebootBtn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
-			rebootBtn?.addEventListener('click', () => {
-				jeeDialog.confirm({
+			try {
+				const rebootBtn = widgetRoot.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
+				rebootBtn?.addEventListener('click', () => {
+					jeeDialog.confirm({
 					title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
 					message: 'Etes-vous sûr de vouloir redémarrer l\'équipement #name# ?',
-					buttons: {
-						confirm: { label: 'Redémarrer', className: 'warning' },
-						cancel: { label: 'Annuler', className: 'info' }
-					},
-					callback: (result) => {
-						if (result) jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
-					}
+						buttons: {
+							confirm: { label: 'Redémarrer', className: 'warning' },
+							cancel: { label: 'Annuler', className: 'info' }
+						},
+						callback: (result) => {
+							if (result) jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
+						}
+					})
 				})
-			})
+			} catch (e) {
+				console.error('[Monitoring] Error in initRebootButton:', e)
+			}
 		}
 		
 		/**
 		 * Initialize Poweroff button with confirmation dialog
 		 */
 		const initPoweroffButton = () => {
-			const poweroffBtn = document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')
-			poweroffBtn?.addEventListener('click', () => {
-				jeeDialog.confirm({
+			try {
+				const poweroffBtn = widgetRoot.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')
+				poweroffBtn?.addEventListener('click', () => {
+					jeeDialog.confirm({
 					title: '<i class="danger fas fa-question-circle"></i> Eteindre l\'équipement',
 					message: 'Etes-vous sûr de vouloir éteindre l\'équipement #name# ?',
-					buttons: {
-						confirm: { label: 'Eteindre', className: 'danger' },
-						cancel: { label: 'Annuler', className: 'info' }
-					},
-					callback: (result) => {
-						if (result) jeedom.cmd.execute({ id: '#cmd_poweroff_id#' })
-					}
+						buttons: {
+							confirm: { label: 'Eteindre', className: 'danger' },
+							cancel: { label: 'Annuler', className: 'info' }
+						},
+						callback: (result) => {
+							if (result) jeedom.cmd.execute({ id: '#cmd_poweroff_id#' })
+						}
+					})
 				})
-			})
+			} catch (e) {
+				console.error('[Monitoring] Error in initPoweroffButton:', e)
+			}
 		}
 		
 		/**
 		 * Initialize Refresh button
 		 */
 		const initRefreshButton = () => {
-			const refreshBtn = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
-			if (!refreshBtn) return
-			
-			if ('#refresh_id#' !== '') {
-				refreshBtn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
-			} else {
-				refreshBtn.remove()
+			try {
+				const refreshBtn = widgetRoot.querySelector('.refresh')
+				if (!refreshBtn) return
+				
+				if ('#refresh_id#' !== '') {
+					refreshBtn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
+				} else {
+					refreshBtn.remove()
+				}
+			} catch (e) {
+				console.error('[Monitoring] Error in initRefreshButton:', e)
 			}
 		}
 		
@@ -442,30 +482,45 @@
 		 * Initialize Uptime display
 		 */
 		const initUptime = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const uptimeEl = document.getElementById('uptime#id#')
-			if (uptimeEl) uptimeEl.innerHTML = '<span>#uptime#</span>'
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				const uptimeEl = widgetRoot.querySelector('#uptime#id#')
+				if (uptimeEl) uptimeEl.innerHTML = '<span>#uptime#</span>'
+			} catch (e) {
+				console.error('[Monitoring] Error in initUptime:', e)
+			}
 		}
 		
 		/**
 		 * Initialize Network Infos display
 		 */
 		const initNetworkInfos = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const networkInfosEl = document.getElementById('network_infos#id#')
-			if (networkInfosEl) networkInfosEl.innerHTML = '<span>#network_infos#</span>'
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				const networkInfosEl = widgetRoot.querySelector('#network_infos#id#')
+				if (networkInfosEl) networkInfosEl.innerHTML = '<span>#network_infos#</span>'
+			} catch (e) {
+				console.error('[Monitoring] Error in initNetworkInfos:', e)
+			}
 		}
 		
 		/**
 		 * Initialize Network Traffic display
 		 */
 		const initNetwork = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const networkEl = document.getElementById('network#id#')
-			if (networkEl) networkEl.innerHTML = '<span>#network#</span>'
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				const networkEl = widgetRoot.querySelector('#network#id#')
+				if (networkEl) {
+					const history = {min: '#network_minHistory#', avg: '#network_averageHistory#', max: '#network_maxHistory#'}
+					networkEl.innerHTML = buildThresholdHTML('#network#', '#network_colorlow#', '#network_colorhigh#', 'Vitesse du réseau', '#network_id#', history, '#network_tendance#', false)
+				}
+			} catch (e) {
+				console.error('[Monitoring] Error in initNetwork:', e)
+			}
 		}
 		
 		// ========================================
@@ -476,42 +531,46 @@
 		 * Initialize Load Average displays (1mn, 5mn, 15mn)
 		 */
 		const initLoadAverage = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			// Load avg 1mn
-			const loadAvg1mn = document.getElementById('load_avg_1mn#id#')
-			if (loadAvg1mn) {
-				const html = buildThresholdHTML(
-					'#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#',
-					'Charge Système (1min)', '#load_avg_1mn_id#',
-					{ min: '#load_avg_1mn_minHistory#', avg: '#load_avg_1mn_averageHistory#', max: '#load_avg_1mn_maxHistory#' },
-					'#load_avg_1mn_tendance#'
-				)
-				loadAvg1mn.innerHTML = html === '<span></span>' ? html : `1 min : ${html}`
-			}
-			
-			// Load avg 5mn
-			const loadAvg5mn = document.getElementById('load_avg_5mn#id#')
-			if (loadAvg5mn) {
-				const html = buildThresholdHTML(
-					'#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#',
-					'Charge Système (5min)', '#load_avg_5mn_id#',
-					{ min: '#load_avg_5mn_minHistory#', avg: '#load_avg_5mn_averageHistory#', max: '#load_avg_5mn_maxHistory#' },
-					'#load_avg_5mn_tendance#'
-				)
-				loadAvg5mn.innerHTML = html === '<span></span>' ? html : ` - 5 min : ${html}`
-			}
-			
-			// Load avg 15mn
-			const loadAvg15mn = document.getElementById('load_avg_15mn#id#')
-			if (loadAvg15mn) {
-				const html = buildThresholdHTML(
-					'#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#',
-					'Charge Système (15min)', '#load_avg_15mn_id#',
-					{ min: '#load_avg_15mn_minHistory#', avg: '#load_avg_15mn_averageHistory#', max: '#load_avg_15mn_maxHistory#' },
-					'#load_avg_15mn_tendance#'
-				)
-				loadAvg15mn.innerHTML = html === '<span></span>' ? html : ` - 15 min : ${html}`
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				// Load avg 1mn
+				const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
+				if (loadAvg1mn) {
+					const html = buildThresholdHTML(
+						'#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#',
+						'Charge Système (1min)', '#load_avg_1mn_id#',
+						{ min: '#load_avg_1mn_minHistory#', avg: '#load_avg_1mn_averageHistory#', max: '#load_avg_1mn_maxHistory#' },
+						'#load_avg_1mn_tendance#'
+					)
+					loadAvg1mn.innerHTML = html === '<span></span>' ? html : `1 min : ${html}`
+				}
+				
+				// Load avg 5mn
+				const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
+				if (loadAvg5mn) {
+					const html = buildThresholdHTML(
+						'#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#',
+						'Charge Système (5min)', '#load_avg_5mn_id#',
+						{ min: '#load_avg_5mn_minHistory#', avg: '#load_avg_5mn_averageHistory#', max: '#load_avg_5mn_maxHistory#' },
+						'#load_avg_5mn_tendance#'
+					)
+					loadAvg5mn.innerHTML = html === '<span></span>' ? html : ` - 5 min : ${html}`
+				}
+				
+				// Load avg 15mn
+				const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
+				if (loadAvg15mn) {
+					const html = buildThresholdHTML(
+						'#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#',
+						'Charge Système (15min)', '#load_avg_15mn_id#',
+						{ min: '#load_avg_15mn_minHistory#', avg: '#load_avg_15mn_averageHistory#', max: '#load_avg_15mn_maxHistory#' },
+						'#load_avg_15mn_tendance#'
+					)
+					loadAvg15mn.innerHTML = html === '<span></span>' ? html : ` - 15 min : ${html}`
+				}
+			} catch (e) {
+				console.error('[Monitoring] Error in initLoadAverage:', e)
 			}
 		}
 		
@@ -519,69 +578,81 @@
 		 * Initialize Memory display with percentage
 		 */
 		const initMemory = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const memoryEl = document.getElementById('memory_available_percent#id#')
-			if (!memoryEl) return
-			
-			const value = '#memory_available_percent#'
-			if (value === '') {
-				memoryEl.innerHTML = '<span>#memory#</span>'
-				return
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				const memoryEl = widgetRoot.querySelector('#memory_available_percent#id#')
+				if (!memoryEl) return
+				
+				const value = '#memory_available_percent#'
+				if (value === '') {
+					memoryEl.innerHTML = '<span>#memory#</span>'
+					return
+				}
+				
+				memoryEl.innerHTML = buildPercentageHTML(
+					value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#',
+					'Mémoire Vive (% Disponible)', '#memory_available_percent_id#',
+					{ min: '#memory_available_percent_minHistory#', avg: '#memory_available_percent_averageHistory#', max: '#memory_available_percent_maxHistory#' },
+					'#memory_available_percent_tendance#', '#memory# (', '%', true
+				)
+			} catch (e) {
+				console.error('[Monitoring] Error in initMemory:', e)
 			}
-			
-			memoryEl.innerHTML = buildPercentageHTML(
-				value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#',
-				'Mémoire Vive (% Disponible)', '#memory_available_percent_id#',
-				{ min: '#memory_available_percent_minHistory#', avg: '#memory_available_percent_averageHistory#', max: '#memory_available_percent_maxHistory#' },
-				'#memory_available_percent_tendance#', '#memory# (', '%', true
-			)
 		}
 		
 		/**
 		 * Initialize Swap display with percentage
 		 */
 		const initSwap = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const swapEl = document.getElementById('swap_free_percent#id#')
-			if (!swapEl) return
-			
-			const value = '#swap_free_percent#'
-			if (value === '') {
-				swapEl.innerHTML = '<span></span>'
-				return
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				const swapEl = widgetRoot.querySelector('#swap_free_percent#id#')
+				if (!swapEl) return
+				
+				const value = '#swap_free_percent#'
+				if (value === '') {
+					swapEl.innerHTML = '<span></span>'
+					return
+				}
+				
+				swapEl.innerHTML = buildPercentageHTML(
+					value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#',
+					'Mémoire Swap (% Libre)', '#swap_free_percent_id#',
+					{ min: '#swap_free_percent_minHistory#', avg: '#swap_free_percent_averageHistory#', max: '#swap_free_percent_maxHistory#' },
+					'#swap_free_percent_tendance#', '#swap# (', '%', true
+				)
+			} catch (e) {
+				console.error('[Monitoring] Error in initSwap:', e)
 			}
-			
-			swapEl.innerHTML = buildPercentageHTML(
-				value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#',
-				'Mémoire Swap (% Libre)', '#swap_free_percent_id#',
-				{ min: '#swap_free_percent_minHistory#', avg: '#swap_free_percent_averageHistory#', max: '#swap_free_percent_maxHistory#' },
-				'#swap_free_percent_tendance#', '#swap# (', '%', true
-			)
 		}
 		
 		/**
 		 * Initialize HDD display with percentage
 		 */
 		const initHDD = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const hddEl = document.getElementById('hdd#id#')
-			if (!hddEl) return
-			
-			const value = '#hdd_free_percent#'
-			if (value === '') {
-				hddEl.innerHTML = '<span></span>'
-				return
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				const hddEl = widgetRoot.querySelector('#hdd#id#')
+				if (!hddEl) return
+				
+				const value = '#hdd_free_percent#'
+				if (value === '') {
+					hddEl.innerHTML = '<span></span>'
+					return
+				}
+				
+				hddEl.innerHTML = buildPercentageHTML(
+					value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#',
+					'Espace Disque (% Libre)', '#hdd_free_percent_id#',
+					{ min: '#hdd_free_percent_minHistory#', avg: '#hdd_free_percent_averageHistory#', max: '#hdd_free_percent_maxHistory#' },
+					'#hdd_free_percent_tendance#', '#hdd# (', '%', true
+				)
+			} catch (e) {
+				console.error('[Monitoring] Error in initHDD:', e)
 			}
-			
-			hddEl.innerHTML = buildPercentageHTML(
-				value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#',
-				'Espace Disque (% Libre)', '#hdd_free_percent_id#',
-				{ min: '#hdd_free_percent_minHistory#', avg: '#hdd_free_percent_averageHistory#', max: '#hdd_free_percent_maxHistory#' },
-				'#hdd_free_percent_tendance#', '#hdd# (', '%', true
-			)
 		}
 		
 		/**
@@ -589,61 +660,69 @@
 		 * @param {HTMLElement} synoContainer - The container div with data-syno-* attributes
 		 */
 		const initSynoVolume = (synoContainer) => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const dataset = synoContainer.dataset
-			if (dataset.synoDisplay !== 'block') return
-			
-			const synoId = dataset.synoId
-			const container = document.getElementById(`${synoId}#id#`)
-			if (!container) return
-			
-			container.className = 'tooltips'
-			container.style.display = dataset.synoDisplay
-			container.innerHTML = `<span title="${dataset.synoName} (% Libre)<br><i>Date de valeur : ${dataset.synoDateValue}<br>Date de collecte : ${dataset.synoCollect}</i>" style="width:15px;max-width:15px;max-height:15px;">${dataset.synoIcon}</span> <span id="${synoId}_free_percent#id#"></span>`
-			
-			const percentEl = document.getElementById(`${synoId}_free_percent#id#`)
-			if (!percentEl) return
-			
-			const value = dataset.synoPercent
-			if (value === '') {
-				percentEl.innerHTML = '<span></span>'
-				return
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				const dataset = synoContainer.dataset
+				if (dataset.synoDisplay !== 'block') return
+				
+				const synoId = dataset.synoId
+				const container = widgetRoot.querySelector(`#${synoId}#id#`)
+				if (!container) return
+				
+				container.className = 'tooltips'
+				container.style.display = dataset.synoDisplay
+				container.innerHTML = `<span title="${dataset.synoName} (% Libre)<br><i>Date de valeur : ${dataset.synoDateValue}<br>Date de collecte : ${dataset.synoCollect}</i>" style="width:15px;max-width:15px;max-height:15px;">${dataset.synoIcon}</span> <span id="${synoId}_free_percent#id#"></span>`
+				
+				const percentEl = widgetRoot.querySelector(`#${synoId}_free_percent#id#`)
+				if (!percentEl) return
+				
+				const value = dataset.synoPercent
+				if (value === '') {
+					percentEl.innerHTML = '<span></span>'
+					return
+				}
+				
+				const history = safeJSONParse(dataset.synoHistory)
+				percentEl.innerHTML = buildPercentageHTML(
+					value, dataset.synoLow, dataset.synoHigh,
+					`${dataset.synoName} (% Libre)`, dataset.synoCmdId,
+					history,
+					dataset.synoTendance, `${dataset.synoValue} (`, '%', true
+				)
+			} catch (e) {
+				console.error('[Monitoring] Error in initSynoVolume for', synoContainer.dataset?.synoId || 'unknown', ':', e)
 			}
-			
-			const history = JSON.parse(dataset.synoHistory)
-			percentEl.innerHTML = buildPercentageHTML(
-				value, dataset.synoLow, dataset.synoHigh,
-				`${dataset.synoName} (% Libre)`, dataset.synoCmdId,
-				history,
-				dataset.synoTendance, `${dataset.synoValue} (`, '%', true
-			)
 		}
 		
 		/**
 		 * Initialize CPU display with optional temperature
 		 */
 		const initCPU = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const cpuEl = document.getElementById('cpu#id#')
-			if (!cpuEl) return
-			
-			if ('#cpu_temp#' !== '' && '#cpu_temp_display#' === 'block') {
-				cpuEl.innerHTML = '<span>#cpu# </span>'
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 				
-				const tempEl = document.getElementById('cpu_temp#id#')
-				if (!tempEl) return
+				const cpuEl = widgetRoot.querySelector('#cpu#id#')
+				if (!cpuEl) return
 				
-				const temp = parseFloat('#cpu_temp#')
-				const low = parseFloat('#cpu_temp_colorlow#')
-				const high = parseFloat('#cpu_temp_colorhigh#')
-				const title = 'Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#'
-				const color = getColorStyle(temp, low, high, false)
-				
-				tempEl.innerHTML = `(<span title="${title}" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips"${color}>#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)`
-			} else {
-				cpuEl.innerHTML = '<span>#cpu#</span>'
+				if ('#cpu_temp#' !== '' && '#cpu_temp_display#' === 'block') {
+					cpuEl.innerHTML = '<span>#cpu# </span>'
+					
+					const tempEl = widgetRoot.querySelector('#cpu_temp#id#')
+					if (!tempEl) return
+					
+					const temp = parseFloat('#cpu_temp#')
+					const low = parseFloat('#cpu_temp_colorlow#')
+					const high = parseFloat('#cpu_temp_colorhigh#')
+					const title = 'Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#'
+					const color = getColorStyle(temp, low, high, false)
+					
+					tempEl.innerHTML = `(<span title="${title}" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips"${color}>#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)`
+				} else {
+					cpuEl.innerHTML = '<span>#cpu#</span>'
+				}
+			} catch (e) {
+				console.error('[Monitoring] Error in initCPU:', e)
 			}
 		}
 		
@@ -652,27 +731,31 @@
 		 * @param {HTMLElement} container - The container div with data-perso-* attributes
 		 */
 		const initPerso = (container) => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const dataset = container.dataset
-			const persoId = dataset.persoId
-			const el = document.getElementById(`${persoId}_unite#id#`)
-			if (!el) return
-			
-			const value = dataset.persoValue
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
+			try {
+				if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+				
+				const dataset = container.dataset
+				const persoId = dataset.persoId
+				const el = widgetRoot.querySelector(`#${persoId}_unite#id#`)
+				if (!el) return
+				
+				const value = dataset.persoValue
+				if (value === '') {
+					el.innerHTML = '<span></span>'
+					return
+				}
+				
+				const val = parseFloat(value)
+				const low = parseFloat(dataset.persoLow)
+				const high = parseFloat(dataset.persoHigh)
+				const history = safeJSONParse(dataset.persoHistory)
+				const title = `Stats : ${dataset.persoName}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
+				const color = getColorStyle(val, low, high, false)
+				
+				el.innerHTML = `<span title="${title}" data-cmd_id="${dataset.persoCmdId}" class="value history cursor tooltips"${color}>${value}</span><span>${dataset.persoUnite}${dataset.persoTendance}</span>`
+			} catch (e) {
+				console.error('[Monitoring] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)
 			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat(dataset.persoLow)
-			const high = parseFloat(dataset.persoHigh)
-			const history = JSON.parse(dataset.persoHistory)
-			const title = `Stats : ${dataset.persoName}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
-			const color = getColorStyle(val, low, high, false)
-			
-			el.innerHTML = `<span title="${title}" data-cmd_id="${dataset.persoCmdId}" class="value history cursor tooltips"${color}>${value}</span><span>${dataset.persoUnite}${dataset.persoTendance}</span>`
 		}
 		
 		// ========================================
@@ -702,13 +785,13 @@
 			initHDD()
 			
 			// Synology volumes - generic initialization using data attributes
-			document.querySelectorAll('[data-syno-id]').forEach(initSynoVolume)
+			widgetRoot.querySelectorAll('[data-syno-id]').forEach(initSynoVolume)
 			
 			// CPU with temperature
 			initCPU()
 			
 			// Custom commands - generic initialization using data attributes
-			document.querySelectorAll('[data-perso-id]').forEach(initPerso)
+			widgetRoot.querySelectorAll('[data-perso-id]').forEach(initPerso)
 		}
 	})()
 	</script>

@@ -197,6 +197,26 @@
 	(() => {
 		'use strict'
 		
+		// Get reference to this specific widget container
+		const widgetRoot = document.querySelector('.eqLogic-widget[data-eqLogic_uid="#uid#"]')
+		if (!widgetRoot) return
+		
+		/**
+		 * Safely parse JSON from data attribute
+		 * @param {string} jsonString - JSON string to parse
+		 * @param {object} fallback - Fallback value if parsing fails
+		 * @returns {object} Parsed object or fallback
+		 */
+		const safeJSONParse = (jsonString, fallback = {min: '-', avg: '-', max: '-'}) => {
+			if (!jsonString || jsonString === 'undefined' || jsonString === '') return fallback
+			try {
+				return JSON.parse(jsonString)
+			} catch (e) {
+				console.warn('[Monitoring AsusWRT] JSON parse error:', e, 'Input:', jsonString)
+				return fallback
+			}
+		}
+		
 		// ========================================
 		// === UTILITY FUNCTIONS ===
 		// ========================================
@@ -285,7 +305,8 @@
 		 * Initialize SSH connection status icon
 		 */
 		const initIconSSH = () => {
-			const iconSSH = document.getElementById('iconSSH#id#')
+		try {
+			const iconSSH = widgetRoot.querySelector('#iconSSH#id#')
 			if (!iconSSH) return
 			
 			if ('#cnx_ssh#' === 'OK') {
@@ -293,13 +314,17 @@
 			} else if ('#cnx_ssh#' === 'KO') {
 				iconSSH.innerHTML = '<i title="Connexion SSH KO" class="cmd monitor-btn fas fa-times-circle tooltips" style="color: var(--al-danger-color) !important;"></i>'
 			}
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initIconSSH:', e)
 		}
-		
-		/**
-		 * Initialize Cron status icon
-		 */
-		const initIconCron = () => {
-			const iconCron = document.getElementById('iconCron#id#')
+	}
+	
+	/**
+	 * Initialize Cron status icon
+	 */
+	const initIconCron = () => {
+		try {
+			const iconCron = widgetRoot.querySelector('#iconCron#id#')
 			if (!iconCron) return
 			
 			const isOn = '#cron_status#' === '1'
@@ -312,13 +337,17 @@
 			const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
 		
 			iconCron.innerHTML = `<i title="Cron ${label}${customLabel}" class="cmd monitor-btn fas fa-${icon} tooltips" style="display: ${display};color: var(${color}) !important;"></i>`
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initIconCron:', e)
 		}
-		
-		/**
-		 * Initialize Check Firmware icon
-		 */
-		const initIconCheckFirmware = () => {
-			const el = document.getElementById('iconCheckFirmware#id#')
+	}
+	
+	/**
+	 * Initialize firmware check icon
+	 */
+	const initIconCheckFirmware = () => {
+		try {
+			const el = widgetRoot.querySelector('#iconCheckFirmware#id#')
 			if (!el) return
 			
 			if ('#asus_fw_check#' === '1') {
@@ -326,17 +355,21 @@
 			} else if ('#asus_fw_check#' === '0') {
 				el.innerHTML = '<i title="Check du Firmware :: 0" class="cmd monitor-btn fas fa-bell-slash tooltips" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>'
 			}
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initIconCheckFirmware:', e)
 		}
-		
-		// ========================================
-		// === BUTTON HANDLERS ===
-		// ========================================
-		
-		/**
-		 * Initialize Reboot button with confirmation dialog
-		 */
+	}
+	
+	// ========================================
+	// === BUTTON HANDLERS ===
+	// ========================================
+	
+	/**
+	 * Initialize Reboot button with confirmation dialog
+	 */
 		const initRebootButton = () => {
-			const rebootBtn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
+		try {
+			const rebootBtn = widgetRoot.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
 			rebootBtn?.addEventListener('click', () => {
 				jeeDialog.confirm({
 					title: '<i class="warning fas fa-question-circle"></i> Redémarrer l\'équipement',
@@ -348,13 +381,17 @@
 					callback: result => result && jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
 				})
 			})
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initRebootButton:', e)
 		}
-		
-		/**
-		 * Initialize Refresh button
-		 */
-		const initRefreshButton = () => {
-			const refreshBtn = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
+	}
+	
+	/**
+	 * Initialize Refresh button
+	 */
+	const initRefreshButton = () => {
+		try {
+			const refreshBtn = widgetRoot.querySelector('.refresh')
 			if (!refreshBtn) return
 			
 			if ('#refresh_id#' !== '') {
@@ -362,84 +399,112 @@
 			} else {
 				refreshBtn.remove()
 			}
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initRefreshButton:', e)
 		}
-		
-		// ========================================
-		// === VALUE DISPLAYS - Simple ===
-		// ========================================
-		
-		/**
-		 * Initialize Uptime display
-		 */
-		const initUptime = () => {
+	}
+	
+	// ========================================
+	// === VALUE DISPLAYS - Simple ===
+	// ========================================
+	
+	/**
+	 * Initialize Uptime display
+	 */
+	const initUptime = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const uptimeEl = document.getElementById('uptime#id#')
+			const uptimeEl = widgetRoot.querySelector('#uptime#id#')
 			if (uptimeEl) uptimeEl.innerHTML = '<span>#uptime#</span>'
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initUptime:', e)
 		}
-		
-		/**
-		 * Initialize Network Infos display
-		 */
-		const initNetworkInfos = () => {
+	}
+	
+	/**
+	 * Initialize Network Infos display
+	 */
+	const initNetworkInfos = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const networkInfosEl = document.getElementById('network_infos#id#')
+			const networkInfosEl = widgetRoot.querySelector('#network_infos#id#')
 			if (networkInfosEl) networkInfosEl.innerHTML = '<span>#network_infos#</span>'
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initNetworkInfos:', e)
 		}
-		
-		/**
-		 * Initialize Network Traffic display
-		 */
-		const initNetwork = () => {
+	}
+	
+	/**
+	 * Initialize Network display
+	 */
+	const initNetwork = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const networkEl = document.getElementById('network#id#')
+			const networkEl = widgetRoot.querySelector('#network#id#')
 			if (networkEl) networkEl.innerHTML = '<span>#network#</span>'
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initNetwork:', e)
 		}
-		
-		/**
-		 * Initialize Asus Clients display
-		 */
-		const initAsusClients = () => {
+	}
+	
+	/**
+	 * Initialize Asus Clients display
+	 */
+	const initAsusClients = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const el = document.getElementById('asus_clients#id#')
+			const el = widgetRoot.querySelector('#asus_clients#id#')
 			if (el) el.innerHTML = '<span>#asus_clients#</span>'
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initAsusClients:', e)
 		}
-		
-		/**
-		 * Initialize Asus WAN IP display
-		 */
-		const initAsusWan0IP = () => {
+	}
+	
+	/**
+	 * Initialize Asus WAN0 IP display
+	 */
+	const initAsusWan0IP = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const el = document.getElementById('asus_wan0_ip#id#')
+			const el = widgetRoot.querySelector('#asus_wan0_ip#id#')
 			if (el) el.innerHTML = '<span>IP (WAN) : #asus_wan0_ip#</span>'
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initAsusWan0IP:', e)
 		}
-		
-		/**
-		 * Initialize Asus WiFi Temperature display
-		 */
-		const initAsusWifiTemp = () => {
+	}
+	
+	/**
+	 * Initialize Asus WiFi Temperature display
+	 */
+	const initAsusWifiTemp = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const el = document.getElementById('asus_wifi_temp#id#')
+			const el = widgetRoot.querySelector('#asus_wifi_temp#id#')
 			if (el) el.innerHTML = '<span>#asus_wifi_temp#</span>'
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initAsusWifiTemp:', e)
 		}
-		
-		// ========================================
-		// === VALUE DISPLAYS - With Thresholds ===
-		// ========================================
-		
-		/**
-		 * Initialize Load Average displays (1mn, 5mn, 15mn)
-		 */
-		const initLoadAverage = () => {
+	}
+	
+	// ========================================
+	// === VALUE DISPLAYS - With Thresholds ===
+	// ========================================
+	
+	/**
+	 * Initialize Load Average displays (1mn, 5mn, 15mn)
+	 */
+	const initLoadAverage = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
 			// Load avg 1mn
-			const loadAvg1mn = document.getElementById('load_avg_1mn#id#')
+			const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
 			if (loadAvg1mn) {
 				const html = buildThresholdHTML(
 					'#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#',
@@ -451,7 +516,7 @@
 			}
 			
 			// Load avg 5mn
-			const loadAvg5mn = document.getElementById('load_avg_5mn#id#')
+			const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
 			if (loadAvg5mn) {
 				const html = buildThresholdHTML(
 					'#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#',
@@ -463,7 +528,7 @@
 			}
 			
 			// Load avg 15mn
-			const loadAvg15mn = document.getElementById('load_avg_15mn#id#')
+			const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
 			if (loadAvg15mn) {
 				const html = buildThresholdHTML(
 					'#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#',
@@ -473,15 +538,19 @@
 				)
 				loadAvg15mn.innerHTML = html === '<span></span>' ? html : ` - 15 min : ${html}`
 			}
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initLoadAverage:', e)
 		}
-		
-		/**
-		 * Initialize Memory display with percentage
-		 */
-		const initMemory = () => {
+	}
+	
+	/**
+	 * Initialize Memory display with percentage
+	 */
+	const initMemory = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const memoryEl = document.getElementById('memory_available_percent#id#')
+			const memoryEl = widgetRoot.querySelector('#memory_available_percent#id#')
 			if (!memoryEl) return
 			
 			const value = '#memory_available_percent#'
@@ -496,15 +565,19 @@
 				{ min: '#memory_available_percent_minHistory#', avg: '#memory_available_percent_averageHistory#', max: '#memory_available_percent_maxHistory#' },
 				'#memory_available_percent_tendance#', '#memory# (', '%', true
 			)
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initMemory:', e)
 		}
-		
-		/**
-		 * Initialize Swap display with percentage
-		 */
-		const initSwap = () => {
+	}
+	
+	/**
+	 * Initialize Swap display with percentage
+	 */
+	const initSwap = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const swapEl = document.getElementById('swap_free_percent#id#')
+			const swapEl = widgetRoot.querySelector('#swap_free_percent#id#')
 			if (!swapEl) return
 			
 			const value = '#swap_free_percent#'
@@ -519,15 +592,19 @@
 				{ min: '#swap_free_percent_minHistory#', avg: '#swap_free_percent_averageHistory#', max: '#swap_free_percent_maxHistory#' },
 				'#swap_free_percent_tendance#', '#swap# (', '%', true
 			)
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initSwap:', e)
 		}
-		
-		/**
-		 * Initialize HDD display with percentage
-		 */
-		const initHDD = () => {
+	}
+	
+	/**
+	 * Initialize HDD display with percentage
+	 */
+	const initHDD = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const hddEl = document.getElementById('hdd#id#')
+			const hddEl = widgetRoot.querySelector('#hdd#id#')
 			if (!hddEl) return
 			
 			const value = '#hdd_free_percent#'
@@ -542,21 +619,25 @@
 				{ min: '#hdd_free_percent_minHistory#', avg: '#hdd_free_percent_averageHistory#', max: '#hdd_free_percent_maxHistory#' },
 				'#hdd_free_percent_tendance#', '#hdd# (', '%', true
 			)
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initHDD:', e)
 		}
-		
-		/**
-		 * Initialize CPU display with optional temperature
-		 */
-		const initCPU = () => {
+	}
+	
+	/**
+	 * Initialize CPU display with optional temperature
+	 */
+	const initCPU = () => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
-			const cpuEl = document.getElementById('cpu#id#')
+			const cpuEl = widgetRoot.querySelector('#cpu#id#')
 			if (!cpuEl) return
 			
 			if ('#cpu_temp#' !== '' && '#cpu_temp_display#' === 'block') {
 				cpuEl.innerHTML = '<span>#cpu# </span>'
 				
-				const tempEl = document.getElementById('cpu_temp#id#')
+				const tempEl = widgetRoot.querySelector('#cpu_temp#id#')
 				if (!tempEl) return
 				
 				const temp = parseFloat('#cpu_temp#')
@@ -569,18 +650,22 @@
 			} else {
 				cpuEl.innerHTML = '<span>#cpu#</span>'
 			}
+		} catch (e) {
+			console.error('[Monitoring AsusWRT] Error in initCPU:', e)
 		}
-		
-		/**
-		 * Initialize custom command display (perso1-4) using data attributes
-		 * @param {HTMLElement} container - The container div with data-perso-* attributes
-		 */
-		const initPerso = (container) => {
+	}
+	
+	/**
+	 * Initialize custom command display (perso1-4) using data attributes
+	 * @param {HTMLElement} container - The container div with data-perso-* attributes
+	 */
+	const initPerso = (container) => {
+		try {
 			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 			
 			const dataset = container.dataset
 			const persoId = dataset.persoId
-			const el = document.getElementById(`${persoId}_unite#id#`)
+			const el = widgetRoot.querySelector(`#${persoId}_unite#id#`)
 			if (!el) return
 			
 			const value = dataset.persoValue
@@ -588,15 +673,18 @@
 				el.innerHTML = '<span></span>'
 				return
 			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat(dataset.persoLow)
-			const high = parseFloat(dataset.persoHigh)
-			const history = JSON.parse(dataset.persoHistory)
-			const title = `Stats : ${dataset.persoName}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
-			const color = getColorStyle(val, low, high, false)
-			
-			el.innerHTML = `<span title="${title}" data-cmd_id="${dataset.persoCmdId}" class="value history cursor tooltips"${color}>${value}</span><span>${dataset.persoUnite}${dataset.persoTendance}</span>`
+				
+				const val = parseFloat(value)
+				const low = parseFloat(dataset.persoLow)
+				const high = parseFloat(dataset.persoHigh)
+				const history = safeJSONParse(dataset.persoHistory)
+				const title = `Stats : ${dataset.persoName}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
+				const color = getColorStyle(val, low, high, false)
+				
+				el.innerHTML = `<span title="${title}" data-cmd_id="${dataset.persoCmdId}" class="value history cursor tooltips"${color}>${value}</span><span>${dataset.persoUnite}${dataset.persoTendance}</span>`
+			} catch (e) {
+				console.error('[Monitoring AsusWRT] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)
+			}
 		}
 		
 		// ========================================
@@ -632,7 +720,7 @@
 			initCPU()
 			
 			// Custom commands - generic initialization using data attributes
-			document.querySelectorAll('[data-perso-id]').forEach(initPerso)
+			widgetRoot.querySelectorAll('[data-perso-id]').forEach(initPerso)
 		}
 	})()
 	</script>
