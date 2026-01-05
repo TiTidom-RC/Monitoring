@@ -331,13 +331,14 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				// Filter placeholder from prefix
-				const prefixStr = (prefix && !prefix.startsWith('#')) ? prefix : ''
-
 				const valueSpan = `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}</span>`
 				const unitSpan = `<span>${unit}${tendanceStr}</span>`
 
-				return prefixStr ? `${prefixStr}${valueSpan}${unitSpan})` : `${valueSpan}${unitSpan}`
+				// Only add prefix if it exists and is not a placeholder
+				if (prefix && !prefix.startsWith('#')) {
+					return `<span>${prefix}${valueSpan}${unitSpan})</span>`
+				}
+				return `${valueSpan}${unitSpan}`
 			}
 
 			// ========================================
