@@ -702,16 +702,21 @@
 						synoValuedate: valueDate, synoCollectdate: collectDate } = volumeEl.dataset
 					
 					// Si la valeur est un placeholder, ne pas afficher ce volume
-					if (!value || value === '' || value.startsWith('#')) return
+				if (!value || value === '' || value.startsWith('#')) {
+					volumeEl.style.display = 'none'
+					return
+				}
 
-					// Récupérer l'icône depuis le premier span
-					const iconSpan = volumeEl.querySelector('span:first-child')
-					if (!iconSpan) return
-					
-					const icon = iconSpan.innerHTML.trim()
-					// Si l'icône est un placeholder, ne pas afficher ce volume
-					if (!icon || icon === '' || icon.startsWith('#')) return
-
+				// Récupérer l'icône depuis le premier span
+				const iconSpan = volumeEl.querySelector('span:first-child')
+				if (!iconSpan) return
+				
+				const icon = iconSpan.innerHTML.trim()
+				// Si l'icône est un placeholder, ne pas afficher ce volume
+				if (!icon || icon === '' || icon.startsWith('#')) {
+					volumeEl.style.display = 'none'
+					return
+				}
 					const history = { min: historyMin || '-', avg: historyAvg || '-', max: historyMax || '-' }
 					const percentageHTML = buildPercentageHTML(value, low, high, label, cmdId, history, tendance, prefix, '%', true)
 					
