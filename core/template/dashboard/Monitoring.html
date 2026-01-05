@@ -295,7 +295,7 @@
 			 * @returns {string} HTML string
 			 */
 			const buildThresholdHTML = (value, lowThreshold, highThreshold, label, cmdId, history, tendance, reversed = false) => {
-				if (value === '') return '<span></span>'
+				if (value === '' || value.startsWith('#')) return '<span></span>'
 
 				const val = parseFloat(value)
 				const low = parseFloat(lowThreshold)
@@ -322,7 +322,7 @@
 			 * @returns {string} HTML string
 			 */
 			const buildPercentageHTML = (value, lowThreshold, highThreshold, label, cmdId, history, tendance, prefix, unit, reversed = false) => {
-				if (value === '') return prefix ? '<span></span>' : ''
+				if (value === '' || value.startsWith('#')) return '<span></span>'
 
 				const val = parseFloat(value)
 				const low = parseFloat(lowThreshold)
@@ -331,8 +331,13 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
+				// Filter placeholder from prefix
+				const prefixStr = (prefix && !prefix.startsWith('#')) ? prefix : ''
+
 				const valueSpan = `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}</span>`
 				const unitSpan = `<span>${unit}${tendanceStr}</span>`
+
+				return prefixStr ? `${prefixStr}${valueSpan}${unitSpan})` : `${valueSpan}${unitSpan}`
 			}
 
 			// ========================================
@@ -645,32 +650,24 @@
 					const synoId = dataset.synoId
 					if (!synoId || synoId.startsWith('#')) return  // Skip if synoId is a placeholder
 
+					const value = dataset.synoPercent
+					if (!value || value === '' || value.startsWith('#')) return  // Skip if no valid value
+
 					const container = widgetRoot.querySelector(`#${synoId}#id#`)
 					if (!container) return
 
 					container.className = 'tooltips'
 					container.style.display = 'block'
 
-					// Build the HTML structure
-					const iconHTML = `<span title="${dataset.synoName}<br><i>Date de valeur : ${dataset.synoDateValue}<br>Date de collecte : ${dataset.synoCollect}</i>" style="width:15px;max-width:15px;max-height:15px;">${dataset.synoIcon}</span>`
-					const percentEl = document.createElement('span')
-					percentEl.id = `${synoId}_percent#id#`
+					const history = safeJSONParse(dataset.synoHistory)
+					const percentHTML = buildPercentageHTML(
+						value, dataset.synoLow, dataset.synoHigh,
+						`${dataset.synoName} (% Libre)`, dataset.synoCmdId,
+						history,
+						dataset.synoTendance, `${dataset.synoValue} (`, '%', true
+					)
 
-					const value = dataset.synoPercent
-					if (value === '') {
-						percentEl.innerHTML = '<span></span>'
-					} else {
-						const history = safeJSONParse(dataset.synoHistory)
-						percentEl.innerHTML = buildPercentageHTML(
-							value, dataset.synoLow, dataset.synoHigh,
-							`${dataset.synoName} (% Libre)`, dataset.synoCmdId,
-							history,
-							dataset.synoTendance, `${dataset.synoValue} (`, '%', true
-						)
-					}
-
-					container.innerHTML = iconHTML
-					container.appendChild(percentEl)
+					container.innerHTML = `<span title="${dataset.synoName}<br><i>Date de valeur : ${dataset.synoDateValue}<br>Date de collecte : ${dataset.synoCollect}</i>" style="width:15px;max-width:15px;max-height:15px;">${dataset.synoIcon}</span>${percentHTML}`
 				} catch (e) {
 					console.error('[Monitoring] Error in initSynoVolume for', synoContainer.dataset?.synoId || 'unknown', ':', e)
 				}

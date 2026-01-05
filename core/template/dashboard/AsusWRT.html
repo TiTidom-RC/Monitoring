@@ -268,7 +268,7 @@
 			 * @returns {string} HTML string
 			 */
 			const buildThresholdHTML = (value, lowThreshold, highThreshold, label, cmdId, history, tendance, reversed = false) => {
-				if (value === '') return '<span></span>'
+				if (value === '' || value.startsWith('#')) return '<span></span>'
 
 				const val = parseFloat(value)
 				const low = parseFloat(lowThreshold)
@@ -295,7 +295,7 @@
 			 * @returns {string} HTML string
 			 */
 			const buildPercentageHTML = (value, lowThreshold, highThreshold, label, cmdId, history, tendance, prefix, unit, reversed = false) => {
-				if (value === '') return prefix ? '<span></span>' : ''
+				if (value === '' || value.startsWith('#')) return '<span></span>'
 
 				const val = parseFloat(value)
 				const low = parseFloat(lowThreshold)
@@ -304,8 +304,13 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
+				// Filter placeholder from prefix
+				const prefixStr = (prefix && !prefix.startsWith('#')) ? prefix : ''
+
 				const valueSpan = `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}</span>`
 				const unitSpan = `<span>${unit}${tendanceStr}</span>`
+
+				return prefixStr ? `${prefixStr}${valueSpan}${unitSpan})` : `${valueSpan}${unitSpan}`
 			}
 
 			// ========================================
