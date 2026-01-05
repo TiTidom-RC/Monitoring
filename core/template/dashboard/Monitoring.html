@@ -700,8 +700,15 @@
 					const history = { min: historyMin || '-', avg: historyAvg || '-', max: historyMax || '-' }
 					const percentageHTML = buildPercentageHTML(value, low, high, label, cmdId, history, tendance, prefix, '%', true)
 					
-					const tooltip = `${synoTitle}<br><i>Date de valeur : ${valueDate}<br>Date de collecte : ${collectDate}</i>`
-					volumeEl.innerHTML = `<span title="${tooltip}" style="width:15px;max-width:15px;max-height:15px;">${icon}</span>${percentageHTML}`
+				// Créer les éléments via DOM pour éviter les problèmes d'échappement
+				const iconSpan = document.createElement('span')
+				iconSpan.style.cssText = 'width:15px;max-width:15px;max-height:15px;'
+				iconSpan.innerHTML = icon
+				iconSpan.setAttribute('title', `${synoTitle}<br><i>Date de valeur : ${valueDate}<br>Date de collecte : ${collectDate}</i>`)
+				
+				volumeEl.innerHTML = ''
+				volumeEl.appendChild(iconSpan)
+				volumeEl.insertAdjacentHTML('beforeend', percentageHTML)
 				} catch (e) {
 					console.error('[Monitoring] Error in initSynoVolume:', e)
 				}
