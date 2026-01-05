@@ -1,4 +1,7 @@
-<div class="eqLogic eqLogic-widget text-center allowResize #custom_layout# #eqLogic_class# #class# #category#" data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="width: #width#;height: #height#;#style#;">
+<div class="eqLogic eqLogic-widget text-center allowResize #custom_layout# #eqLogic_class# #class# #category#"
+	data-eqType="#eqType#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#"
+	data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#"
+	style="width: #width#;height: #height#;#style#;">
 	<style>
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] .cmd.monitor-btn {
 			font-size: 12px !important;
@@ -77,16 +80,19 @@
 		<div class="monitor-name-left">
 			<span id="iconSSH#id#" class="cmd monitor-btn"></span>
 			<span id="iconCron#id#" class="cmd monitor-btn"></span>
-			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action"
+				data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="cmd monitor-btn fas fa-redo"></i>
 			</span>
-			<span class="cmd action poweroff cursor" title="Eteindre l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
+			<span class="cmd action poweroff cursor" title="Eteindre l'équipement" data-type="action"
+				data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
 				<i class="cmd monitor-btn fas fa-power-off"></i>
 			</span>
 		</div>
 		<div class="widget-name monitor-name-center">
 			<span class="reportModeVisible">#name_display# <span class="object_name">#object_name#</span></span>
-			<a href="#eqLink#" class="reportModeHidden">#name_display# <span class="object_name">#object_name#</span></a>
+			<a href="#eqLink#" class="reportModeHidden">#name_display# <span
+					class="object_name">#object_name#</span></a>
 		</div>
 		<div class="monitor-name-right">
 			<span class="cmd refresh cursor" title="Rafraîchir" data-cmd_id="#refresh_id#">
@@ -296,8 +302,9 @@
 				const high = parseFloat(highThreshold)
 				const title = `Stats : ${label}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
 				const color = getColorStyle(val, low, high, reversed)
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				return `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}${tendance}</span>`
+				return `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}${tendanceStr}</span>`
 			}
 
 			/**
@@ -322,11 +329,10 @@
 				const high = parseFloat(highThreshold)
 				const title = `Stats : ${label}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
 				const color = getColorStyle(val, low, high, reversed)
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
 				const valueSpan = `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}</span>`
-				const unitSpan = `<span>${unit}${tendance}</span>`
-
-				return prefix ? `${prefix}${valueSpan}${unitSpan})` : `${valueSpan}${unitSpan}`
+				const unitSpan = `<span>${unit}${tendanceStr}</span>`
 			}
 
 			// ========================================
@@ -637,29 +643,34 @@
 					if (dataset.synoDisplay !== 'block') return
 
 					const synoId = dataset.synoId
+					if (!synoId || synoId.startsWith('#')) return  // Skip if synoId is a placeholder
+
 					const container = widgetRoot.querySelector(`#${synoId}#id#`)
 					if (!container) return
 
 					container.className = 'tooltips'
-					container.style.display = dataset.synoDisplay
-					container.innerHTML = `<span title="${dataset.synoName} (% Libre)<br><i>Date de valeur : ${dataset.synoDateValue}<br>Date de collecte : ${dataset.synoCollect}</i>" style="width:15px;max-width:15px;max-height:15px;">${dataset.synoIcon}</span> <span id="${synoId}_free_percent#id#"></span>`
+					container.style.display = 'block'
 
-					const percentEl = widgetRoot.querySelector(`#${synoId}_free_percent#id#`)
-					if (!percentEl) return
+					// Build the HTML structure
+					const iconHTML = `<span title="${dataset.synoName}<br><i>Date de valeur : ${dataset.synoDateValue}<br>Date de collecte : ${dataset.synoCollect}</i>" style="width:15px;max-width:15px;max-height:15px;">${dataset.synoIcon}</span>`
+					const percentEl = document.createElement('span')
+					percentEl.id = `${synoId}_percent#id#`
 
 					const value = dataset.synoPercent
 					if (value === '') {
 						percentEl.innerHTML = '<span></span>'
-						return
+					} else {
+						const history = safeJSONParse(dataset.synoHistory)
+						percentEl.innerHTML = buildPercentageHTML(
+							value, dataset.synoLow, dataset.synoHigh,
+							`${dataset.synoName} (% Libre)`, dataset.synoCmdId,
+							history,
+							dataset.synoTendance, `${dataset.synoValue} (`, '%', true
+						)
 					}
 
-					const history = safeJSONParse(dataset.synoHistory)
-					percentEl.innerHTML = buildPercentageHTML(
-						value, dataset.synoLow, dataset.synoHigh,
-						`${dataset.synoName} (% Libre)`, dataset.synoCmdId,
-						history,
-						dataset.synoTendance, `${dataset.synoValue} (`, '%', true
-					)
+					container.innerHTML = iconHTML
+					container.appendChild(percentEl)
 				} catch (e) {
 					console.error('[Monitoring] Error in initSynoVolume for', synoContainer.dataset?.synoId || 'unknown', ':', e)
 				}
