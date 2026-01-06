@@ -271,13 +271,13 @@
 			 */
 			const initIconSSH = () => {
 				try {
-					const el = widgetRoot.querySelector('#iconSSH#id#')
-					if (!el) return
+					const iconSSH = widgetRoot.querySelector('#iconSSH#id#')
+					if (!iconSSH) return
 
 					if ('#cnx_ssh#' === 'OK') {
-						el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
+						iconSSH.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
 					} else if ('#cnx_ssh#' === 'KO') {
-						el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
+						iconSSH.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
 					}
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initIconSSH:', e)
@@ -289,8 +289,8 @@
 			 */
 			const initIconCron = () => {
 				try {
-					const el = widgetRoot.querySelector('#iconCron#id#')
-					if (!el) return
+					const iconCron = widgetRoot.querySelector('#iconCron#id#')
+					if (!iconCron) return
 
 					const isOn = '#cron_status#' === '1'
 					const isCustom = '#cron_status_custom#' === '1'
@@ -301,7 +301,7 @@
 					const customLabel = isCustom ? ' (Custom)' : ' (Default)'
 					const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
 
-					el.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
+					iconCron.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initIconCron:', e)
 				}
@@ -312,13 +312,13 @@
 			 */
 			const initIconCheckFirmware = () => {
 				try {
-					const el = widgetRoot.querySelector('#iconCheckFirmware#id#')
-					if (!el) return
+					const iconCheckFirmware = widgetRoot.querySelector('#iconCheckFirmware#id#')
+					if (!iconCheckFirmware) return
 
 					if ('#asus_fw_check#' === '1') {
-						el.innerHTML = '<i title="Check du Firmware :: 1" class="fas fa-bell" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>'
+						iconCheckFirmware.innerHTML = '<i title="Check du Firmware :: 1" class="fas fa-bell" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>'
 					} else if ('#asus_fw_check#' === '0') {
-						el.innerHTML = '<i title="Check du Firmware :: 0" class="fas fa-bell-slash" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>'
+						iconCheckFirmware.innerHTML = '<i title="Check du Firmware :: 0" class="fas fa-bell-slash" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>'
 					}
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initIconCheckFirmware:', e)
@@ -334,10 +334,10 @@
 			 */
 			const initRebootButton = () => {
 				try {
-					const btn = widgetRoot.querySelector('.reboot')
-					if (!btn) return
+					const rebootBtn = widgetRoot.querySelector('.reboot')
+					if (!rebootBtn) return
 
-					btn.addEventListener('click', () => {
+					rebootBtn.addEventListener('click', () => {
 						if (confirm("Etes-vous sûr de vouloir redémarrer l'équipement #name# ?")) {
 							jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
 						}
@@ -352,13 +352,13 @@
 			 */
 			const initRefreshButton = () => {
 				try {
-					const btn = widgetRoot.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
-					if (!btn) return
+					const refreshBtn = widgetRoot.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
+					if (!refreshBtn) return
 
 					if ('#refresh_id#' !== '') {
-						btn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
+						refreshBtn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
 					} else {
-						btn.remove()
+						refreshBtn.remove()
 					}
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initRefreshButton:', e)
@@ -376,9 +376,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#uptime#id#')
-					if (!el) return
-					el.innerHTML = '<span>#uptime#</span>'
+					const uptimeEl = widgetRoot.querySelector('#uptime#id#')
+					if (!uptimeEl) return
+					uptimeEl.innerHTML = '<span>#uptime#</span>'
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initUptime:', e)
 				}
@@ -391,9 +391,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#network_infos#id#')
-					if (!el) return
-					el.innerHTML = '<span>#network_infos#</span>'
+					const networkInfosEl = widgetRoot.querySelector('#network_infos#id#')
+					if (!networkInfosEl) return
+					networkInfosEl.innerHTML = '<span>#network_infos#</span>'
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initNetworkInfos:', e)
 				}
@@ -406,9 +406,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#network#id#')
-					if (!el) return
-					el.innerHTML = '<span>#network#</span>'
+					const networkEl = widgetRoot.querySelector('#network#id#')
+					if (!networkEl) return
+					networkEl.innerHTML = '<span>#network#</span>'
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initNetwork:', e)
 				}
@@ -421,9 +421,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#asus_clients#id#')
-					if (!el) return
-					el.innerHTML = '<span>#asus_clients#</span>'
+					const asusClientsEl = widgetRoot.querySelector('#asus_clients#id#')
+					if (!asusClientsEl) return
+					asusClientsEl.innerHTML = '<span>#asus_clients#</span>'
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initAsusClients:', e)
 				}
@@ -436,9 +436,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#asus_wan0_ip#id#')
-					if (!el) return
-					el.innerHTML = '<span>#asus_wan0_ip#</span>'
+					const asusWanIpEl = widgetRoot.querySelector('#asus_wan0_ip#id#')
+					if (!asusWanIpEl) return
+					asusWanIpEl.innerHTML = '<span>#asus_wan0_ip#</span>'
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initAsusWanIP:', e)
 				}
@@ -451,9 +451,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#asus_wifi_temp#id#')
-					if (!el) return
-					el.innerHTML = '<span>#asus_wifi_temp#</span>'
+					const asusWiFiTempEl = widgetRoot.querySelector('#asus_wifi_temp#id#')
+					if (!asusWiFiTempEl) return
+					asusWiFiTempEl.innerHTML = '<span>#asus_wifi_temp#</span>'
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initAsusWiFiTemp:', e)
 				}
@@ -502,16 +502,16 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#memory_available_percent#id#')
-					if (!el) return
+					const memoryEl = widgetRoot.querySelector('#memory_available_percent#id#')
+					if (!memoryEl) return
 
 					const value = '#memory_available_percent#'
 					if (value === '') {
-						el.innerHTML = '<span>#memory#</span>'
+						memoryEl.innerHTML = '<span>#memory#</span>'
 						return
 					}
 
-					el.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
+					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initMemory:', e)
 				}
@@ -524,16 +524,16 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#swap_free_percent#id#')
-					if (!el) return
+					const swapEl = widgetRoot.querySelector('#swap_free_percent#id#')
+					if (!swapEl) return
 
 					const value = '#swap_free_percent#'
 					if (value === '') {
-						el.innerHTML = '<span>#swap#</span>'
+						swapEl.innerHTML = '<span>#swap#</span>'
 						return
 					}
 
-					el.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
+					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initSwap:', e)
 				}
@@ -546,16 +546,16 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#hdd#id#')
-					if (!el) return
+					const hddEl = widgetRoot.querySelector('#hdd#id#')
+					if (!hddEl) return
 
 					const value = '#hdd_free_percent#'
 					if (value === '') {
-						el.innerHTML = '<span></span>'
+						hddEl.innerHTML = '<span></span>'
 						return
 					}
 
-					el.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
+					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initHDD:', e)
 				}
@@ -600,12 +600,12 @@
 
 					const dataset = container.dataset
 					const persoId = dataset.persoId
-					const el = widgetRoot.querySelector('#' + persoId + '_unite#id#')
-					if (!el) return
+					const persoEl = widgetRoot.querySelector('#' + persoId + '_unite#id#')
+					if (!persoEl) return
 
 					const value = dataset.persoValue
 					if (value === '') {
-						el.innerHTML = '<span></span>'
+						persoEl.innerHTML = '<span></span>'
 						return
 					}
 
@@ -615,9 +615,9 @@
 					const color = getColorStyle(val, low, high, false)
 
 					if (color) {
-						el.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+						persoEl.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
 					} else {
-						el.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+						persoEl.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
 					}
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)

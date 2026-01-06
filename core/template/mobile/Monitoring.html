@@ -304,10 +304,10 @@
 			 */
 			const initRebootButton = () => {
 				try {
-					const btn = widgetRoot.querySelector('.reboot')
-					if (!btn) return
+					const rebootBtn = widgetRoot.querySelector('.reboot')
+					if (!rebootBtn) return
 
-					btn.addEventListener('click', () => {
+					rebootBtn.addEventListener('click', () => {
 						if (confirm("Etes-vous sûr de vouloir redémarrer l'équipement #name# ?")) {
 							jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
 						}
@@ -322,10 +322,10 @@
 			 */
 			const initPoweroffButton = () => {
 				try {
-					const btn = widgetRoot.querySelector('.poweroff')
-					if (!btn) return
+					const poweroffBtn = widgetRoot.querySelector('.poweroff')
+					if (!poweroffBtn) return
 
-					btn.addEventListener('click', () => {
+					poweroffBtn.addEventListener('click', () => {
 						if (confirm("Etes-vous sûr de vouloir éteindre l'équipement #name# ?")) {
 							jeedom.cmd.execute({ id: '#cmd_poweroff_id#' })
 						}
@@ -340,13 +340,13 @@
 			 */
 			const initRefreshButton = () => {
 				try {
-					const btn = widgetRoot.querySelector('.refresh')
-					if (!btn) return
+					const refreshBtn = widgetRoot.querySelector('.refresh')
+					if (!refreshBtn) return
 
 					if ('#refresh_id#' !== '') {
-						btn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
+						refreshBtn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
 					} else {
-						btn.remove()
+						refreshBtn.remove()
 					}
 				} catch (e) {
 					console.error('[Monitoring] Error in initRefreshButton:', e)
@@ -364,9 +364,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#uptime#id#')
-					if (!el) return
-					el.innerHTML = '<span>#uptime#</span>'
+					const uptimeEl = widgetRoot.querySelector('#uptime#id#')
+					if (!uptimeEl) return
+					uptimeEl.innerHTML = '<span>#uptime#</span>'
 				} catch (e) {
 					console.error('[Monitoring] Error in initUptime:', e)
 				}
@@ -379,9 +379,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#network_infos#id#')
-					if (!el) return
-					el.innerHTML = '<span>#network_infos#</span>'
+					const networkInfosEl = widgetRoot.querySelector('#network_infos#id#')
+					if (!networkInfosEl) return
+					networkInfosEl.innerHTML = '<span>#network_infos#</span>'
 				} catch (e) {
 					console.error('[Monitoring] Error in initNetworkInfos:', e)
 				}
@@ -394,9 +394,9 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#network#id#')
-					if (!el) return
-					el.innerHTML = '<span>#network#</span>'
+					const networkEl = widgetRoot.querySelector('#network#id#')
+					if (!networkEl) return
+					networkEl.innerHTML = '<span>#network#</span>'
 				} catch (e) {
 					console.error('[Monitoring] Error in initNetwork:', e)
 				}
@@ -445,16 +445,16 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#memory_available_percent#id#')
-					if (!el) return
+					const memoryEl = widgetRoot.querySelector('#memory_available_percent#id#')
+					if (!memoryEl) return
 
 					const value = '#memory_available_percent#'
 					if (value === '') {
-						el.innerHTML = '<span>#memory#</span>'
+						memoryEl.innerHTML = '<span>#memory#</span>'
 						return
 					}
 
-					el.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
+					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initMemory:', e)
 				}
@@ -467,16 +467,16 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#swap_free_percent#id#')
-					if (!el) return
+					const swapEl = widgetRoot.querySelector('#swap_free_percent#id#')
+					if (!swapEl) return
 
 					const value = '#swap_free_percent#'
 					if (value === '') {
-						el.innerHTML = '<span>#swap#</span>'
+						swapEl.innerHTML = '<span>#swap#</span>'
 						return
 					}
 
-					el.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
+					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initSwap:', e)
 				}
@@ -489,16 +489,16 @@
 				try {
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
-					const el = widgetRoot.querySelector('#hdd#id#')
-					if (!el) return
+					const hddEl = widgetRoot.querySelector('#hdd#id#')
+					if (!hddEl) return
 
 					const value = '#hdd_free_percent#'
 					if (value === '') {
-						el.innerHTML = '<span></span>'
+						hddEl.innerHTML = '<span></span>'
 						return
 					}
 
-					el.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
+					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initHDD:', e)
 				}
@@ -543,12 +543,12 @@
 
 					const dataset = container.dataset
 					const persoId = dataset.persoId
-					const el = widgetRoot.querySelector('#' + persoId + '_unite#id#')
-					if (!el) return
+					const persoEl = widgetRoot.querySelector('#' + persoId + '_unite#id#')
+					if (!persoEl) return
 
 					const value = dataset.persoValue
 					if (value === '') {
-						el.innerHTML = '<span></span>'
+						persoEl.innerHTML = '<span></span>'
 						return
 					}
 
@@ -558,9 +558,9 @@
 					const color = getColorStyle(val, low, high, false)
 
 					if (color) {
-						el.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+						persoEl.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
 					} else {
-						el.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+						persoEl.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
 					}
 				} catch (e) {
 					console.error('[Monitoring] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)
