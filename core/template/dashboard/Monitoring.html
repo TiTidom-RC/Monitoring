@@ -298,7 +298,7 @@
 
 				// Only add prefix if it exists and is not a placeholder
 				if (prefix && !prefix.startsWith('#')) {
-					return `<span>${prefix}${valueSpan}${unitSpan})</span>`
+					return `${prefix}${valueSpan}${unitSpan})`
 				}
 				return `${valueSpan}${unitSpan}`
 			}
