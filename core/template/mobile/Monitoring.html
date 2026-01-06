@@ -259,13 +259,13 @@
 			 */
 			const initIconSSH = () => {
 				try {
-					const el = widgetRoot.querySelector('#iconSSH#id#')
-					if (!el) return
+					const iconSSH = widgetRoot.querySelector('#iconSSH#id#')
+					if (!iconSSH) return
 
 					if ('#cnx_ssh#' === 'OK') {
-						el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
+						iconSSH.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
 					} else if ('#cnx_ssh#' === 'KO') {
-						el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
+						iconSSH.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
 					}
 				} catch (e) {
 					console.error('[Monitoring] Error in initIconSSH:', e)
@@ -277,8 +277,8 @@
 			 */
 			const initIconCron = () => {
 				try {
-					const el = widgetRoot.querySelector('#iconCron#id#')
-					if (!el) return
+					const iconCron = widgetRoot.querySelector('#iconCron#id#')
+					if (!iconCron) return
 
 					const isOn = '#cron_status#' === '1'
 					const isCustom = '#cron_status_custom#' === '1'
@@ -289,7 +289,7 @@
 					const customLabel = isCustom ? ' (Custom)' : ' (Default)'
 					const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
 
-					el.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
+					iconCron.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
 				} catch (e) {
 					console.error('[Monitoring] Error in initIconCron:', e)
 				}
@@ -416,22 +416,22 @@
 					// Load avg 1mn
 					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
 					if (loadAvg1mn) {
-					const html1mn = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
-					loadAvg1mn.innerHTML = html1mn === '<span></span>' ? html1mn : `1 min : ${html1mn}`
-				}
+						const html1mn = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
+						loadAvg1mn.innerHTML = html1mn === '<span></span>' ? html1mn : `1 min : ${html1mn}`
+					}
 
-				// Load avg 5mn
-				const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
-				if (loadAvg5mn) {
-					const html5mn = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
-					loadAvg5mn.innerHTML = html5mn === '<span></span>' ? html5mn : ` - 5 min : ${html5mn}`
-				}
+					// Load avg 5mn
+					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
+					if (loadAvg5mn) {
+						const html5mn = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
+						loadAvg5mn.innerHTML = html5mn === '<span></span>' ? html5mn : ` - 5 min : ${html5mn}`
+					}
 
-				// Load avg 15mn
-				const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
-				if (loadAvg15mn) {
-					const html15mn = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
-					loadAvg15mn.innerHTML = html15mn === '<span></span>' ? html15mn : ` - 15 min : ${html15mn}`
+					// Load avg 15mn
+					const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
+					if (loadAvg15mn) {
+						const html15mn = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
+						loadAvg15mn.innerHTML = html15mn === '<span></span>' ? html15mn : ` - 15 min : ${html15mn}`
 					}
 				} catch (e) {
 					console.error('[Monitoring] Error in initLoadAverage:', e)

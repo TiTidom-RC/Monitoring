@@ -430,8 +430,8 @@
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
 					const uptimeEl = widgetRoot.querySelector('#uptime#id#')
-				if (!uptimeEl) return
-				uptimeEl.innerHTML = '<span>#uptime#</span>'
+					if (!uptimeEl) return
+					uptimeEl.innerHTML = '<span>#uptime#</span>'
 				} catch (e) {
 					console.error('[Monitoring] Error in initUptime:', e)
 				}
@@ -445,8 +445,8 @@
 					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
 
 					const networkInfosEl = widgetRoot.querySelector('#network_infos#id#')
-				if (!networkInfosEl) return
-				networkInfosEl.innerHTML = '<span>#network_infos#</span>'
+					if (!networkInfosEl) return
+					networkInfosEl.innerHTML = '<span>#network_infos#</span>'
 				} catch (e) {
 					console.error('[Monitoring] Error in initNetworkInfos:', e)
 				}
@@ -462,7 +462,7 @@
 					const networkEl = widgetRoot.querySelector('#network#id#')
 					if (!networkEl) return
 
-				networkEl.innerHTML = '<span>#network#</span>'
+					networkEl.innerHTML = '<span>#network#</span>'
 				} catch (e) {
 					console.error('[Monitoring] Error in initNetwork:', e)
 				}
