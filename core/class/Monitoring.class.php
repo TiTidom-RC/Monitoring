@@ -279,13 +279,13 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-  	public static function postConfig_configPullLocal($value) {
-	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
-  	}
-  	
+	public static function postConfig_configPullLocal($value) {
+		log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: ' . $value);
+	}
+
 	public static function postConfig_configPull($value) {
-	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: '. $value);
-  	}
+		log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: ' . $value);
+	}
 
 	// Fonction exécutée automatiquement avant la suppression de l'équipement
 	public function preRemove() {
@@ -2118,10 +2118,10 @@ class Monitoring extends eqLogic {
 			$cron->save();
 		} else {
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
-        	if (is_object($cron)) {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Remove CustomPull');
-            	$cron->remove();
-        	}
+			if (is_object($cron)) {
+				log::add('Monitoring', 'debug', '[' . $this->getName() . '][POSTSAVE] Remove CustomPull');
+				$cron->remove();
+			}
 		}
 
 		$this->getInformations();
