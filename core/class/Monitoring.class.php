@@ -2327,9 +2327,11 @@ class Monitoring extends eqLogic {
 			$replace['#multi_network_cards#'] = template_replace($replace, $multi_network_html);
 		}
 
-		// Use a specific template for AsusWRT and default for others
+		// Use specific templates for AsusWRT, Synology, and default for others
 		if ($this->getConfiguration('asuswrt') == '1') {
 			$template = 'AsusWRT';
+		} elseif ($this->getConfiguration('synology') == '1') {
+			$template = 'Synology';
 		} else {
 			$template = 'Monitoring';
 		}
