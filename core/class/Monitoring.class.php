@@ -241,12 +241,14 @@ class Monitoring extends eqLogic {
 		$mem_stats = config::byKey('configStatsMemCustom', 'Monitoring', '0') == '1' ? true : false;
 		if ($mem_stats) {
 			$mem_start_usage = memory_get_usage();
-			log::add('Monitoring', 'info', '[PULLCUSTOM] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
 		}
 
 		/** @var Monitoring $Monitoring */
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
+			if ($mem_stats) {
+				log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
+			}
 			$cronState = $Monitoring->getCmd(null, 'cron_status');
 			if (is_object($cronState) && $cronState->execCmd() === 0) {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: En Pause');
@@ -270,10 +272,10 @@ class Monitoring extends eqLogic {
 				}
 				$Monitoring->refreshWidget();
 			}
-		}
-		if ($mem_stats) {
-			$mem_end_usage = memory_get_usage();
-			log::add('Monitoring', 'info', '[PULLCUSTOM] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
+			if ($mem_stats) {
+				$mem_end_usage = memory_get_usage();
+				log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
+			}
 		}
 	}
 
