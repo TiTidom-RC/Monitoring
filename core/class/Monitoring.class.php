@@ -241,12 +241,14 @@ class Monitoring extends eqLogic {
 		$mem_stats = config::byKey('configStatsMemCustom', 'Monitoring', '0') == '1' ? true : false;
 		if ($mem_stats) {
 			$mem_start_usage = memory_get_usage();
-			log::add('Monitoring', 'info', '[PULLCUSTOM] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
 		}
 
 		/** @var Monitoring $Monitoring */
 		$Monitoring = Monitoring::byId($_options['Monitoring_Id']);
 		if (is_object($Monitoring)) {
+			if ($mem_stats) {
+				log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage Start :: ' . round($mem_start_usage / 1024, 2) . ' Ko');
+			}
 			$cronState = $Monitoring->getCmd(null, 'cron_status');
 			if (is_object($cronState) && $cronState->execCmd() === 0) {
 				log::add('Monitoring', 'debug', '[' . $Monitoring->getName() .'][PULLCUSTOM] Pull (Custom) :: En Pause');
@@ -270,20 +272,20 @@ class Monitoring extends eqLogic {
 				}
 				$Monitoring->refreshWidget();
 			}
-		}
-		if ($mem_stats) {
-			$mem_end_usage = memory_get_usage();
-			log::add('Monitoring', 'info', '[PULLCUSTOM] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
+			if ($mem_stats) {
+				$mem_end_usage = memory_get_usage();
+				log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage End :: ' . round($mem_end_usage / 1024, 2) . ' Ko | Conso :: ' . round(($mem_end_usage - $mem_start_usage) / 1024, 2) . ' Ko');
+			}
 		}
 	}
 
-  	public static function postConfig_configPullLocal($value) {
-	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: '. $value);
-  	}
-  	
+	public static function postConfig_configPullLocal($value) {
+		log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration PullLocal :: ' . $value);
+	}
+
 	public static function postConfig_configPull($value) {
-	    log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: '. $value);
-  	}
+		log::add('Monitoring', 'debug', '[CONFIG-SAVE] Configuration Pull :: ' . $value);
+	}
 
 	// Fonction exécutée automatiquement avant la suppression de l'équipement
 	public function preRemove() {
@@ -2116,10 +2118,10 @@ class Monitoring extends eqLogic {
 			$cron->save();
 		} else {
 			$cron = cron::byClassAndFunction('Monitoring', 'pullCustom', array('Monitoring_Id' => intval($this->getId())));
-        	if (is_object($cron)) {
-				log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] Remove CustomPull');
-            	$cron->remove();
-        	}
+			if (is_object($cron)) {
+				log::add('Monitoring', 'debug', '[' . $this->getName() . '][POSTSAVE] Remove CustomPull');
+				$cron->remove();
+			}
 		}
 
 		$this->getInformations();
@@ -2327,9 +2329,11 @@ class Monitoring extends eqLogic {
 			$replace['#multi_network_cards#'] = template_replace($replace, $multi_network_html);
 		}
 
-		// Use a specific template for AsusWRT and default for others
+		// Use specific templates for AsusWRT, Synology, and default for others
 		if ($this->getConfiguration('asuswrt') == '1') {
 			$template = 'AsusWRT';
+		} elseif ($this->getConfiguration('synology') == '1') {
+			$template = 'Synology';
 		} else {
 			$template = 'Monitoring';
 		}
