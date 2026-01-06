@@ -685,12 +685,10 @@
 				initSwap()
 				initHDD()
 
-				// Synology volumes
-			widgetRoot.querySelectorAll('[data-syno-id]').forEach(initSynoVolume)
-			// CPU with temperature
-			initCPU()
+				// CPU with temperature
+				initCPU()
 
-			// Custom commands - generic initialization using data attributes
+				// Custom commands - generic initialization using data attributes
 				widgetRoot.querySelectorAll('[data-perso-id]').forEach(initPerso)
 			}
 		})()
