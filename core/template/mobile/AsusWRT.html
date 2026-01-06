@@ -1,4 +1,6 @@
-<div class="eqLogic eqLogic-widget col2" data-eqLogic_id="#id#" data-eqType="#eqType#" data-version="#version#" data-eqLogic_uid="#uid#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="#style#">
+<div class="eqLogic eqLogic-widget col2" data-eqLogic_id="#id#" data-eqType="#eqType#" data-version="#version#"
+	data-eqLogic_uid="#uid#" data-translate-category="#translate_category#" data-category="#category#"
+	data-tags="#tags#" style="#style#">
 	<style>
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-flex {
 			display: flex;
@@ -13,6 +15,7 @@
 			justify-content: flex-start;
 			align-items: center;
 		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-left span:not(:empty) {
 			padding-right: 5px;
 		}
@@ -24,6 +27,7 @@
 			text-align: center;
 			overflow: hidden;
 		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center span {
 			justify-content: center;
 			overflow: hidden;
@@ -37,7 +41,7 @@
 			padding-left: 6px;
 			padding-right: 6px;
 		}
-		
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right {
 			display: flex;
 			flex: 0 1 auto;
@@ -46,6 +50,7 @@
 			align-items: center;
 			padding-left: 5px;
 		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right .refresh {
 			position: relative;
 		}
@@ -72,7 +77,8 @@
 			<span class="cmd" id="iconSSH#id#"></span>
 			<span class="cmd" id="iconCron#id#"></span>
 			<span class="cmd" id="iconCheckFirmware#id#"></span>
-			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action"
+				data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="fas fa-redo"></i>
 			</span>
 		</span>
@@ -89,497 +95,570 @@
 	</span>
 	<div class="monitor-cmds">
 		<div class="tooltips" style="display: #distri_name_display#;">
-			<span title="Distribution AsusWRT || Date valeur : #distri_name_value# || Date collecte : #distri_name_collect#" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
+			<span
+				title="Distribution AsusWRT || Date valeur : #distri_name_value# || Date collecte : #distri_name_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
 			<span>#distri_name#</span>
 		</div>
 		<div class="tooltips" style="display: #uptime_display#;">
-			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
+			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
 			<span id="uptime#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #load_avg_display#;">
-			<span title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
+			<span
+				title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
 			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #memory_display#;">
-			<span title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
+			<span
+				title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
 			<span id="memory_available_percent#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #swap_display#;">
-			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
+			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
 			<span id="swap_free_percent#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #network_infos_display#;">
-			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
+			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
 			<span id="network_infos#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #network_display#;">
-			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
+			<span
+				title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
 			<span id="network#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #asus_clients_display#;">
-			<span title="Infos Clients || Date de valeur : #asus_clients_value# || Date de collecte : #asus_clients_collect#" style="width:15px;max-width:15px;max-height:15px;">#asus_clients_icon#</span>
+			<span title="Infos Clients || Date valeur : #asus_clients_value# || Date collecte : #asus_clients_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#asus_clients_icon#</span>
 			<span id="asus_clients#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #asus_wan0_ip_display#;">
-			<span title="Infos Internet (WAN) || Date valeur : #asus_wan0_ip_value# || Date collecte : #asus_wan0_ip_collect#" style="width:15px;max-width:15px;max-height:15px;">#asus_wan0_ip_icon#</span>
+			<span
+				title="Infos Internet (WAN) || Date valeur : #asus_wan0_ip_value# || Date collecte : #asus_wan0_ip_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#asus_wan0_ip_icon#</span>
 			<span id="asus_wan0_ip#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #asus_wifi_temp_display#;">
-			<span title="Infos Températures WiFi || Date valeur : #asus_wifi_temp_value# || Date collecte : #asus_wifi_temp_collect#" style="width:15px;max-width:15px;max-height:15px;">#asus_wifi_temp_icon#</span>
+			<span
+				title="Infos Températures WiFi || Date valeur : #asus_wifi_temp_value# || Date collecte : #asus_wifi_temp_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#asus_wifi_temp_icon#</span>
 			<span id="asus_wifi_temp#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #hdd_display#;">
-			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
+			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #cpu_display#;">
-			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
+			<span
+				title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #perso1_display#;"
-		     data-perso-id="perso1"
-		     data-perso-value="#perso1#"
-		     data-perso-name="#perso1_name#"
-		     data-perso-date-value="#perso1_value#"
-		     data-perso-collect="#perso1_collect#"
-		     data-perso-icon="#perso1_icon#"
-		     data-perso-low="#perso1_colorlow#"
-		     data-perso-high="#perso1_colorhigh#"
-		     data-perso-unite="#perso1_unite#">
-			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
+		<div class="tooltips" style="display: #perso1_display#;" data-perso-id="perso1" data-perso-value="#perso1#"
+			data-perso-name="#perso1_name#" data-perso-date-value="#perso1_value#" data-perso-collect="#perso1_collect#"
+			data-perso-icon="#perso1_icon#" data-perso-low="#perso1_colorlow#" data-perso-high="#perso1_colorhigh#"
+			data-perso-unite="#perso1_unite#">
+			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #perso2_display#;"
-		     data-perso-id="perso2"
-		     data-perso-value="#perso2#"
-		     data-perso-name="#perso2_name#"
-		     data-perso-date-value="#perso2_value#"
-		     data-perso-collect="#perso2_collect#"
-		     data-perso-icon="#perso2_icon#"
-		     data-perso-low="#perso2_colorlow#"
-		     data-perso-high="#perso2_colorhigh#"
-		     data-perso-unite="#perso2_unite#">
-			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
+		<div class="tooltips" style="display: #perso2_display#;" data-perso-id="perso2" data-perso-value="#perso2#"
+			data-perso-name="#perso2_name#" data-perso-date-value="#perso2_value#" data-perso-collect="#perso2_collect#"
+			data-perso-icon="#perso2_icon#" data-perso-low="#perso2_colorlow#" data-perso-high="#perso2_colorhigh#"
+			data-perso-unite="#perso2_unite#">
+			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #perso3_display#;"
-		     data-perso-id="perso3"
-		     data-perso-value="#perso3#"
-		     data-perso-name="#perso3_name#"
-		     data-perso-date-value="#perso3_value#"
-		     data-perso-collect="#perso3_collect#"
-		     data-perso-icon="#perso3_icon#"
-		     data-perso-low="#perso3_colorlow#"
-		     data-perso-high="#perso3_colorhigh#"
-		     data-perso-unite="#perso3_unite#">
-			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
+		<div class="tooltips" style="display: #perso3_display#;" data-perso-id="perso3" data-perso-value="#perso3#"
+			data-perso-name="#perso3_name#" data-perso-date-value="#perso3_value#" data-perso-collect="#perso3_collect#"
+			data-perso-icon="#perso3_icon#" data-perso-low="#perso3_colorlow#" data-perso-high="#perso3_colorhigh#"
+			data-perso-unite="#perso3_unite#">
+			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
 			<span id="perso3_unite#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #perso4_display#;"
-		     data-perso-id="perso4"
-		     data-perso-value="#perso4#"
-		     data-perso-name="#perso4_name#"
-		     data-perso-date-value="#perso4_value#"
-		     data-perso-collect="#perso4_collect#"
-		     data-perso-icon="#perso4_icon#"
-		     data-perso-low="#perso4_colorlow#"
-		     data-perso-high="#perso4_colorhigh#"
-		     data-perso-unite="#perso4_unite#">
-			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
+		<div class="tooltips" style="display: #perso4_display#;" data-perso-id="perso4" data-perso-value="#perso4#"
+			data-perso-name="#perso4_name#" data-perso-date-value="#perso4_value#" data-perso-collect="#perso4_collect#"
+			data-perso-icon="#perso4_icon#" data-perso-low="#perso4_colorlow#" data-perso-high="#perso4_colorhigh#"
+			data-perso-unite="#perso4_unite#">
+			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
 			<span id="perso4_unite#id#"></span>
 		</div>
 	</div>
 	<script>
-	(() => {
-		'use strict'
-		
-		// ========================================
-		// === UTILITY FUNCTIONS ===
-		// ========================================
-		
-		/**
-		 * Get color style based on value and thresholds (mobile optimized)
-		 * @param {number} val - Numeric value to evaluate
-		 * @param {number} low - Low threshold
-		 * @param {number} high - High threshold
-		 * @param {boolean} reversed - If true, higher values are better (green)
-		 * @returns {string} Inline style string for color
-		 */
-		const getColorStyle = (val, low, high, reversed) => {
-			if (reversed === void 0) reversed = false
-			if (reversed) {
-				// Reversed: higher is better (e.g., % free)
-				if (val > high && high !== '') return ' style="color: var(--al-success-color) !important;"'
-				if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
-				if (val < low) return ' style="color: var(--al-danger-color) !important;"'
-			} else {
-				// Normal: lower is better (e.g., temperature, load)
-				if (val < low) return ' style="color: var(--al-success-color) !important;"'
-				if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
-				if (val > high && high !== '') return ' style="color: var(--al-danger-color) !important;"'
-			}
-			return ''
-		}
-		
-		/**
-		 * Build HTML for threshold-based value with color (mobile version - no history)
-		 */
-		const buildThresholdHTML = (value, lowThreshold, highThreshold, prefix, reversed) => {
-			if (reversed === void 0) reversed = false
-			if (value === '') return '<span></span>'
-			
-			const val = parseFloat(value)
-			const low = parseFloat(lowThreshold)
-			const high = parseFloat(highThreshold)
-			const color = getColorStyle(val, low, high, reversed)
-			
-			return prefix + '<span class="state"' + color + '>' + value + '</span>'
-		}
-		
-		/**
-		 * Build HTML for percentage-based value with color and unit (mobile version)
-		 */
-		const buildPercentageHTML = (value, lowThreshold, highThreshold, prefix, unit, reversed) => {
-			if (reversed === void 0) reversed = false
-			if (value === '') return prefix ? '<span></span>' : ''
-			
-			const val = parseFloat(value)
-			const low = parseFloat(lowThreshold)
-			const high = parseFloat(highThreshold)
-			const color = getColorStyle(val, low, high, reversed)
-			
-			const valueSpan = '<span class="state"' + color + '>' + value + '</span>'
-			const unitSpan = '<span>' + unit + '</span>'
-			
-			return prefix ? prefix + valueSpan + unitSpan + ')' : valueSpan + unitSpan
-		}
-		
-		// ========================================
-		// === ICON HANDLERS ===
-		// ========================================
-		
-		/**
-		 * Initialize SSH connection status icon
-		 */
-		const initIconSSH = () => {
-			const el = document.getElementById('iconSSH#id#')
-			if (!el) return
-			
-			if ('#cnx_ssh#' === 'OK') {
-				el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
-			} else if ('#cnx_ssh#' === 'KO') {
-				el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
-			}
-		}
-		
-		/**
-		 * Initialize Cron status icon
-		 */
-		const initIconCron = () => {
-			const el = document.getElementById('iconCron#id#')
-			if (!el) return
-			
-			const isOn = '#cron_status#' === '1'
-			const isCustom = '#cron_status_custom#' === '1'
-			const display = '#cron_status_display#'
-			
-			const icon = isOn ? 'play-circle' : 'pause-circle'
-			const label = isOn ? 'ON' : 'OFF'
-			const customLabel = isCustom ? ' (Custom)' : ' (Default)'
-			const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
-			
-			el.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
-		}
-		
-		/**
-		 * Initialize AsusWRT Firmware Check icon (AsusWRT-specific)
-		 */
-		const initIconCheckFirmware = () => {
-			const el = document.getElementById('iconCheckFirmware#id#')
-			if (!el) return
-			
-			if ('#asus_fw_check#' === '1') {
-				el.innerHTML = '<i title="Check du Firmware :: 1" class="fas fa-bell" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>'
-			} else if ('#asus_fw_check#' === '0') {
-				el.innerHTML = '<i title="Check du Firmware :: 0" class="fas fa-bell-slash" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>'
-			}
-		}
-		
-		// ========================================
-		// === BUTTON HANDLERS ===
-		// ========================================
-		
-		/**
-		 * Initialize Reboot button with native confirm (mobile optimized)
-		 */
-		const initRebootButton = () => {
-			const btn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
-			if (!btn) return
-			
-			btn.addEventListener('click', () => {
-				if (confirm("Etes-vous sûr de vouloir redémarrer l'équipement #name# ?")) {
-					jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
+		(() => {
+			'use strict'
+
+			const widgetRoot = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"]')
+			if (!widgetRoot) return
+
+			// ========================================
+			// === UTILITY FUNCTIONS ===
+			// ========================================
+
+			/**
+			 * Get color style based on value and thresholds (mobile optimized)
+			 * @param {number} val - Numeric value to evaluate
+			 * @param {number} low - Low threshold
+			 * @param {number} high - High threshold
+			 * @param {boolean} reversed - If true, higher values are better (green)
+			 * @returns {string} Inline style string for color
+			 */
+			const getColorStyle = (val, low, high, reversed) => {
+				if (reversed === void 0) reversed = false
+				if (reversed) {
+					// Reversed: higher is better (e.g., % free)
+					if (val > high && high !== '') return ' style="color: var(--al-success-color) !important;"'
+					if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
+					if (val < low) return ' style="color: var(--al-danger-color) !important;"'
+				} else {
+					// Normal: lower is better (e.g., temperature, load)
+					if (val < low) return ' style="color: var(--al-success-color) !important;"'
+					if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
+					if (val > high && high !== '') return ' style="color: var(--al-danger-color) !important;"'
 				}
-			})
-		}
-		
-		/**
-		 * Initialize Refresh button
-		 */
-		const initRefreshButton = () => {
-			const btn = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
-			if (!btn) return
-			
-			if ('#refresh_id#' !== '') {
-				btn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
-			} else {
-				btn.remove()
+				return ''
 			}
-		}
-		
-		// ========================================
-		// === VALUE DISPLAYS - Simple ===
-		// ========================================
-		
-		/**
-		 * Initialize Uptime display
-		 */
-		const initUptime = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('uptime#id#')
-			if (el) el.innerHTML = '<span>#uptime#</span>'
-		}
-		
-		/**
-		 * Initialize Network Infos display
-		 */
-		const initNetworkInfos = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('network_infos#id#')
-			if (el) el.innerHTML = '<span>#network_infos#</span>'
-		}
-		
-		/**
-		 * Initialize Network Traffic display
-		 */
-		const initNetwork = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('network#id#')
-			if (el) el.innerHTML = '<span>#network#</span>'
-		}
-		
-		/**
-		 * Initialize AsusWRT Clients display (AsusWRT-specific)
-		 */
-		const initAsusClients = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('asus_clients#id#')
-			if (el) el.innerHTML = '<span>#asus_clients#</span>'
-		}
-		
-		/**
-		 * Initialize AsusWRT WAN IP display (AsusWRT-specific)
-		 */
-		const initAsusWanIP = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('asus_wan0_ip#id#')
-			if (el) el.innerHTML = '<span>IP (WAN) : #asus_wan0_ip#</span>'
-		}
-		
-		/**
-		 * Initialize AsusWRT WiFi Temperature display (AsusWRT-specific)
-		 */
-		const initAsusWiFiTemp = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('asus_wifi_temp#id#')
-			if (el) el.innerHTML = '<span>#asus_wifi_temp#</span>'
-		}
-		
-		// ========================================
-		// === VALUE DISPLAYS - With Thresholds ===
-		// ========================================
-		
-		/**
-		 * Initialize Load Average displays (1mn, 5mn, 15mn)
-		 */
-		const initLoadAverage = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			// Load avg 1mn
-			const loadAvg1mn = document.getElementById('load_avg_1mn#id#')
-			if (loadAvg1mn) {
-				const html = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
-				loadAvg1mn.innerHTML = html
+
+			/**
+			 * Build HTML for threshold-based value with color (mobile version - no history)
+			 */
+			const buildThresholdHTML = (value, lowThreshold, highThreshold, prefix, reversed) => {
+				if (reversed === void 0) reversed = false
+				if (value === '') return '<span></span>'
+
+				const val = parseFloat(value)
+				const low = parseFloat(lowThreshold)
+				const high = parseFloat(highThreshold)
+				const color = getColorStyle(val, low, high, reversed)
+
+				return prefix + '<span class="state"' + color + '>' + value + '</span>'
 			}
-			
-			// Load avg 5mn
-			const loadAvg5mn = document.getElementById('load_avg_5mn#id#')
-			if (loadAvg5mn) {
-				const html = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
-				loadAvg5mn.innerHTML = html
+
+			/**
+			 * Build HTML for percentage-based value with color and unit (mobile version)
+			 */
+			const buildPercentageHTML = (value, lowThreshold, highThreshold, prefix, unit, reversed) => {
+				if (reversed === void 0) reversed = false
+				if (value === '') return prefix ? '<span></span>' : ''
+
+				const val = parseFloat(value)
+				const low = parseFloat(lowThreshold)
+				const high = parseFloat(highThreshold)
+				const color = getColorStyle(val, low, high, reversed)
+
+				const valueSpan = '<span class="state"' + color + '>' + value + '</span>'
+				const unitSpan = '<span>' + unit + '</span>'
+
+				return prefix ? prefix + valueSpan + unitSpan + ')' : valueSpan + unitSpan
 			}
-			
-			// Load avg 15mn
-			const loadAvg15mn = document.getElementById('load_avg_15mn#id#')
-			if (loadAvg15mn) {
-				const html = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
-				loadAvg15mn.innerHTML = html
+
+			// ========================================
+			// === ICON HANDLERS ===
+			// ========================================
+
+			/**
+			 * Initialize SSH connection status icon
+			 */
+			const initIconSSH = () => {
+				try {
+					const el = widgetRoot.querySelector('#iconSSH#id#')
+					if (!el) return
+
+					if ('#cnx_ssh#' === 'OK') {
+						el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
+					} else if ('#cnx_ssh#' === 'KO') {
+						el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
+					}
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initIconSSH:', e)
+				}
 			}
-		}
-		
-		/**
-		 * Initialize Memory display with percentage
-		 */
-		const initMemory = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('memory_available_percent#id#')
-			if (!el) return
-			
-			const value = '#memory_available_percent#'
-			if (value === '') {
-				el.innerHTML = '<span>#memory#</span>'
-				return
+
+			/**
+			 * Initialize Cron status icon
+			 */
+			const initIconCron = () => {
+				try {
+					const el = widgetRoot.querySelector('#iconCron#id#')
+					if (!el) return
+
+					const isOn = '#cron_status#' === '1'
+					const isCustom = '#cron_status_custom#' === '1'
+					const display = '#cron_status_display#'
+
+					const icon = isOn ? 'play-circle' : 'pause-circle'
+					const label = isOn ? 'ON' : 'OFF'
+					const customLabel = isCustom ? ' (Custom)' : ' (Default)'
+					const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
+
+					el.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initIconCron:', e)
+				}
 			}
-			
-			el.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
-		}
-		
-		/**
-		 * Initialize Swap display with percentage
-		 */
-		const initSwap = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('swap_free_percent#id#')
-			if (!el) return
-			
-			const value = '#swap_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span>#swap#</span>'
-				return
+
+			/**
+			 * Initialize Check Firmware icon (AsusWRT specific)
+			 */
+			const initIconCheckFirmware = () => {
+				try {
+					const el = widgetRoot.querySelector('#iconCheckFirmware#id#')
+					if (!el) return
+
+					if ('#asus_fw_check#' === '1') {
+						el.innerHTML = '<i title="Check du Firmware :: 1" class="fas fa-bell" style="display: #asus_fw_check_display#;color: var(--al-success-color) !important;"></i>'
+					} else if ('#asus_fw_check#' === '0') {
+						el.innerHTML = '<i title="Check du Firmware :: 0" class="fas fa-bell-slash" style="display: #asus_fw_check_display#;color: var(--al-danger-color) !important;"></i>'
+					}
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initIconCheckFirmware:', e)
+				}
 			}
-			
-			el.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
-		}
-		
-		/**
-		 * Initialize HDD display with percentage
-		 */
-		const initHDD = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('hdd#id#')
-			if (!el) return
-			
-			const value = '#hdd_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
+
+			// ========================================
+			// === BUTTON HANDLERS ===
+			// ========================================
+
+			/**
+			 * Initialize Reboot button with native confirm (mobile optimized)
+			 */
+			const initRebootButton = () => {
+				try {
+					const btn = widgetRoot.querySelector('.reboot')
+					if (!btn) return
+
+					btn.addEventListener('click', () => {
+						if (confirm("Etes-vous sûr de vouloir redémarrer l'équipement #name# ?")) {
+							jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
+						}
+					})
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initRebootButton:', e)
+				}
 			}
-			
-			el.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
-		}
-		
-		/**
-		 * Initialize CPU display with optional temperature
-		 */
-		const initCPU = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const cpuEl = document.getElementById('cpu#id#')
-			const tempEl = document.getElementById('cpu_temp#id#')
-			if (!cpuEl || !tempEl) return
-			
-			const temp = '#cpu_temp#'
-			if (temp !== '' && '#cpu_temp_display#' === 'block') {
-				cpuEl.innerHTML = '<span>#cpu# </span>'
-				
-				const tempVal = parseFloat(temp)
-				const low = parseFloat('#cpu_temp_colorlow#')
-				const high = parseFloat('#cpu_temp_colorhigh#')
-				const color = getColorStyle(tempVal, low, high, false)
-				
-				tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C</span>)'
-			} else {
-				cpuEl.innerHTML = '<span>#cpu#</span>'
+
+			/**
+			 * Initialize Refresh button (mobile version)
+			 */
+			const initRefreshButton = () => {
+				try {
+					const btn = widgetRoot.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
+					if (!btn) return
+
+					if ('#refresh_id#' !== '') {
+						btn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
+					} else {
+						btn.remove()
+					}
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initRefreshButton:', e)
+				}
 			}
-		}
-		
-		/**
-		 * Initialize custom command display (perso1-4) using data attributes (mobile version)
-		 * @param {HTMLElement} container - The container div with data-perso-* attributes
-		 */
-		const initPerso = (container) => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const dataset = container.dataset
-			const persoId = dataset.persoId
-			const el = document.getElementById(persoId + '_unite#id#')
-			if (!el) return
-			
-			const value = dataset.persoValue
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
+
+			// ========================================
+			// === VALUE DISPLAYS - Simple ===
+			// ========================================
+
+			/**
+			 * Initialize Uptime display
+			 */
+			const initUptime = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#uptime#id#')
+					if (!el) return
+					el.innerHTML = '<span>#uptime#</span>'
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initUptime:', e)
+				}
 			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat(dataset.persoLow)
-			const high = parseFloat(dataset.persoHigh)
-			const color = getColorStyle(val, low, high, false)
-			
-			if (color) {
-				el.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
-			} else {
-				el.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+
+			/**
+			 * Initialize Network Infos display
+			 */
+			const initNetworkInfos = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#network_infos#id#')
+					if (!el) return
+					el.innerHTML = '<span>#network_infos#</span>'
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initNetworkInfos:', e)
+				}
 			}
-		}
-		
-		// ========================================
-		// === INITIALIZATION ===
-		// ========================================
-		
-		// Only initialize if template is properly instantiated
-		if ('#uid#') {
-			// Icon handlers
-			initIconSSH()
-			initIconCron()
-			initIconCheckFirmware()
-			
-			// Button handlers
-			initRebootButton()
-			initRefreshButton()
-			
-			// Simple value displays
-			initUptime()
-			initNetworkInfos()
-			initNetwork()
-			
-			// AsusWRT-specific displays
-			initAsusClients()
-			initAsusWanIP()
-			initAsusWiFiTemp()
-			
-			// Value displays with thresholds
-			initLoadAverage()
-			initMemory()
-			initSwap()
-			initHDD()
-			
-			// CPU with temperature
-			initCPU()
-			
-			// Custom commands - generic initialization using data attributes
-			document.querySelectorAll('[data-perso-id]').forEach(initPerso)
-		}
-	})()
+
+			/**
+			 * Initialize Network display
+			 */
+			const initNetwork = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#network#id#')
+					if (!el) return
+					el.innerHTML = '<span>#network#</span>'
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initNetwork:', e)
+				}
+			}
+
+			/**
+			 * Initialize Asus Clients display (AsusWRT specific)
+			 */
+			const initAsusClients = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#asus_clients#id#')
+					if (!el) return
+					el.innerHTML = '<span>#asus_clients#</span>'
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initAsusClients:', e)
+				}
+			}
+
+			/**
+			 * Initialize Asus WAN IP display (AsusWRT specific)
+			 */
+			const initAsusWanIP = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#asus_wan0_ip#id#')
+					if (!el) return
+					el.innerHTML = '<span>#asus_wan0_ip#</span>'
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initAsusWanIP:', e)
+				}
+			}
+
+			/**
+			 * Initialize Asus WiFi Temperature display (AsusWRT specific)
+			 */
+			const initAsusWiFiTemp = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#asus_wifi_temp#id#')
+					if (!el) return
+					el.innerHTML = '<span>#asus_wifi_temp#</span>'
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initAsusWiFiTemp:', e)
+				}
+			}
+
+			// ========================================
+			// === VALUE DISPLAYS - With thresholds ===
+			// ========================================
+
+			/**
+			 * Initialize Load Average displays (1mn, 5mn, 15mn)
+			 */
+			const initLoadAverage = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					// Load avg 1mn
+					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
+					if (loadAvg1mn) {
+						const html = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
+						loadAvg1mn.innerHTML = html
+					}
+
+					// Load avg 5mn
+					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
+					if (loadAvg5mn) {
+						const html = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
+						loadAvg5mn.innerHTML = html
+					}
+
+					// Load avg 15mn
+					const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
+					if (loadAvg15mn) {
+						const html = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
+						loadAvg15mn.innerHTML = html
+					}
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initLoadAverage:', e)
+				}
+			}
+
+			/**
+			 * Initialize Memory display with percentage
+			 */
+			const initMemory = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#memory_available_percent#id#')
+					if (!el) return
+
+					const value = '#memory_available_percent#'
+					if (value === '') {
+						el.innerHTML = '<span>#memory#</span>'
+						return
+					}
+
+					el.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initMemory:', e)
+				}
+			}
+
+			/**
+			 * Initialize Swap display with percentage
+			 */
+			const initSwap = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#swap_free_percent#id#')
+					if (!el) return
+
+					const value = '#swap_free_percent#'
+					if (value === '') {
+						el.innerHTML = '<span>#swap#</span>'
+						return
+					}
+
+					el.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initSwap:', e)
+				}
+			}
+
+			/**
+			 * Initialize HDD display with percentage
+			 */
+			const initHDD = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#hdd#id#')
+					if (!el) return
+
+					const value = '#hdd_free_percent#'
+					if (value === '') {
+						el.innerHTML = '<span></span>'
+						return
+					}
+
+					el.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initHDD:', e)
+				}
+			}
+
+			/**
+			 * Initialize CPU display with temperature
+			 */
+			const initCPU = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const cpuEl = widgetRoot.querySelector('#cpu#id#')
+					const tempEl = widgetRoot.querySelector('#cpu_temp#id#')
+					if (!cpuEl || !tempEl) return
+
+					const temp = '#cpu_temp#'
+					if (temp !== '' && '#cpu_temp_display#' === 'block') {
+						cpuEl.innerHTML = '<span>#cpu# </span>'
+
+						const tempVal = parseFloat(temp)
+						const low = parseFloat('#cpu_temp_colorlow#')
+						const high = parseFloat('#cpu_temp_colorhigh#')
+						const color = getColorStyle(tempVal, low, high, false)
+
+						tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C</span>)'
+					} else {
+						cpuEl.innerHTML = '<span>#cpu#</span>'
+					}
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initCPU:', e)
+				}
+			}
+
+			/**
+			 * Initialize custom command display (perso1-4) using data attributes (mobile version)
+			 * @param {HTMLElement} container - The container div with data-perso-* attributes
+			 */
+			const initPerso = (container) => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const dataset = container.dataset
+					const persoId = dataset.persoId
+					const el = widgetRoot.querySelector('#' + persoId + '_unite#id#')
+					if (!el) return
+
+					const value = dataset.persoValue
+					if (value === '') {
+						el.innerHTML = '<span></span>'
+						return
+					}
+
+					const val = parseFloat(value)
+					const low = parseFloat(dataset.persoLow)
+					const high = parseFloat(dataset.persoHigh)
+					const color = getColorStyle(val, low, high, false)
+
+					if (color) {
+						el.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+					} else {
+						el.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+					}
+				} catch (e) {
+					console.error('[Monitoring AsusWRT] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)
+				}
+			}
+
+			// ========================================
+			// === INITIALIZATION ===
+			// ========================================
+
+			// Only initialize if template is properly instantiated
+			if ('#uid#') {
+				// Icon handlers
+				initIconSSH()
+				initIconCron()
+				initIconCheckFirmware()
+
+				// Button handlers
+				initRebootButton()
+				initRefreshButton()
+
+				// Simple value displays
+				initUptime()
+				initNetworkInfos()
+				initNetwork()
+				initAsusClients()
+				initAsusWanIP()
+				initAsusWiFiTemp()
+
+				// Value displays with thresholds
+				initLoadAverage()
+				initMemory()
+				initSwap()
+				initHDD()
+
+				// CPU with temperature
+				initCPU()
+
+				// Custom commands - generic initialization using data attributes
+				widgetRoot.querySelectorAll('[data-perso-id]').forEach(initPerso)
+			}
+		})()
 	</script>
-	#divGraphInfo#
 </div>

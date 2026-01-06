@@ -1,4 +1,6 @@
-<div class="eqLogic eqLogic-widget col2" data-eqLogic_id="#id#" data-eqType="#eqType#" data-version="#version#" data-eqLogic_uid="#uid#" data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#" style="#style#">
+<div class="eqLogic eqLogic-widget col2" data-eqLogic_id="#id#" data-eqType="#eqType#" data-version="#version#"
+	data-eqLogic_uid="#uid#" data-translate-category="#translate_category#" data-category="#category#"
+	data-tags="#tags#" style="#style#">
 	<style>
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-flex {
 			display: flex;
@@ -13,6 +15,7 @@
 			justify-content: flex-start;
 			align-items: center;
 		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-left span:not(:empty) {
 			padding-right: 5px;
 		}
@@ -24,6 +27,7 @@
 			text-align: center;
 			overflow: hidden;
 		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-center span {
 			justify-content: center;
 			overflow: hidden;
@@ -37,7 +41,7 @@
 			padding-left: 6px;
 			padding-right: 6px;
 		}
-		
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right {
 			display: flex;
 			flex: 0 1 auto;
@@ -46,6 +50,7 @@
 			align-items: center;
 			padding-left: 5px;
 		}
+
 		div.eqLogic-widget[data-eqLogic_uid="#uid#"] span.monitor-name-right .refresh {
 			position: relative;
 		}
@@ -71,10 +76,12 @@
 		<span class="monitor-name-left">
 			<span class="cmd" id="iconSSH#id#"></span>
 			<span class="cmd" id="iconCron#id#"></span>
-			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
+			<span class="cmd action reboot cursor" title="Redémarrer l'équipement" data-type="action"
+				data-subtype="other" data-cmd_id="#cmd_reboot_id#" style="display: #cmd_reboot_display#;">
 				<i class="fas fa-redo"></i>
 			</span>
-			<span class="cmd action poweroff cursor" title="Eteindre l'équipement" data-type="action" data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
+			<span class="cmd action poweroff cursor" title="Eteindre l'équipement" data-type="action"
+				data-subtype="other" data-cmd_id="#cmd_poweroff_id#" style="display: #cmd_poweroff_display#;">
 				<i class="fas fa-power-off"></i>
 			</span>
 		</span>
@@ -91,546 +98,507 @@
 	</span>
 	<div class="monitor-cmds">
 		<div class="tooltips" style="display: #distri_name_display#;">
-			<span title="Distribution Linux || Date valeur : #distri_name_value# || Date collecte : #distri_name_collect#" style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
+			<span
+				title="Distribution Linux || Date valeur : #distri_name_value# || Date collecte : #distri_name_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#distri_name_icon#</span>
 			<span>#distri_name#</span>
 		</div>
 		<div class="tooltips" style="display: #uptime_display#;">
-			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#" style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
+			<span title="Temps d'Activité (UpTime) || Date valeur : #uptime_value# || Date collecte : #uptime_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#uptime_icon#</span>
 			<span id="uptime#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #load_avg_display#;">
-			<span title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#" style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
+			<span
+				title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
 			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #memory_display#;">
-			<span title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#" style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
+			<span
+				title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
 			<span id="memory_available_percent#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #swap_display#;">
-			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#" style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
+			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
 			<span id="swap_free_percent#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #network_infos_display#;">
-			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
+			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#network_infos_icon#</span>
 			<span id="network_infos#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #network_display#;">
-			<span title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#" style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
+			<span
+				title="Trafic Réseau (#network_name# / #network_ip#) || Date valeur : #network_value# || Date collecte : #network_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#network_icon#</span>
 			<span id="network#id#"></span>
 		</div>
 		<!-- Cartes réseau supplémentaires -->
 		#multi_network_cards#
 		<div class="tooltips" style="display: #hdd_display#;">
-			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#" style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
+			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
 		</div>
-		<div id="syno_hddv2#id#"
-		     data-syno-id="syno_hddv2"
-		     data-syno-name="Syno Volume 2"
-		     data-syno-display="#syno_hddv2_display#"
-		     data-syno-value="#syno_hddv2#"
-		     data-syno-date-value="#syno_hddv2_value#"
-		     data-syno-collect="#syno_hddv2_collect#"
-		     data-syno-icon="#syno_hddv2_icon#"
-		     data-syno-percent="#syno_hddv2_free_percent#"
-		     data-syno-low="#syno_hddv2_free_percent_colorlow#"
-		     data-syno-high="#syno_hddv2_free_percent_colorhigh#"></div>
-		<div id="syno_hddv3#id#"
-		     data-syno-id="syno_hddv3"
-		     data-syno-name="Syno Volume 3"
-		     data-syno-display="#syno_hddv3_display#"
-		     data-syno-value="#syno_hddv3#"
-		     data-syno-date-value="#syno_hddv3_value#"
-		     data-syno-collect="#syno_hddv3_collect#"
-		     data-syno-icon="#syno_hddv3_icon#"
-		     data-syno-percent="#syno_hddv3_free_percent#"
-		     data-syno-low="#syno_hddv3_free_percent_colorlow#"
-		     data-syno-high="#syno_hddv3_free_percent_colorhigh#"></div>
-		<div id="syno_hddv4#id#"
-		     data-syno-id="syno_hddv4"
-		     data-syno-name="Syno Volume 4"
-		     data-syno-display="#syno_hddv4_display#"
-		     data-syno-value="#syno_hddv4#"
-		     data-syno-date-value="#syno_hddv4_value#"
-		     data-syno-collect="#syno_hddv4_collect#"
-		     data-syno-icon="#syno_hddv4_icon#"
-		     data-syno-percent="#syno_hddv4_free_percent#"
-		     data-syno-low="#syno_hddv4_free_percent_colorlow#"
-		     data-syno-high="#syno_hddv4_free_percent_colorhigh#"></div>
-		<div id="syno_hddusb#id#"
-		     data-syno-id="syno_hddusb"
-		     data-syno-name="Syno Volume USB"
-		     data-syno-display="#syno_hddusb_display#"
-		     data-syno-value="#syno_hddusb#"
-		     data-syno-date-value="#syno_hddusb_value#"
-		     data-syno-collect="#syno_hddusb_collect#"
-		     data-syno-icon="#syno_hddusb_icon#"
-		     data-syno-percent="#syno_hddusb_free_percent#"
-		     data-syno-low="#syno_hddusb_free_percent_colorlow#"
-		     data-syno-high="#syno_hddusb_free_percent_colorhigh#"></div>
-		<div id="syno_hddesata#id#"
-		     data-syno-id="syno_hddesata"
-		     data-syno-name="Syno Volume eSATA"
-		     data-syno-display="#syno_hddesata_display#"
-		     data-syno-value="#syno_hddesata#"
-		     data-syno-date-value="#syno_hddesata_value#"
-		     data-syno-collect="#syno_hddesata_collect#"
-		     data-syno-icon="#syno_hddesata_icon#"
-		     data-syno-percent="#syno_hddesata_free_percent#"
-		     data-syno-low="#syno_hddesata_free_percent_colorlow#"
-		     data-syno-high="#syno_hddesata_free_percent_colorhigh#"></div>
 		<div class="tooltips" style="display: #cpu_display#;">
-			<span title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#" style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
+			<span
+				title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #perso1_display#;"
-		     data-perso-id="perso1"
-		     data-perso-value="#perso1#"
-		     data-perso-name="#perso1_name#"
-		     data-perso-date-value="#perso1_value#"
-		     data-perso-collect="#perso1_collect#"
-		     data-perso-icon="#perso1_icon#"
-		     data-perso-low="#perso1_colorlow#"
-		     data-perso-high="#perso1_colorhigh#"
-		     data-perso-unite="#perso1_unite#">
-			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
+		<div class="tooltips" style="display: #perso1_display#;" data-perso-id="perso1" data-perso-value="#perso1#"
+			data-perso-name="#perso1_name#" data-perso-date-value="#perso1_value#" data-perso-collect="#perso1_collect#"
+			data-perso-icon="#perso1_icon#" data-perso-low="#perso1_colorlow#" data-perso-high="#perso1_colorhigh#"
+			data-perso-unite="#perso1_unite#">
+			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #perso2_display#;"
-		     data-perso-id="perso2"
-		     data-perso-value="#perso2#"
-		     data-perso-name="#perso2_name#"
-		     data-perso-date-value="#perso2_value#"
-		     data-perso-collect="#perso2_collect#"
-		     data-perso-icon="#perso2_icon#"
-		     data-perso-low="#perso2_colorlow#"
-		     data-perso-high="#perso2_colorhigh#"
-		     data-perso-unite="#perso2_unite#">
-			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
+		<div class="tooltips" style="display: #perso2_display#;" data-perso-id="perso2" data-perso-value="#perso2#"
+			data-perso-name="#perso2_name#" data-perso-date-value="#perso2_value#" data-perso-collect="#perso2_collect#"
+			data-perso-icon="#perso2_icon#" data-perso-low="#perso2_colorlow#" data-perso-high="#perso2_colorhigh#"
+			data-perso-unite="#perso2_unite#">
+			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #perso3_display#;"
-		     data-perso-id="perso3"
-		     data-perso-value="#perso3#"
-		     data-perso-name="#perso3_name#"
-		     data-perso-date-value="#perso3_value#"
-		     data-perso-collect="#perso3_collect#"
-		     data-perso-icon="#perso3_icon#"
-		     data-perso-low="#perso3_colorlow#"
-		     data-perso-high="#perso3_colorhigh#"
-		     data-perso-unite="#perso3_unite#">
-			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
+		<div class="tooltips" style="display: #perso3_display#;" data-perso-id="perso3" data-perso-value="#perso3#"
+			data-perso-name="#perso3_name#" data-perso-date-value="#perso3_value#" data-perso-collect="#perso3_collect#"
+			data-perso-icon="#perso3_icon#" data-perso-low="#perso3_colorlow#" data-perso-high="#perso3_colorhigh#"
+			data-perso-unite="#perso3_unite#">
+			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
 			<span id="perso3_unite#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #perso4_display#;"
-		     data-perso-id="perso4"
-		     data-perso-value="#perso4#"
-		     data-perso-name="#perso4_name#"
-		     data-perso-date-value="#perso4_value#"
-		     data-perso-collect="#perso4_collect#"
-		     data-perso-icon="#perso4_icon#"
-		     data-perso-low="#perso4_colorlow#"
-		     data-perso-high="#perso4_colorhigh#"
-		     data-perso-unite="#perso4_unite#">
-			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#" style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
+		<div class="tooltips" style="display: #perso4_display#;" data-perso-id="perso4" data-perso-value="#perso4#"
+			data-perso-name="#perso4_name#" data-perso-date-value="#perso4_value#" data-perso-collect="#perso4_collect#"
+			data-perso-icon="#perso4_icon#" data-perso-low="#perso4_colorlow#" data-perso-high="#perso4_colorhigh#"
+			data-perso-unite="#perso4_unite#">
+			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#"
+				style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
 			<span id="perso4_unite#id#"></span>
 		</div>
 	</div>
 	<script>
-	(() => {
-		'use strict'
-		
-		// ========================================
-		// === UTILITY FUNCTIONS ===
-		// ========================================
-		
-		/**
-		 * Get color style based on value and thresholds (mobile optimized)
-		 * @param {number} val - Numeric value to evaluate
-		 * @param {number} low - Low threshold
-		 * @param {number} high - High threshold
-		 * @param {boolean} reversed - If true, higher values are better (green)
-		 * @returns {string} Inline style string for color
-		 */
-		const getColorStyle = (val, low, high, reversed) => {
-			if (reversed === void 0) reversed = false
-			if (reversed) {
-				// Reversed: higher is better (e.g., % free)
-				if (val > high && high !== '') return ' style="color: var(--al-success-color) !important;"'
-				if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
-				if (val < low) return ' style="color: var(--al-danger-color) !important;"'
-			} else {
-				// Normal: lower is better (e.g., temperature, load)
-				if (val < low) return ' style="color: var(--al-success-color) !important;"'
-				if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
-				if (val > high && high !== '') return ' style="color: var(--al-danger-color) !important;"'
-			}
-			return ''
-		}
-		
-		/**
-		 * Build HTML for threshold-based value with color (mobile version - no history)
-		 */
-		const buildThresholdHTML = (value, lowThreshold, highThreshold, prefix, reversed) => {
-			if (reversed === void 0) reversed = false
-			if (value === '') return '<span></span>'
-			
-			const val = parseFloat(value)
-			const low = parseFloat(lowThreshold)
-			const high = parseFloat(highThreshold)
-			const color = getColorStyle(val, low, high, reversed)
-			
-			return prefix + '<span class="state"' + color + '>' + value + '</span>'
-		}
-		
-		/**
-		 * Build HTML for percentage-based value with color and unit (mobile version)
-		 */
-		const buildPercentageHTML = (value, lowThreshold, highThreshold, prefix, unit, reversed) => {
-			if (reversed === void 0) reversed = false
-			if (value === '') return prefix ? '<span></span>' : ''
-			
-			const val = parseFloat(value)
-			const low = parseFloat(lowThreshold)
-			const high = parseFloat(highThreshold)
-			const color = getColorStyle(val, low, high, reversed)
-			
-			const valueSpan = '<span class="state"' + color + '>' + value + '</span>'
-			const unitSpan = '<span>' + unit + '</span>'
-			
-			return prefix ? prefix + valueSpan + unitSpan + ')' : valueSpan + unitSpan
-		}
-		
-		// ========================================
-		// === ICON HANDLERS ===
-		// ========================================
-		
-		/**
-		 * Initialize SSH connection status icon
-		 */
-		const initIconSSH = () => {
-			const el = document.getElementById('iconSSH#id#')
-			if (!el) return
-			
-			if ('#cnx_ssh#' === 'OK') {
-				el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
-			} else if ('#cnx_ssh#' === 'KO') {
-				el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
-			}
-		}
-		
-		/**
-		 * Initialize Cron status icon
-		 */
-		const initIconCron = () => {
-			const el = document.getElementById('iconCron#id#')
-			if (!el) return
-			
-			const isOn = '#cron_status#' === '1'
-			const isCustom = '#cron_status_custom#' === '1'
-			const display = '#cron_status_display#'
-			
-			const icon = isOn ? 'play-circle' : 'pause-circle'
-			const label = isOn ? 'ON' : 'OFF'
-			const customLabel = isCustom ? ' (Custom)' : ' (Default)'
-			const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
-			
-			el.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
-		}
-		
-		// ========================================
-		// === BUTTON HANDLERS ===
-		// ========================================
-		
-		/**
-		 * Initialize Reboot button with native confirm (mobile optimized)
-		 */
-		const initRebootButton = () => {
-			const btn = document.querySelector('.reboot[data-cmd_id="#cmd_reboot_id#"]')
-			if (!btn) return
-			
-			btn.addEventListener('click', () => {
-				if (confirm("Etes-vous sûr de vouloir redémarrer l'équipement #name# ?")) {
-					jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
+		(() => {
+			'use strict'
+
+			const widgetRoot = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"]')
+			if (!widgetRoot) return
+
+			// ========================================
+			// === UTILITY FUNCTIONS ===
+			// ========================================
+
+			/**
+			 * Get color style based on value and thresholds (mobile optimized)
+			 * @param {number} val - Numeric value to evaluate
+			 * @param {number} low - Low threshold
+			 * @param {number} high - High threshold
+			 * @param {boolean} reversed - If true, higher values are better (green)
+			 * @returns {string} Inline style string for color
+			 */
+			const getColorStyle = (val, low, high, reversed) => {
+				if (reversed === void 0) reversed = false
+				if (reversed) {
+					// Reversed: higher is better (e.g., % free)
+					if (val > high && high !== '') return ' style="color: var(--al-success-color) !important;"'
+					if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
+					if (val < low) return ' style="color: var(--al-danger-color) !important;"'
+				} else {
+					// Normal: lower is better (e.g., temperature, load)
+					if (val < low) return ' style="color: var(--al-success-color) !important;"'
+					if (val >= low && val <= high) return ' style="color: var(--al-warning-color) !important;"'
+					if (val > high && high !== '') return ' style="color: var(--al-danger-color) !important;"'
 				}
-			})
-		}
-		
-		/**
-		 * Initialize Poweroff button with native confirm (mobile optimized)
-		 */
-		const initPoweroffButton = () => {
-			const btn = document.querySelector('.poweroff[data-cmd_id="#cmd_poweroff_id#"]')
-			if (!btn) return
-			
-			btn.addEventListener('click', () => {
-				if (confirm("Etes-vous sûr de vouloir éteindre l'équipement #name# ?")) {
-					jeedom.cmd.execute({ id: '#cmd_poweroff_id#' })
+				return ''
+			}
+
+			/**
+			 * Build HTML for threshold-based value with color (mobile version - no history)
+			 */
+			const buildThresholdHTML = (value, lowThreshold, highThreshold, prefix, reversed) => {
+				if (reversed === void 0) reversed = false
+				if (value === '') return '<span></span>'
+
+				const val = parseFloat(value)
+				const low = parseFloat(lowThreshold)
+				const high = parseFloat(highThreshold)
+				const color = getColorStyle(val, low, high, reversed)
+
+				return prefix + '<span class="state"' + color + '>' + value + '</span>'
+			}
+
+			/**
+			 * Build HTML for percentage-based value with color and unit (mobile version)
+			 */
+			const buildPercentageHTML = (value, lowThreshold, highThreshold, prefix, unit, reversed) => {
+				if (reversed === void 0) reversed = false
+				if (value === '') return prefix ? '<span></span>' : ''
+
+				const val = parseFloat(value)
+				const low = parseFloat(lowThreshold)
+				const high = parseFloat(highThreshold)
+				const color = getColorStyle(val, low, high, reversed)
+
+				const valueSpan = '<span class="state"' + color + '>' + value + '</span>'
+				const unitSpan = '<span>' + unit + '</span>'
+
+				return prefix ? prefix + valueSpan + unitSpan + ')' : valueSpan + unitSpan
+			}
+
+			// ========================================
+			// === ICON HANDLERS ===
+			// ========================================
+
+			/**
+			 * Initialize SSH connection status icon
+			 */
+			const initIconSSH = () => {
+				try {
+					const el = widgetRoot.querySelector('#iconSSH#id#')
+					if (!el) return
+
+					if ('#cnx_ssh#' === 'OK') {
+						el.innerHTML = '<i title="Connexion SSH OK" class="fas fa-check" style="color: var(--al-success-color) !important;"></i>'
+					} else if ('#cnx_ssh#' === 'KO') {
+						el.innerHTML = '<i title="Connexion SSH KO" class="fas fa-times-circle" style="color: var(--al-danger-color) !important;"></i>'
+					}
+				} catch (e) {
+					console.error('[Monitoring] Error in initIconSSH:', e)
 				}
-			})
-		}
-		
-		/**
-		 * Initialize Refresh button
-		 */
-		const initRefreshButton = () => {
-			const btn = document.querySelector('.eqLogic[data-eqLogic_uid="#uid#"] .refresh')
-			if (!btn) return
-			
-			if ('#refresh_id#' !== '') {
-				btn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
-			} else {
-				btn.remove()
 			}
-		}
-		
-		// ========================================
-		// === VALUE DISPLAYS - Simple ===
-		// ========================================
-		
-		/**
-		 * Initialize Uptime display
-		 */
-		const initUptime = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('uptime#id#')
-			if (el) el.innerHTML = '<span>#uptime#</span>'
-		}
-		
-		/**
-		 * Initialize Network Infos display
-		 */
-		const initNetworkInfos = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('network_infos#id#')
-			if (el) el.innerHTML = '<span>#network_infos#</span>'
-		}
-		
-		/**
-		 * Initialize Network Traffic display
-		 */
-		const initNetwork = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('network#id#')
-			if (el) el.innerHTML = '<span>#network#</span>'
-		}
-		
-		// ========================================
-		// === VALUE DISPLAYS - With Thresholds ===
-		// ========================================
-		
-		/**
-		 * Initialize Load Average displays (1mn, 5mn, 15mn)
-		 */
-		const initLoadAverage = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			// Load avg 1mn
-			const loadAvg1mn = document.getElementById('load_avg_1mn#id#')
-			if (loadAvg1mn) {
-				const html = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
-				loadAvg1mn.innerHTML = html
+
+			/**
+			 * Initialize Cron status icon
+			 */
+			const initIconCron = () => {
+				try {
+					const el = widgetRoot.querySelector('#iconCron#id#')
+					if (!el) return
+
+					const isOn = '#cron_status#' === '1'
+					const isCustom = '#cron_status_custom#' === '1'
+					const display = '#cron_status_display#'
+
+					const icon = isOn ? 'play-circle' : 'pause-circle'
+					const label = isOn ? 'ON' : 'OFF'
+					const customLabel = isCustom ? ' (Custom)' : ' (Default)'
+					const color = isCustom ? '--al-warning-color' : (isOn ? '--al-success-color' : '--al-danger-color')
+
+					el.innerHTML = '<i title="Cron ' + label + customLabel + '" class="fas fa-' + icon + ' tooltips" style="display: ' + display + ';color: var(' + color + ') !important;"></i>'
+				} catch (e) {
+					console.error('[Monitoring] Error in initIconCron:', e)
+				}
 			}
-			
-			// Load avg 5mn
-			const loadAvg5mn = document.getElementById('load_avg_5mn#id#')
-			if (loadAvg5mn) {
-				const html = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
-				loadAvg5mn.innerHTML = html
+
+			// ========================================
+			// === BUTTON HANDLERS ===
+			// ========================================
+
+			/**
+			 * Initialize Reboot button with native confirm (mobile optimized)
+			 */
+			const initRebootButton = () => {
+				try {
+					const btn = widgetRoot.querySelector('.reboot')
+					if (!btn) return
+
+					btn.addEventListener('click', () => {
+						if (confirm("Etes-vous sûr de vouloir redémarrer l'équipement #name# ?")) {
+							jeedom.cmd.execute({ id: '#cmd_reboot_id#' })
+						}
+					})
+				} catch (e) {
+					console.error('[Monitoring] Error in initRebootButton:', e)
+				}
 			}
-			
-			// Load avg 15mn
-			const loadAvg15mn = document.getElementById('load_avg_15mn#id#')
-			if (loadAvg15mn) {
-				const html = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
-				loadAvg15mn.innerHTML = html
+
+			/**
+			 * Initialize Poweroff button with native confirm (mobile optimized)
+			 */
+			const initPoweroffButton = () => {
+				try {
+					const btn = widgetRoot.querySelector('.poweroff')
+					if (!btn) return
+
+					btn.addEventListener('click', () => {
+						if (confirm("Etes-vous sûr de vouloir éteindre l'équipement #name# ?")) {
+							jeedom.cmd.execute({ id: '#cmd_poweroff_id#' })
+						}
+					})
+				} catch (e) {
+					console.error('[Monitoring] Error in initPoweroffButton:', e)
+				}
 			}
-		}
-		
-		/**
-		 * Initialize Memory display with percentage
-		 */
-		const initMemory = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('memory_available_percent#id#')
-			if (!el) return
-			
-			const value = '#memory_available_percent#'
-			if (value === '') {
-				el.innerHTML = '<span>#memory#</span>'
-				return
+
+			/**
+			 * Initialize Refresh button (mobile version)
+			 */
+			const initRefreshButton = () => {
+				try {
+					const btn = widgetRoot.querySelector('.refresh')
+					if (!btn) return
+
+					if ('#refresh_id#' !== '') {
+						btn.addEventListener('click', () => jeedom.cmd.execute({ id: '#refresh_id#' }))
+					} else {
+						btn.remove()
+					}
+				} catch (e) {
+					console.error('[Monitoring] Error in initRefreshButton:', e)
+				}
 			}
-			
-			el.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
-		}
-		
-		/**
-		 * Initialize Swap display with percentage
-		 */
-		const initSwap = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('swap_free_percent#id#')
-			if (!el) return
-			
-			const value = '#swap_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span>#swap#</span>'
-				return
+
+			// ========================================
+			// === VALUE DISPLAYS - Simple ===
+			// ========================================
+
+			/**
+			 * Initialize Uptime display
+			 */
+			const initUptime = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#uptime#id#')
+					if (!el) return
+					el.innerHTML = '<span>#uptime#</span>'
+				} catch (e) {
+					console.error('[Monitoring] Error in initUptime:', e)
+				}
 			}
-			
-			el.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
-		}
-		
-		/**
-		 * Initialize HDD display with percentage
-		 */
-		const initHDD = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const el = document.getElementById('hdd#id#')
-			if (!el) return
-			
-			const value = '#hdd_free_percent#'
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
+
+			/**
+			 * Initialize Network Infos display
+			 */
+			const initNetworkInfos = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#network_infos#id#')
+					if (!el) return
+					el.innerHTML = '<span>#network_infos#</span>'
+				} catch (e) {
+					console.error('[Monitoring] Error in initNetworkInfos:', e)
+				}
 			}
-			
-			el.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
-		}
-		
-		/**
-		 * Initialize CPU display with optional temperature
-		 */
-		const initCPU = () => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const cpuEl = document.getElementById('cpu#id#')
-			const tempEl = document.getElementById('cpu_temp#id#')
-			if (!cpuEl || !tempEl) return
-			
-			const temp = '#cpu_temp#'
-			if (temp !== '' && '#cpu_temp_display#' === 'block') {
-				cpuEl.innerHTML = '<span>#cpu# </span>'
-				
-				const tempVal = parseFloat(temp)
-				const low = parseFloat('#cpu_temp_colorlow#')
-				const high = parseFloat('#cpu_temp_colorhigh#')
-				const color = getColorStyle(tempVal, low, high, false)
-				
-				tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C</span>)'
-			} else {
-				cpuEl.innerHTML = '<span>#cpu#</span>'
+
+			/**
+			 * Initialize Network display
+			 */
+			const initNetwork = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#network#id#')
+					if (!el) return
+					el.innerHTML = '<span>#network#</span>'
+				} catch (e) {
+					console.error('[Monitoring] Error in initNetwork:', e)
+				}
 			}
-		}
-		
-		/**
-		 * Initialize Synology volume display using data attributes (mobile version)
-		 * @param {HTMLElement} container - The container div with data-syno-* attributes
-		 */
-		const initSynoVolume = (container) => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			if (container.dataset.synoDisplay !== 'block') return
-			
-			const dataset = container.dataset
-			const synoId = dataset.synoId
-			
-			// Setup container
-			container.className = 'tooltips'
-			container.style.display = dataset.synoDisplay
-			
-			// Build HTML with tooltip (mobile format with ||)
-			const title = dataset.synoName + ' (% Libre) || Date valeur : ' + dataset.synoDateValue + ' || Date collecte : ' + dataset.synoCollect
-			container.innerHTML = '<span title="' + title + '" style="width:15px;max-width:15px;max-height:15px;">' + dataset.synoIcon + '</span> <span id="' + synoId + '_free_percent#id#"></span>'
-			
-			// Set percentage value with color
-			const el = document.getElementById(synoId + '_free_percent#id#')
-			if (!el) return
-			
-			const value = dataset.synoPercent
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
+
+			// ========================================
+			// === VALUE DISPLAYS - With thresholds ===
+			// ========================================
+
+			/**
+			 * Initialize Load Average displays (1mn, 5mn, 15mn)
+			 */
+			const initLoadAverage = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					// Load avg 1mn
+					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
+					if (loadAvg1mn) {
+						const html = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
+						loadAvg1mn.innerHTML = html
+					}
+
+					// Load avg 5mn
+					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
+					if (loadAvg5mn) {
+						const html = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
+						loadAvg5mn.innerHTML = html
+					}
+
+					// Load avg 15mn
+					const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
+					if (loadAvg15mn) {
+						const html = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
+						loadAvg15mn.innerHTML = html
+					}
+				} catch (e) {
+					console.error('[Monitoring] Error in initLoadAverage:', e)
+				}
 			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat(dataset.synoLow)
-			const high = parseFloat(dataset.synoHigh)
-			const color = getColorStyle(val, low, high, true)
-			
-			el.innerHTML = dataset.synoValue + ' (<span class="state"' + color + '>' + value + '</span><span>%</span>)'
-		}
-		
-		/**
-		 * Initialize custom command display (perso1-4) using data attributes (mobile version)
-		 * @param {HTMLElement} container - The container div with data-perso-* attributes
-		 */
-		const initPerso = (container) => {
-			if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
-			
-			const dataset = container.dataset
-			const persoId = dataset.persoId
-			const el = document.getElementById(persoId + '_unite#id#')
-			if (!el) return
-			
-			const value = dataset.persoValue
-			if (value === '') {
-				el.innerHTML = '<span></span>'
-				return
+
+			/**
+			 * Initialize Memory display with percentage
+			 */
+			const initMemory = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#memory_available_percent#id#')
+					if (!el) return
+
+					const value = '#memory_available_percent#'
+					if (value === '') {
+						el.innerHTML = '<span>#memory#</span>'
+						return
+					}
+
+					el.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
+				} catch (e) {
+					console.error('[Monitoring] Error in initMemory:', e)
+				}
 			}
-			
-			const val = parseFloat(value)
-			const low = parseFloat(dataset.persoLow)
-			const high = parseFloat(dataset.persoHigh)
-			const color = getColorStyle(val, low, high, false)
-			
-			if (color) {
-				el.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
-			} else {
-				el.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+
+			/**
+			 * Initialize Swap display with percentage
+			 */
+			const initSwap = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#swap_free_percent#id#')
+					if (!el) return
+
+					const value = '#swap_free_percent#'
+					if (value === '') {
+						el.innerHTML = '<span>#swap#</span>'
+						return
+					}
+
+					el.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
+				} catch (e) {
+					console.error('[Monitoring] Error in initSwap:', e)
+				}
 			}
-		}
-		
-		// ========================================
-		// === INITIALIZATION ===
-		// ========================================
-		
-		// Only initialize if template is properly instantiated
-		if ('#uid#') {
-			// Icon handlers
-			initIconSSH()
-			initIconCron()
-			
-			// Button handlers
-			initRebootButton()
-			initPoweroffButton()
-			initRefreshButton()
-			
-			// Simple value displays
-			initUptime()
-			initNetworkInfos()
-			initNetwork()
-			
-			// Value displays with thresholds
-			initLoadAverage()
-			initMemory()
-			initSwap()
-			initHDD()
-			
-			// CPU with temperature
-			initCPU()
-			
-			// Synology volumes - generic initialization using data attributes
-			document.querySelectorAll('[data-syno-id]').forEach(initSynoVolume)
-			
-			// Custom commands - generic initialization using data attributes
-			document.querySelectorAll('[data-perso-id]').forEach(initPerso)
-		}
-	})()
+
+			/**
+			 * Initialize HDD display with percentage
+			 */
+			const initHDD = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const el = widgetRoot.querySelector('#hdd#id#')
+					if (!el) return
+
+					const value = '#hdd_free_percent#'
+					if (value === '') {
+						el.innerHTML = '<span></span>'
+						return
+					}
+
+					el.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
+				} catch (e) {
+					console.error('[Monitoring] Error in initHDD:', e)
+				}
+			}
+
+			/**
+			 * Initialize CPU display with temperature
+			 */
+			const initCPU = () => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const cpuEl = widgetRoot.querySelector('#cpu#id#')
+					const tempEl = widgetRoot.querySelector('#cpu_temp#id#')
+					if (!cpuEl || !tempEl) return
+
+					const temp = '#cpu_temp#'
+					if (temp !== '' && '#cpu_temp_display#' === 'block') {
+						cpuEl.innerHTML = '<span>#cpu# </span>'
+
+						const tempVal = parseFloat(temp)
+						const low = parseFloat('#cpu_temp_colorlow#')
+						const high = parseFloat('#cpu_temp_colorhigh#')
+						const color = getColorStyle(tempVal, low, high, false)
+
+						tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C</span>)'
+					} else {
+						cpuEl.innerHTML = '<span>#cpu#</span>'
+					}
+				} catch (e) {
+					console.error('[Monitoring] Error in initCPU:', e)
+				}
+			}
+
+			/**
+			 * Initialize custom command display (perso1-4) using data attributes (mobile version)
+			 * @param {HTMLElement} container - The container div with data-perso-* attributes
+			 */
+			const initPerso = (container) => {
+				try {
+					if ('#cnx_ssh#' !== 'OK' && '#cnx_ssh#' !== 'No') return
+
+					const dataset = container.dataset
+					const persoId = dataset.persoId
+					const el = widgetRoot.querySelector('#' + persoId + '_unite#id#')
+					if (!el) return
+
+					const value = dataset.persoValue
+					if (value === '') {
+						el.innerHTML = '<span></span>'
+						return
+					}
+
+					const val = parseFloat(value)
+					const low = parseFloat(dataset.persoLow)
+					const high = parseFloat(dataset.persoHigh)
+					const color = getColorStyle(val, low, high, false)
+
+					if (color) {
+						el.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+					} else {
+						el.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+					}
+				} catch (e) {
+					console.error('[Monitoring] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)
+				}
+			}
+
+			// ========================================
+			// === INITIALIZATION ===
+			// ========================================
+
+			// Only initialize if template is properly instantiated
+			if ('#uid#') {
+				// Icon handlers
+				initIconSSH()
+				initIconCron()
+
+				// Button handlers
+				initRebootButton()
+				initPoweroffButton()
+				initRefreshButton()
+
+				// Simple value displays
+				initUptime()
+				initNetworkInfos()
+				initNetwork()
+
+				// Value displays with thresholds
+				initLoadAverage()
+				initMemory()
+				initSwap()
+				initHDD()
+
+				// CPU with temperature
+				initCPU()
+
+				// Custom commands - generic initialization using data attributes
+				widgetRoot.querySelectorAll('[data-perso-id]').forEach(initPerso)
+			}
+		})()
 	</script>
 </div>
