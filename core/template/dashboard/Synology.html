@@ -523,8 +523,7 @@
                     const networkEl = widgetRoot.querySelector('#network#id#')
                     if (!networkEl) return
 
-                    const history = { min: '#network_minHistory#', avg: '#network_averageHistory#', max: '#network_maxHistory#' }
-                    networkEl.innerHTML = buildThresholdHTML('#network#', '#network_colorlow#', '#network_colorhigh#', 'Vitesse du réseau', '#network_id#', history, '#network_tendance#', false)
+                    networkEl.innerHTML = '<span>#network#</span>'
                 } catch (e) {
                     console.error('[Monitoring] Error in initNetwork:', e)
                 }
