@@ -396,33 +396,61 @@ function printEqLogic(_eqLogic) {
     }
   }
   
-  buildSelectHost(_eqLogic.configuration.SSHHostId)
+  // Build SSH host select
+  const buildPromise = buildSelectHost(_eqLogic.configuration.SSHHostId)
   
   // Toggle add/edit button based on SSH host selection
   const sshHostSelect = document.querySelector('.sshmanagerHelper[data-helper="list"]')
   if (sshHostSelect) {
+    // Remove existing listener to avoid duplicates
+    sshHostSelect.removeEventListener('change', toggleSSHButtons)
+    // Attach listener
     sshHostSelect.addEventListener('change', toggleSSHButtons)
-    // Initialize button display
-    toggleSSHButtons({ currentTarget: sshHostSelect })
+    
+    // Initialize button display - pass the value directly instead of waiting
+    if (buildPromise && buildPromise.then) {
+      buildPromise.then(() => {
+        toggleSSHButtons(_eqLogic.configuration.SSHHostId)
+      })
+    } else {
+      // Fallback if buildSelectHost didn't return a promise
+      toggleSSHButtons(_eqLogic.configuration.SSHHostId)
+    }
   }
 }
 
 /**
  * Toggle between add and edit SSH buttons based on selection
+ * @param {Event|string|number} eventOrValue - Either a change event or a direct value (SSHHostId)
  */
-function toggleSSHButtons(event) {
-  const selectedValue = event.currentTarget.value
+function toggleSSHButtons(eventOrValue) {
+  let selectedValue
+  
+  // Check if it's a direct value (string/number) or an event object
+  if (typeof eventOrValue === 'string' || typeof eventOrValue === 'number') {
+    selectedValue = eventOrValue
+  } else if (eventOrValue?.target || eventOrValue?.currentTarget) {
+    // It's an event, extract value from it
+    selectedValue = eventOrValue.target?.value ?? eventOrValue.currentTarget?.value ?? eventOrValue.value
+  }
+  
+  // If still no value, read directly from the select element as fallback
+  if (!selectedValue) {
+    const sshHostSelect = document.querySelector('.sshmanagerHelper[data-helper="list"]')
+    selectedValue = sshHostSelect?.value
+  }
+  
   const addBtn = document.querySelector('.sshmanagerHelper[data-helper="add"]')
   const editBtn = document.querySelector('.sshmanagerHelper[data-helper="edit"]')
   
   if (selectedValue && selectedValue !== '') {
     // Host selected → show edit, hide add
-    addBtn?.unseen()
-    editBtn?.seen()
+    if (addBtn) addBtn.style.display = 'none'
+    if (editBtn) editBtn.style.display = 'block'
   } else {
     // No host selected → show add, hide edit
-    addBtn?.seen()
-    editBtn?.unseen()
+    if (addBtn) addBtn.style.display = 'block'
+    if (editBtn) editBtn.style.display = 'none'
   }
 }
 
