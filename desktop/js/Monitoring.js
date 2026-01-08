@@ -407,23 +407,39 @@ function printEqLogic(_eqLogic) {
     // Attach listener
     sshHostSelect.addEventListener('change', toggleSSHButtons)
     
-    // Initialize button display after select is populated
+    // Initialize button display - pass the value directly instead of waiting
     if (buildPromise && buildPromise.then) {
       buildPromise.then(() => {
-        toggleSSHButtons({ currentTarget: sshHostSelect })
+        toggleSSHButtons(_eqLogic.configuration.SSHHostId)
       })
     } else {
       // Fallback if buildSelectHost didn't return a promise
-      toggleSSHButtons({ currentTarget: sshHostSelect })
+      toggleSSHButtons(_eqLogic.configuration.SSHHostId)
     }
   }
 }
 
 /**
  * Toggle between add and edit SSH buttons based on selection
+ * @param {Event|string|number} eventOrValue - Either a change event or a direct value (SSHHostId)
  */
-function toggleSSHButtons(event) {
-  const selectedValue = event.target?.value ?? event.currentTarget?.value ?? event.value
+function toggleSSHButtons(eventOrValue) {
+  let selectedValue
+  
+  // Check if it's a direct value (string/number) or an event object
+  if (typeof eventOrValue === 'string' || typeof eventOrValue === 'number') {
+    selectedValue = eventOrValue
+  } else if (eventOrValue?.target || eventOrValue?.currentTarget) {
+    // It's an event, extract value from it
+    selectedValue = eventOrValue.target?.value ?? eventOrValue.currentTarget?.value ?? eventOrValue.value
+  }
+  
+  // If still no value, read directly from the select element as fallback
+  if (!selectedValue) {
+    const sshHostSelect = document.querySelector('.sshmanagerHelper[data-helper="list"]')
+    selectedValue = sshHostSelect?.value
+  }
+  
   const addBtn = document.querySelector('.sshmanagerHelper[data-helper="add"]')
   const editBtn = document.querySelector('.sshmanagerHelper[data-helper="edit"]')
   
