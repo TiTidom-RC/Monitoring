@@ -423,7 +423,7 @@ function printEqLogic(_eqLogic) {
  * Toggle between add and edit SSH buttons based on selection
  */
 function toggleSSHButtons(event) {
-  const selectedValue = event.currentTarget.value
+  const selectedValue = event.target?.value ?? event.currentTarget?.value ?? event.value
   const addBtn = document.querySelector('.sshmanagerHelper[data-helper="add"]')
   const editBtn = document.querySelector('.sshmanagerHelper[data-helper="edit"]')
   
