@@ -396,17 +396,26 @@ function printEqLogic(_eqLogic) {
     }
   }
   
-  // Build SSH host select and attach listener after options are loaded
+  // Build SSH host select
   const buildPromise = buildSelectHost(_eqLogic.configuration.SSHHostId)
-  if (buildPromise && buildPromise.then) {
-    buildPromise.then(() => {
-      const sshHostSelect = document.querySelector('.sshmanagerHelper[data-helper="list"]')
-      if (sshHostSelect) {
-        sshHostSelect.addEventListener('change', toggleSSHButtons)
-        // Initialize button display
+  
+  // Toggle add/edit button based on SSH host selection
+  const sshHostSelect = document.querySelector('.sshmanagerHelper[data-helper="list"]')
+  if (sshHostSelect) {
+    // Remove existing listener to avoid duplicates
+    sshHostSelect.removeEventListener('change', toggleSSHButtons)
+    // Attach listener
+    sshHostSelect.addEventListener('change', toggleSSHButtons)
+    
+    // Initialize button display after select is populated
+    if (buildPromise && buildPromise.then) {
+      buildPromise.then(() => {
         toggleSSHButtons({ currentTarget: sshHostSelect })
-      }
-    })
+      })
+    } else {
+      // Fallback if buildSelectHost didn't return a promise
+      toggleSSHButtons({ currentTarget: sshHostSelect })
+    }
   }
 }
 
