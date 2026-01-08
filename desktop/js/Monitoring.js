@@ -396,14 +396,17 @@ function printEqLogic(_eqLogic) {
     }
   }
   
-  buildSelectHost(_eqLogic.configuration.SSHHostId)
-  
-  // Toggle add/edit button based on SSH host selection
-  const sshHostSelect = document.querySelector('.sshmanagerHelper[data-helper="list"]')
-  if (sshHostSelect) {
-    sshHostSelect.addEventListener('change', toggleSSHButtons)
-    // Initialize button display
-    toggleSSHButtons({ currentTarget: sshHostSelect })
+  // Build SSH host select and attach listener after options are loaded
+  const buildPromise = buildSelectHost(_eqLogic.configuration.SSHHostId)
+  if (buildPromise && buildPromise.then) {
+    buildPromise.then(() => {
+      const sshHostSelect = document.querySelector('.sshmanagerHelper[data-helper="list"]')
+      if (sshHostSelect) {
+        sshHostSelect.addEventListener('change', toggleSSHButtons)
+        // Initialize button display
+        toggleSSHButtons({ currentTarget: sshHostSelect })
+      }
+    })
   }
 }
 
