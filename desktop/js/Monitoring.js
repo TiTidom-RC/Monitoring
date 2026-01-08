@@ -429,12 +429,12 @@ function toggleSSHButtons(event) {
   
   if (selectedValue && selectedValue !== '') {
     // Host selected → show edit, hide add
-    addBtn?.unseen()
-    editBtn?.seen()
+    if (addBtn) addBtn.style.display = 'none'
+    if (editBtn) editBtn.style.display = 'block'
   } else {
     // No host selected → show add, hide edit
-    addBtn?.seen()
-    editBtn?.unseen()
+    if (addBtn) addBtn.style.display = 'block'
+    if (editBtn) editBtn.style.display = 'none'
   }
 }
 
