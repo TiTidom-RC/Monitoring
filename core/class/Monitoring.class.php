@@ -2627,7 +2627,11 @@ class Monitoring extends eqLogic {
 				$replace[$cmdNamePrefix . '_averageHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_averageHistory') : '-';
 				$replace[$cmdNamePrefix . '_minHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_minHistory') : '-';
 				$replace[$cmdNamePrefix . '_maxHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_maxHistory') : '-';
-				$replace[$cmdNamePrefix . '_tendance#'] = ($isCmdObject && $cmd->getConfiguration($cmdName . '_tendance', '') !== '') ? ' <i style=\'color: var(--al-info-color) !important;\' class=\'fas fa-' . $cmd->getConfiguration($cmdName . '_tendance') . '\'></i>' : '';
+				// Utiliser htmlspecialchars pour échapper les attributs HTML afin d'éviter les conflits avec les guillemets
+				$tendanceIcon = ($isCmdObject && $cmd->getConfiguration($cmdName . '_tendance', '') !== '') 
+					? ' <i style=&quot;color: var(--al-info-color) !important;&quot; class=&quot;fas fa-' . $cmd->getConfiguration($cmdName . '_tendance') . '&quot;></i>' 
+					: '';
+				$replace[$cmdNamePrefix . '_tendance#'] = $tendanceIcon;
 			}
 		];
 
