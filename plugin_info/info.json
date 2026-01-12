@@ -1,19 +1,19 @@
 {
 	"id": "Monitoring",
 	"name": "Monitoring",
-	"pluginVersion": "3.4.3",
+	"pluginVersion": "3.4.4",
 	"description": {
-		"fr_FR": "Plugin permettant le monitoring des équipements locaux et distants (via SSH). Le plugin affichera les informations systèmes d'équipements sous Linux ou Synology (Distribution, CPU, Mémoire, Disques, Swap).",
-		"en_US": "Plugin to monitor local and remote equipments (through SSH). The plugin will display system informations from Linux or Synology (Distribution, CPU, Memory, Disks, Swap).",
-		"es_ES": "Plugin para monitorear equipos locales y remotos (a través de SSH). El complemento mostrará información del sistema de Linux o Synology (Distribución, CPU, Memoria, Discos, Intercambio).",
-		"de_DE": "Plugin zur Überwachung lokaler und entfernter Geräte (über SSH). Das Plugin zeigt Systeminformationen von Linux oder Synology an (Verteilung, CPU, Speicher, Festplatten, Swap).",
-		"it_IT": "Plugin per il monitoraggio di apparecchiature locali e remote (via SSH). Il plugin visualizza le informazioni di sistema per i dispositivi con Linux o Synology (distribuzione, CPU, memoria, dischi, swap).",
-		"pt_PT": "Plugin para monitorizar equipamentos locais e remotos (via SSH). O plugin apresenta informações do sistema para dispositivos com Linux ou Synology (Distribuição, CPU, Memória, Discos, Swap)."
+		"fr_FR": "Plugin pour surveiller vos systèmes Linux, NAS (Synology, QNAP, Medion), Proxmox, LXC et routeurs ASUS-WRT (locaux ou distants via SSH) : distribution, uptime, charge système, RAM, swap, disques, réseau, CPU, températures et commandes personnalisées.",
+		"en_US": "Plugin to monitor your Linux systems, NAS (Synology, QNAP, Medion), Proxmox, LXC and ASUS-WRT routers (local or remote via SSH): distribution, uptime, system load, RAM, swap, disks, network, CPU, temperatures and custom commands.",
+		"es_ES": "Plugin para supervisar sus sistemas Linux, NAS (Synology, QNAP, Medion), Proxmox, LXC y routers ASUS-WRT (locales o remotos a través de SSH): distribución, uptime, carga del sistema, RAM, swap, discos, red, CPU, temperaturas y comandos personalizados.",
+		"de_DE": "Plugin zur Überwachung Ihrer Linux-Systeme, NAS (Synology, QNAP, Medion), Proxmox, LXC und ASUS-WRT-Router (lokal oder remote über SSH): Distribution, Uptime, Systemlast, RAM, Swap, Festplatten, Netzwerk, CPU, Temperaturen und benutzerdefinierte Befehle.",
+		"it_IT": "Plugin per monitorare i tuoi sistemi Linux, NAS (Synology, QNAP, Medion), Proxmox, LXC e router ASUS-WRT (locali o remoti tramite SSH): distribuzione, uptime, carico del sistema, RAM, swap, dischi, rete, CPU, temperature e comandi personalizzati.",
+		"pt_PT": "Plugin para monitorizar os seus sistemas Linux, NAS (Synology, QNAP, Medion), Proxmox, LXC e routers ASUS-WRT (locais ou remotos via SSH): distribuição, uptime, carga do sistema, RAM, swap, discos, rede, CPU, temperaturas e comandos personalizados."
 	},
-	"utilization": "Ajoutez un équipement et choisissez s'il est local ou distant pour monitorer l'OS Linux ou Synology correspondant (Nom de la distribution Linux ou Syno, uptime, charge système, mémoire libre, disques + swap, réseau, cpu et température).",
+	"utilization": "Créez un équipement, définissez son type (local/distant SSH), activez les commandes souhaitées dans les onglets et configurez les seuils d'alerte pour une surveillance optimale.",
 	"licence": "AGPL",
 	"author": "TiTidom",
-	"require": "4.4",
+	"require": "4.4.2",
 	"hasDependency": true,
 	"category": "monitoring",
 	"language": [
