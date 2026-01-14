@@ -594,7 +594,10 @@
 						const high = parseFloat('#cpu_temp_colorhigh#')
 						const color = getColorStyle(tempVal, low, high, false)
 						const tendance = tempEl.dataset.cpuTempTendance || ''
-						const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
+					// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
+					const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) 
+						? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>` 
+						: ''
 
 						tempEl.innerHTML = ` (<span class="state"${color}>${temp}</span><span>°C</span>${tendanceStr})`
 					} else {
