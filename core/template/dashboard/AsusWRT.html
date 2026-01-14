@@ -720,8 +720,12 @@
 					const history = safeJSONParse(dataset.persoHistory)
 					const title = `Stats : ${dataset.persoName}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
 					const color = getColorStyle(val, low, high, false)
+				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
+				const tendanceStr = (dataset.persoTendance && dataset.persoTendance !== '' && !dataset.persoTendance.startsWith('#')) 
+					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${dataset.persoTendance}'></i>` 
+					: ''
 
-					el.innerHTML = `<span title="${title}" data-cmd_id="${dataset.persoCmdId}" class="value history cursor tooltips"${color}>${value}</span><span>${dataset.persoUnite}${dataset.persoTendance}</span>`
+				el.innerHTML = `<span title="${title}" data-cmd_id="${dataset.persoCmdId}" class="value history cursor tooltips"${color}>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)
 				}

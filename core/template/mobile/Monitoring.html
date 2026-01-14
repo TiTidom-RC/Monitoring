@@ -571,12 +571,15 @@
 					const low = parseFloat(dataset.persoLow)
 					const high = parseFloat(dataset.persoHigh)
 					const color = getColorStyle(val, low, high, false)
-					const tendanceStr = (dataset.persoTendance && dataset.persoTendance !== '' && !dataset.persoTendance.startsWith('#')) ? dataset.persoTendance : ''
+				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
+				const tendanceStr = (dataset.persoTendance && dataset.persoTendance !== '' && !dataset.persoTendance.startsWith('#')) 
+					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${dataset.persoTendance}'></i>` 
+					: ''
 
 					if (color) {
-						persoEl.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + tendanceStr + '</span>'
-					} else {
-						persoEl.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + tendanceStr + '</span>'
+					persoEl.innerHTML = `<span class="state"${color}>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
+				} else {
+					persoEl.innerHTML = `<span>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
 					}
 				} catch (e) {
 					console.error('[Monitoring] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)
