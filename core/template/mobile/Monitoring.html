@@ -112,18 +112,21 @@
 			<span
 				title="Charge système (load average) || Date valeur : #load_avg_value# || Date collecte : #load_avg_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#load_avg_icon#</span>
-			<span id="load_avg_1mn#id#"></span><span id="load_avg_5mn#id#"></span><span id="load_avg_15mn#id#"></span>
+			<span id="load_avg_1mn#id#" data-load-avg-1mn-tendance="#load_avg_1mn_tendance#"></span><span
+				id="load_avg_5mn#id#" data-load-avg-5mn-tendance="#load_avg_5mn_tendance#"></span><span
+				id="load_avg_15mn#id#" data-load-avg-15mn-tendance="#load_avg_15mn_tendance#"></span>
 		</div>
 		<div class="tooltips" style="display: #memory_display#;">
 			<span
 				title="Mémoire Vive (% Disponible) || Date valeur : #memory_value# || Date collecte : #memory_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#memory_icon#</span>
-			<span id="memory_available_percent#id#"></span>
+			<span id="memory_available_percent#id#"
+				data-memory-available-percent-tendance="#memory_available_percent_tendance#"></span>
 		</div>
 		<div class="tooltips" style="display: #swap_display#;">
 			<span title="Mémoire Swap (% Libre) || Date valeur : #swap_value# || Date collecte : #swap_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#swap_icon#</span>
-			<span id="swap_free_percent#id#"></span>
+			<span id="swap_free_percent#id#" data-swap-free-percent-tendance="#swap_free_percent_tendance#"></span>
 		</div>
 		<div class="tooltips" style="display: #network_infos_display#;">
 			<span title="Infos Réseau || Date valeur : #network_infos_value# || Date collecte : #network_infos_collect#"
@@ -141,13 +144,13 @@
 		<div class="tooltips" style="display: #hdd_display#;">
 			<span title="Espace disque (% Libre) || Date valeur : #hdd_value# || Date collecte : #hdd_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
-			<span id="hdd#id#"></span>
+			<span id="hdd#id#" data-hdd-free-percent-tendance="#hdd_free_percent_tendance#"></span>
 		</div>
 		<div class="tooltips" style="display: #cpu_display#;">
 			<span
 				title="Nombre CPU - Fréquence (Température) || Date valeur : #cpu_value# || Date collecte : #cpu_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#cpu_icon#</span>
-			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
+			<span id="cpu#id#"></span><span id="cpu_temp#id#" data-cpu-temp-tendance="#cpu_temp_tendance#"></span>
 		</div>
 		<div class="tooltips" style="display: #perso1_display#;" data-perso-id="perso1" data-perso-value="#perso1#"
 			data-perso-low="#perso1_colorlow#" data-perso-high="#perso1_colorhigh#" data-perso-unite="#perso1_unite#"
@@ -414,21 +417,24 @@
 					// Load avg 1mn
 					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
 					if (loadAvg1mn) {
-						const html1mn = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '', '#load_avg_1mn_tendance#')
+						const tendance1mn = loadAvg1mn.dataset.loadAvg1mnTendance || ''
+						const html1mn = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '', tendance1mn)
 						loadAvg1mn.innerHTML = html1mn === '<span></span>' ? html1mn : `1 min : ${html1mn}`
 					}
 
 					// Load avg 5mn
 					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
 					if (loadAvg5mn) {
-						const html5mn = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', '', '#load_avg_5mn_tendance#')
+						const tendance5mn = loadAvg5mn.dataset.loadAvg5mnTendance || ''
+						const html5mn = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', '', tendance5mn)
 						loadAvg5mn.innerHTML = html5mn === '<span></span>' ? html5mn : ` - 5 min : ${html5mn}`
 					}
 
 					// Load avg 15mn
 					const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
 					if (loadAvg15mn) {
-						const html15mn = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', '', '#load_avg_15mn_tendance#')
+						const tendance15mn = loadAvg15mn.dataset.loadAvg15mnTendance || ''
+						const html15mn = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', '', tendance15mn)
 						loadAvg15mn.innerHTML = html15mn === '<span></span>' ? html15mn : ` - 15 min : ${html15mn}`
 					}
 				} catch (e) {
@@ -452,7 +458,8 @@
 						return
 					}
 
-					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory#', '%', '#memory_available_percent_tendance#', true)
+					const tendance = memoryEl.dataset.memoryAvailablePercentTendance || ''
+					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory#', '%', tendance, true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initMemory:', e)
 				}
@@ -474,7 +481,8 @@
 						return
 					}
 
-					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap#', '%', '#swap_free_percent_tendance#', true)
+					const tendance = swapEl.dataset.swapFreePercentTendance || ''
+					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap#', '%', tendance, true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initSwap:', e)
 				}
@@ -496,7 +504,8 @@
 						return
 					}
 
-					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd#', '%', '#hdd_free_percent_tendance#', true)
+					const tendance = hddEl.dataset.hddFreePercentTendance || ''
+					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd#', '%', tendance, true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initHDD:', e)
 				}
@@ -521,7 +530,8 @@
 						const low = parseFloat('#cpu_temp_colorlow#')
 						const high = parseFloat('#cpu_temp_colorhigh#')
 						const color = getColorStyle(tempVal, low, high, false)
-						const tendanceStr = ('#cpu_temp_tendance#' && '#cpu_temp_tendance#' !== '' && !('#cpu_temp_tendance#'.startsWith('#'))) ? '#cpu_temp_tendance#' : ''
+						const tendance = tempEl.dataset.cpuTempTendance || ''
+						const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
 						tempEl.innerHTML = ` (<span class="state"${color}>${temp}</span><span>°C</span>${tendanceStr})`
 					} else {
