@@ -414,21 +414,21 @@
 					// Load avg 1mn
 					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
 					if (loadAvg1mn) {
-						const html1mn = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ', '#load_avg_1mn_tendance#')
+						const html1mn = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '', '#load_avg_1mn_tendance#')
 						loadAvg1mn.innerHTML = html1mn === '<span></span>' ? html1mn : `1 min : ${html1mn}`
 					}
 
 					// Load avg 5mn
 					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
 					if (loadAvg5mn) {
-						const html5mn = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ', '#load_avg_5mn_tendance#')
+						const html5mn = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', '', '#load_avg_5mn_tendance#')
 						loadAvg5mn.innerHTML = html5mn === '<span></span>' ? html5mn : ` - 5 min : ${html5mn}`
 					}
 
 					// Load avg 15mn
 					const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
 					if (loadAvg15mn) {
-						const html15mn = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ', '#load_avg_15mn_tendance#')
+						const html15mn = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', '', '#load_avg_15mn_tendance#')
 						loadAvg15mn.innerHTML = html15mn === '<span></span>' ? html15mn : ` - 15 min : ${html15mn}`
 					}
 				} catch (e) {
