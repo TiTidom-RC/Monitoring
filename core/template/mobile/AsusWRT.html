@@ -162,29 +162,29 @@
 			<span id="cpu#id#"></span><span id="cpu_temp#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #perso1_display#;" data-perso-id="perso1" data-perso-value="#perso1#"
-		data-perso-low="#perso1_colorlow#" data-perso-high="#perso1_colorhigh#"
-			data-perso-unite="#perso1_unite#">
+			data-perso-low="#perso1_colorlow#" data-perso-high="#perso1_colorhigh#" data-perso-unite="#perso1_unite#"
+			data-perso-tendance="#perso1_tendance#">
 			<span title="#perso1_name# || Date valeur : #perso1_value# || Date collecte : #perso1_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#perso1_icon#</span>
 			<span id="perso1_unite#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #perso2_display#;" data-perso-id="perso2" data-perso-value="#perso2#"
-		data-perso-low="#perso2_colorlow#" data-perso-high="#perso2_colorhigh#"
-			data-perso-unite="#perso2_unite#">
+			data-perso-low="#perso2_colorlow#" data-perso-high="#perso2_colorhigh#" data-perso-unite="#perso2_unite#"
+			data-perso-tendance="#perso2_tendance#">
 			<span title="#perso2_name# || Date valeur : #perso2_value# || Date collecte : #perso2_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#perso2_icon#</span>
 			<span id="perso2_unite#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #perso3_display#;" data-perso-id="perso3" data-perso-value="#perso3#"
-		data-perso-low="#perso3_colorlow#" data-perso-high="#perso3_colorhigh#"
-			data-perso-unite="#perso3_unite#">
+			data-perso-low="#perso3_colorlow#" data-perso-high="#perso3_colorhigh#" data-perso-unite="#perso3_unite#"
+			data-perso-tendance="#perso3_tendance#">
 			<span title="#perso3_name# || Date valeur : #perso3_value# || Date collecte : #perso3_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#perso3_icon#</span>
 			<span id="perso3_unite#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #perso4_display#;" data-perso-id="perso4" data-perso-value="#perso4#"
-		data-perso-low="#perso4_colorlow#" data-perso-high="#perso4_colorhigh#"
-			data-perso-unite="#perso4_unite#">
+			data-perso-low="#perso4_colorlow#" data-perso-high="#perso4_colorhigh#" data-perso-unite="#perso4_unite#"
+			data-perso-tendance="#perso4_tendance#">
 			<span title="#perso4_name# || Date valeur : #perso4_value# || Date collecte : #perso4_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#perso4_icon#</span>
 			<span id="perso4_unite#id#"></span>
@@ -226,9 +226,9 @@
 			}
 
 			/**
-			 * Build HTML for threshold-based value with color (mobile version - no history)
+			 * Build HTML for threshold-based value with color (mobile version)
 			 */
-			const buildThresholdHTML = (value, lowThreshold, highThreshold, prefix, reversed) => {
+			const buildThresholdHTML = (value, lowThreshold, highThreshold, prefix, tendance, reversed) => {
 				if (reversed === void 0) reversed = false
 				if (value === '') return '<span></span>'
 
@@ -236,14 +236,15 @@
 				const low = parseFloat(lowThreshold)
 				const high = parseFloat(highThreshold)
 				const color = getColorStyle(val, low, high, reversed)
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				return prefix + '<span class="state"' + color + '>' + value + '</span>'
+				return prefix + '<span class="state"' + color + '>' + value + tendanceStr + '</span>'
 			}
 
 			/**
 			 * Build HTML for percentage-based value with color and unit (mobile version)
 			 */
-			const buildPercentageHTML = (value, lowThreshold, highThreshold, prefix, unit, reversed) => {
+			const buildPercentageHTML = (value, lowThreshold, highThreshold, prefix, unit, tendance, reversed) => {
 				if (reversed === void 0) reversed = false
 				if (value === '') return prefix ? '<span></span>' : ''
 
@@ -251,9 +252,10 @@
 				const low = parseFloat(lowThreshold)
 				const high = parseFloat(highThreshold)
 				const color = getColorStyle(val, low, high, reversed)
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
 				const valueSpan = '<span class="state"' + color + '>' + value + '</span>'
-				const unitSpan = '<span>' + unit + '</span>'
+				const unitSpan = '<span>' + unit + tendanceStr + '</span>'
 
 				return prefix ? prefix + valueSpan + unitSpan + ')' : valueSpan + unitSpan
 			}
@@ -469,22 +471,22 @@
 					// Load avg 1mn
 					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
 					if (loadAvg1mn) {
-					const html1mn = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ')
-					loadAvg1mn.innerHTML = html1mn === '<span></span>' ? html1mn : `1 min : ${html1mn}`
-				}
+						const html1mn = buildThresholdHTML('#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#', '1 min : ', '#load_avg_1mn_tendance#')
+						loadAvg1mn.innerHTML = html1mn === '<span></span>' ? html1mn : `1 min : ${html1mn}`
+					}
 
-				// Load avg 5mn
-				const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
-				if (loadAvg5mn) {
-					const html5mn = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ')
-					loadAvg5mn.innerHTML = html5mn === '<span></span>' ? html5mn : ` - 5 min : ${html5mn}`
-				}
+					// Load avg 5mn
+					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
+					if (loadAvg5mn) {
+						const html5mn = buildThresholdHTML('#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#', ' - 5 min : ', '#load_avg_5mn_tendance#')
+						loadAvg5mn.innerHTML = html5mn === '<span></span>' ? html5mn : ` - 5 min : ${html5mn}`
+					}
 
-				// Load avg 15mn
-				const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
-				if (loadAvg15mn) {
-					const html15mn = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ')
-					loadAvg15mn.innerHTML = html15mn === '<span></span>' ? html15mn : ` - 15 min : ${html15mn}`
+					// Load avg 15mn
+					const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
+					if (loadAvg15mn) {
+						const html15mn = buildThresholdHTML('#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#', ' - 15 min : ', '#load_avg_15mn_tendance#')
+						loadAvg15mn.innerHTML = html15mn === '<span></span>' ? html15mn : ` - 15 min : ${html15mn}`
 					}
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initLoadAverage:', e)
@@ -507,7 +509,7 @@
 						return
 					}
 
-					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
+					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', '#memory_available_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initMemory:', e)
 				}
@@ -529,7 +531,7 @@
 						return
 					}
 
-					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', true)
+					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', '#swap_free_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initSwap:', e)
 				}
@@ -551,7 +553,7 @@
 						return
 					}
 
-					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', true)
+					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', '#hdd_free_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initHDD:', e)
 				}
@@ -577,7 +579,7 @@
 						const high = parseFloat('#cpu_temp_colorhigh#')
 						const color = getColorStyle(tempVal, low, high, false)
 
-						tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C</span>)'
+						tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C</span>' + '#cpu_temp_tendance#' + ')'
 					} else {
 						cpuEl.innerHTML = '<span>#cpu#</span>'
 					}
@@ -611,9 +613,9 @@
 					const color = getColorStyle(val, low, high, false)
 
 					if (color) {
-						persoEl.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+						persoEl.innerHTML = '<span class="state"' + color + '>' + value + '</span><span>' + dataset.persoUnite + '</span>' + (dataset.persoTendance || '')
 					} else {
-						persoEl.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>'
+						persoEl.innerHTML = '<span>' + value + '</span><span>' + dataset.persoUnite + '</span>' + (dataset.persoTendance || '')
 					}
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)

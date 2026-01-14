@@ -10,7 +10,7 @@
 		"it_IT": "Plugin per monitorare i tuoi sistemi Linux, NAS (Synology, QNAP, Medion), Proxmox, LXC e router ASUS-WRT (locali o remoti tramite SSH): distribuzione, uptime, carico del sistema, RAM, swap, dischi, rete, CPU, temperature e comandi personalizzati.",
 		"pt_PT": "Plugin para monitorizar os seus sistemas Linux, NAS (Synology, QNAP, Medion), Proxmox, LXC e routers ASUS-WRT (locais ou remotos via SSH): distribuição, uptime, carga do sistema, RAM, swap, discos, rede, CPU, temperaturas e comandos personalizados."
 	},
-	"utilization": "Créez un équipement, définissez son type (local/distant SSH), activez les commandes souhaitées dans les onglets et configurez les seuils d'alerte pour une surveillance optimale.",
+	"utilization": "Créez un équipement, définissez son type (local/distant SSH), activez les commandes souhaitées et configurez les seuils d'alerte pour une surveillance optimale.",
 	"licence": "AGPL",
 	"author": "TiTidom",
 	"require": "4.4.2",
