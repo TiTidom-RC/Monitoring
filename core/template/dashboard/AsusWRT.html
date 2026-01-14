@@ -277,7 +277,7 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				return `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}${tendanceStr}</span>`
+				return `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}</span>${tendanceStr}`
 			}
 
 			/**
@@ -289,7 +289,7 @@
 			 * @param {string} cmdId - Command ID
 			 * @param {object} history - History stats {min, avg, max}
 			 * @param {string} tendance - Trend indicator
-			 * @param {string} prefix - Prefix text (e.g., "#memory# (")
+			 * @param {string} prefix - Prefix text (e.g., "#memory#")
 			 * @param {string} unit - Unit (e.g., "%")
 			 * @param {boolean} reversed - If true, higher values are better
 			 * @returns {string} HTML string
@@ -305,13 +305,13 @@
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
 				const valueSpan = `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}</span>`
-				const unitSpan = `<span>${unit}${tendanceStr}</span>`
+				const unitSpan = `<span>${unit}</span>`
 
 				// Only add prefix if it exists and is not a placeholder
 				if (prefix && !prefix.startsWith('#')) {
-					return `<span>${prefix}${valueSpan}${unitSpan})</span>`
+					return `${prefix} (${valueSpan}${unitSpan}${tendanceStr})`
 				}
-				return `${valueSpan}${unitSpan}`
+				return `${valueSpan}${unitSpan}${tendanceStr}`
 			}
 
 			// ========================================
@@ -586,7 +586,7 @@
 						value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#',
 						'Mémoire Vive (% Disponible)', '#memory_available_percent_id#',
 						{ min: '#memory_available_percent_minHistory#', avg: '#memory_available_percent_averageHistory#', max: '#memory_available_percent_maxHistory#' },
-						'#memory_available_percent_tendance#', '#memory# (', '%', true
+						'#memory_available_percent_tendance#', '#memory#', '%', true
 					)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initMemory:', e)
@@ -613,7 +613,7 @@
 						value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#',
 						'Mémoire Swap (% Libre)', '#swap_free_percent_id#',
 						{ min: '#swap_free_percent_minHistory#', avg: '#swap_free_percent_averageHistory#', max: '#swap_free_percent_maxHistory#' },
-						'#swap_free_percent_tendance#', '#swap# (', '%', true
+						'#swap_free_percent_tendance#', '#swap#', '%', true
 					)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initSwap:', e)
@@ -640,7 +640,7 @@
 						value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#',
 						'Espace Disque (% Libre)', '#hdd_free_percent_id#',
 						{ min: '#hdd_free_percent_minHistory#', avg: '#hdd_free_percent_averageHistory#', max: '#hdd_free_percent_maxHistory#' },
-						'#hdd_free_percent_tendance#', '#hdd# (', '%', true
+						'#hdd_free_percent_tendance#', '#hdd#', '%', true
 					)
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initHDD:', e)
@@ -668,8 +668,9 @@
 						const high = parseFloat('#cpu_temp_colorhigh#')
 						const title = 'Stats : Température CPU<br>Min: #cpu_temp_minHistory# | Moy : #cpu_temp_averageHistory# | Max : #cpu_temp_maxHistory#'
 						const color = getColorStyle(temp, low, high, false)
+						const tendanceStr = ('#cpu_temp_tendance#' && '#cpu_temp_tendance#' !== '' && !('#cpu_temp_tendance#'.startsWith('#'))) ? '#cpu_temp_tendance#' : ''
 
-						tempEl.innerHTML = `(<span title="${title}" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips"${color}>#cpu_temp#</span><span>°C#cpu_temp_tendance#</span>)`
+						tempEl.innerHTML = `(<span title="${title}" data-cmd_id="#cpu_temp_id#" class="value history cursor tooltips"${color}>#cpu_temp#</span><span>°C</span>${tendanceStr})`
 					} else {
 						cpuEl.innerHTML = '<span>#cpu#</span>'
 					}

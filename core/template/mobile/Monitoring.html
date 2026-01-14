@@ -226,7 +226,7 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				return prefix + '<span class="state"' + color + '>' + value + '</span>' + tendanceStr
+				return `${prefix}<span class="state"${color}>${value}</span>${tendanceStr}`
 			}
 
 			/**
@@ -242,10 +242,10 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				const valueSpan = '<span class="state"' + color + '>' + value + '</span>'
-				const unitSpan = '<span>' + unit + tendanceStr + '</span>'
+				const valueSpan = `<span class="state"${color}>${value}</span>`
+				const unitSpan = `<span>${unit}</span>`
 
-				return prefix ? prefix + valueSpan + unitSpan + ')' : valueSpan + unitSpan
+				return prefix ? `${prefix} (${valueSpan}${unitSpan}${tendanceStr})` : `${valueSpan}${unitSpan}${tendanceStr}`
 			}
 
 			// ========================================
@@ -452,7 +452,7 @@
 						return
 					}
 
-					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', '#memory_available_percent_tendance#', true)
+					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory#', '%', '#memory_available_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initMemory:', e)
 				}
@@ -474,7 +474,7 @@
 						return
 					}
 
-					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', '#swap_free_percent_tendance#', true)
+					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap#', '%', '#swap_free_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initSwap:', e)
 				}
@@ -496,7 +496,7 @@
 						return
 					}
 
-					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', '#hdd_free_percent_tendance#', true)
+					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd#', '%', '#hdd_free_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring] Error in initHDD:', e)
 				}
@@ -523,7 +523,7 @@
 						const color = getColorStyle(tempVal, low, high, false)
 						const tendanceStr = ('#cpu_temp_tendance#' && '#cpu_temp_tendance#' !== '' && !('#cpu_temp_tendance#'.startsWith('#'))) ? '#cpu_temp_tendance#' : ''
 
-						tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C' + tendanceStr + '</span>)'
+						tempEl.innerHTML = ` (<span class="state"${color}>${temp}</span><span>°C</span>${tendanceStr})`
 					} else {
 						cpuEl.innerHTML = '<span>#cpu#</span>'
 					}

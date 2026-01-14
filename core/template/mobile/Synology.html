@@ -143,46 +143,40 @@
 				style="width:15px;max-width:15px;max-height:15px;">#hdd_icon#</span>
 			<span id="hdd#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #syno_v2_display#;" data-syno-id="syno_v2" data-syno-value="#syno_v2#"
-			data-syno-value-percent="#syno_v2_free_percent#" data-syno-name="#syno_v2_name#"
-			data-syno-date-value="#syno_v2_value#" data-syno-collect="#syno_v2_collect#" data-syno-icon="#syno_v2_icon#"
+		<div class="tooltips" style="display: #syno_v2_display#;" data-syno-id="syno_v2"
+			data-syno-value="#syno_v2_free_percent#" data-syno-prefix="#syno_v2#"
 			data-syno-low="#syno_v2_free_percent_colorlow#" data-syno-high="#syno_v2_free_percent_colorhigh#"
 			data-syno-tendance="#syno_v2_free_percent_tendance#">
 			<span title="#syno_v2_name# || Date valeur : #syno_v2_value# || Date collecte : #syno_v2_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#syno_v2_icon#</span>
 			<span id="syno_v2_unit#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #syno_v3_display#;" data-syno-id="syno_v3" data-syno-value="#syno_v3#"
-			data-syno-value-percent="#syno_v3_free_percent#" data-syno-name="#syno_v3_name#"
-			data-syno-date-value="#syno_v3_value#" data-syno-collect="#syno_v3_collect#" data-syno-icon="#syno_v3_icon#"
+		<div class="tooltips" style="display: #syno_v3_display#;" data-syno-id="syno_v3"
+			data-syno-value="#syno_v3_free_percent#" data-syno-prefix="#syno_v3#"
 			data-syno-low="#syno_v3_free_percent_colorlow#" data-syno-high="#syno_v3_free_percent_colorhigh#"
 			data-syno-tendance="#syno_v3_free_percent_tendance#">
 			<span title="#syno_v3_name# || Date valeur : #syno_v3_value# || Date collecte : #syno_v3_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#syno_v3_icon#</span>
 			<span id="syno_v3_unit#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #syno_v4_display#;" data-syno-id="syno_v4" data-syno-value="#syno_v4#"
-			data-syno-value-percent="#syno_v4_free_percent#" data-syno-name="#syno_v4_name#"
-			data-syno-date-value="#syno_v4_value#" data-syno-collect="#syno_v4_collect#" data-syno-icon="#syno_v4_icon#"
+		<div class="tooltips" style="display: #syno_v4_display#;" data-syno-id="syno_v4"
+			data-syno-value="#syno_v4_free_percent#" data-syno-prefix="#syno_v4#"
 			data-syno-low="#syno_v4_free_percent_colorlow#" data-syno-high="#syno_v4_free_percent_colorhigh#"
 			data-syno-tendance="#syno_v4_free_percent_tendance#">
 			<span title="#syno_v4_name# || Date valeur : #syno_v4_value# || Date collecte : #syno_v4_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#syno_v4_icon#</span>
 			<span id="syno_v4_unit#id#"></span>
 		</div>
-		<div class="tooltips" style="display: #syno_usb_display#;" data-syno-id="syno_usb" data-syno-value="#syno_usb#"
-			data-syno-value-percent="#syno_usb_free_percent#" data-syno-name="#syno_usb_name#"
-			data-syno-date-value="#syno_usb_value#" data-syno-collect="#syno_usb_collect#"
-			data-syno-icon="#syno_usb_icon#" data-syno-low="#syno_usb_free_percent_colorlow#"
-			data-syno-high="#syno_usb_free_percent_colorhigh#" data-syno-tendance="#syno_usb_free_percent_tendance#">
+		<div class="tooltips" style="display: #syno_usb_display#;" data-syno-id="syno_usb"
+			data-syno-value="#syno_usb_free_percent#" data-syno-prefix="#syno_usb#"
+			data-syno-low="#syno_usb_free_percent_colorlow#" data-syno-high="#syno_usb_free_percent_colorhigh#"
+			data-syno-tendance="#syno_usb_free_percent_tendance#">
 			<span title="#syno_usb_name# || Date valeur : #syno_usb_value# || Date collecte : #syno_usb_collect#"
 				style="width:15px;max-width:15px;max-height:15px;">#syno_usb_icon#</span>
 			<span id="syno_usb_unit#id#"></span>
 		</div>
 		<div class="tooltips" style="display: #syno_esata_display#;" data-syno-id="syno_esata"
-			data-syno-value="#syno_esata#" data-syno-value-percent="#syno_esata_free_percent#"
-			data-syno-name="#syno_esata_name#" data-syno-date-value="#syno_esata_value#"
-			data-syno-collect="#syno_esata_collect#" data-syno-icon="#syno_esata_icon#"
+			data-syno-value="#syno_esata_free_percent#" data-syno-prefix="#syno_esata#"
 			data-syno-low="#syno_esata_free_percent_colorlow#" data-syno-high="#syno_esata_free_percent_colorhigh#"
 			data-syno-tendance="#syno_esata_free_percent_tendance#">
 			<span title="#syno_esata_name# || Date valeur : #syno_esata_value# || Date collecte : #syno_esata_collect#"
@@ -272,7 +266,7 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				return prefix + '<span class="state"' + color + '>' + value + '</span>' + tendanceStr
+				return `${prefix}<span class="state"${color}>${value}</span>${tendanceStr}`
 			}
 
 			/**
@@ -288,10 +282,10 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				const valueSpan = '<span class="state"' + color + '>' + value + '</span>'
-				const unitSpan = '<span>' + unit + tendanceStr + '</span>'
+				const valueSpan = `<span class="state"${color}>${value}</span>`
+				const unitSpan = `<span>${unit}</span>`
 
-				return prefix ? prefix + valueSpan + unitSpan + ')' : valueSpan + unitSpan
+				return prefix ? `${prefix} (${valueSpan}${unitSpan}${tendanceStr})` : `${valueSpan}${unitSpan}${tendanceStr}`
 			}
 
 			// ========================================
@@ -498,7 +492,7 @@
 						return
 					}
 
-					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', '#memory_available_percent_tendance#', true)
+					memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory#', '%', '#memory_available_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring Syno] Error in initMemory:', e)
 				}
@@ -520,7 +514,7 @@
 						return
 					}
 
-					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap# (', '%', '#swap_free_percent_tendance#', true)
+					swapEl.innerHTML = buildPercentageHTML(value, '#swap_free_percent_colorlow#', '#swap_free_percent_colorhigh#', '#swap#', '%', '#swap_free_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring Syno] Error in initSwap:', e)
 				}
@@ -542,7 +536,7 @@
 						return
 					}
 
-					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd# (', '%', '#hdd_free_percent_tendance#', true)
+					hddEl.innerHTML = buildPercentageHTML(value, '#hdd_free_percent_colorlow#', '#hdd_free_percent_colorhigh#', '#hdd#', '%', '#hdd_free_percent_tendance#', true)
 				} catch (e) {
 					console.error('[Monitoring Syno] Error in initHDD:', e)
 				}
@@ -567,8 +561,9 @@
 						const low = parseFloat('#cpu_temp_colorlow#')
 						const high = parseFloat('#cpu_temp_colorhigh#')
 						const color = getColorStyle(tempVal, low, high, false)
+						const tendanceStr = ('#cpu_temp_tendance#' && '#cpu_temp_tendance#' !== '' && !('#cpu_temp_tendance#'.startsWith('#'))) ? '#cpu_temp_tendance#' : ''
 
-						tempEl.innerHTML = ' (<span class="state"' + color + '>' + temp + '</span><span>°C</span>' + '#cpu_temp_tendance#' + ')'
+						tempEl.innerHTML = ` (<span class="state"${color}>${temp}</span><span>°C</span>${tendanceStr})`
 					} else {
 						cpuEl.innerHTML = '<span>#cpu#</span>'
 					}
@@ -591,7 +586,6 @@
 					if (!synoVolumeEl) return
 
 					const value = dataset.synoValue
-					const valuePercent = dataset.synoValuePercent
 
 					// Validate - hide div if placeholder not replaced
 					if (!value || value === '' || value.startsWith('#')) {
@@ -599,18 +593,17 @@
 						return
 					}
 
-					if (!valuePercent || valuePercent === '' || valuePercent.startsWith('#')) {
-						synoVolumeEl.innerHTML = '<span>' + value + '</span>'
-						return
-					}
-
-					const val = parseFloat(valuePercent)
+					const val = parseFloat(value)
 					const low = parseFloat(dataset.synoLow)
 					const high = parseFloat(dataset.synoHigh)
 					const color = getColorStyle(val, low, high, true)
 					const tendanceStr = (dataset.synoTendance && dataset.synoTendance !== '' && !dataset.synoTendance.startsWith('#')) ? dataset.synoTendance : ''
+					const prefix = dataset.synoPrefix
 
-			synoVolumeEl.innerHTML = value + ' (<span class="state"' + color + '>' + valuePercent + '</span><span>%' + tendanceStr + '</span>)'
+					const valueSpan = `<span class="state"${color}>${value}</span>`
+					const unitSpan = `<span>%</span>`
+
+					synoVolumeEl.innerHTML = (prefix && !prefix.startsWith('#')) ? `${prefix} (${valueSpan}${unitSpan}${tendanceStr})` : `${valueSpan}${unitSpan}${tendanceStr}`
 				} catch (e) {
 					console.error('[Monitoring Syno] Error in initSynoVolume for', container.dataset?.synoId || 'unknown', ':', e)
 				}
