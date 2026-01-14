@@ -492,7 +492,7 @@
 						return
 					}
 
-					el.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
+				memoryEl.innerHTML = buildPercentageHTML(value, '#memory_available_percent_colorlow#', '#memory_available_percent_colorhigh#', '#memory# (', '%', true)
 				} catch (e) {
 					console.error('[Monitoring Syno] Error in initMemory:', e)
 				}
