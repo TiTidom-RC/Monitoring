@@ -238,7 +238,7 @@
 				const color = getColorStyle(val, low, high, reversed)
 				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
 
-				return prefix + '<span class="state"' + color + '>' + value + tendanceStr + '</span>'
+				return prefix + '<span class="state"' + color + '>' + value + '</span>' + tendanceStr
 			}
 
 			/**
