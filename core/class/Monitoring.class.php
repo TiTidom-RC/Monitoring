@@ -2627,12 +2627,13 @@ class Monitoring extends eqLogic {
 				$replace[$cmdNamePrefix . '_averageHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_averageHistory') : '-';
 				$replace[$cmdNamePrefix . '_minHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_minHistory') : '-';
 				$replace[$cmdNamePrefix . '_maxHistory#'] = $isCmdObject ? $cmd->getConfiguration($cmdName . '_maxHistory') : '-';
-				// Utiliser des quotes simples pour éviter les conflits avec les guillemets doubles dans data-attributes
-				$tendanceIcon = ($isCmdObject && $cmd->getConfiguration($cmdName . '_tendance', '') !== '') 
-					? ' <i style=\'color: var(--al-info-color) !important;\' class=\'fas fa-' . $cmd->getConfiguration($cmdName . '_tendance') . '\'></i>' 
+				// Stocker seulement la classe CSS (arrow-up, arrow-down, minus), pas le HTML complet
+				// Le JavaScript construira l'icône à partir de cette classe
+				$tendanceClass = ($isCmdObject && $cmd->getConfiguration($cmdName . '_tendance', '') !== '') 
+					? $cmd->getConfiguration($cmdName . '_tendance')
 					: '';
-				$replace[$cmdNamePrefix . '_tendance#'] = $tendanceIcon;
-				log::add('Monitoring', 'debug', '[' . $cmdName . '][stats] tendance = ' . $cmd->getConfiguration($cmdName . '_tendance', '') . ' | icon = ' . $tendanceIcon);
+				$replace[$cmdNamePrefix . '_tendance#'] = $tendanceClass;
+				log::add('Monitoring', 'debug', '[' . $cmdName . '][stats] tendance = ' . $tendanceClass);
 			}
 		];
 

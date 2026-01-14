@@ -239,7 +239,10 @@
 				const low = parseFloat(lowThreshold)
 				const high = parseFloat(highThreshold)
 				const color = getColorStyle(val, low, high, reversed)
-				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
+				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) 
+					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>` 
+					: ''
 
 				return `${prefix}<span class="state"${color}>${value}</span>${tendanceStr}`
 			}
@@ -255,7 +258,10 @@
 				const low = parseFloat(lowThreshold)
 				const high = parseFloat(highThreshold)
 				const color = getColorStyle(val, low, high, reversed)
-				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) ? tendance : ''
+				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) 
+					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>` 
+					: ''
 
 				const valueSpan = `<span class="state"${color}>${value}</span>`
 				const unitSpan = `<span>${unit}</span>`
