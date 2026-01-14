@@ -491,16 +491,14 @@
 					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
 					if (loadAvg1mn) {
 						const tendance1mn = loadAvg1mn.dataset.loadAvg1mnTendance || ''
-						const html1mn = buildThresholdHTML(
-							'#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#',
-							'Charge Système (1min)', '#load_avg_1mn_id#',
-							{ min: '#load_avg_1mn_minHistory#', avg: '#load_avg_1mn_averageHistory#', max: '#load_avg_1mn_maxHistory#' },
-							tendance1mn
-						)
-						loadAvg1mn.innerHTML = html1mn === '<span></span>' ? html1mn : `1 min : ${html1mn}`
-					}
-
-					// Load avg 5mn
+					console.log('[Monitoring] LoadAvg 1mn tendance:', tendance1mn)
+					const html1mn = buildThresholdHTML(
+						'#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#',
+						'Charge Système (1min)', '#load_avg_1mn_id#',
+						{ min: '#load_avg_1mn_minHistory#', avg: '#load_avg_1mn_averageHistory#', max: '#load_avg_1mn_maxHistory#' },
+						tendance1mn
+					)
+					console.log('[Monitoring] LoadAvg 1mn html:', html1mn)
 					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
 					if (loadAvg5mn) {
 						const tendance5mn = loadAvg5mn.dataset.loadAvg5mnTendance || ''
