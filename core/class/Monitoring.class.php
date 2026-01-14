@@ -2632,6 +2632,7 @@ class Monitoring extends eqLogic {
 					? ' <i style=\'color: var(--al-info-color) !important;\' class=\'fas fa-' . $cmd->getConfiguration($cmdName . '_tendance') . '\'></i>' 
 					: '';
 				$replace[$cmdNamePrefix . '_tendance#'] = $tendanceIcon;
+				log::add('Monitoring', 'debug', '[' . $cmdName . '][stats] tendance = ' . $cmd->getConfiguration($cmdName . '_tendance', '') . ' | icon = ' . $tendanceIcon);
 			}
 		];
 
