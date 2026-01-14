@@ -240,8 +240,8 @@
 				const high = parseFloat(highThreshold)
 				const color = getColorStyle(val, low, high, reversed)
 				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
-				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) 
-					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>` 
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#'))
+					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>`
 					: ''
 
 				return `${prefix}<span class="state"${color}>${value}</span>${tendanceStr}`
@@ -259,8 +259,8 @@
 				const high = parseFloat(highThreshold)
 				const color = getColorStyle(val, low, high, reversed)
 				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
-				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) 
-					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>` 
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#'))
+					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>`
 					: ''
 
 				const valueSpan = `<span class="state"${color}>${value}</span>`
@@ -628,15 +628,15 @@
 					const low = parseFloat(dataset.persoLow)
 					const high = parseFloat(dataset.persoHigh)
 					const color = getColorStyle(val, low, high, false)
-				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
-				const tendanceStr = (dataset.persoTendance && dataset.persoTendance !== '' && !dataset.persoTendance.startsWith('#')) 
-					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${dataset.persoTendance}'></i>` 
-					: ''
+					// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
+					const tendanceStr = (dataset.persoTendance && dataset.persoTendance !== '' && !dataset.persoTendance.startsWith('#'))
+						? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${dataset.persoTendance}'></i>`
+						: ''
 
-				if (color) {
-					persoEl.innerHTML = `<span class="state"${color}>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
-				} else {
-					persoEl.innerHTML = `<span>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
+					if (color) {
+						persoEl.innerHTML = `<span class="state"${color}>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
+					} else {
+						persoEl.innerHTML = `<span>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
 					}
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)

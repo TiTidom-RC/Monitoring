@@ -279,8 +279,8 @@
 				const title = `Stats : ${label}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
 				const color = getColorStyle(val, low, high, reversed)
 				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
-				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) 
-					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>` 
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#'))
+					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>`
 					: ''
 
 				return `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}</span>${tendanceStr}`
@@ -309,8 +309,8 @@
 				const title = `Stats : ${label}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
 				const color = getColorStyle(val, low, high, reversed)
 				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
-				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#')) 
-					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>` 
+				const tendanceStr = (tendance && tendance !== '' && !tendance.startsWith('#'))
+					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${tendance}'></i>`
 					: ''
 
 				const valueSpan = `<span title="${title}" data-cmd_id="${cmdId}" class="value history cursor tooltips"${color}>${value}</span>`
@@ -538,12 +538,12 @@
 					// Load avg 1mn
 					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
 					if (loadAvg1mn) {
-					const tendance1mn = loadAvg1mn.dataset.loadAvg1mnTendance || ''
-					const html1mn = buildThresholdHTML(
-						'#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#',
-						'Charge Système (1min)', '#load_avg_1mn_id#',
-						{ min: '#load_avg_1mn_minHistory#', avg: '#load_avg_1mn_averageHistory#', max: '#load_avg_1mn_maxHistory#' },
-						tendance1mn
+						const tendance1mn = loadAvg1mn.dataset.loadAvg1mnTendance || ''
+						const html1mn = buildThresholdHTML(
+							'#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#',
+							'Charge Système (1min)', '#load_avg_1mn_id#',
+							{ min: '#load_avg_1mn_minHistory#', avg: '#load_avg_1mn_averageHistory#', max: '#load_avg_1mn_maxHistory#' },
+							tendance1mn
 						)
 						loadAvg1mn.innerHTML = html1mn === '<span></span>' ? html1mn : `1 min : ${html1mn}`
 					}
@@ -551,12 +551,12 @@
 					// Load avg 5mn
 					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
 					if (loadAvg5mn) {
-					const tendance5mn = loadAvg5mn.dataset.loadAvg5mnTendance || ''
-					const html5mn = buildThresholdHTML(
-						'#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#',
-						'Charge Système (5min)', '#load_avg_5mn_id#',
-						{ min: '#load_avg_5mn_minHistory#', avg: '#load_avg_5mn_averageHistory#', max: '#load_avg_5mn_maxHistory#' },
-						tendance5mn
+						const tendance5mn = loadAvg5mn.dataset.loadAvg5mnTendance || ''
+						const html5mn = buildThresholdHTML(
+							'#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#',
+							'Charge Système (5min)', '#load_avg_5mn_id#',
+							{ min: '#load_avg_5mn_minHistory#', avg: '#load_avg_5mn_averageHistory#', max: '#load_avg_5mn_maxHistory#' },
+							tendance5mn
 						)
 						loadAvg5mn.innerHTML = html5mn === '<span></span>' ? html5mn : ` - 5 min : ${html5mn}`
 					}
@@ -564,12 +564,12 @@
 					// Load avg 15mn
 					const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
 					if (loadAvg15mn) {
-					const tendance15mn = loadAvg15mn.dataset.loadAvg15mnTendance || ''
-					const html15mn = buildThresholdHTML(
-						'#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#',
-						'Charge Système (15min)', '#load_avg_15mn_id#',
-						{ min: '#load_avg_15mn_minHistory#', avg: '#load_avg_15mn_averageHistory#', max: '#load_avg_15mn_maxHistory#' },
-						tendance15mn
+						const tendance15mn = loadAvg15mn.dataset.loadAvg15mnTendance || ''
+						const html15mn = buildThresholdHTML(
+							'#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#',
+							'Charge Système (15min)', '#load_avg_15mn_id#',
+							{ min: '#load_avg_15mn_minHistory#', avg: '#load_avg_15mn_averageHistory#', max: '#load_avg_15mn_maxHistory#' },
+							tendance15mn
 						)
 						loadAvg15mn.innerHTML = html15mn === '<span></span>' ? html15mn : ` - 15 min : ${html15mn}`
 					}
@@ -720,12 +720,12 @@
 					const history = safeJSONParse(dataset.persoHistory)
 					const title = `Stats : ${dataset.persoName}<br>Min: ${history.min} | Moy : ${history.avg} | Max : ${history.max}`
 					const color = getColorStyle(val, low, high, false)
-				// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
-				const tendanceStr = (dataset.persoTendance && dataset.persoTendance !== '' && !dataset.persoTendance.startsWith('#')) 
-					? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${dataset.persoTendance}'></i>` 
-					: ''
+					// Construire l'icône HTML à partir de la classe CSS (arrow-up, arrow-down, minus)
+					const tendanceStr = (dataset.persoTendance && dataset.persoTendance !== '' && !dataset.persoTendance.startsWith('#'))
+						? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${dataset.persoTendance}'></i>`
+						: ''
 
-				el.innerHTML = `<span title="${title}" data-cmd_id="${dataset.persoCmdId}" class="value history cursor tooltips"${color}>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
+					el.innerHTML = `<span title="${title}" data-cmd_id="${dataset.persoCmdId}" class="value history cursor tooltips"${color}>${value}</span><span>${dataset.persoUnite}</span>${tendanceStr}`
 				} catch (e) {
 					console.error('[Monitoring AsusWRT] Error in initPerso for', container.dataset?.persoId || 'unknown', ':', e)
 				}
