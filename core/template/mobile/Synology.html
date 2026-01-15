@@ -619,7 +619,7 @@
 					const low = parseFloat(dataset.synoLow)
 					const high = parseFloat(dataset.synoHigh)
 					const color = getColorStyle(val, low, high, true)
-					const tendanceStr = (dataset.synoTendance && dataset.synoTendance !== '' && !dataset.synoTendance.startsWith('#')) ? dataset.synoTendance : ''
+					const tendanceStr = (dataset.synoTendance && dataset.synoTendance !== '' && !dataset.synoTendance.startsWith('#')) ? ` <i style='color: var(--al-info-color) !important;' class='fas fa-${dataset.synoTendance}'></i>` : ''
 					const prefix = dataset.synoPrefix
 
 					const valueSpan = `<span class="state"${color}>${value}</span>`
