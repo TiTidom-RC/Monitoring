@@ -538,7 +538,7 @@
 					// Load avg 1mn
 					const loadAvg1mn = widgetRoot.querySelector('#load_avg_1mn#id#')
 					if (loadAvg1mn) {
-						const tendance1mn = loadAvg1mn.dataset.loadAvg1mnTendance || ''
+						const tendance1mn = loadAvg1mn.getAttribute('data-load-avg-1mn-tendance') || ''
 						const html1mn = buildThresholdHTML(
 							'#load_avg_1mn#', '#load_avg_1mn_colorlow#', '#load_avg_1mn_colorhigh#',
 							'Charge Système (1min)', '#load_avg_1mn_id#',
@@ -551,7 +551,7 @@
 					// Load avg 5mn
 					const loadAvg5mn = widgetRoot.querySelector('#load_avg_5mn#id#')
 					if (loadAvg5mn) {
-						const tendance5mn = loadAvg5mn.dataset.loadAvg5mnTendance || ''
+						const tendance5mn = loadAvg5mn.getAttribute('data-load-avg-5mn-tendance') || ''
 						const html5mn = buildThresholdHTML(
 							'#load_avg_5mn#', '#load_avg_5mn_colorlow#', '#load_avg_5mn_colorhigh#',
 							'Charge Système (5min)', '#load_avg_5mn_id#',
@@ -564,7 +564,7 @@
 					// Load avg 15mn
 					const loadAvg15mn = widgetRoot.querySelector('#load_avg_15mn#id#')
 					if (loadAvg15mn) {
-						const tendance15mn = loadAvg15mn.dataset.loadAvg15mnTendance || ''
+						const tendance15mn = loadAvg15mn.getAttribute('data-load-avg-15mn-tendance') || ''
 						const html15mn = buildThresholdHTML(
 							'#load_avg_15mn#', '#load_avg_15mn_colorlow#', '#load_avg_15mn_colorhigh#',
 							'Charge Système (15min)', '#load_avg_15mn_id#',
