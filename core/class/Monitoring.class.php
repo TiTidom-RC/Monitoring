@@ -2633,7 +2633,6 @@ class Monitoring extends eqLogic {
 					? $cmd->getConfiguration($cmdName . '_tendance')
 					: '';
 				$replace[$cmdNamePrefix . '_tendance#'] = $tendanceClass;
-				log::add('Monitoring', 'debug', '[' . $cmdName . '][stats] tendance = ' . $tendanceClass);
 			}
 		];
 
