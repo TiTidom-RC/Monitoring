@@ -185,43 +185,40 @@ function Monitoring_update() {
     }
 
     /* Ménage dans les répertoires du plugin */
+    $pluginDir = dirname(__DIR__);
     try {
-        $dirToDelete = array(
-            __DIR__ . '/../ressources',
-            __DIR__ . '/../mobile',
-            __DIR__ . '/../core/img',
-            __DIR__ . '/../resources',
-            __DIR__ . '/../vendor',
-        );
-        
-        $filesToDelete = array(
-            __DIR__ . '/../plugin_info/packages.json',
-            __DIR__ . '/../desktop/js/panel.js',
-            __DIR__ . '/../desktop/php/panel.php',
-            __DIR__ . '/../composer.json',
-            __DIR__ . '/../composer.lock',
+        $pathsToRemove = array(
+            // Accepte fichiers ET répertoires (rm -rf) — ajouter ici les chemins à supprimer à chaque mise à jour
+            $pluginDir . '/ressources',
+            $pluginDir . '/mobile',
+            $pluginDir . '/core/img',
+            $pluginDir . '/resources',
+            $pluginDir . '/vendor',
+            $pluginDir . '/plugin_info/packages.json',
+            $pluginDir . '/desktop/js/panel.js',
+            $pluginDir . '/desktop/php/panel.php',
+            $pluginDir . '/composer.json',
+            $pluginDir . '/composer.lock',
+            $pluginDir . '/core/php/.htaccess',
         );
 
-        foreach ($dirToDelete as $dir) {
-            log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du répertoire ' . $dir);
-            if (file_exists($dir)) {
-                shell_exec('sudo rm -rf ' . $dir);
-                log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le répertoire ' . $dir . ' a bien été effacé.');
+        foreach ($pathsToRemove as $path) {
+            log::add('Monitoring', 'debug', '[CLEANUP] Vérification du chemin : ' . $path);
+            if (file_exists($path)) {
+                $output = array();
+                $returnVar = 0;
+                exec('rm -rf ' . escapeshellarg($path) . ' 2>&1', $output, $returnVar);
+                if ($returnVar !== 0) {
+                    log::add('Monitoring', 'warning', '[CLEANUP_KO] Echec suppression "' . $path . '" (Code: ' . $returnVar . ') : ' . implode(' ', $output));
+                } else {
+                    log::add('Monitoring', 'info', '[CLEANUP_OK] Chemin supprimé : ' . $path);
+                }
             } else {
-                log::add('Monitoring', 'debug', '[CLEAN_CHECK_NA] Répertoire ' . $dir . ' non trouvé. Aucune action requise.');
-            }
-        }
-        foreach ($filesToDelete as $file) {
-            log::add('Monitoring', 'debug', '[CLEAN_CHECK] Vérification de la présence du fichier : ' . $file);
-            if (file_exists($file)) {
-                shell_exec('sudo rm -f ' . $file);
-                log::add('Monitoring', 'debug', '[CLEAN_CHECK_OK] Le fichier  ' . $file . ' a bien été effacé.');
-            } else {
-                log::add('Monitoring', 'debug', '[CLEAN_CHECK_NA] Fichier ' . $file . ' non trouvé. Aucune action requise.');
+                log::add('Monitoring', 'debug', '[CLEANUP_NA] Chemin non trouvé, aucune action : ' . $path);
             }
         }
     } catch (Exception $e) {
-        log::add('Monitoring', 'debug', '[CLEAN_CHECK_KO] WARNING :: Exception levée :: ' . $e->getMessage());
+        log::add('Monitoring', 'warning', '[CLEANUP_KO] Erreur lors du nettoyage : ' . $e->getMessage());
     }
 }
 
