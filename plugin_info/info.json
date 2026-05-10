@@ -1,7 +1,7 @@
 {
 	"id": "Monitoring",
 	"name": "Monitoring",
-	"pluginVersion": "3.4.5",
+	"pluginVersion": "3.4.6",
 	"description": {
 		"fr_FR": "Plugin pour surveiller vos systèmes Linux, NAS (Synology, QNAP, Medion), Proxmox, LXC et routeurs ASUS-WRT (locaux ou distants via SSH) : distribution, uptime, charge système, RAM, swap, disques, réseau, CPU, températures et commandes personnalisées.",
 		"en_US": "Plugin to monitor your Linux systems, NAS (Synology, QNAP, Medion), Proxmox, LXC and ASUS-WRT routers (local or remote via SSH): distribution, uptime, system load, RAM, swap, disks, network, CPU, temperatures and custom commands.",
