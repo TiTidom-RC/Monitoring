@@ -33,8 +33,14 @@ jobs:
             https://github.com/jeedom/core.git /tmp/jeedom-core
           git -C /tmp/jeedom-core sparse-checkout set core/class core/php core/repo
 
+      - name: Checkout SSH-Manager (sparse)
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/TiTidom-RC/SSH-Manager.git /tmp/sshmanager
+          git -C /tmp/sshmanager sparse-checkout set core/class
+
       - name: PHP ${{ matrix.php-version }} Compatibility Check
         run: |
           PHPSTAN_VERSION=$(echo "${{ matrix.php-version }}" | awk -F. '{printf "%d%02d00", $1, $2}')
-          printf 'includes:\n  - phpstan.neon.dist\nparameters:\n  phpVersion: %s\n  scanDirectories:\n    - /tmp/jeedom-core/core/class\n    - /tmp/jeedom-core/core/php\n    - /tmp/jeedom-core/core/repo\n' "$PHPSTAN_VERSION" > phpstan.neon
+          printf 'includes:\n  - phpstan.neon.dist\nparameters:\n  phpVersion: %s\n  scanDirectories:\n    - /tmp/jeedom-core/core/class\n    - /tmp/jeedom-core/core/php\n    - /tmp/jeedom-core/core/repo\n    - /tmp/sshmanager/core/class\n' "$PHPSTAN_VERSION" > phpstan.neon
           phpstan analyse --level 0 --no-progress core/ desktop/ plugin_info/
