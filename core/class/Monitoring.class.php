@@ -4221,7 +4221,8 @@ class Monitoring extends eqLogic {
 					foreach ($dataresult as $key => $value) {
 						$cmd = $this->getCmd(null, $key);
 						if (is_object($cmd)) {
-							$cmd->event($value);
+							// $cmd->event($value);
+                    		$this->checkAndUpdateCmd($cmd, $value);
 						}
 					}
 
@@ -4241,7 +4242,8 @@ class Monitoring extends eqLogic {
 					foreach ($dataresult as $key => $value) {
 						$cmd = $this->getCmd(null, $key);
 						if (is_object($cmd)) {
-							$cmd->event($value);
+							// $cmd->event($value);
+                    		$this->checkAndUpdateCmd($cmd, $value);
 						}
 					}
 				}
