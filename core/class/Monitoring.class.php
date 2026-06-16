@@ -4217,6 +4217,13 @@ class Monitoring extends eqLogic {
 						]);
 					}
 
+					// TODO: Évaluer la migration vers checkAndUpdateCmd() ici.
+					// Impact sur les graphiques d'historique : si une valeur numérique reste stable
+					// plusieurs heures (ex: swap à 0, charge système constante, disque stable),
+					// checkAndUpdateCmd() n'écrit rien en base → le graphique interpolera entre deux
+					// points distants. Solution : activer "Répétition des valeurs" sur les commandes
+					// concernées (repeatEventManagement = always), ce qui rétablit le comportement
+					// identique à event(). 
 					// Event sur les commandes après récupération des données
 					foreach ($dataresult as $key => $value) {
 						$cmd = $this->getCmd(null, $key);
@@ -4234,16 +4241,8 @@ class Monitoring extends eqLogic {
 					}
 
 				} elseif ($cnx_ssh == 'KO') {
-					$dataresult = array(
-						'distri_name' => 'Connexion SSH KO',
-						'cnx_ssh' => $cnx_ssh
-					);
-					foreach ($dataresult as $key => $value) {
-						$cmd = $this->getCmd(null, $key);
-						if (is_object($cmd)) {
-							$cmd->event($value);
-						}
-					}
+					$this->checkAndUpdateCmd('distri_name', 'Connexion SSH KO');
+					$this->checkAndUpdateCmd('cnx_ssh', $cnx_ssh);
 				}
 			}
 
@@ -4374,19 +4373,13 @@ class MonitoringCmd extends cmd {
 					break;
 				case "cron_on":
 					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Execution Commande :: ' . $paramaction);
-					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
-					if (is_object($cron_status_cmd)) {
-						$cron_status_cmd->event(1);
-						$eqLogic->refreshWidget();
-					}
+					$eqLogic->checkAndUpdateCmd('cron_status', 1);
+					$eqLogic->refreshWidget();
 					break;
 				case "cron_off":
 					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Execution Commande :: ' . $paramaction);
-					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
-					if (is_object($cron_status_cmd)) {
-						$cron_status_cmd->event(0);
-						$eqLogic->refreshWidget();
-					}
+					$eqLogic->checkAndUpdateCmd('cron_status', 0);
+					$eqLogic->refreshWidget();
 					break;
 				default:
 					throw new Exception(__('Commande non implémentée actuellement', __FILE__));
