@@ -3236,9 +3236,11 @@ class Monitoring extends eqLogic {
 	public function execSRV($cmd_srv = '', $cmdName_srv = '', $timeout_srv = true, $cmd_delay = 0.0) {
 		$conf_timeoutSrv = $this->getConfiguration('timeoutsrv', 30);
 		$cmdResult_srv = '';
-	
+		
+		$_cmd = trim($cmd_srv);
+
 		try {
-			$_cmd = trim($cmd_srv);
+			
 			if ($timeout_srv && $conf_timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $_cmd)) {
 				if (preg_match('/LC_ALL=C/', $_cmd)) {
 					$_cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $conf_timeoutSrv, $_cmd, 1);
