@@ -20,6 +20,7 @@
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class Monitoring extends eqLogic {
+
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
@@ -179,8 +180,7 @@ class Monitoring extends eqLogic {
 						if ($mem_stats) {
 							$mem_cycle_usage = memory_get_usage();
 							$mem_cycle_peak = memory_get_peak_usage();
-							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
-							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko (Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko)');
 						}
 						$Monitoring->refreshWidget();
 					}
@@ -223,8 +223,7 @@ class Monitoring extends eqLogic {
 						if ($mem_stats) {
 							$mem_cycle_usage = memory_get_usage();
 							$mem_cycle_peak = memory_get_peak_usage();
-							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
-							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko (Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko)');
 						}
 						$Monitoring->refreshWidget();
 					}
@@ -267,8 +266,7 @@ class Monitoring extends eqLogic {
 				if ($mem_stats) {
 					$mem_cycle_usage = memory_get_usage();
 					$mem_cycle_peak = memory_get_peak_usage();
-					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
-					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko (Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko)');
 				}
 				$Monitoring->refreshWidget();
 			}
@@ -2482,7 +2480,8 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function getStats($cmd, $cmdName, int $precision = 2) {
+	public function getStats(cmd $cmd, string $cmdName, int $precision = 2): ?string {
+		$tendanceEntry = null;
 		try {
 			if ($cmd->getIsHistorized() == 1) {
 				$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
@@ -2502,7 +2501,7 @@ class Monitoring extends eqLogic {
 				// Tendance
 				if ($this->getConfiguration('stats_tendance', '0') == '1') {
 					$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
-					log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
+					$tendanceEntry = $cmd->getName() . ' = ' . strval($tendance);
 					if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
 						$cmd->setConfiguration($cmdName . '_tendance', 'arrow-up');
 					} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
@@ -2526,6 +2525,7 @@ class Monitoring extends eqLogic {
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[' . $this->getName() . '][getStats] ' . $e->getMessage());
 		}
+		return $tendanceEntry;
 	}
 
 	public function getDefaultIcon(string $cmdName) {
@@ -3426,10 +3426,6 @@ class Monitoring extends eqLogic {
 		$swap_used = intval($swap_data[1]);
 		$swap_free = intval($swap_data[2]);
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Total :: ' . $swap_total);
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Used :: ' . $swap_used);
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Free :: ' . $swap_free);
-
 		if ($swap_total != 0) {
 			$swap_used_percent = round($swap_used / $swap_total * 100, 1);
 			$swap_free_percent = round($swap_free / $swap_total * 100, 1);
@@ -3438,8 +3434,7 @@ class Monitoring extends eqLogic {
 			$swap_free_percent = 0.0;
 		}
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Used % :: ' . $swap_used_percent);
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Free % :: ' . $swap_free_percent);
+		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap :: Total=' . $swap_total . ' | Used=' . $swap_used . ' (' . $swap_used_percent . '%) | Free=' . $swap_free . ' (' . $swap_free_percent . '%)');
 
 		$swap = __('Total', __FILE__) . ' : ' . $this->formatSize($swap_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap_free, 'Ko');
 		
@@ -3481,11 +3476,7 @@ class Monitoring extends eqLogic {
 				$memory_available = intval($memory_data[4]);
 			}
 
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Total :: ' . $memory_total);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used :: ' . $memory_used);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Free :: ' . $memory_free);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Buff/Cache :: ' . $memory_buffcache);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Available :: ' . $memory_available);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory :: Total=' . $memory_total . ' | Used=' . $memory_used . ' | Free=' . $memory_free . ' | Buff/Cache=' . $memory_buffcache . ' | Available=' . $memory_available);
 
 			if ($memory_total != 0) {
 				$memory_used_percent = round(($memory_used + $memory_buffcache) / $memory_total * 100, 1);
@@ -3497,9 +3488,7 @@ class Monitoring extends eqLogic {
 				$memory_available_percent = 0.0;
 			}
 
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used % :: ' . $memory_used_percent);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Free % :: ' . $memory_free_percent);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Available % :: ' . $memory_available_percent);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory % :: Used=' . $memory_used_percent . '% | Free=' . $memory_free_percent . '% | Available=' . $memory_available_percent . '%');
 
 			$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Disponible', __FILE__) . ' : ' . $this->formatSize($memory_available, 'Ko');
 			
@@ -3593,11 +3582,7 @@ class Monitoring extends eqLogic {
 			$hdd_used_percent = 0.0;
 			$hdd_free_percent = 0.0;
 		}
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Total :: ' . $hdd_total);
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Used :: ' . $hdd_used);
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Free :: ' . $hdd_free);
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Used % :: ' . $hdd_used_percent);
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Free % :: ' . $hdd_free_percent);
+		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD :: Total=' . $hdd_total . ' | Used=' . $hdd_used . ' (' . $hdd_used_percent . '%) | Free=' . $hdd_free . ' (' . $hdd_free_percent . '%)');
 
 		$hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($hdd_free, 'Ko');
 		
@@ -4235,11 +4220,18 @@ class Monitoring extends eqLogic {
 					}
 
 					// getStats pour les commandes
+					$tendanceLog = array();
 					foreach ($dataresult_stats as $cmd_name => $precision) {
 						$cmd = $this->getCmd(null, $cmd_name);
 						if (is_object($cmd)) {
-							$this->getStats($cmd, $cmd_name, $precision);
+							$tendanceEntry = $this->getStats($cmd, $cmd_name, $precision);
+							if ($tendanceEntry !== null) {
+								$tendanceLog[] = $tendanceEntry;
+							}
 						}
+					}
+					if (!empty($tendanceLog)) {
+						log::add('Monitoring', 'debug', '[' . $equipement . '][getStats] Tendance :: ' . implode(' | ', $tendanceLog));
 					}
 
 				} elseif ($cnx_ssh == 'KO') {
