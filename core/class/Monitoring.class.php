@@ -3434,7 +3434,7 @@ class Monitoring extends eqLogic {
 			$swap_free_percent = 0.0;
 		}
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap :: Total=' . $swap_total . ' | Used=' . $swap_used . ' (' . $swap_used_percent . '%) | Free=' . $swap_free . ' (' . $swap_free_percent . '%)');
+		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap :: Total = ' . $swap_total . ' | Used = ' . $swap_used . ' (' . $swap_used_percent . '%) | Free = ' . $swap_free . ' (' . $swap_free_percent . '%)');
 
 		$swap = __('Total', __FILE__) . ' : ' . $this->formatSize($swap_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap_free, 'Ko');
 		
@@ -3476,7 +3476,7 @@ class Monitoring extends eqLogic {
 				$memory_available = intval($memory_data[4]);
 			}
 
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory :: Total=' . $memory_total . ' | Used=' . $memory_used . ' | Free=' . $memory_free . ' | Buff/Cache=' . $memory_buffcache . ' | Available=' . $memory_available);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory :: Total = ' . $memory_total . ' | Used = ' . $memory_used . ' | Free = ' . $memory_free . ' | Buff/Cache = ' . $memory_buffcache . ' | Available = ' . $memory_available);
 
 			if ($memory_total != 0) {
 				$memory_used_percent = round(($memory_used + $memory_buffcache) / $memory_total * 100, 1);
@@ -3488,7 +3488,7 @@ class Monitoring extends eqLogic {
 				$memory_available_percent = 0.0;
 			}
 
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory % :: Used=' . $memory_used_percent . '% | Free=' . $memory_free_percent . '% | Available=' . $memory_available_percent . '%');
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory % :: Used = ' . $memory_used_percent . '% | Free = ' . $memory_free_percent . '% | Available = ' . $memory_available_percent . '%');
 
 			$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Disponible', __FILE__) . ' : ' . $this->formatSize($memory_available, 'Ko');
 			
@@ -3582,7 +3582,7 @@ class Monitoring extends eqLogic {
 			$hdd_used_percent = 0.0;
 			$hdd_free_percent = 0.0;
 		}
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD :: Total=' . $hdd_total . ' | Used=' . $hdd_used . ' (' . $hdd_used_percent . '%) | Free=' . $hdd_free . ' (' . $hdd_free_percent . '%)');
+		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD :: Total = ' . $hdd_total . ' | Used = ' . $hdd_used . ' (' . $hdd_used_percent . '%) | Free = ' . $hdd_free . ' (' . $hdd_free_percent . '%)');
 
 		$hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($hdd_free, 'Ko');
 		
