@@ -3899,7 +3899,7 @@ class Monitoring extends eqLogic {
 				extract($this->getCPUFreq($commands['cpu_freq'], $equipement, 'local', null, $cmd_delay));
 				extract($this->getCPUTemp($commands['cpu_temp'], $equipement, 'local', null, $cmd_delay));
 				
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriName = ' . $distri_name_value . ' | DistriBits = ' . $distri_bits . ' | OsVersion = ' . $os_version_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ARMv = ' . $ARMv . ' | DistriName = ' . $distri_name_value . ' | DistriBits = ' . $distri_bits . ' | OsVersion = ' . $os_version_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uptime = ' . $uptime_value . ' | LoadAverage = ' . $load_avg_value);
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Memory = ' . $memory_value . ' | Swap = ' . $swap_value . ' | HDD = ' . $hdd_value . ' (Id: ' . $hdd_id . ')');
 				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauRXTX = ' . $network_value . ' | ReseauIP = ' . $network_ip_value);
