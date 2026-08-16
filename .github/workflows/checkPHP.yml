@@ -4,9 +4,13 @@ on:
   pull_request:
     branches:
       - beta
+    paths:
+      - '**/*.php'
+  workflow_dispatch:
 
 jobs:
   php-lint:
+    name: PHP Lint — PHP 8.4
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

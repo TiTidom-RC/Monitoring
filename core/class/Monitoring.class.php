@@ -20,6 +20,7 @@
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class Monitoring extends eqLogic {
+
 	public function decrypt() {
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
@@ -179,8 +180,7 @@ class Monitoring extends eqLogic {
 						if ($mem_stats) {
 							$mem_cycle_usage = memory_get_usage();
 							$mem_cycle_peak = memory_get_peak_usage();
-							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
-							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko (Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko)');
 						}
 						$Monitoring->refreshWidget();
 					}
@@ -223,8 +223,7 @@ class Monitoring extends eqLogic {
 						if ($mem_stats) {
 							$mem_cycle_usage = memory_get_usage();
 							$mem_cycle_peak = memory_get_peak_usage();
-							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
-							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+							log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLLOCAL] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko (Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko)');
 						}
 						$Monitoring->refreshWidget();
 					}
@@ -267,8 +266,7 @@ class Monitoring extends eqLogic {
 				if ($mem_stats) {
 					$mem_cycle_usage = memory_get_usage();
 					$mem_cycle_peak = memory_get_peak_usage();
-					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko');
-					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko');
+					log::add('Monitoring', 'info', '[' . $Monitoring->getName() .'][PULLCUSTOM] Memory Usage :: ' . round($mem_cycle_usage / 1024, 2) . ' Ko (Peak :: ' . round($mem_cycle_peak / 1024, 2) . ' Ko)');
 				}
 				$Monitoring->refreshWidget();
 			}
@@ -2376,7 +2374,7 @@ class Monitoring extends eqLogic {
         return $pluginVersion;
     }
 
-	public function getCmdPerso($perso) {
+	public function getCmdPerso(string $perso): string {
 		$result = '';
 		$perso_cmd = $this->getCmd(null, $perso);
 		if (is_object($perso_cmd)) {
@@ -2388,9 +2386,13 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function getHDD($hddCmds, $equipement, $localOrRemote = 'local', $hostId = '', $cmd_delay = 0.0) {
-		$result = ['hdd_value' => '', 'hdd_id' => ''];
+	/**
+	 * @param array|string $hddCmds Liste de commandes candidates (array) ou commande unique (string) -- union type non utilisable en signature (PHP 8.0+), doc uniquement pour compatibilité PHP 7.4
+	 */
+	public function getHDD($hddCmds, string $equipement, string $localOrRemote = 'local', ?string $hostId = '', float $cmd_delay = 0.0) {
+		$result = ['hdd_value' => '', 'hdd_id' => 'N/A'];
 		if (is_array($hddCmds)) {
+			$result['hdd_id'] = 'KO';
 			foreach ($hddCmds as $id => [$type, $command]) {
 				if ($localOrRemote == 'local' && $type == 'file' && file_exists($command)) {
 					$hdd_cmd = "cat " . $command . " 2>/dev/null";
@@ -2407,13 +2409,13 @@ class Monitoring extends eqLogic {
 			}
 		} else {
 			$hdd_value = trim($hddCmds) !== '' ? ($localOrRemote == 'local' ? $this->execSRV($hddCmds, 'HDD', true, $cmd_delay) : $this->execSSH($hostId, $hddCmds, 'HDD', $cmd_delay)) : '';
-			$result = ['hdd_value' => $hdd_value, 'hdd_id' => ''];
+			$result = ['hdd_value' => $hdd_value, 'hdd_id' => 'N/A'];
 		}
 		return $result;
 	}
 
-	public function getCPUFreq($cpuFreqArray, $equipement, $localOrRemote = 'local', $hostId = '', $cmd_delay = 0.0) {
-		$result = ['cpu_freq' => '', 'cpu_freq_id' => ''];
+	public function getCPUFreq(array $cpuFreqArray, string $equipement, string $localOrRemote = 'local', ?string $hostId = '', float $cmd_delay = 0.0) {
+		$result = ['cpu_freq' => '', 'cpu_freq_id' => 'KO'];
 		foreach ($cpuFreqArray as $id => [$type, $command]) {
 			if ($localOrRemote == 'local' && $type == 'file' && file_exists($command)) {
 				$cpu_freq_cmd = "cat " . $command . " 2>/dev/null";
@@ -2432,17 +2434,19 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function getCPUTemp($tempArray, $equipement, $localoudistant = 'local', $hostId = '', $cmd_delay = 0.0) {
-		$result = ['cpu_temp' => '', 'cpu_temp_id' => ''];
+	public function getCPUTemp(array $tempArray, string $equipement, string $localoudistant = 'local', ?string $hostId = '', float $cmd_delay = 0.0) {
+		$result = ['cpu_temp' => '', 'cpu_temp_id' => 'N/A'];
 
 		if ($this->getConfiguration('linux_use_temp_cmd')) {
 			$cpu_temp_cmd = $this->getconfiguration('linux_temp_cmd');
-			log::add('Monitoring','debug', '['. $equipement .'][' . $localoudistant == 'local' ? 'LOCAL' : 'SSH-EXEC' .'] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
+			log::add('Monitoring','debug', '['. $equipement .']['. ($localoudistant == 'local' ? 'LOCAL' : 'SSH-EXEC') .'] Commande Température (Custom) :: ' . str_replace("\r\n", "\\r\\n", $cpu_temp_cmd));	
 			$cpu_temp = trim($cpu_temp_cmd) !== '' ? ($localoudistant == 'local' ? $this->execSRV($cpu_temp_cmd, 'CPUTemp-Custom', true, $cmd_delay) : $this->execSSH($hostId, $cpu_temp_cmd, 'CPUTemp-Custom', $cmd_delay)) : '';
+			$result['cpu_temp_id'] = 'KO';
 			if (!empty($cpu_temp)) {
 				$result = ['cpu_temp' => $cpu_temp, 'cpu_temp_id' => 'Custom'];
 			}
 		} elseif (is_array($tempArray)) {
+			$result['cpu_temp_id'] = 'KO';
 			foreach ($tempArray as $id => [$type, $command]) {
 				if ($localoudistant == 'local' && $type == 'file' && file_exists($command)) {
 					$cpu_temp_cmd = "cat " . $command . " 2>/dev/null";
@@ -2482,7 +2486,8 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function getStats($cmd, $cmdName, int $precision = 2) {
+	public function getStats(cmd $cmd, string $cmdName, int $precision = 2): ?string {
+		$tendanceEntry = null;
 		try {
 			if ($cmd->getIsHistorized() == 1) {
 				$startHist = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' -' . config::byKey('historyCalculPeriod') . ' hour'));
@@ -2502,7 +2507,7 @@ class Monitoring extends eqLogic {
 				// Tendance
 				if ($this->getConfiguration('stats_tendance', '0') == '1') {
 					$tendance = $cmd->getTendance($startHist, date('Y-m-d H:i:s'));
-					log::add('Monitoring', 'debug', '[' . $this->getName() . '][getStats] Tendance :: ' . $cmd->getName() . ' :: ' . strval($tendance));
+					$tendanceEntry = $cmd->getName() . ' = ' . strval($tendance);
 					if ($tendance > config::byKey('historyCalculTendanceThresholddMax')) {
 						$cmd->setConfiguration($cmdName . '_tendance', 'arrow-up');
 					} elseif ($tendance < config::byKey('historyCalculTendanceThresholddMin')) {
@@ -2526,6 +2531,7 @@ class Monitoring extends eqLogic {
 		} catch (Exception $e) {
 			log::add('Monitoring', 'error', '[' . $this->getName() . '][getStats] ' . $e->getMessage());
 		}
+		return $tendanceEntry;
 	}
 
 	public function getDefaultIcon(string $cmdName) {
@@ -2581,7 +2587,7 @@ class Monitoring extends eqLogic {
 		return $icon;
 	}
 
-	public function getCmdReplace(string $cmdName, array $cmdOptions, &$replace) {
+	public function getCmdReplace(string $cmdName, array $cmdOptions, array &$replace) {
 		$cmd = $this->getCmd(null, $cmdName);
 		$isCmdObject = is_object($cmd);
 		$cmdNamePrefix = '#' . $cmdName;
@@ -2686,7 +2692,7 @@ class Monitoring extends eqLogic {
 		return [$archKey, $archSubKey, $archKeyType, $ARMv];
 	}
 
-	public function getRemoteArchKeys($hostId, $osType = '') {
+	public function getRemoteArchKeys(string $hostId, string $osType = '') {
 		[$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value] = ['unknown', '', 'Unknown', '', ''];
 		
 		if ($osType == 'Synology') {
@@ -2789,7 +2795,7 @@ class Monitoring extends eqLogic {
 		return [$archKey, $archSubKey, $archKeyType, $ARMv, $distri_name_value];
 	}
 
-	public function getCommands($key, $subKey = '', $cartereseau = '', $cartesreseau_multi = [], $confLocalorRemote = 'local') {
+	public function getCommands(string $key, string $subKey = '', string $cartereseau = '', array $cartesreseau_multi = [], string $confLocalorRemote = 'local') {
 		if (!empty($subKey)) {
 			log::add('Monitoring', 'debug', '['. $this->getName() .'][getCommands] Key / SubKey (LocalorRemote) :: ' . $key . ' / ' . $subKey . ' (' . $confLocalorRemote . ')');
 		} else {
@@ -3190,7 +3196,7 @@ class Monitoring extends eqLogic {
 		}	
 	}
 
-	public function getNetworkCard($_networkCard = '', $_localorremote = 'local', $_hostId = '', $_archKey = '') {
+	public function getNetworkCard(string $_networkCard = '', string $_localorremote = 'local', string $_hostId = '', string $_archKey = '') {
 		$networkCard = '';
 		if ($_networkCard == 'netautre') {
 			$networkCard = trim($this->getConfiguration('cartereseauautre'));
@@ -3233,12 +3239,14 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	public function execSRV($cmd_srv = '', $cmdName_srv = '', $timeout_srv = true, $cmd_delay = 0.0) {
+	public function execSRV(string $cmd_srv = '', string $cmdName_srv = '', bool $timeout_srv = true, float $cmd_delay = 0.0) {
 		$conf_timeoutSrv = $this->getConfiguration('timeoutsrv', 30);
 		$cmdResult_srv = '';
-	
+		
+		$_cmd = trim($cmd_srv);
+
 		try {
-			$_cmd = trim($cmd_srv);
+			
 			if ($timeout_srv && $conf_timeoutSrv > 0 && !preg_match('/^[^|]*(;|^\b(timeout)\b)/', $_cmd)) {
 				if (preg_match('/LC_ALL=C/', $_cmd)) {
 					$_cmd = preg_replace('/LC_ALL=C/', 'LC_ALL=C timeout ' . $conf_timeoutSrv, $_cmd, 1);
@@ -3272,7 +3280,7 @@ class Monitoring extends eqLogic {
 		return $cmdResult_srv;
 	}
 
-	public function execSSH($hostId, $cmd_ssh = '', $cmdName_ssh = '', $cmd_delay = 0.0) {
+	public function execSSH(?string $hostId, string $cmd_ssh = '', string $cmdName_ssh = '', float $cmd_delay = 0.0) {
 		$cmdResult_ssh = '';
 		try {
 			$cmdResult_ssh = sshmanager::executeCmds($hostId, $cmd_ssh, $cmdName_ssh);
@@ -3300,13 +3308,13 @@ class Monitoring extends eqLogic {
 		return $cmdResult_ssh;
 	}
 
-	public function formatAsusWRTWifiTemp($_wifi2g_temp, $_wifi5g_temp, $_equipement) {
+	public function formatAsusWRTWifiTemp(string $_wifi2g_temp, string $_wifi5g_temp, string $_equipement): string {
 		$wifi_temp = "WiFi 2.4Ghz : " . (is_numeric($_wifi2g_temp) ? $_wifi2g_temp . "°C" : "N/A") . " - WiFi 5GHz : " . (is_numeric($_wifi5g_temp) ? $_wifi5g_temp . "°C" : "N/A");
 		log::add('Monitoring', 'debug', '['. $_equipement .'][WIFI-TEMP] ' . $wifi_temp);
 		return $wifi_temp;
 	}
 
-	public function formatAsusWRTClients($_clients, $_equipement) {
+	public function formatAsusWRTClients(string $_clients, string $_equipement): array {
 		[$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired] = ['', 0, 0, 0, 0];
 		if (empty($_clients)) {
 			log::add('Monitoring', 'debug', '['. $_equipement .'][CLIENTS] Erreur :: Liste Vide ');
@@ -3338,7 +3346,7 @@ class Monitoring extends eqLogic {
 		return [$clients_str, $clients_nb, $clients_wifi_2G, $clients_wifi_5G, $clients_wired];
 	}
 
-	public function formatCPU($_cpu_nb, $_cpu_freq, $_cpu_temp, $_OS, $_equipement) {
+	public function formatCPU(string $_cpu_nb, string $_cpu_freq, string $_cpu_temp, string $_OS, string $_equipement): array {
 		$unitCPUFreq = [
 			'syno' => 'MHz',
 			'qnap' => 'MHz',
@@ -3372,7 +3380,7 @@ class Monitoring extends eqLogic {
 
 	}
 
-	public function formatNetwork($_network_txrx, $_network_ip, $_equipement) {
+	public function formatNetwork(string $_network_txrx, string $_network_ip, string $_equipement): array {
 		// Network TX, Network RX, Network Name, Network Ip, Text
 		$network_ip = isset($_network_ip) && !empty($_network_ip) ? $_network_ip : 'N/A';
 
@@ -3406,7 +3414,7 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function formatSwap($_swap, $_equipement) {
+	public function formatSwap(string $_swap, string $_equipement): array {
 		// Total, Used, Free, Used %, Free %, Text
 		$result = [0.00, 0.00, 0.00, 0.0, 0.0, ''];
 
@@ -3424,10 +3432,6 @@ class Monitoring extends eqLogic {
 		$swap_used = intval($swap_data[1]);
 		$swap_free = intval($swap_data[2]);
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Total :: ' . $swap_total);
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Used :: ' . $swap_used);
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Free :: ' . $swap_free);
-
 		if ($swap_total != 0) {
 			$swap_used_percent = round($swap_used / $swap_total * 100, 1);
 			$swap_free_percent = round($swap_free / $swap_total * 100, 1);
@@ -3436,8 +3440,7 @@ class Monitoring extends eqLogic {
 			$swap_free_percent = 0.0;
 		}
 
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Used % :: ' . $swap_used_percent);
-		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap Free % :: ' . $swap_free_percent);
+		log::add('Monitoring', 'debug', '['. $_equipement .'] Swap :: Total = ' . $swap_total . ' | Used = ' . $swap_used . ' (' . $swap_used_percent . '%) | Free = ' . $swap_free . ' (' . $swap_free_percent . '%)');
 
 		$swap = __('Total', __FILE__) . ' : ' . $this->formatSize($swap_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($swap_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($swap_free, 'Ko');
 		
@@ -3450,7 +3453,7 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function formatMemory($_memory, $_archKey, $_equipement) {
+	public function formatMemory(string $_memory, string $_archKey, string $_equipement): array {
 		$result = [0, 0, 0, 0, 0, 0.0, 0.0, 0.0, ''];
 
 		if (empty($_memory)) {
@@ -3479,11 +3482,7 @@ class Monitoring extends eqLogic {
 				$memory_available = intval($memory_data[4]);
 			}
 
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Total :: ' . $memory_total);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used :: ' . $memory_used);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Free :: ' . $memory_free);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Buff/Cache :: ' . $memory_buffcache);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Available :: ' . $memory_available);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory :: Total = ' . $memory_total . ' | Used = ' . $memory_used . ' | Free = ' . $memory_free . ' | Buff/Cache = ' . $memory_buffcache . ' | Available = ' . $memory_available);
 
 			if ($memory_total != 0) {
 				$memory_used_percent = round(($memory_used + $memory_buffcache) / $memory_total * 100, 1);
@@ -3495,9 +3494,7 @@ class Monitoring extends eqLogic {
 				$memory_available_percent = 0.0;
 			}
 
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Used % :: ' . $memory_used_percent);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Free % :: ' . $memory_free_percent);
-			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory Available % :: ' . $memory_available_percent);
+			log::add('Monitoring', 'debug', '['. $_equipement .'] Memory % :: Used = ' . $memory_used_percent . '% | Free = ' . $memory_free_percent . '% | Available = ' . $memory_available_percent . '%');
 
 			$memory = __('Total', __FILE__) . ' : ' . $this->formatSize($memory_total, 'Ko') . ' - ' . __('Utilisée', __FILE__) . ' : ' . $this->formatSize($memory_used, 'Ko') . ' - ' . __('Disponible', __FILE__) . ' : ' . $this->formatSize($memory_available, 'Ko');
 			
@@ -3549,7 +3546,7 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function formatLoadAvg($load) {
+	public function formatLoadAvg(string $load): array {
 		$result = [0.0, 0.0, 0.0, ''];
 		if (empty($load)) {
 			return $result;
@@ -3569,7 +3566,7 @@ class Monitoring extends eqLogic {
 		return $result;
 	}
 
-	public function formatHDD($hdd_value, $hdd_name, $equipement) {
+	public function formatHDD(string $hdd_value, string $hdd_name, string $equipement): array {
 		$result = [0.00, 0.00, 0.00, 0.0, 0.0, '']; // Total, Used, Free, Used %, Free %, Text
 
 		if (empty($hdd_value)) {
@@ -3591,11 +3588,7 @@ class Monitoring extends eqLogic {
 			$hdd_used_percent = 0.0;
 			$hdd_free_percent = 0.0;
 		}
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Total :: ' . $hdd_total);
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Used :: ' . $hdd_used);
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Free :: ' . $hdd_free);
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Used % :: ' . $hdd_used_percent);
-		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD Free % :: ' . $hdd_free_percent);
+		log::add('Monitoring', 'debug', '['. $equipement .'][' . $hdd_name .'] HDD :: Total = ' . $hdd_total . ' | Used = ' . $hdd_used . ' (' . $hdd_used_percent . '%) | Free = ' . $hdd_free . ' (' . $hdd_free_percent . '%)');
 
 		$hdd = __('Total', __FILE__) . ' : ' . $this->formatSize($hdd_total, 'Ko') . ' - ' . __('Utilisé', __FILE__) . ' : ' . $this->formatSize($hdd_used, 'Ko') . ' - ' . __('Libre', __FILE__) . ' : ' . $this->formatSize($hdd_free, 'Ko');
 		
@@ -3609,7 +3602,7 @@ class Monitoring extends eqLogic {
 		return $result;	
 	}
 
-	public function formatSize($size, string $start = 'o') {
+	public function formatSize(int $size, string $start = 'o'): string {
 		$units = array('o', 'Ko', 'Mo', 'Go', 'To');
 		$unitIndex = ($unitIndex = array_search($start, $units)) === false ? 0 : $unitIndex;
 		$size = intval($size);
@@ -3621,7 +3614,7 @@ class Monitoring extends eqLogic {
 		return round($size, 2) . ' ' . $units[$unitIndex];
 	}
 
-	public function formatFreq($freq, string $start = 'MHz') {
+	public function formatFreq(string $freq, string $start = 'MHz'): array {
 		$units = array('KHz', 'MHz', 'GHz');
 		$unitIndex = ($unitIndex = array_search($start, $units)) === false ? 0 : $unitIndex;
 		$freq = floatval($freq);
@@ -3641,7 +3634,7 @@ class Monitoring extends eqLogic {
 		return [$freq_result, round($freq, 1, PHP_ROUND_HALF_UP) . ' ' . $units[$unitIndex]];
 	}
 
-	public function formatTemp($temp) {
+	public function formatTemp(string $temp): float {
 		$tempNum = floatval($temp);
 		if ($tempNum > 200) {
 			$tempNum = $tempNum / 1000;
@@ -3649,7 +3642,7 @@ class Monitoring extends eqLogic {
 		return round($tempNum, 1, PHP_ROUND_HALF_UP);
 	}
 
-	public function formatUptime($uptime, $type = 'uptime') {
+	public function formatUptime(string $uptime, string $type = 'uptime'): array {
 		if ($type == 'unix') {
 			$uptimeNum = round(microtime(true) - floatval($uptime), 3);
 		} else {
@@ -3810,57 +3803,31 @@ class Monitoring extends eqLogic {
 						$asus_wan0_ip_value = $this->execSSH($hostId, $commands['wan0_ip'], 'AsusWRT WAN IP', $cmd_delay);
 					}
 
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv :: ' . $ARMv);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriName :: ' . $distri_name_value);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] DistriBits :: ' . $distri_bits);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsVersion :: ' . $os_version_value);
-					
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ARMv = ' . $ARMv . ' | DistriName = ' . $distri_name_value . ' | DistriBits = ' . $distri_bits . ' | OsVersion = ' . $os_version_value);
+
 					if ($isSynology) {
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoModel :: ' . $syno_model);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoVersion :: ' . $syno_version_file);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoModel = ' . $syno_model . ' | SynoVersion = ' . $syno_version_file);
 					}
 
 					if ($isQNAP) {
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel :: ' . $qnap_model_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsName :: ' . $os_name_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] QnapModel = ' . $qnap_model_value . ' | OsBuild = ' . $os_build_value . ' | OsName = ' . $os_name_value);
 					}
 
 					if ($isAsusWRT) {
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Model :: ' . $asus_model_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] OsBuild :: ' . $os_build_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT FW_Check :: ' . $asus_fw_check_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Clients :: ' . $asus_clients_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT WAN IP :: ' . $asus_wan0_ip_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT WiFi 2.4G Temp :: ' . $asus_wifi2g_temp_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT WiFi 5G Temp :: ' . $asus_wifi5g_temp_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] AsusWRT Model = ' . $asus_model_value . ' | OsBuild = ' . $os_build_value . ' | AsusWRT FW_Check = ' . $asus_fw_check_value . ' | AsusWRT Clients = ' . $asus_clients_value . ' | AsusWRT WAN IP = ' . $asus_wan0_ip_value . ' | AsusWRT WiFi 2.4G Temp = ' . $asus_wifi2g_temp_value . ' | AsusWRT WiFi 5G Temp = ' . $asus_wifi5g_temp_value);
 					}
-					
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime :: ' . $uptime_value);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] LoadAverage :: ' . $load_avg_value);
-					
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Memory :: ' . $memory_value);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Swap :: ' . $swap_value);
-					
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] HDD :: ' . $hdd_value);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] HDD Id :: ' . $hdd_id);
+
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Uptime = ' . $uptime_value . ' | LoadAverage = ' . $load_avg_value);
+
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] Memory = ' . $memory_value . ' | Swap = ' . $swap_value . ' | HDD = ' . $hdd_value . ' (Id: ' . $hdd_id . ')');
 
 					if ($isSynology) {
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv2 :: ' . $syno_hddv2_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv3 :: ' . $syno_hddv3_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv4 :: ' . $syno_hddv4_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDUSB :: ' . $syno_hddusb_value);
-						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDeSATA :: ' . $syno_hddesata_value);
+						log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] SynoHDDv2 = ' . $syno_hddv2_value . ' | SynoHDDv3 = ' . $syno_hddv3_value . ' | SynoHDDv4 = ' . $syno_hddv4_value . ' | SynoHDDUSB = ' . $syno_hddusb_value . ' | SynoHDDeSATA = ' . $syno_hddesata_value);
 					}
-					
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauRXTX :: ' . $network_value);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauIP :: ' . $network_ip_value);
-					
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] NbCPU :: ' . $cpu_nb);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq :: ' . $cpu_freq);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUFreq Id :: ' . $cpu_freq_id);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUTemp :: ' . $cpu_temp);
-					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] CPUTemp Id :: ' . $cpu_temp_id);
+
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] ReseauRXTX = ' . $network_value . ' | ReseauIP = ' . $network_ip_value);
+
+					log::add('Monitoring', 'debug', '['. $equipement .'][REMOTE] NbCPU = ' . $cpu_nb . ' | CPUFreq = ' . $cpu_freq . ' (Id: ' . $cpu_freq_id . ') | CPUTemp = ' . $cpu_temp . ' (Id: ' . $cpu_temp_id . ')');
 
 					// Perso1 Command
 					$perso1_cmd = $this->getCmdPerso('perso1');
@@ -3932,22 +3899,11 @@ class Monitoring extends eqLogic {
 				extract($this->getCPUFreq($commands['cpu_freq'], $equipement, 'local', null, $cmd_delay));
 				extract($this->getCPUTemp($commands['cpu_temp'], $equipement, 'local', null, $cmd_delay));
 				
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriName :: ' . $distri_name_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] DistriBits :: ' . $distri_bits);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] OsVersion :: ' . $os_version_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uptime :: ' . $uptime_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] LoadAverage :: ' . $load_avg_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Memory :: ' . $memory_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Swap :: ' . $swap_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] HDD :: ' . $hdd_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] HDD Id :: ' . $hdd_id);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauRXTX :: ' . $network_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauIP :: ' . $network_ip_value);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] NbCPU :: ' . $cpu_nb);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUFreq :: ' . $cpu_freq);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUFreq Id :: ' . $cpu_freq_id);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUTemp :: ' . $cpu_temp);
-				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] CPUTemp Id :: ' . $cpu_temp_id);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ARMv = ' . $ARMv . ' | DistriName = ' . $distri_name_value . ' | DistriBits = ' . $distri_bits . ' | OsVersion = ' . $os_version_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Uptime = ' . $uptime_value . ' | LoadAverage = ' . $load_avg_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] Memory = ' . $memory_value . ' | Swap = ' . $swap_value . ' | HDD = ' . $hdd_value . ' (Id: ' . $hdd_id . ')');
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] ReseauRXTX = ' . $network_value . ' | ReseauIP = ' . $network_ip_value);
+				log::add('Monitoring', 'debug', '['. $equipement .'][LOCAL] NbCPU = ' . $cpu_nb . ' | CPUFreq = ' . $cpu_freq . ' (Id: ' . $cpu_freq_id . ') | CPUTemp = ' . $cpu_temp . ' (Id: ' . $cpu_temp_id . ')');
 
 				// Perso1 Command
 				$perso1_cmd = $this->getCmdPerso('perso1');
@@ -4217,6 +4173,13 @@ class Monitoring extends eqLogic {
 						]);
 					}
 
+					// TODO: Évaluer la migration vers checkAndUpdateCmd() ici.
+					// Impact sur les graphiques d'historique : si une valeur numérique reste stable
+					// plusieurs heures (ex: swap à 0, charge système constante, disque stable),
+					// checkAndUpdateCmd() n'écrit rien en base → le graphique interpolera entre deux
+					// points distants. Solution : activer "Répétition des valeurs" sur les commandes
+					// concernées (repeatEventManagement = always), ce qui rétablit le comportement
+					// identique à event(). 
 					// Event sur les commandes après récupération des données
 					foreach ($dataresult as $key => $value) {
 						$cmd = $this->getCmd(null, $key);
@@ -4226,24 +4189,23 @@ class Monitoring extends eqLogic {
 					}
 
 					// getStats pour les commandes
+					$tendanceLog = array();
 					foreach ($dataresult_stats as $cmd_name => $precision) {
 						$cmd = $this->getCmd(null, $cmd_name);
 						if (is_object($cmd)) {
-							$this->getStats($cmd, $cmd_name, $precision);
+							$tendanceEntry = $this->getStats($cmd, $cmd_name, $precision);
+							if ($tendanceEntry !== null) {
+								$tendanceLog[] = $tendanceEntry;
+							}
 						}
+					}
+					if (!empty($tendanceLog)) {
+						log::add('Monitoring', 'debug', '[' . $equipement . '][getStats] Tendance :: ' . implode(' | ', $tendanceLog));
 					}
 
 				} elseif ($cnx_ssh == 'KO') {
-					$dataresult = array(
-						'distri_name' => 'Connexion SSH KO',
-						'cnx_ssh' => $cnx_ssh
-					);
-					foreach ($dataresult as $key => $value) {
-						$cmd = $this->getCmd(null, $key);
-						if (is_object($cmd)) {
-							$cmd->event($value);
-						}
-					}
+					$this->checkAndUpdateCmd('distri_name', 'Connexion SSH KO');
+					$this->checkAndUpdateCmd('cnx_ssh', $cnx_ssh);
 				}
 			}
 
@@ -4255,7 +4217,7 @@ class Monitoring extends eqLogic {
 		}
 	}
 
-	function getCaseAction($paramaction) {
+	function getCaseAction(string $paramaction): void {
 		$confLocalOrRemote = $this->getConfiguration('localoudistant');
 		$equipement = $this->getName();
 		$isSynology = $this->getConfiguration('synology') == '1' ? true : false;
@@ -4374,19 +4336,13 @@ class MonitoringCmd extends cmd {
 					break;
 				case "cron_on":
 					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Execution Commande :: ' . $paramaction);
-					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
-					if (is_object($cron_status_cmd)) {
-						$cron_status_cmd->event(1);
-						$eqLogic->refreshWidget();
-					}
+					$eqLogic->checkAndUpdateCmd('cron_status', 1);
+					$eqLogic->refreshWidget();
 					break;
 				case "cron_off":
 					log::add('Monitoring', 'debug', '['. $eqLogic->getName() .'][CRON] Execution Commande :: ' . $paramaction);
-					$cron_status_cmd = $eqLogic->getCmd(null, 'cron_status');
-					if (is_object($cron_status_cmd)) {
-						$cron_status_cmd->event(0);
-						$eqLogic->refreshWidget();
-					}
+					$eqLogic->checkAndUpdateCmd('cron_status', 0);
+					$eqLogic->refreshWidget();
 					break;
 				default:
 					throw new Exception(__('Commande non implémentée actuellement', __FILE__));

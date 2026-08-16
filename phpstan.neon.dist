@@ -1,0 +1,8 @@
+parameters:
+    reportUnmatchedIgnoredErrors: true
+    ignoreErrors:
+        -
+            # extract() crée ces variables dynamiquement (clés issues des retours de
+            # getHDD()/getCPUFreq()/getCPUTemp()) : PHPStan ne peut pas les résoudre statiquement.
+            message: '#^Undefined variable: \$(hdd_value|cpu_freq|cpu_temp)$#'
+            path: core/class/Monitoring.class.php
