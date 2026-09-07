@@ -3726,7 +3726,7 @@ class Monitoring extends eqLogic {
 					$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'remote', $hostId, $archKey);
 					$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, $cartesreseau_multi, 'remote');
 
-					$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv', $cmd_delay) : $commands['ARMv'][1]) : $ARMv;
+					$ARMv = (empty($ARMv) && isset($commands['ARMv'])) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSSH($hostId, $commands['ARMv'][1], 'ARMv', $cmd_delay) : $commands['ARMv'][1]) : $ARMv;
 					
 					// Pour contourner le bug de la version du piCorePlayer qui n'est pas bonne dans le fichier /etc/os-release
 					if ($archKey == "piCorePlayer") {
@@ -3870,7 +3870,7 @@ class Monitoring extends eqLogic {
 				$cartereseau = $this->getNetworkCard($this->getConfiguration('cartereseau'), 'local');
 				$commands = $this->getCommands($archKey, $archSubKey, $cartereseau, $cartesreseau_multi, 'local');
 
-				$ARMv = empty($ARMv) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSRV($commands['ARMv'][1], 'ARMv', true, $cmd_delay) : $commands['ARMv'][1]) : $ARMv;
+				$ARMv = (empty($ARMv) && isset($commands['ARMv'])) ? ($commands['ARMv'][0] === 'cmd' ? $this->execSRV($commands['ARMv'][1], 'ARMv', true, $cmd_delay) : $commands['ARMv'][1]) : $ARMv;
 
 				$distri_bits = $this->execSRV($commands['distri_bits'], 'DistriBits', true, $cmd_delay);
 				$distri_name_value = $this->execSRV($commands['distri_name'], 'DistriName', true, $cmd_delay);
@@ -4157,19 +4157,19 @@ class Monitoring extends eqLogic {
 					if ($isAsusWRT) {
 						// AsusWRT Values
 						[$asus_clients, $asus_clients_nb, $asus_clients_wifi_2G, $asus_clients_wifi_5G, $asus_clients_wired] = isset($asus_clients_value) ? $this->formatAsusWRTClients($asus_clients_value, $equipement) : ['', 0, 0, 0, 0];
-						$asus_wifi_temp = $this->formatAsusWRTWifiTemp($asus_wifi2g_temp_value, $asus_wifi5g_temp_value, $equipement);
+						$asus_wifi_temp = $this->formatAsusWRTWifiTemp($asus_wifi2g_temp_value ?? '', $asus_wifi5g_temp_value ?? '', $equipement);
 
 						$dataresult = array_merge($dataresult, [
-							'asus_fw_check' => $asus_fw_check_value,
-							'asus_wifi2g_temp' => $asus_wifi2g_temp_value,
-							'asus_wifi5g_temp' => $asus_wifi5g_temp_value,
+							'asus_fw_check' => $asus_fw_check_value ?? '',
+							'asus_wifi2g_temp' => $asus_wifi2g_temp_value ?? '',
+							'asus_wifi5g_temp' => $asus_wifi5g_temp_value ?? '',
 							'asus_wifi_temp' => $asus_wifi_temp,
 							'asus_clients' => $asus_clients,
 							'asus_clients_total' => $asus_clients_nb,
 							'asus_clients_wifi24' => $asus_clients_wifi_2G,
 							'asus_clients_wifi5' => $asus_clients_wifi_5G,
 							'asus_clients_wired' => $asus_clients_wired,
-							'asus_wan0_ip' => $asus_wan0_ip_value
+							'asus_wan0_ip' => $asus_wan0_ip_value ?? ''
 						]);
 					}
 
