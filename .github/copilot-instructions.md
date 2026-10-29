@@ -4,6 +4,9 @@
 - OS: Windows 11 (PowerShell 7).
 - Constraint: Never suggest bash/grep. Use Select-String.
 
+## Git Workflow
+- **Commits**: made exclusively by the user via GitHub Desktop. Never commit, push or open a PR, and don't offer to at the end of a task: just list the modified files.
+
 ## Backend & Versions
 - Python 3.12+ (Strict typing).
 - Node.js 22+ (ESM).
